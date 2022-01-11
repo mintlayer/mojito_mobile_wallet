@@ -1,12 +1,16 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform } from 'react-native';
-import { getSystemName, isTablet, getDeviceType } from 'react-native-device-info';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform, Dimensions } from "react-native";
+import {
+  getSystemName,
+  isTablet,
+  getDeviceType,
+} from "react-native-device-info";
 
-const isMacCatalina = getSystemName() === 'Mac OS X';
-const isDesktop = getDeviceType() === 'Desktop';
+const isMacCatalina = getSystemName() === "Mac OS X";
+const isDesktop = getDeviceType() === "Desktop";
 const getIsTorCapable = () => {
   let capable = true;
-  if (Platform.OS === 'android' && Platform.Version < 26) {
+  if (Platform.OS === "android" && Platform.Version < 26) {
     capable = false;
   } else if (isDesktop) {
     capable = false;
@@ -14,9 +18,9 @@ const getIsTorCapable = () => {
   return capable;
 };
 
-const IS_TOR_DAEMON_DISABLED = 'is_tor_daemon_disabled';
+const IS_TOR_DAEMON_DISABLED = "is_tor_daemon_disabled";
 export async function setIsTorDaemonDisabled(disabled = true) {
-  return AsyncStorage.setItem(IS_TOR_DAEMON_DISABLED, disabled ? '1' : '');
+  return AsyncStorage.setItem(IS_TOR_DAEMON_DISABLED, disabled ? "1" : "");
 }
 
 export async function isTorDaemonDisabled() {
@@ -35,6 +39,9 @@ export async function isTorDaemonDisabled() {
   return !!isTorDaemonDisabled;
 }
 
-export const isHandset = getDeviceType() === 'Handset';
+export const isHandset = getDeviceType() === "Handset";
 export const isTorCapable = getIsTorCapable();
 export { isMacCatalina, isDesktop, isTablet };
+
+export const windowWidth = Dimensions.get("window").width;
+export const windowHeight = Dimensions.get("window").height;

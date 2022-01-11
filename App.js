@@ -1,5 +1,5 @@
-import 'react-native-gesture-handler'; // should be on top
-import React, { useContext, useEffect, useRef } from 'react';
+import "react-native-gesture-handler"; // should be on top
+import React, { useContext, useEffect, useRef } from "react";
 import {
   AppState,
   DeviceEventEmitter,
@@ -12,58 +12,68 @@ import {
   useColorScheme,
   View,
   StatusBar,
-} from 'react-native';
-import { NavigationContainer, CommonActions } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { navigationRef } from './NavigationService';
-import * as NavigationService from './NavigationService';
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { Chain } from './models/bitcoinUnits';
-import OnAppLaunch from './class/on-app-launch';
-import DeeplinkSchemaMatch from './class/deeplink-schema-match';
-import loc from './loc';
-import { BlueDefaultTheme, BlueDarkTheme, BlueCurrentTheme } from './components/themes';
-import InitRoot from './Navigation';
-import BlueClipboard from './blue_modules/clipboard';
-import { isDesktop } from './blue_modules/environment';
-import { BlueStorageContext } from './blue_modules/storage-context';
-import WatchConnectivity from './WatchConnectivity';
-import DeviceQuickActions from './class/quick-actions';
-import Notifications from './blue_modules/notifications';
-import Biometric from './class/biometrics';
-import WidgetCommunication from './blue_modules/WidgetCommunication';
-import changeNavigationBarColor from 'react-native-navigation-bar-color';
-import ActionSheet from './screen/ActionSheet';
-import HandoffComponent from './components/handoff';
-import Privacy from './blue_modules/Privacy';
-const A = require('./blue_modules/analytics');
-const currency = require('./blue_modules/currency');
+} from "react-native";
+import { NavigationContainer, CommonActions } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { navigationRef } from "./NavigationService";
+import * as NavigationService from "./NavigationService";
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+import { Chain } from "./models/bitcoinUnits";
+import OnAppLaunch from "./class/on-app-launch";
+import DeeplinkSchemaMatch from "./class/deeplink-schema-match";
+import loc from "./loc";
+import {
+  BlueDefaultTheme,
+  BlueDarkTheme,
+  BlueCurrentTheme,
+} from "./components/themes";
+import InitRoot from "./Navigation";
+import BlueClipboard from "./blue_modules/clipboard";
+import { isDesktop } from "./blue_modules/environment";
+import { BlueStorageContext } from "./blue_modules/storage-context";
+import WatchConnectivity from "./WatchConnectivity";
+import DeviceQuickActions from "./class/quick-actions";
+import Notifications from "./blue_modules/notifications";
+import Biometric from "./class/biometrics";
+import WidgetCommunication from "./blue_modules/WidgetCommunication";
+import changeNavigationBarColor from "react-native-navigation-bar-color";
+import ActionSheet from "./screen/ActionSheet";
+import HandoffComponent from "./components/handoff";
+import Privacy from "./blue_modules/Privacy";
+const A = require("./blue_modules/analytics");
+const currency = require("./blue_modules/currency");
 
 const eventEmitter = new NativeEventEmitter(NativeModules.EventEmitter);
 const { EventEmitter } = NativeModules;
-
+// testing
 const ClipboardContentType = Object.freeze({
-  BITCOIN: 'BITCOIN',
-  LIGHTNING: 'LIGHTNING',
+  BITCOIN: "BITCOIN",
+  LIGHTNING: "LIGHTNING",
 });
 
-if (Platform.OS === 'android') {
+if (Platform.OS === "android") {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
   }
 }
 
 const App = () => {
-  const { walletsInitialized, wallets, addWallet, saveToDisk, fetchAndSaveWalletTransactions, refreshAllWalletTransactions } = useContext(
-    BlueStorageContext,
-  );
+  const {
+    walletsInitialized,
+    wallets,
+    addWallet,
+    saveToDisk,
+    fetchAndSaveWalletTransactions,
+    refreshAllWalletTransactions,
+  } = useContext(BlueStorageContext);
   const appState = useRef(AppState.currentState);
   const clipboardContent = useRef();
   const colorScheme = useColorScheme();
 
-  const onNotificationReceived = async notification => {
+  const onNotificationReceived = async (notification) => {
     const payload = Object.assign({}, notification, notification.data);
-    if (notification.data && notification.data.data) Object.assign(payload, notification.data.data);
+    if (notification.data && notification.data.data)
+      Object.assign(payload, notification.data.data);
     payload.foreground = true;
 
     await Notifications.addNotification(payload);
@@ -75,24 +85,24 @@ const App = () => {
   const openSettings = () => {
     NavigationService.dispatch(
       CommonActions.navigate({
-        name: 'Settings',
-      }),
+        name: "Settings",
+      })
     );
   };
 
-  const onUserActivityOpen = data => {
+  const onUserActivityOpen = (data) => {
     switch (data.activityType) {
       case HandoffComponent.activityTypes.ReceiveOnchain:
-        NavigationService.navigate('ReceiveDetailsRoot', {
-          screen: 'ReceiveDetails',
+        NavigationService.navigate("ReceiveDetailsRoot", {
+          screen: "ReceiveDetails",
           params: {
             address: data.userInfo.address,
           },
         });
         break;
       case HandoffComponent.activityTypes.Xpub:
-        NavigationService.navigate('WalletXpubRoot', {
-          screen: 'WalletXpub',
+        NavigationService.navigate("WalletXpubRoot", {
+          screen: "WalletXpub",
           params: {
             xpub: data.userInfo.xpub,
           },
@@ -112,11 +122,11 @@ const App = () => {
 
   useEffect(() => {
     return () => {
-      Linking.removeEventListener('url', handleOpenURL);
-      AppState.removeEventListener('change', handleAppStateChange);
-      eventEmitter.removeAllListeners('onNotificationReceived');
-      eventEmitter.removeAllListeners('openSettings');
-      eventEmitter.removeAllListeners('onUserActivityOpen');
+      Linking.removeEventListener("url", handleOpenURL);
+      AppState.removeEventListener("change", handleAppStateChange);
+      eventEmitter.removeAllListeners("onNotificationReceived");
+      eventEmitter.removeAllListeners("openSettings");
+      eventEmitter.removeAllListeners("onUserActivityOpen");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -124,44 +134,54 @@ const App = () => {
   useEffect(() => {
     if (colorScheme) {
       BlueCurrentTheme.updateColorScheme();
-      if (colorScheme === 'light') {
-        changeNavigationBarColor(BlueDefaultTheme.colors.background, true, true);
+      if (colorScheme === "light") {
+        changeNavigationBarColor(
+          BlueDefaultTheme.colors.background,
+          true,
+          true
+        );
       } else {
-        changeNavigationBarColor(BlueDarkTheme.colors.buttonBackgroundColor, false, true);
+        changeNavigationBarColor(
+          BlueDarkTheme.colors.buttonBackgroundColor,
+          false,
+          true
+        );
       }
     }
   }, [colorScheme]);
 
   const addListeners = () => {
-    Linking.addEventListener('url', handleOpenURL);
-    AppState.addEventListener('change', handleAppStateChange);
-    DeviceEventEmitter.addListener('quickActionShortcut', walletQuickActions);
+    Linking.addEventListener("url", handleOpenURL);
+    AppState.addEventListener("change", handleAppStateChange);
+    DeviceEventEmitter.addListener("quickActionShortcut", walletQuickActions);
     DeviceQuickActions.popInitialAction().then(popInitialAction);
     EventEmitter?.getMostRecentUserActivity()
       .then(onUserActivityOpen)
-      .catch(() => console.log('No userActivity object sent'));
+      .catch(() => console.log("No userActivity object sent"));
     handleAppStateChange(undefined);
     /*
       When a notification on iOS is shown while the app is on foreground;
       On willPresent on AppDelegate.m
      */
-    eventEmitter.addListener('onNotificationReceived', onNotificationReceived);
-    eventEmitter.addListener('openSettings', openSettings);
-    eventEmitter.addListener('onUserActivityOpen', onUserActivityOpen);
+    eventEmitter.addListener("onNotificationReceived", onNotificationReceived);
+    eventEmitter.addListener("openSettings", openSettings);
+    eventEmitter.addListener("onUserActivityOpen", onUserActivityOpen);
   };
 
-  const popInitialAction = async data => {
+  const popInitialAction = async (data) => {
     if (data) {
-      const wallet = wallets.find(wallet => wallet.getID() === data.userInfo.url.split('wallet/')[1]);
+      const wallet = wallets.find(
+        (wallet) => wallet.getID() === data.userInfo.url.split("wallet/")[1]
+      );
       NavigationService.dispatch(
         CommonActions.navigate({
-          name: 'WalletTransactions',
+          name: "WalletTransactions",
           key: `WalletTransactions-${wallet.getID()}`,
           params: {
             walletID: wallet.getID(),
             walletType: wallet.type,
           },
-        }),
+        })
       );
     } else {
       const url = await Linking.getInitialURL();
@@ -173,17 +193,19 @@ const App = () => {
         const isViewAllWalletsEnabled = await OnAppLaunch.isViewAllWalletsEnabled();
         if (!isViewAllWalletsEnabled) {
           const selectedDefaultWallet = await OnAppLaunch.getSelectedDefaultWallet();
-          const wallet = wallets.find(wallet => wallet.getID() === selectedDefaultWallet.getID());
+          const wallet = wallets.find(
+            (wallet) => wallet.getID() === selectedDefaultWallet.getID()
+          );
           if (wallet) {
             NavigationService.dispatch(
               CommonActions.navigate({
-                name: 'WalletTransactions',
+                name: "WalletTransactions",
                 key: `WalletTransactions-${wallet.getID()}`,
                 params: {
                   walletID: wallet.getID(),
                   walletType: wallet.type,
                 },
-              }),
+              })
             );
           }
         }
@@ -191,17 +213,19 @@ const App = () => {
     }
   };
 
-  const walletQuickActions = data => {
-    const wallet = wallets.find(wallet => wallet.getID() === data.userInfo.url.split('wallet/')[1]);
+  const walletQuickActions = (data) => {
+    const wallet = wallets.find(
+      (wallet) => wallet.getID() === data.userInfo.url.split("wallet/")[1]
+    );
     NavigationService.dispatch(
       CommonActions.navigate({
-        name: 'WalletTransactions',
+        name: "WalletTransactions",
         key: `WalletTransactions-${wallet.getID()}`,
         params: {
           walletID: wallet.getID(),
           walletType: wallet.type,
         },
-      }),
+      })
     );
   };
 
@@ -213,10 +237,12 @@ const App = () => {
    */
   const processPushNotifications = async () => {
     if (!walletsInitialized) {
-      console.log('not processing push notifications because wallets are not initialized');
+      console.log(
+        "not processing push notifications because wallets are not initialized"
+      );
       return;
     }
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 200));
     // sleep needed as sometimes unsuspend is faster than notification module actually saves notifications to async storage
     const notifications2process = await Notifications.getStoredNotifications();
 
@@ -226,18 +252,22 @@ const App = () => {
     setTimeout(() => Notifications.removeAllDeliveredNotifications(), 5000); // so notification bubble wont disappear too fast
 
     for (const payload of notifications2process) {
-      const wasTapped = payload.foreground === false || (payload.foreground === true && payload.userInteraction);
+      const wasTapped =
+        payload.foreground === false ||
+        (payload.foreground === true && payload.userInteraction);
 
-      console.log('processing push notification:', payload);
+      console.log("processing push notification:", payload);
       let wallet;
       switch (+payload.type) {
         case 2:
         case 3:
-          wallet = wallets.find(w => w.weOwnAddress(payload.address));
+          wallet = wallets.find((w) => w.weOwnAddress(payload.address));
           break;
         case 1:
         case 4:
-          wallet = wallets.find(w => w.weOwnTransaction(payload.txid || payload.hash));
+          wallet = wallets.find((w) =>
+            w.weOwnTransaction(payload.txid || payload.hash)
+          );
           break;
       }
 
@@ -248,17 +278,17 @@ const App = () => {
           if (payload.type !== 3 || wallet.chain === Chain.OFFCHAIN) {
             NavigationService.dispatch(
               CommonActions.navigate({
-                name: 'WalletTransactions',
+                name: "WalletTransactions",
                 key: `WalletTransactions-${wallet.getID()}`,
                 params: {
                   walletID,
                   walletType: wallet.type,
                 },
-              }),
+              })
             );
           } else {
-            NavigationService.navigate('ReceiveDetailsRoot', {
-              screen: 'ReceiveDetails',
+            NavigationService.navigate("ReceiveDetailsRoot", {
+              screen: "ReceiveDetails",
               params: {
                 walletID,
                 address: payload.address,
@@ -269,7 +299,9 @@ const App = () => {
           return true;
         }
       } else {
-        console.log('could not find wallet while processing push notification, NOP');
+        console.log(
+          "could not find wallet while processing push notification, NOP"
+        );
       }
     } // end foreach notifications loop
 
@@ -283,30 +315,47 @@ const App = () => {
     return false;
   };
 
-  const handleAppStateChange = async nextAppState => {
+  const handleAppStateChange = async (nextAppState) => {
     if (wallets.length === 0) return;
-    if ((appState.current.match(/background/) && nextAppState === 'active') || nextAppState === undefined) {
+    if (
+      (appState.current.match(/background/) && nextAppState === "active") ||
+      nextAppState === undefined
+    ) {
       setTimeout(() => A(A.ENUM.APP_UNSUSPENDED), 2000);
       currency.updateExchangeRate();
       const processed = await processPushNotifications();
       if (processed) return;
       const clipboard = await BlueClipboard.getClipboardContent();
-      const isAddressFromStoredWallet = wallets.some(wallet => {
+      const isAddressFromStoredWallet = wallets.some((wallet) => {
         if (wallet.chain === Chain.ONCHAIN) {
           // checking address validity is faster than unwrapping hierarchy only to compare it to garbage
-          return wallet.isAddressValid && wallet.isAddressValid(clipboard) && wallet.weOwnAddress(clipboard);
+          return (
+            wallet.isAddressValid &&
+            wallet.isAddressValid(clipboard) &&
+            wallet.weOwnAddress(clipboard)
+          );
         } else {
-          return wallet.isInvoiceGeneratedByWallet(clipboard) || wallet.weOwnAddress(clipboard);
+          return (
+            wallet.isInvoiceGeneratedByWallet(clipboard) ||
+            wallet.weOwnAddress(clipboard)
+          );
         }
       });
       const isBitcoinAddress = DeeplinkSchemaMatch.isBitcoinAddress(clipboard);
-      const isLightningInvoice = DeeplinkSchemaMatch.isLightningInvoice(clipboard);
+      const isLightningInvoice = DeeplinkSchemaMatch.isLightningInvoice(
+        clipboard
+      );
       const isLNURL = DeeplinkSchemaMatch.isLnUrl(clipboard);
-      const isBothBitcoinAndLightning = DeeplinkSchemaMatch.isBothBitcoinAndLightning(clipboard);
+      const isBothBitcoinAndLightning = DeeplinkSchemaMatch.isBothBitcoinAndLightning(
+        clipboard
+      );
       if (
         !isAddressFromStoredWallet &&
         clipboardContent.current !== clipboard &&
-        (isBitcoinAddress || isLightningInvoice || isLNURL || isBothBitcoinAndLightning)
+        (isBitcoinAddress ||
+          isLightningInvoice ||
+          isLNURL ||
+          isBothBitcoinAndLightning)
       ) {
         let contentType;
         if (isBitcoinAddress) {
@@ -325,41 +374,53 @@ const App = () => {
     }
   };
 
-  const handleOpenURL = event => {
-    DeeplinkSchemaMatch.navigationRouteFor(event, value => NavigationService.navigate(...value), { wallets, addWallet, saveToDisk });
+  const handleOpenURL = (event) => {
+    DeeplinkSchemaMatch.navigationRouteFor(
+      event,
+      (value) => NavigationService.navigate(...value),
+      { wallets, addWallet, saveToDisk }
+    );
   };
 
   const showClipboardAlert = ({ contentType }) => {
-    ReactNativeHapticFeedback.trigger('impactLight', { ignoreAndroidSystemSettings: false });
-    BlueClipboard.getClipboardContent().then(clipboard => {
-      if (Platform.OS === 'ios' || Platform.OS === 'macos') {
+    ReactNativeHapticFeedback.trigger("impactLight", {
+      ignoreAndroidSystemSettings: false,
+    });
+    BlueClipboard.getClipboardContent().then((clipboard) => {
+      if (Platform.OS === "ios" || Platform.OS === "macos") {
         ActionSheet.showActionSheetWithOptions(
           {
             options: [loc._.cancel, loc._.continue],
             title: loc._.clipboard,
-            message: contentType === ClipboardContentType.BITCOIN ? loc.wallets.clipboard_bitcoin : loc.wallets.clipboard_lightning,
+            message:
+              contentType === ClipboardContentType.BITCOIN
+                ? loc.wallets.clipboard_bitcoin
+                : loc.wallets.clipboard_lightning,
             cancelButtonIndex: 0,
           },
-          buttonIndex => {
+          (buttonIndex) => {
             if (buttonIndex === 1) {
               handleOpenURL({ url: clipboard });
             }
-          },
+          }
         );
       } else {
         ActionSheet.showActionSheetWithOptions({
           buttons: [
-            { text: loc._.cancel, style: 'cancel', onPress: () => {} },
+            { text: loc._.cancel, style: "cancel", onPress: () => {} },
             {
               text: loc._.continue,
-              style: 'default',
+              style: "default",
               onPress: () => {
                 handleOpenURL({ url: clipboard });
               },
             },
           ],
           title: loc._.clipboard,
-          message: contentType === ClipboardContentType.BITCOIN ? loc.wallets.clipboard_bitcoin : loc.wallets.clipboard_lightning,
+          message:
+            contentType === ClipboardContentType.BITCOIN
+              ? loc.wallets.clipboard_bitcoin
+              : loc.wallets.clipboard_lightning,
         });
       }
     });
@@ -368,8 +429,15 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <View style={styles.root}>
-        <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} backgroundColor="transparent" translucent />
-        <NavigationContainer ref={navigationRef} theme={colorScheme === 'dark' ? BlueDarkTheme : BlueDefaultTheme}>
+        <StatusBar
+          barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
+          backgroundColor="transparent"
+          translucent
+        />
+        <NavigationContainer
+          ref={navigationRef}
+          theme={colorScheme === "dark" ? BlueDarkTheme : BlueDefaultTheme}
+        >
           <InitRoot />
           <Notifications onProcessNotifications={processPushNotifications} />
         </NavigationContainer>
@@ -392,19 +460,19 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     padding: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
+    borderColor: "rgba(0, 0, 0, 0.1)",
     minHeight: 200,
     height: 200,
   },
   modelContentButtonLayout: {
-    flexDirection: 'row',
+    flexDirection: "row",
     margin: 16,
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    justifyContent: "space-between",
+    alignItems: "flex-end",
   },
 });
 
