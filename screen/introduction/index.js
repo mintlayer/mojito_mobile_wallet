@@ -11,8 +11,6 @@ import { introductionContent } from '../../constants';
 
 const Introduction = () => {
   const [activePage, setActivePage] = useState(0);
-  const { navigate } = useNavigation();
-
   const _renderItem = ({ item, index }) => {
     const { image, title, subtitle } = item;
     return <View style={styles.slide1}>{pageContent(image, title, subtitle)}</View>;
@@ -34,23 +32,28 @@ const Introduction = () => {
       />
       <Pagination dotsLength={introductionContent.length} activeDotIndex={activePage} dotStyle={styles.activeDot} inactiveDotStyle={styles.inActiveDot} />
 
-      <View style={styles.skipButtonPortion}>{activePage === 3 ? startButton(navigate) : skip(navigate)}</View>
+      <View style={styles.skipButtonPortion}>{activePage === 3 ? startButton() : skip()}</View>
     </View>
   );
 };
-const navigateScreen = (navigate) => {
-  navigate('WalletsList');
+const navigateScreen = (navigate) => navigate('WalletsList');
+
+const skip = () => {
+  const { navigate } = useNavigation();
+  return (
+    <TouchableOpacity style={styles.skipButton} onPress={() => navigateScreen(navigate)}>
+      <Text style={{ color: COLORS.green }}>Skip</Text>
+    </TouchableOpacity>
+  );
 };
-const skip = (navigate) => (
-  <TouchableOpacity style={styles.skipButton} onPress={() => navigateScreen(navigate)}>
-    <Text style={{ color: COLORS.green }}>Skip</Text>
-  </TouchableOpacity>
-);
-const startButton = (navigate) => (
-  <TouchableOpacity style={styles.startButton} onPress={() => navigateScreen(navigate)}>
-    <Text style={styles.startButtonText}>Start</Text>
-  </TouchableOpacity>
-);
+const startButton = () => {
+  const { navigate } = useNavigation();
+  return (
+    <TouchableOpacity style={styles.startButton} onPress={() => navigateScreen(navigate)}>
+      <Text style={styles.startButtonText}>Start</Text>
+    </TouchableOpacity>
+  );
+};
 const pageContent = (image, title, subTitle) => (
   <Fragment>
     <Image source={image} />

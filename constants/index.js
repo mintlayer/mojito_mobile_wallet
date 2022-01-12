@@ -25,3 +25,5 @@ export const introductionContent = [
     index: 3,
   },
 ];
+
+export const androidLevel = 28;
