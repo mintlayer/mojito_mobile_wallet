@@ -7,6 +7,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 import navigationStyle from '../../components/navigationStyle';
 import { COLORS } from '../../theme/Colors';
+import { type } from '../../theme/Fonts';
 import { introductionContent } from '../../constants';
 
 const Introduction = () => {
@@ -42,7 +43,7 @@ const skip = () => {
   const { navigate } = useNavigation();
   return (
     <TouchableOpacity style={styles.skipButton} onPress={() => navigateScreen(navigate)}>
-      <Text style={{ color: COLORS.green }}>Skip</Text>
+      <Text style={styles.skipButtonText}>Skip</Text>
     </TouchableOpacity>
   );
 };
@@ -79,13 +80,17 @@ const styles = StyleSheet.create({
   },
   text: {
     color: COLORS.black,
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
     marginVertical: 30,
+    fontFamily: type.bold,
   },
   description: {
     color: COLORS.lightGray,
-    fontSize: 12,
+    fontSize: 14,
+    fontFamily: type.light,
+    lineHeight: 18,
+    letterSpacing: 0.7,
+    textAlign: 'center',
   },
   activeDot: {
     width: 30,
@@ -99,7 +104,7 @@ const styles = StyleSheet.create({
   },
   startButton: {
     width: '80%',
-    paddingVertical: 25,
+    paddingVertical: 20,
     borderRadius: 20,
     backgroundColor: COLORS.green,
     justifyContent: 'center',
@@ -107,10 +112,17 @@ const styles = StyleSheet.create({
   },
   startButtonText: {
     color: COLORS.white,
+    fontFamily: type.light,
+    fontSize: 14,
   },
   skipButton: {
     paddingVertical: 20,
     paddingHorizontal: 50,
+  },
+  skipButtonText: {
+    color: COLORS.green,
+    fontFamily: type.semiBold,
+    fontSize: 14,
   },
   skipButtonPortion: {
     flex: 0.18,
