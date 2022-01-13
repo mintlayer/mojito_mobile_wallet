@@ -1,18 +1,6 @@
 import 'react-native-gesture-handler'; // should be on top
 import React, { useContext, useEffect, useRef } from 'react';
-import {
-  AppState,
-  DeviceEventEmitter,
-  NativeModules,
-  NativeEventEmitter,
-  Linking,
-  Platform,
-  StyleSheet,
-  UIManager,
-  useColorScheme,
-  View,
-  StatusBar,
-} from 'react-native';
+import { AppState, DeviceEventEmitter, NativeModules, NativeEventEmitter, Linking, Platform, StyleSheet, UIManager, useColorScheme, View, StatusBar } from 'react-native';
 import { NavigationContainer, CommonActions } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { navigationRef } from './NavigationService';
@@ -41,7 +29,6 @@ const currency = require('./blue_modules/currency');
 
 const eventEmitter = new NativeEventEmitter(NativeModules.EventEmitter);
 const { EventEmitter } = NativeModules;
-
 const ClipboardContentType = Object.freeze({
   BITCOIN: 'BITCOIN',
   LIGHTNING: 'LIGHTNING',
@@ -54,14 +41,12 @@ if (Platform.OS === 'android') {
 }
 
 const App = () => {
-  const { walletsInitialized, wallets, addWallet, saveToDisk, fetchAndSaveWalletTransactions, refreshAllWalletTransactions } = useContext(
-    BlueStorageContext,
-  );
+  const { walletsInitialized, wallets, addWallet, saveToDisk, fetchAndSaveWalletTransactions, refreshAllWalletTransactions } = useContext(BlueStorageContext);
   const appState = useRef(AppState.currentState);
   const clipboardContent = useRef();
   const colorScheme = useColorScheme();
 
-  const onNotificationReceived = async notification => {
+  const onNotificationReceived = async (notification) => {
     const payload = Object.assign({}, notification, notification.data);
     if (notification.data && notification.data.data) Object.assign(payload, notification.data.data);
     payload.foreground = true;
@@ -80,7 +65,7 @@ const App = () => {
     );
   };
 
-  const onUserActivityOpen = data => {
+  const onUserActivityOpen = (data) => {
     switch (data.activityType) {
       case HandoffComponent.activityTypes.ReceiveOnchain:
         NavigationService.navigate('ReceiveDetailsRoot', {
@@ -150,9 +135,9 @@ const App = () => {
     eventEmitter.addListener('onUserActivityOpen', onUserActivityOpen);
   };
 
-  const popInitialAction = async data => {
+  const popInitialAction = async (data) => {
     if (data) {
-      const wallet = wallets.find(wallet => wallet.getID() === data.userInfo.url.split('wallet/')[1]);
+      const wallet = wallets.find((wallet) => wallet.getID() === data.userInfo.url.split('wallet/')[1]);
       NavigationService.dispatch(
         CommonActions.navigate({
           name: 'WalletTransactions',
@@ -173,7 +158,7 @@ const App = () => {
         const isViewAllWalletsEnabled = await OnAppLaunch.isViewAllWalletsEnabled();
         if (!isViewAllWalletsEnabled) {
           const selectedDefaultWallet = await OnAppLaunch.getSelectedDefaultWallet();
-          const wallet = wallets.find(wallet => wallet.getID() === selectedDefaultWallet.getID());
+          const wallet = wallets.find((wallet) => wallet.getID() === selectedDefaultWallet.getID());
           if (wallet) {
             NavigationService.dispatch(
               CommonActions.navigate({
@@ -191,8 +176,8 @@ const App = () => {
     }
   };
 
-  const walletQuickActions = data => {
-    const wallet = wallets.find(wallet => wallet.getID() === data.userInfo.url.split('wallet/')[1]);
+  const walletQuickActions = (data) => {
+    const wallet = wallets.find((wallet) => wallet.getID() === data.userInfo.url.split('wallet/')[1]);
     NavigationService.dispatch(
       CommonActions.navigate({
         name: 'WalletTransactions',
@@ -216,7 +201,7 @@ const App = () => {
       console.log('not processing push notifications because wallets are not initialized');
       return;
     }
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 200));
     // sleep needed as sometimes unsuspend is faster than notification module actually saves notifications to async storage
     const notifications2process = await Notifications.getStoredNotifications();
 
@@ -233,11 +218,11 @@ const App = () => {
       switch (+payload.type) {
         case 2:
         case 3:
-          wallet = wallets.find(w => w.weOwnAddress(payload.address));
+          wallet = wallets.find((w) => w.weOwnAddress(payload.address));
           break;
         case 1:
         case 4:
-          wallet = wallets.find(w => w.weOwnTransaction(payload.txid || payload.hash));
+          wallet = wallets.find((w) => w.weOwnTransaction(payload.txid || payload.hash));
           break;
       }
 
@@ -283,7 +268,7 @@ const App = () => {
     return false;
   };
 
-  const handleAppStateChange = async nextAppState => {
+  const handleAppStateChange = async (nextAppState) => {
     if (wallets.length === 0) return;
     if ((appState.current.match(/background/) && nextAppState === 'active') || nextAppState === undefined) {
       setTimeout(() => A(A.ENUM.APP_UNSUSPENDED), 2000);
@@ -291,7 +276,7 @@ const App = () => {
       const processed = await processPushNotifications();
       if (processed) return;
       const clipboard = await BlueClipboard.getClipboardContent();
-      const isAddressFromStoredWallet = wallets.some(wallet => {
+      const isAddressFromStoredWallet = wallets.some((wallet) => {
         if (wallet.chain === Chain.ONCHAIN) {
           // checking address validity is faster than unwrapping hierarchy only to compare it to garbage
           return wallet.isAddressValid && wallet.isAddressValid(clipboard) && wallet.weOwnAddress(clipboard);
@@ -303,11 +288,7 @@ const App = () => {
       const isLightningInvoice = DeeplinkSchemaMatch.isLightningInvoice(clipboard);
       const isLNURL = DeeplinkSchemaMatch.isLnUrl(clipboard);
       const isBothBitcoinAndLightning = DeeplinkSchemaMatch.isBothBitcoinAndLightning(clipboard);
-      if (
-        !isAddressFromStoredWallet &&
-        clipboardContent.current !== clipboard &&
-        (isBitcoinAddress || isLightningInvoice || isLNURL || isBothBitcoinAndLightning)
-      ) {
+      if (!isAddressFromStoredWallet && clipboardContent.current !== clipboard && (isBitcoinAddress || isLightningInvoice || isLNURL || isBothBitcoinAndLightning)) {
         let contentType;
         if (isBitcoinAddress) {
           contentType = ClipboardContentType.BITCOIN;
@@ -325,13 +306,19 @@ const App = () => {
     }
   };
 
-  const handleOpenURL = event => {
-    DeeplinkSchemaMatch.navigationRouteFor(event, value => NavigationService.navigate(...value), { wallets, addWallet, saveToDisk });
+  const handleOpenURL = (event) => {
+    DeeplinkSchemaMatch.navigationRouteFor(event, (value) => NavigationService.navigate(...value), {
+      wallets,
+      addWallet,
+      saveToDisk,
+    });
   };
 
   const showClipboardAlert = ({ contentType }) => {
-    ReactNativeHapticFeedback.trigger('impactLight', { ignoreAndroidSystemSettings: false });
-    BlueClipboard.getClipboardContent().then(clipboard => {
+    ReactNativeHapticFeedback.trigger('impactLight', {
+      ignoreAndroidSystemSettings: false,
+    });
+    BlueClipboard.getClipboardContent().then((clipboard) => {
       if (Platform.OS === 'ios' || Platform.OS === 'macos') {
         ActionSheet.showActionSheetWithOptions(
           {
@@ -340,7 +327,7 @@ const App = () => {
             message: contentType === ClipboardContentType.BITCOIN ? loc.wallets.clipboard_bitcoin : loc.wallets.clipboard_lightning,
             cancelButtonIndex: 0,
           },
-          buttonIndex => {
+          (buttonIndex) => {
             if (buttonIndex === 1) {
               handleOpenURL({ url: clipboard });
             }
