@@ -79,6 +79,12 @@
     "universe",
     "eslint:recommended",
     "react-app",
+
+    "standard",
+    "standard-react",
+    "standard-jsx",
+    "plugin:react-hooks/recommended",
+    "@react-native-community" // TODO: try to enable
   ],
   "globals": {
     "fetch": false,
