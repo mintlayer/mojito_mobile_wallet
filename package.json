@@ -49,7 +49,9 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react-hooks": "^4.1.2",
     "@babel/plugin-transform-react-constant-elements": "^7.12.1",
-    "@babel/plugin-transform-runtime": "^7.12.1"
+    "@babel/plugin-transform-runtime": "^7.12.1",
+    "metro-config": "0.58",
+    "babel-plugin-transform-remove-console": "^6.9.4"
   },
   "husky": {
     "hooks": {
@@ -58,10 +60,8 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
-      "./node_modules/.bin/eslint --fix --max-warnings 1"
-    ],
-    "**/*.{json,md}": [
-      "prettier --write"
+      "npm run lint:fix",
+      "npm run test:staged"
     ]
   },
   "engines": {
@@ -89,7 +89,8 @@
     "e2e:release-build": "detox build -c android.emu.release",
     "e2e:release-test": "detox test -c android.emu.release --record-videos all --take-screenshots all --headless -d 200000 --loglevel info",
     "tslint": "tsc",
-    "lint": "eslint --ext .js,.ts,.tsx '*.@(js|ts|tsx)' screen 'blue_modules/*.@(js|ts|tsx)' class models loc tests components",
+    "lint:work": "eslint --ext .js,.ts,.tsx '*.@(js|ts|tsx)' screen 'blue_modules/*.@(js|ts|tsx)' class models loc tests components",
+    "lint": "eslint --fix",
     "lint:fix": "npm run lint -- --fix",
     "lint:quickfix": "git status --porcelain | grep -v '\\.json' | grep -E '\\.js|\\.ts' --color=never |  awk '{print $2}' | xargs eslint --fix; exit 0",
     "unit": "jest -b tests/unit/*",
