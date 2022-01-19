@@ -1,70 +1,151 @@
+// {
+//   "parser": "@typescript-eslint/parser",
+//   "plugins": [
+//     "@typescript-eslint",
+//     "react-native" // for no-inline-styles rule
+//   ],
+//   "extends": [
+//     "standard",
+//     "standard-react",
+//     "standard-jsx",
+//     "plugin:react-hooks/recommended",
+//     "plugin:react/recommended",
+//     "plugin:@typescript-eslint/recommended",
+//     // "@react-native-community", // TODO: try to enable
+//     "plugin:prettier/recommended" // removes all eslint rules that can mess up with prettier
+//   ],
+//   "rules": {
+//     "react/jsx-handler-names": "off", // activated by standard-react config
+//     "react/display-name": "off",
+//     "react-native/no-inline-styles": "error",
+//     "prettier/prettier": [
+//       "warn",
+//       {
+//         "singleQuote": true,
+//         "printWidth": 140,
+//         "trailingComma": "all",
+//         "arrowParens": "avoid"
+//       }
+//     ],
+//     "@typescript-eslint/no-empty-function": "off", // used often in the codebase, useful e.g. in testing
+//     "@typescript-eslint/ban-ts-comment": [
+//       "error",
+//       {
+//         "ts-expect-error": "allow-with-description",
+//         "ts-ignore": "allow-with-description", // temporary allow to ease the migration
+//         "ts-nocheck": true,
+//         "ts-check": false
+//       }
+//     ],
+//     "@typescript-eslint/no-unused-vars": ["error", { "args": "none" }],
+
+//     // disable rules that are superseded by @typescript-eslint rules
+//     "no-unused-vars": "off",
+//     "no-use-before-define": "off",
+
+//     // disable rules that we want to enforce only for typescript files
+//     "@typescript-eslint/explicit-module-boundary-types": "off",
+//     "@typescript-eslint/no-var-requires": "off",
+//     "@typescript-eslint/no-this-alias": "off",
+//     "@typescript-eslint/no-use-before-define": "off"
+//   },
+//   "overrides": [
+//     {
+//       // enable the rule specifically for TypeScript files
+//       "files": ["*.ts", "*.tsx"],
+//       "rules": {
+//         "@typescript-eslint/explicit-module-boundary-types": "off",
+//         "@typescript-eslint/no-explicit-any": "off",
+//         "@typescript-eslint/no-this-alias": "off",
+//         "@typescript-eslint/no-var-requires": "off",
+//         "@typescript-eslint/no-inferrable-types": "off",
+//         "@typescript-eslint/no-use-before-define": ["error", { "variables": false }]
+//       }
+//     }
+//   ],
+//   "env": {
+//     "es6": true
+//   },
+//   "globals": { "fetch": false }
+// }
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "react-native" // for no-inline-styles rule
-  ],
   "extends": [
-    "standard",
-    "standard-react",
-    "standard-jsx",
-    "plugin:react-hooks/recommended",
+    "airbnb",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    // "@react-native-community", // TODO: try to enable
-    "plugin:prettier/recommended" // removes all eslint rules that can mess up with prettier
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended",
+    "universe",
+    "eslint:recommended",
+    "react-app",
   ],
-  "rules": {
-    "react/jsx-handler-names": "off", // activated by standard-react config
-    "react/display-name": "off",
-    "react-native/no-inline-styles": "error",
-    "prettier/prettier": [
-      "warn",
-      {
-        "singleQuote": true,
-        "printWidth": 140,
-        "trailingComma": "all",
-        "arrowParens": "avoid"
-      }
-    ],
-    "@typescript-eslint/no-empty-function": "off", // used often in the codebase, useful e.g. in testing
-    "@typescript-eslint/ban-ts-comment": [
-      "error",
-      {
-        "ts-expect-error": "allow-with-description",
-        "ts-ignore": "allow-with-description", // temporary allow to ease the migration
-        "ts-nocheck": true,
-        "ts-check": false
-      }
-    ],
-    "@typescript-eslint/no-unused-vars": ["error", { "args": "none" }],
-
-    // disable rules that are superseded by @typescript-eslint rules
-    "no-unused-vars": "off",
-    "no-use-before-define": "off",
-
-    // disable rules that we want to enforce only for typescript files
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/no-this-alias": "off",
-    "@typescript-eslint/no-use-before-define": "off"
+  "globals": {
+    "fetch": false,
+    "__CLIENT__": true,
+    "__SERVER__": true,
+    "__DEV__": true,
+    "GLOBAL": true,
+    "XMLHttpRequest": true,
   },
-  "overrides": [
-    {
-      // enable the rule specifically for TypeScript files
-      "files": ["*.ts", "*.tsx"],
-      "rules": {
-        "@typescript-eslint/explicit-module-boundary-types": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-this-alias": "off",
-        "@typescript-eslint/no-var-requires": "off",
-        "@typescript-eslint/no-inferrable-types": "off",
-        "@typescript-eslint/no-use-before-define": ["error", { "variables": false }]
-      }
-    }
-  ],
   "env": {
-    "es6": true
+    "node": true,
+    "browser": true,
+    "es6": true,
+    "jest": true,
   },
-  "globals": { "fetch": false }
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+    },
+  },
+  "rules": {
+    "no-irregular-whitespace": 0,
+    "eslintreact/no-unused-state": 0,
+    "react-hooks/rules-of-hooks": 0,
+    "react/prop-types": 0,
+    "react/no-unused-prop-types": 0,
+    "no-underscore-dangle": 0,
+    "no-tabs": 0,
+    "react/sort-comp": 0,
+    "react/require-default-props": 0,
+    "indent": 0,
+    "class-methods-use-this": 0,
+    "quote-props": 0,
+    "arrow-body-style": 0,
+    "object-curly-newline": 0,
+    "no-nested-ternary": 0,
+    "no-plusplus": 0,
+    "no-param-reassign": 0,
+    "global-require": 0,
+    "react-hooks/exhaustive-deps": 0,
+    "react/jsx-props-no-spreading": 0,
+    "import/extensions": 0,
+    "consistent-return": 0,
+    "react/jsx-one-expression-per-line": [
+      0,
+      {
+        "allow": "none",
+      },
+    ],
+    "react/prefer-stateless-function": [0],
+    "jsx-a11y/label-has-associated-control": [0],
+    "jsx-a11y/label-has-for": [0],
+    "no-shadow": [0],
+    "import/prefer-default-export": 0,
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".jsx", "tsx", "ts"],
+      },
+    ],
+  },
+  "plugins": ["@typescript-eslint", "prettier"],
+  "settings": {
+    "react": {
+      "version": "detect",
+    },
+  },
 }
