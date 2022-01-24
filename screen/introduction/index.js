@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -12,7 +12,7 @@ import { introductionContent } from '../../constants';
 
 const Introduction = () => {
   const [activePage, setActivePage] = useState(0);
-  const _renderItem = ({ item, index }) => {
+  const _renderItem = ({ item }) => {
     const { image, title, subtitle } = item;
     return <View style={styles.slide1}>{pageContent(image, title, subtitle)}</View>;
   };
@@ -22,7 +22,7 @@ const Introduction = () => {
       <Carousel
         data={introductionContent}
         renderItem={_renderItem}
-        onSnapToItem={(index) => {
+        onSnapToItem={index => {
           setActivePage(index);
         }}
         useScrollView
@@ -31,15 +31,20 @@ const Introduction = () => {
         inactiveSlideScale={0.94}
         inactiveSlideOpacity={0.7}
       />
-      <Pagination dotsLength={introductionContent.length} activeDotIndex={activePage} dotStyle={styles.activeDot} inactiveDotStyle={styles.inActiveDot} />
+      <Pagination
+        dotsLength={introductionContent.length}
+        activeDotIndex={activePage}
+        dotStyle={styles.activeDot}
+        inactiveDotStyle={styles.inActiveDot}
+      />
 
-      <View style={styles.skipButtonPortion}>{activePage === 3 ? startButton() : skip()}</View>
+      <View style={styles.skipButtonPortion}>{activePage === 3 ? StartButton() : Skip()}</View>
     </View>
   );
 };
-const navigateScreen = (navigate) => navigate('WalletsList');
+const navigateScreen = navigate => navigate('WalletsList');
 
-const skip = () => {
+const Skip = () => {
   const { navigate } = useNavigation();
   return (
     <TouchableOpacity style={styles.skipButton} onPress={() => navigateScreen(navigate)}>
@@ -47,7 +52,7 @@ const skip = () => {
     </TouchableOpacity>
   );
 };
-const startButton = () => {
+const StartButton = () => {
   const { navigate } = useNavigation();
   return (
     <TouchableOpacity style={styles.startButton} onPress={() => navigateScreen(navigate)}>
@@ -56,15 +61,15 @@ const startButton = () => {
   );
 };
 const pageContent = (image, title, subTitle) => (
-  <Fragment>
+  <React.Fragment key={title}>
     <Image source={image} />
     <Text style={styles.text}>{title}</Text>
     <Text style={styles.description}>{subTitle}</Text>
-  </Fragment>
+  </React.Fragment>
 );
 
 export default Introduction;
-Introduction.navigationOptions = navigationStyle({}, (opts) => ({
+Introduction.navigationOptions = navigationStyle({}, opts => ({
   ...opts,
   headerTitle: '',
 }));
