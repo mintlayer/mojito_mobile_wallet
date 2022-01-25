@@ -26,3 +26,8 @@ jobs:
           # Enable linters
           eslint: true
           prettier: true
+
+      - name: Install packages
+        run: npm ci
+      - name: Run Tests
+        run: npm run ci:test
