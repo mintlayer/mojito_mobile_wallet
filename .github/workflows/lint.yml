@@ -1,5 +1,21 @@
-name: Lint Action
-on: push
+name: Lint
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - master
+  # Replace pull_request with pull_request_target if you
+  # plan to use this action with forks, see the Limitations section
+  pull_request:
+    branches:
+      - master
+
+# Down scope as necessary via https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
+permissions:
+  checks: write
+  contents: write
 
 jobs:
   run-linters:
@@ -10,24 +26,9 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16.0.0
-
-      # ESLint and Prettier must be in `package.json`
-      - name: Install Node.js dependencies
-        run: npm install
+      # Install your linters here
 
       - name: Run linters
         uses: wearerequired/lint-action@v1
         with:
-          github_token: ${{ secrets.TOKEN }}
-          # Enable linters
-          eslint: true
-          prettier: true
-
-      # - name: Install packages
-      #   run: npm ci
-      # - name: Run Tests
-      #   run: npm run ci:test
+          # Enable your linters here
