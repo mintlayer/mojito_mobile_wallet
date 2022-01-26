@@ -93,7 +93,8 @@
     "lint:fix": "npm run lint -- --fix",
     "lint:quickfix": "git status --porcelain | grep -v '\\.json' | grep -E '\\.js|\\.ts' --color=never |  awk '{print $2}' | xargs eslint --fix; exit 0",
     "unit": "jest -b tests/unit/*",
-    "windows": "react-native run-windows"
+    "windows": "react-native run-windows",
+    "ci:test": "jest --ci"
   },
   "jest": {
     "preset": "react-native",

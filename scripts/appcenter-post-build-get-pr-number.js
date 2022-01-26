@@ -11,9 +11,10 @@ const req = https.request(
   {
     hostname: 'api.github.com',
     port: 443,
-    path: '/repos/BlueWallet/BlueWallet/pulls',
+    path: '/repos/mintlayer/mobile_wallet/pulls',
     method: 'GET',
-    headers: { 'User-Agent': 'BlueWallet bot', Authorization: auth },
+    // headers: { 'User-Agent': 'BlueWallet bot', Authorization: auth },
+    headers: { Authorization: auth },
   },
   resp => {
     let data = '';
