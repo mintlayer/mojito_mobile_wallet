@@ -85,7 +85,8 @@ export class AbstractWallet {
   }
 
   getID(): string {
-    const thisWithPassphrase = this as unknown as WalletWithPassphrase;
+    // eslint-disable-next-line prettier/prettier
+    const thisWithPassphrase = (this as unknown) as WalletWithPassphrase;
     const passphrase = thisWithPassphrase.getPassphrase ? thisWithPassphrase.getPassphrase() : '';
     const path = this._derivationPath ?? '';
     const string2hash = this.type + this.getSecret() + passphrase + path;

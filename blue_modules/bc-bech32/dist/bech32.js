@@ -3,7 +3,9 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var index_1 = {};
 var Bech32Version;
 (function (Bech32Version) {
+  // eslint-disable-next-line dot-notation
   Bech32Version[(Bech32Version['Origin'] = 1)] = 'Origin';
+  // eslint-disable-next-line dot-notation
   Bech32Version[(Bech32Version['bis'] = 2)] = 'bis';
 })((Bech32Version = Bech32Version || (Bech32Version = {})));
 index_1.Bech32Version = Bech32Version;
@@ -130,4 +132,4 @@ exports.default = {
   encode: encode,
   decode: decode,
 };
-//# sourceMappingURL=bech32.js.map
+// # sourceMappingURL=bech32.js.map
