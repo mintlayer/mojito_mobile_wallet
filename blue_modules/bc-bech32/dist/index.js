@@ -6,12 +6,7 @@ var __importDefault =
   };
 Object.defineProperty(exports, '__esModule', { value: true });
 // eslint-disable-next-line no-void
-exports.decodeBc32Data =
-  exports.encodeBc32Data =
-  exports.encodeSegwitAddress =
-  exports.decodeSegwitAddress =
-  exports.Bech32Version =
-    void 0;
+exports.decodeBc32Data = exports.encodeBc32Data = exports.encodeSegwitAddress = exports.decodeSegwitAddress = exports.Bech32Version = void 0;
 var bech32_1 = __importDefault(require('./bech32'));
 var Bech32Version;
 (function (Bech32Version) {

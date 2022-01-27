@@ -76,8 +76,7 @@ var dealWithMultipleWorkloads = function (workloads, type) {
       index = _a[0],
       total = _a[1];
     if (total !== length) throw new Error('invalid workload: ' + workload + ', total ' + total + ' not equal workloads length ' + length);
-    if (digest && digest !== pieces[2])
-      throw new Error('invalid workload: ' + workload + ', checksum changed ' + digest + ', ' + pieces[2]);
+    if (digest && digest !== pieces[2]) throw new Error('invalid workload: ' + workload + ', checksum changed ' + digest + ', ' + pieces[2]);
     digest = pieces[2];
     if (fragments[index - 1]) throw new Error('invalid workload: ' + workload + ', index ' + index + ' has already been set');
     fragments[index - 1] = pieces[3];

@@ -65,9 +65,7 @@ export function getMempoolTransactionsByAddress(address: string): Promise<Mempoo
 
 export function estimateCurrentBlockheight(): number;
 
-export function multiGetHistoryByAddress(
-  addresses: string[],
-): Promise<
+export function multiGetHistoryByAddress(addresses: string[]): Promise<
   Record<
     string,
     {
