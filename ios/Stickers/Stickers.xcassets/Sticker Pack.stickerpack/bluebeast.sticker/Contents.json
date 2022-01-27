@@ -1,9 +1,9 @@
 {
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
+  "info": {
+    "author": "xcode",
+    "version": 1
   },
-  "properties" : {
-    "filename" : "bluebeast.png"
+  "properties": {
+    "filename": "bluebeast.png"
   }
 }

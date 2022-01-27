@@ -90,7 +90,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
     await super.fetchUtxo();
     // now we need to fetch txhash for each input as required by PSBT
     const txhexes = await BlueElectrum.multiGetTransactionByTxid(
-      this.getUtxo().map(x => x.txid),
+      this.getUtxo().map((x) => x.txid),
       50,
       false,
     );

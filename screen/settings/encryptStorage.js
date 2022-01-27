@@ -60,7 +60,7 @@ const EncryptStorage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
-  const onEncryptStorageSwitch = async value => {
+  const onEncryptStorageSwitch = async (value) => {
     setIsLoading(true);
     if (value === true) {
       let p1 = await prompt(loc.settings.password, loc.settings.password_explain).catch(() => {
@@ -105,7 +105,7 @@ const EncryptStorage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
-  const onUseBiometricSwitch = async value => {
+  const onUseBiometricSwitch = async (value) => {
     const isBiometricsEnabled = {
       isDeviceBiometricCapable: biometrics.isDeviceBiometricCapable,
       isBiometricsEnabled: biometrics.isBiometricsEnabled,
@@ -133,11 +133,7 @@ const EncryptStorage = () => {
         {biometrics.isDeviceBiometricCapable && (
           <>
             <BlueHeaderDefaultSub leftText={loc.settings.biometrics} rightComponent={null} />
-            <BlueListItem
-              title={loc.formatString(loc.settings.encrypt_use, { type: biometrics.biometricsType })}
-              Component={TouchableWithoutFeedback}
-              switch={{ value: biometrics.isBiometricsEnabled, onValueChange: onUseBiometricSwitch }}
-            />
+            <BlueListItem title={loc.formatString(loc.settings.encrypt_use, { type: biometrics.biometricsType })} Component={TouchableWithoutFeedback} switch={{ value: biometrics.isBiometricsEnabled, onValueChange: onUseBiometricSwitch }} />
             <BlueCard>
               <BlueText>{loc.formatString(loc.settings.encrypt_use_expl, { type: biometrics.biometricsType })}</BlueText>
             </BlueCard>
@@ -145,26 +141,12 @@ const EncryptStorage = () => {
           </>
         )}
         <BlueHeaderDefaultSub leftText={loc.settings.encrypt_tstorage} rightComponent={null} />
-        <BlueListItem
-          testID="EncyptedAndPasswordProtected"
-          hideChevron
-          title={loc.settings.encrypt_enc_and_pass}
-          Component={TouchableWithoutFeedback}
-          switch={{ onValueChange: onEncryptStorageSwitch, value: storageIsEncryptedSwitchEnabled }}
-        />
-        {storageIsEncryptedSwitchEnabled && (
-          <BlueListItem
-            onPress={navigateToPlausibleDeniability}
-            title={loc.settings.plausible_deniability}
-            chevron
-            testID="PlausibleDeniabilityButton"
-            Component={TouchableOpacity}
-          />
-        )}
+        <BlueListItem testID="EncyptedAndPasswordProtected" hideChevron title={loc.settings.encrypt_enc_and_pass} Component={TouchableWithoutFeedback} switch={{ onValueChange: onEncryptStorageSwitch, value: storageIsEncryptedSwitchEnabled }} />
+        {storageIsEncryptedSwitchEnabled && <BlueListItem onPress={navigateToPlausibleDeniability} title={loc.settings.plausible_deniability} chevron testID="PlausibleDeniabilityButton" Component={TouchableOpacity} />}
       </ScrollView>
     </SafeBlueArea>
   );
 };
 
 export default EncryptStorage;
-EncryptStorage.navigationOptions = navigationStyle({}, opts => ({ ...opts, headerTitle: loc.settings.encrypt_title }));
+EncryptStorage.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, headerTitle: loc.settings.encrypt_title }));

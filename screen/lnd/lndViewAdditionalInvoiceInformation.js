@@ -12,7 +12,7 @@ import alert from '../../components/Alert';
 const LNDViewAdditionalInvoiceInformation = () => {
   const { walletID } = useRoute().params;
   const { wallets } = useContext(BlueStorageContext);
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const [walletInfo, setWalletInfo] = useState();
   const { colors } = useTheme();
   const { goBack } = useNavigation();
@@ -29,10 +29,10 @@ const LNDViewAdditionalInvoiceInformation = () => {
     if (wallet) {
       wallet
         .fetchInfo()
-        .then(_ => {
+        .then((_) => {
           setWalletInfo(wallet.info_raw);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           alert(loc.errors.network);
           goBack();
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
 
 export default LNDViewAdditionalInvoiceInformation;
 
-LNDViewAdditionalInvoiceInformation.navigationOptions = navigationStyle({}, opts => ({
+LNDViewAdditionalInvoiceInformation.navigationOptions = navigationStyle({}, (opts) => ({
   ...opts,
   title: loc.lndViewInvoice.additional_info,
 }));

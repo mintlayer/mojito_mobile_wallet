@@ -14,7 +14,7 @@ const SLIP39Mixin = {
   },
 
   validateMnemonic() {
-    if (!this.secret.every(m => slip39.validateMnemonic(m))) return false;
+    if (!this.secret.every((m) => slip39.validateMnemonic(m))) return false;
 
     try {
       slip39.recoverSecret(this.secret);
@@ -39,8 +39,8 @@ const SLIP39Mixin = {
     this.secret = newSecret
       .trim()
       .split('\n')
-      .filter(s => s)
-      .map(s => {
+      .filter((s) => s)
+      .map((s) => {
         let secret = s
           .trim()
           .toLowerCase()
@@ -49,7 +49,7 @@ const SLIP39Mixin = {
 
         secret = secret
           .split(' ')
-          .map(word => lookupMap.get(word) || word)
+          .map((word) => lookupMap.get(word) || word)
           .join(' ');
 
         return secret;

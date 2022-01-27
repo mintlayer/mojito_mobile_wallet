@@ -97,20 +97,20 @@ const LdkInfo = () => {
     try {
       const listChannels = await wallet.listChannels();
       if (listChannels && Array.isArray(listChannels)) {
-        const activeChannels = listChannels.filter(channel => channel.is_usable === true);
+        const activeChannels = listChannels.filter((channel) => channel.is_usable === true);
         setChannels(activeChannels);
       } else {
         setChannels([]);
       }
       if (listChannels && Array.isArray(listChannels)) {
-        const inactiveChannels = listChannels.filter(channel => !channel.is_usable && channel.is_funding_locked);
+        const inactiveChannels = listChannels.filter((channel) => !channel.is_usable && channel.is_funding_locked);
         setInactiveChannels(inactiveChannels);
       } else {
         setInactiveChannels([]);
       }
 
       if (listChannels && Array.isArray(listChannels)) {
-        const listPendingChannels = listChannels.filter(channel => !channel.is_funding_locked);
+        const listPendingChannels = listChannels.filter((channel) => !channel.is_funding_locked);
         setPendingChannels(listPendingChannels);
       } else {
         setPendingChannels([]);
@@ -184,13 +184,7 @@ const LdkInfo = () => {
 
     const wallets2use = wallets.filter((w: AbstractWallet) => w.chain === Chain.ONCHAIN);
 
-    const toWallet: AbstractWallet = await selectWallet(
-      navigate,
-      name,
-      null,
-      wallets2use,
-      'Onchain wallet is required to withdraw funds to',
-    );
+    const toWallet: AbstractWallet = await selectWallet(navigate, name, null, wallets2use, 'Onchain wallet is required to withdraw funds to');
     // using wallets2use instead of simple Chain.ONCHAIN argument because by default this argument only selects wallets
     // that can send, which is not possible if user wants to withdraw to watch-only wallet
     if (!toWallet) return;
@@ -214,13 +208,7 @@ const LdkInfo = () => {
 
   const claimBalance = async () => {
     const wallets2use = wallets.filter((w: AbstractWallet) => w.chain === Chain.ONCHAIN);
-    const selectedWallet: AbstractWallet = await selectWallet(
-      navigate,
-      name,
-      null,
-      wallets2use,
-      'Onchain wallet is required to withdraw funds to',
-    );
+    const selectedWallet: AbstractWallet = await selectWallet(navigate, name, null, wallets2use, 'Onchain wallet is required to withdraw funds to');
     // using wallets2use instead of simple Chain.ONCHAIN argument because by default this argument only selects wallets
     // that can send, which is not possible if user wants to withdraw to watch-only wallet
     if (!selectedWallet) return;
@@ -259,33 +247,11 @@ const LdkInfo = () => {
         <View style={[styles.modalContent, stylesHook.modalContent]}>
           <Text style={[stylesHook.detailsText]}>{loc.lnd.node_alias}</Text>
           <BlueSpacing10 />
-          {channelData && (
-            <Text style={[stylesHook.detailsText]}>
-              {LightningLdkWallet.pubkeyToAlias(channelData.remote_node_id) +
-                ' (' +
-                channelData.remote_node_id.substr(0, 10) +
-                '...' +
-                channelData.remote_node_id.substr(-6) +
-                ')'}
-            </Text>
-          )}
+          {channelData && <Text style={[stylesHook.detailsText]}>{LightningLdkWallet.pubkeyToAlias(channelData.remote_node_id) + ' (' + channelData.remote_node_id.substr(0, 10) + '...' + channelData.remote_node_id.substr(-6) + ')'}</Text>}
           <BlueSpacing20 />
-          <LNNodeBar
-            disabled={
-              status === LdkNodeInfoChannelStatus.ACTIVE || status === LdkNodeInfoChannelStatus.INACTIVE ? !channelData?.is_usable : true
-            }
-            canSend={Number(channelData?.outbound_capacity_msat / 1000)}
-            canReceive={Number(channelData?.inbound_capacity_msat / 1000)}
-            itemPriceUnit={wallet.getPreferredBalanceUnit()}
-          />
+          <LNNodeBar disabled={status === LdkNodeInfoChannelStatus.ACTIVE || status === LdkNodeInfoChannelStatus.INACTIVE ? !channelData?.is_usable : true} canSend={Number(channelData?.outbound_capacity_msat / 1000)} canReceive={Number(channelData?.inbound_capacity_msat / 1000)} itemPriceUnit={wallet.getPreferredBalanceUnit()} />
 
-          <Text style={[stylesHook.detailsText]}>
-            {status === LdkNodeInfoChannelStatus.PENDING
-              ? loc.transactions.pending
-              : channelData?.is_usable
-              ? loc.lnd.active
-              : loc.lnd.inactive}
-          </Text>
+          <Text style={[stylesHook.detailsText]}>{status === LdkNodeInfoChannelStatus.PENDING ? loc.transactions.pending : channelData?.is_usable ? loc.lnd.active : loc.lnd.inactive}</Text>
 
           {status === LdkNodeInfoChannelStatus.INACTIVE && (
             <>
@@ -319,13 +285,7 @@ const LdkInfo = () => {
 
     return (
       <TouchableOpacity onPress={() => showModal(channel)}>
-        <LNNodeBar
-          disabled={!channelData.is_usable}
-          canSend={Number(channelData.outbound_capacity_msat / 1000)}
-          canReceive={Number(channelData.inbound_capacity_msat / 1000)}
-          itemPriceUnit={wallet.getPreferredBalanceUnit()}
-          nodeAlias={LightningLdkWallet.pubkeyToAlias(channelData.remote_node_id)}
-        />
+        <LNNodeBar disabled={!channelData.is_usable} canSend={Number(channelData.outbound_capacity_msat / 1000)} canReceive={Number(channelData.inbound_capacity_msat / 1000)} itemPriceUnit={wallet.getPreferredBalanceUnit()} nodeAlias={LightningLdkWallet.pubkeyToAlias(channelData.remote_node_id)} />
       </TouchableOpacity>
     );
   };
@@ -401,12 +361,10 @@ const LdkInfo = () => {
           sectionList.current = ref;
         }}
         renderItem={renderSectionItem}
-        keyExtractor={channel => channel.channel_id}
+        keyExtractor={(channel) => channel.channel_id}
         initialNumToRender={7}
         ItemSeparatorComponent={itemSeparatorComponent}
-        renderSectionHeader={section => (
-          <View style={[styles.listHeaderBack, stylesHook.listHeaderBack]}>{renderSectionHeader(section)}</View>
-        )}
+        renderSectionHeader={(section) => <View style={[styles.listHeaderBack, stylesHook.listHeaderBack]}>{renderSectionHeader(section)}</View>}
         contentContainerStyle={[centerContent ? {} : styles.contentContainerStyle, stylesHook.root]}
         contentInset={{ top: 0, left: 0, bottom: 8, right: 0 }}
         centerContent={centerContent}
@@ -427,11 +385,7 @@ const LdkInfo = () => {
             <BlueSpacing20 />
           </>
         ) : null}
-        {maturingBalance ? (
-          <Text style={[stylesHook.detailsText]}>
-            Balance awaiting confirmations: {formatBalance(Number(maturingBalance), wallet.getPreferredBalanceUnit(), true)}
-          </Text>
-        ) : null}
+        {maturingBalance ? <Text style={[stylesHook.detailsText]}>Balance awaiting confirmations: {formatBalance(Number(maturingBalance), wallet.getPreferredBalanceUnit(), true)}</Text> : null}
         {maturingEta ? <Text style={[stylesHook.detailsText]}>ETA: {maturingEta}</Text> : null}
         <Button text={loc.lnd.new_channel} onPress={navigateToOpenPrivateChannel} disabled={isLoading} />
         <BlueSpacing20 />

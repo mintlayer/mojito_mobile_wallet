@@ -22,7 +22,7 @@ module.exports = (title, text, isCancelable = true, type = 'secure-text', isOKDe
           },
           {
             text: continueButtonText,
-            onPress: password => {
+            onPress: (password) => {
               console.log('OK Pressed');
               resolve(password);
             },
@@ -32,7 +32,7 @@ module.exports = (title, text, isCancelable = true, type = 'secure-text', isOKDe
       : [
           {
             text: continueButtonText,
-            onPress: password => {
+            onPress: (password) => {
               console.log('OK Pressed');
               resolve(password);
             },

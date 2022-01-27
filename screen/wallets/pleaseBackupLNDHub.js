@@ -12,7 +12,7 @@ import QRCodeComponent from '../../components/QRCodeComponent';
 const PleaseBackupLNDHub = () => {
   const { wallets } = useContext(BlueStorageContext);
   const { walletID } = useRoute().params;
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const navigation = useNavigation();
   const { colors } = useTheme();
   const [qrCodeSize, setQRCodeSize] = useState(90);
@@ -45,7 +45,7 @@ const PleaseBackupLNDHub = () => {
 
   const pop = () => navigation.dangerouslyGetParent().pop();
 
-  const onLayout = e => {
+  const onLayout = (e) => {
     const { height, width } = e.nativeEvent.layout;
     setQRCodeSize(height > width ? width - 40 : e.nativeEvent.layout.width / 1.5);
   };
@@ -72,7 +72,7 @@ PleaseBackupLNDHub.navigationOptions = navigationStyle(
     swipeEnabled: false,
     headerHideBackButton: true,
   },
-  opts => ({ ...opts, headerTitle: loc.pleasebackup.title }),
+  (opts) => ({ ...opts, headerTitle: loc.pleasebackup.title }),
 );
 
 export default PleaseBackupLNDHub;

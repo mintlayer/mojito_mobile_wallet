@@ -12,14 +12,7 @@ class DeeplinkSchemaMatch {
   static hasSchema(schemaString) {
     if (typeof schemaString !== 'string' || schemaString.length <= 0) return false;
     const lowercaseString = schemaString.trim().toLowerCase();
-    return (
-      lowercaseString.startsWith('bitcoin:') ||
-      lowercaseString.startsWith('lightning:') ||
-      lowercaseString.startsWith('blue:') ||
-      lowercaseString.startsWith('bluewallet:') ||
-      lowercaseString.startsWith('lapp:') ||
-      lowercaseString.startsWith('aopp:')
-    );
+    return lowercaseString.startsWith('bitcoin:') || lowercaseString.startsWith('lightning:') || lowercaseString.startsWith('blue:') || lowercaseString.startsWith('bluewallet:') || lowercaseString.startsWith('lapp:') || lowercaseString.startsWith('aopp:');
   }
 
   /**
@@ -88,7 +81,7 @@ class DeeplinkSchemaMatch {
       }
     } else if (DeeplinkSchemaMatch.isPossiblySignedPSBTFile(event.url)) {
       RNFS.readFile(decodeURI(event.url))
-        .then(file => {
+        .then((file) => {
           if (file) {
             completionHandler([
               'SendDetailsRoot',
@@ -101,7 +94,7 @@ class DeeplinkSchemaMatch {
             ]);
           }
         })
-        .catch(e => console.warn(e));
+        .catch((e) => console.warn(e));
       return;
     }
     let isBothBitcoinAndLightning;
@@ -325,24 +318,15 @@ class DeeplinkSchemaMatch {
   }
 
   static isTXNFile(filePath) {
-    return (
-      (filePath.toLowerCase().startsWith('file:') || filePath.toLowerCase().startsWith('content:')) &&
-      filePath.toLowerCase().endsWith('.txn')
-    );
+    return (filePath.toLowerCase().startsWith('file:') || filePath.toLowerCase().startsWith('content:')) && filePath.toLowerCase().endsWith('.txn');
   }
 
   static isPossiblySignedPSBTFile(filePath) {
-    return (
-      (filePath.toLowerCase().startsWith('file:') || filePath.toLowerCase().startsWith('content:')) &&
-      filePath.toLowerCase().endsWith('-signed.psbt')
-    );
+    return (filePath.toLowerCase().startsWith('file:') || filePath.toLowerCase().startsWith('content:')) && filePath.toLowerCase().endsWith('-signed.psbt');
   }
 
   static isPossiblyPSBTFile(filePath) {
-    return (
-      (filePath.toLowerCase().startsWith('file:') || filePath.toLowerCase().startsWith('content:')) &&
-      filePath.toLowerCase().endsWith('.psbt')
-    );
+    return (filePath.toLowerCase().startsWith('file:') || filePath.toLowerCase().startsWith('content:')) && filePath.toLowerCase().endsWith('.psbt');
   }
 
   static isBothBitcoinAndLightningOnWalletSelect(wallet, uri) {

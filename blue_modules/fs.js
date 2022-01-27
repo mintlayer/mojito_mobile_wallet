@@ -51,7 +51,7 @@ const writeFileAndExport = async function (filename, contents) {
       url: 'file://' + filePath,
       saveToFiles: isDesktop,
     })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       })
       .finally(() => {
@@ -114,7 +114,7 @@ const showImagePickerAndReadImage = () => {
         maxWidth: 600,
         selectionLimit: 1,
       },
-      response => {
+      (response) => {
         if (!response.didCancel) {
           const asset = response.assets[0];
           if (asset.uri) {
@@ -141,7 +141,7 @@ const takePhotoWithImagePickerAndReadPhoto = () => {
         mediaType: 'photo',
         takePhotoButtonTitle: null,
       },
-      response => {
+      (response) => {
         if (response.uri) {
           const uri = response.uri.toString().replace('file://', '');
           LocalQRCode.decode(uri, (error, result) => {
@@ -162,17 +162,7 @@ const takePhotoWithImagePickerAndReadPhoto = () => {
 const showFilePickerAndReadFile = async function () {
   try {
     const res = await DocumentPicker.pick({
-      type:
-        Platform.OS === 'ios'
-          ? [
-              'io.bluewallet.psbt',
-              'io.bluewallet.psbt.txn',
-              'io.bluewallet.backup',
-              DocumentPicker.types.plainText,
-              'public.json',
-              DocumentPicker.types.images,
-            ]
-          : [DocumentPicker.types.allFiles],
+      type: Platform.OS === 'ios' ? ['io.bluewallet.psbt', 'io.bluewallet.psbt.txn', 'io.bluewallet.backup', DocumentPicker.types.plainText, 'public.json', DocumentPicker.types.images] : [DocumentPicker.types.allFiles],
     });
 
     const uri = Platform.OS === 'ios' ? decodeURI(res.uri) : res.uri;
@@ -186,7 +176,7 @@ const showFilePickerAndReadFile = async function () {
     }
 
     if (res?.type === DocumentPicker.types.images || res?.type?.startsWith('image/')) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         const uri = res.uri.toString().replace('file://', '');
         LocalQRCode.decode(decodeURI(uri), (error, result) => {
           if (!error) {
@@ -206,7 +196,7 @@ const showFilePickerAndReadFile = async function () {
 };
 
 // Intended for macOS Catalina. Not for long press shortcut
-const showActionSheet = async props => {
+const showActionSheet = async (props) => {
   const isClipboardEmpty = (await BlueClipboard.getClipboardContent()).trim().length === 0;
   let copyFromClipboardIndex;
   const options = [loc._.cancel, loc.wallets.take_photo, loc.wallets.list_long_choose];
@@ -218,14 +208,14 @@ const showActionSheet = async props => {
   options.push(loc.wallets.import_file);
   const importFileButtonIndex = options.length - 1;
 
-  return new Promise(resolve =>
-    ActionSheet.showActionSheetWithOptions({ options, cancelButtonIndex: 0, anchor: props.anchor }, async buttonIndex => {
+  return new Promise((resolve) =>
+    ActionSheet.showActionSheetWithOptions({ options, cancelButtonIndex: 0, anchor: props.anchor }, async (buttonIndex) => {
       if (buttonIndex === 1) {
         takePhotoWithImagePickerAndReadPhoto().then(resolve);
       } else if (buttonIndex === 2) {
         showImagePickerAndReadImage()
           .then(resolve)
-          .catch(error => alert(error.message));
+          .catch((error) => alert(error.message));
       } else if (buttonIndex === copyFromClipboardIndex) {
         const clipboard = await BlueClipboard.getClipboardContent();
         resolve(clipboard);

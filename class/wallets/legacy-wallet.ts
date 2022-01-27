@@ -143,7 +143,7 @@ export class LegacyWallet extends AbstractWallet {
       // now we need to fetch txhash for each input as required by PSBT
       if (LegacyWallet.type !== this.type) return; // but only for LEGACY single-address wallets
       const txhexes = await BlueElectrum.multiGetTransactionByTxid(
-        this.utxo.map(u => u.txId),
+        this.utxo.map((u) => u.txId),
         50,
         false,
       );
@@ -278,8 +278,7 @@ export class LegacyWallet extends AbstractWallet {
       }
     }
 
-    if (this.getTransactions().length === 0 && Object.values(txs).length > 1000)
-      throw new Error('Addresses with history of > 1000 transactions are not supported');
+    if (this.getTransactions().length === 0 && Object.values(txs).length > 1000) throw new Error('Addresses with history of > 1000 transactions are not supported');
     // we check existing transactions, so if there are any then user is just using his wallet and gradually reaching the theshold, which
     // is safe because in that case our cache is filled
 
@@ -299,10 +298,10 @@ export class LegacyWallet extends AbstractWallet {
 
     // fetched all transactions from our inputs. now we need to combine it.
     // iterating all _our_ transactions:
-    const transactionsWithInputValue = transactions.map(tx => {
+    const transactionsWithInputValue = transactions.map((tx) => {
       return {
         ...tx,
-        vin: tx.vin.map(vin => {
+        vin: tx.vin.map((vin) => {
           const inpTxid = vin.txid;
           const inpVout = vin.vout;
           // got txid and output number of _previous_ transaction we shoud look into
@@ -394,7 +393,7 @@ export class LegacyWallet extends AbstractWallet {
 
     let algo = coinSelect;
     // if targets has output without a value, we want send MAX to it
-    if (targets.some(i => !('value' in i))) {
+    if (targets.some((i) => !('value' in i))) {
       algo = coinSelectSplit;
     }
 
@@ -439,7 +438,7 @@ export class LegacyWallet extends AbstractWallet {
     const values: Record<number, number> = {};
     let keyPair: Signer | null = null;
 
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       if (!skipSigning) {
         // skiping signing related stuff
         keyPair = ECPair.fromWIF(this.secret); // secret is WIF
@@ -458,13 +457,13 @@ export class LegacyWallet extends AbstractWallet {
       });
     });
 
-    const sanitizedOutputs = outputs.map(output => ({
+    const sanitizedOutputs = outputs.map((output) => ({
       ...output,
       // if output has no address - this is change output
       address: output.address ?? changeAddress,
     }));
 
-    sanitizedOutputs.forEach(output => {
+    sanitizedOutputs.forEach((output) => {
       const outputData = {
         address: output.address,
         value: output.value,

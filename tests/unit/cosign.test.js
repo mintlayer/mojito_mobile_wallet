@@ -189,8 +189,7 @@ describe('AbstractHDElectrumWallet.cosign', () => {
     w.setSecret(process.env.MNEMONICS_COBO);
     assert.ok(w.validateMnemonic());
 
-    const psbtWithCorrectFpBase64 =
-      'cHNidP8BAFUCAAAAAfsmeQ1mJJqC9cD0DxDRFQoG2hvU6S4koB0jl+8TEDKjAAAAAAD/////AQpfAAAAAAAAGXapFBkSnVPmMZuvGdugWb6tFm35Crj1iKwAAAAAAAEBH8p3AAAAAAAAFgAUf8fcrCg92McSzWkmw+UAluC4IjsiBgLfsmddhS3oxlnlGrUPDBVoVHSMa8RcXlGsyhfc8CcGpRjTfq2IVAAAgAAAAIAAAACAAAAAAAQAAAAAAA==';
+    const psbtWithCorrectFpBase64 = 'cHNidP8BAFUCAAAAAfsmeQ1mJJqC9cD0DxDRFQoG2hvU6S4koB0jl+8TEDKjAAAAAAD/////AQpfAAAAAAAAGXapFBkSnVPmMZuvGdugWb6tFm35Crj1iKwAAAAAAAEBH8p3AAAAAAAAFgAUf8fcrCg92McSzWkmw+UAluC4IjsiBgLfsmddhS3oxlnlGrUPDBVoVHSMa8RcXlGsyhfc8CcGpRjTfq2IVAAAgAAAAIAAAACAAAAAAAQAAAAAAA==';
     const psbtWithCorrectFp = bitcoin.Psbt.fromBase64(psbtWithCorrectFpBase64);
 
     assert.strictEqual(w.calculateHowManySignaturesWeHaveFromPsbt(psbtWithCorrectFp), 0);
@@ -212,9 +211,7 @@ describe('AbstractHDElectrumWallet.cosign', () => {
 
     // setting up watch-only wallet that tracks signer wallet, with the same fp & path:
     const watchOnlyWallet = new WatchOnlyWallet();
-    watchOnlyWallet.setSecret(
-      `{"ExtPubKey":"${signerWallet.getXpub()}","MasterFingerprint":"${signerWallet.getMasterFingerprintHex()}","AccountKeyPath":"${signerWallet.getDerivationPath()}"}`,
-    );
+    watchOnlyWallet.setSecret(`{"ExtPubKey":"${signerWallet.getXpub()}","MasterFingerprint":"${signerWallet.getMasterFingerprintHex()}","AccountKeyPath":"${signerWallet.getDerivationPath()}"}`);
     watchOnlyWallet.init();
 
     // hardcoding valid utxo (unspent at the momend of coding):
@@ -233,12 +230,7 @@ describe('AbstractHDElectrumWallet.cosign', () => {
     ];
 
     // creating a tx on watch-only wallet:
-    const { psbt } = watchOnlyWallet.createTransaction(
-      utxos,
-      [{ address: '13HaCAB4jf7FYSZexJxoczyDDnutzZigjS', value: 1000 }],
-      1,
-      watchOnlyWallet._getInternalAddressByIndex(0),
-    );
+    const { psbt } = watchOnlyWallet.createTransaction(utxos, [{ address: '13HaCAB4jf7FYSZexJxoczyDDnutzZigjS', value: 1000 }], 1, watchOnlyWallet._getInternalAddressByIndex(0));
     assert.strictEqual(psbt.data.outputs.length, 2);
     assert.strictEqual(psbt.data.inputs.length, 1);
 
@@ -247,9 +239,6 @@ describe('AbstractHDElectrumWallet.cosign', () => {
     assert.ok(tx);
     assert.ok(tx.toHex());
 
-    assert.strictEqual(
-      tx.toHex(),
-      '020000000001015ef1e86d7c989396de213c9c677744a3f03c5ec1eb7b2de1e263f4be05c798e500000000000000008002e8030000000000001976a91419129d53e6319baf19dba059bead166df90ab8f588ac9622000000000000160014063e495b0228ad29d537f90586ff0965718ee78602483045022100f56f9337a7c4f2e4176852131a6176bdf72daab1a64c6c00d1e4ae8a53c0caf50220159f36793bad0bbacdff5660991c3246d9930796a0a34a9d7a8f4bc3da67c9d90121024328b820f06c591b1a8790a4a3ee7a8679f672879b750a205d6e2c02660e19ac00000000',
-    );
+    assert.strictEqual(tx.toHex(), '020000000001015ef1e86d7c989396de213c9c677744a3f03c5ec1eb7b2de1e263f4be05c798e500000000000000008002e8030000000000001976a91419129d53e6319baf19dba059bead166df90ab8f588ac9622000000000000160014063e495b0228ad29d537f90586ff0965718ee78602483045022100f56f9337a7c4f2e4176852131a6176bdf72daab1a64c6c00d1e4ae8a53c0caf50220159f36793bad0bbacdff5660991c3246d9930796a0a34a9d7a8f4bc3da67c9d90121024328b820f06c591b1a8790a4a3ee7a8679f672879b750a205d6e2c02660e19ac00000000');
   });
 });

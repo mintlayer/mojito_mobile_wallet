@@ -8,10 +8,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     hd.setSecret(mnemonic);
 
     assert.strictEqual(true, hd.validateMnemonic());
-    assert.strictEqual(
-      'zpub6rFR7y4Q2AijBEqTUquhVz398htDFrtymD9xYYfG1m4wAcvPhXNfE3EfH1r1ADqtfSdVCToUG868RvUUkgDKf31mGDtKsAYz2oz2AGutZYs',
-      hd.getXpub(),
-    );
+    assert.strictEqual('zpub6rFR7y4Q2AijBEqTUquhVz398htDFrtymD9xYYfG1m4wAcvPhXNfE3EfH1r1ADqtfSdVCToUG868RvUUkgDKf31mGDtKsAYz2oz2AGutZYs', hd.getXpub());
 
     assert.strictEqual(hd._getExternalWIFByIndex(0), 'KyZpNDKnfs94vbrwhJneDi77V6jF64PWPF8x5cdJb8ifgg2DUc9d');
     assert.strictEqual(hd._getExternalWIFByIndex(1), 'Kxpf5b8p3qX56DKEe5NqWbNUP9MnqoRFzZwHRtsFqhzuvUJsYZCy');
@@ -30,14 +27,8 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     assert.ok(hd.addressIsChange('bc1q8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el'));
     assert.ok(!hd.addressIsChange('bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu'));
 
-    assert.strictEqual(
-      hd._getPubkeyByAddress(hd._getExternalAddressByIndex(0)).toString('hex'),
-      '0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c',
-    );
-    assert.strictEqual(
-      hd._getPubkeyByAddress(hd._getInternalAddressByIndex(0)).toString('hex'),
-      '03025324888e429ab8e3dbaf1f7802648b9cd01e9b418485c5fa4c1b9b5700e1a6',
-    );
+    assert.strictEqual(hd._getPubkeyByAddress(hd._getExternalAddressByIndex(0)).toString('hex'), '0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c');
+    assert.strictEqual(hd._getPubkeyByAddress(hd._getInternalAddressByIndex(0)).toString('hex'), '03025324888e429ab8e3dbaf1f7802648b9cd01e9b418485c5fa4c1b9b5700e1a6');
 
     assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/84'/0'/0'/0/0");
     assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(1)), "m/84'/0'/0'/0/1");
@@ -136,32 +127,11 @@ describe('Bech32 Segwit HD (BIP84)', () => {
 
     // can verify electrum message signature
     // bech32 segwit (p2wpkh)
-    assert.strictEqual(
-      hd.verifyMessage(
-        'vires is numeris',
-        'bc1q8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el',
-        'Hya6IaZGbKF83eOmC5i1CX5V42Wqkf+eSMi8S+hvJuJrDmp5F56ivrHgAzcxNIShIpY2lJv76M2LB6zLV70KxWQ=',
-      ),
-      true,
-    );
+    assert.strictEqual(hd.verifyMessage('vires is numeris', 'bc1q8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el', 'Hya6IaZGbKF83eOmC5i1CX5V42Wqkf+eSMi8S+hvJuJrDmp5F56ivrHgAzcxNIShIpY2lJv76M2LB6zLV70KxWQ='), true);
     // p2sh-segwit (p2wpkh-p2sh)
-    assert.strictEqual(
-      hd.verifyMessage(
-        'vires is numeris',
-        '37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf',
-        'IBm8XAd/NdWjjUBXr3pkXdVk1XQBHKPkBy4DCmSG0Ox4IKOLb1O+V7cTXPQ2vm3rcYquF+6iKSPJDiE1TPrAswY=',
-      ),
-      true,
-    );
+    assert.strictEqual(hd.verifyMessage('vires is numeris', '37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf', 'IBm8XAd/NdWjjUBXr3pkXdVk1XQBHKPkBy4DCmSG0Ox4IKOLb1O+V7cTXPQ2vm3rcYquF+6iKSPJDiE1TPrAswY='), true);
     // legacy
-    assert.strictEqual(
-      hd.verifyMessage(
-        'vires is numeris',
-        '1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA',
-        'IDNPawFev2E+W1xhHYi6NKuj7BY2Xe9qvXfddoWL4XZcPridoizzm8pda6jGEIwHlVYe4zrGhYqUR+j2hOsQxD8=',
-      ),
-      true,
-    );
+    assert.strictEqual(hd.verifyMessage('vires is numeris', '1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA', 'IDNPawFev2E+W1xhHYi6NKuj7BY2Xe9qvXfddoWL4XZcPridoizzm8pda6jGEIwHlVYe4zrGhYqUR+j2hOsQxD8='), true);
   });
 
   it('can use mnemonic with passphrase', () => {
@@ -171,10 +141,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     hd.setSecret(mnemonic);
     hd.setPassphrase(passphrase);
 
-    assert.strictEqual(
-      hd.getXpub(),
-      'zpub6qNvUL1qNQwaReccveprgd4urE2EUvShpcFe7WB9tzf9L4NJNcWhPzJSk4fzNXqBNZdRr6135hBKaqqp5RVvyxZ6eMbZXL6u5iK4zrfkCaQ',
-    );
+    assert.strictEqual(hd.getXpub(), 'zpub6qNvUL1qNQwaReccveprgd4urE2EUvShpcFe7WB9tzf9L4NJNcWhPzJSk4fzNXqBNZdRr6135hBKaqqp5RVvyxZ6eMbZXL6u5iK4zrfkCaQ');
 
     assert.strictEqual(hd._getExternalAddressByIndex(0), 'bc1qgaj3satczjem43pz46ct6r3758twhnny4y720z');
     assert.strictEqual(hd._getInternalAddressByIndex(0), 'bc1qthe7wh5eplzxczslvthyrer36ph3kxpnfnxgjg');
@@ -186,10 +153,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     hd.setSecret('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about');
     hd.setDerivationPath("m/84'/0'/1'");
 
-    assert.strictEqual(
-      hd.getXpub(),
-      'zpub6rFR7y4Q2AijF6Gk1bofHLs1d66hKFamhXWdWBup1Em25wfabZqkDqvaieV63fDQFaYmaatCG7jVNUpUiM2hAMo6SAVHcrUpSnHDpNzucB7',
-    );
+    assert.strictEqual(hd.getXpub(), 'zpub6rFR7y4Q2AijF6Gk1bofHLs1d66hKFamhXWdWBup1Em25wfabZqkDqvaieV63fDQFaYmaatCG7jVNUpUiM2hAMo6SAVHcrUpSnHDpNzucB7');
 
     assert.strictEqual(hd._getExternalAddressByIndex(0), 'bc1qku0qh0mc00y8tk0n65x2tqw4trlspak0fnjmfz');
     assert.strictEqual(hd._getInternalAddressByIndex(0), 'bc1qt0x83f5vmnapgl2gjj9r3d67rcghvjaqrvgpck');

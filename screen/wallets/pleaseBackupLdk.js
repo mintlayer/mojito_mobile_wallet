@@ -12,7 +12,7 @@ const PleaseBackupLdk = () => {
   const { wallets } = useContext(BlueStorageContext);
   const { walletID } = useRoute().params;
   /** @type {LightningLdkWallet} */
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const navigation = useNavigation();
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
@@ -56,16 +56,7 @@ const PleaseBackupLdk = () => {
         </View>
         <BlueSpacing20 />
         <View style={styles.qrCodeContainer}>
-          <QRCode
-            value={wallet.secret}
-            logo={require('../../img/qr-code.png')}
-            logoSize={90}
-            size={height > width ? width - 40 : width / 2}
-            color="#000000"
-            logoBackgroundColor={colors.brandingColor}
-            backgroundColor="#FFFFFF"
-            ecl="H"
-          />
+          <QRCode value={wallet.secret} logo={require('../../img/qr-code.png')} logoSize={90} size={height > width ? width - 40 : width / 2} color="#000000" logoBackgroundColor={colors.brandingColor} backgroundColor="#FFFFFF" ecl="H" />
         </View>
         <BlueCopyTextToClipboard text={wallet.getSecret()} />
         <BlueSpacing20 />

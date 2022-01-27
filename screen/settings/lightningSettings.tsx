@@ -66,7 +66,7 @@ const LightningSettings: React.FC & { navigationOptions: NavigationOptionsGetter
 
   useEffect(() => {
     AsyncStorage.getItem(AppStorage.LNDHUB)
-      .then(value => setURI(value ?? undefined))
+      .then((value) => setURI(value ?? undefined))
       .then(() => setIsLoading(false))
       .catch(() => setIsLoading(false));
 
@@ -149,23 +149,7 @@ const LightningSettings: React.FC & { navigationOptions: NavigationOptionsGetter
 
       <BlueCard>
         <View style={[styles.uri, styleHook.uri]}>
-          <TextInput
-            value={URI}
-            placeholder={
-              loc.formatString(loc.settings.lndhub_uri, { example: 'https://10.20.30.40:3000' }) +
-              (isTorCapable ? ' (' + loc.settings.tor_supported + ')' : '')
-            }
-            onChangeText={setLndhubURI}
-            numberOfLines={1}
-            style={styles.uriText}
-            placeholderTextColor="#81868e"
-            editable={!isLoading}
-            textContentType="URL"
-            autoCapitalize="none"
-            autoCorrect={false}
-            underlineColorAndroid="transparent"
-            testID="URIInput"
-          />
+          <TextInput value={URI} placeholder={loc.formatString(loc.settings.lndhub_uri, { example: 'https://10.20.30.40:3000' }) + (isTorCapable ? ' (' + loc.settings.tor_supported + ')' : '')} onChangeText={setLndhubURI} numberOfLines={1} style={styles.uriText} placeholderTextColor="#81868e" editable={!isLoading} textContentType="URL" autoCapitalize="none" autoCorrect={false} underlineColorAndroid="transparent" testID="URIInput" />
         </View>
         <BlueSpacing20 />
         <BlueButtonLink title={loc.wallets.import_scan_qr} testID="ImportScan" onPress={importScan} />
@@ -176,6 +160,6 @@ const LightningSettings: React.FC & { navigationOptions: NavigationOptionsGetter
   );
 };
 
-LightningSettings.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.lightning_settings }));
+LightningSettings.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.settings.lightning_settings }));
 
 export default LightningSettings;

@@ -94,8 +94,7 @@ class Torsbee {
                 return this.constructor._rejectReference(new Error(err));
               }
               const json = JSON.parse(data);
-              if (!json || typeof json.result === 'undefined')
-                return this.constructor._rejectReference(new Error('Unexpected response from TOR socket: ' + JSON.stringify(json)));
+              if (!json || typeof json.result === 'undefined') return this.constructor._rejectReference(new Error('Unexpected response from TOR socket: ' + JSON.stringify(json)));
 
               // conn.close();
               // instead of closing connect, we will actualy re-cyce existing test connection as we
@@ -103,14 +102,10 @@ class Torsbee {
               this.constructor._resolveReference();
             });
 
-            await this.constructor._testConn.write(
-              `{ "id": 1, "method": "blockchain.scripthash.get_balance", "params": ["716decbe1660861c3d93906cb1d98ee68b154fd4d23aed9783859c1271b52a9c"] }\n`,
-            );
+            await this.constructor._testConn.write(`{ "id": 1, "method": "blockchain.scripthash.get_balance", "params": ["716decbe1660861c3d93906cb1d98ee68b154fd4d23aed9783859c1271b52a9c"] }\n`);
           } else {
             // test connectino exists, so we are reusing it
-            await this.constructor._testConn.write(
-              `{ "id": 1, "method": "blockchain.scripthash.get_balance", "params": ["716decbe1660861c3d93906cb1d98ee68b154fd4d23aed9783859c1271b52a9c"] }\n`,
-            );
+            await this.constructor._testConn.write(`{ "id": 1, "method": "blockchain.scripthash.get_balance", "params": ["716decbe1660861c3d93906cb1d98ee68b154fd4d23aed9783859c1271b52a9c"] }\n`);
           }
         } catch (error) {
           this.constructor._rejectReference(error);
@@ -190,7 +185,7 @@ class TorSocket {
       });
 
       try {
-        this._socket = await Promise.race([iWillConnectISwear, new Promise(resolve => setTimeout(resolve, 21000))]);
+        this._socket = await Promise.race([iWillConnectISwear, new Promise((resolve) => setTimeout(resolve, 21000))]);
       } catch (e) {}
 
       if (!this._socket) {
@@ -282,8 +277,7 @@ module.exports.testHttp = async () => {
     },
   });
   const json = torResponse.body;
-  if (json.txid !== 'a84dbcf0d2550f673dda9331eea7cab86b645fd6e12049755c4b47bd238adce9')
-    throw new Error('TOR failure, got ' + JSON.stringify(torResponse));
+  if (json.txid !== 'a84dbcf0d2550f673dda9331eea7cab86b645fd6e12049755c4b47bd238adce9') throw new Error('TOR failure, got ' + JSON.stringify(torResponse));
 };
 
 module.exports.Torsbee = Torsbee;

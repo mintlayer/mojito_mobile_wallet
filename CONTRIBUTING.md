@@ -13,5 +13,4 @@ When tagging a new release, make sure to increment version in package.json and o
 In the commit where you up version you can have the commit message as
 `"REL vX.X.X: Summary message"`.
 
-
-Do *not* add new dependencies. Bonus points if you manage to actually remove a dependency.
+Do _not_ add new dependencies. Bonus points if you manage to actually remove a dependency.

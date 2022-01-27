@@ -3,8 +3,8 @@ const bitcoin = require('bitcoinjs-lib');
 const assert = require('assert');
 
 jasmine.getEnv().addReporter({
-  specStarted: result => (jasmine.currentTest = result),
-  specDone: result => (jasmine.currentTest = result),
+  specStarted: (result) => (jasmine.currentTest = result),
+  specDone: (result) => (jasmine.currentTest = result),
 });
 
 beforeAll(async () => {
@@ -33,8 +33,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
   it('can import BIP84 mnemonic, fetch balance & transactions, then create a transaction; then cosign', async () => {
     const lockFile = '/tmp/travislock.' + hashIt(jasmine.currentTest.fullName);
     if (process.env.TRAVIS) {
-      if (require('fs').existsSync(lockFile))
-        return console.warn('skipping', JSON.stringify(jasmine.currentTest.fullName), 'as it previously passed on Travis');
+      if (require('fs').existsSync(lockFile)) return console.warn('skipping', JSON.stringify(jasmine.currentTest.fullName), 'as it previously passed on Travis');
     }
     if (!process.env.HD_MNEMONIC_BIP84) {
       console.error('process.env.HD_MNEMONIC_BIP84 not set, skipped');
@@ -78,7 +77,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
 
     // checking fee rate:
     const totalIns = 69909; // we hardcode it since we know it in advance
-    const totalOuts = transaction.outs.map(el => el.value).reduce((a, b) => a + b, 0);
+    const totalOuts = transaction.outs.map((el) => el.value).reduce((a, b) => a + b, 0);
     const tx = bitcoin.Transaction.fromHex(txhex);
     assert.strictEqual(Math.round((totalIns - totalOuts) / tx.virtualSize()), feeRate);
     assert.strictEqual(transactionFee.split(' ')[1] * 100000000, totalIns - totalOuts);
@@ -294,8 +293,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
       await sleep(1000);
     }
     // 1 input, 2 outputs. wallet can fully sign this tx
-    const psbt =
-      'cHNidP8BAFICAAAAAXYa7FEQBAQ2X0B48aHHKKgzkVuHfQ2yCOi3v9RR0IqlAQAAAAAAAACAAegDAAAAAAAAFgAUSnH40G+jiJfreeRb36cs641KFm8AAAAAAAEBH5YVAAAAAAAAFgAUTKHjDm4OJQSbvy9uzyLYi5i5XIoiBgMQcGrP5TIMrdvb73yB4WnZvkPzKr1EzJXJYBHWmlPJZRgAAAAAVAAAgAAAAIAAAACAAQAAAD4AAAAAAA==';
+    const psbt = 'cHNidP8BAFICAAAAAXYa7FEQBAQ2X0B48aHHKKgzkVuHfQ2yCOi3v9RR0IqlAQAAAAAAAACAAegDAAAAAAAAFgAUSnH40G+jiJfreeRb36cs641KFm8AAAAAAAEBH5YVAAAAAAAAFgAUTKHjDm4OJQSbvy9uzyLYi5i5XIoiBgMQcGrP5TIMrdvb73yB4WnZvkPzKr1EzJXJYBHWmlPJZRgAAAAAVAAAgAAAAIAAAACAAQAAAD4AAAAAAA==';
     await element(by.id('scanQrBackdoorInput')).replaceText(psbt);
     await element(by.id('scanQrBackdoorOkButton')).tap();
 
@@ -346,8 +344,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
   it('should handle URL successfully', async () => {
     const lockFile = '/tmp/travislock.' + hashIt(jasmine.currentTest.fullName);
     if (process.env.TRAVIS) {
-      if (require('fs').existsSync(lockFile))
-        return console.warn('skipping', JSON.stringify(jasmine.currentTest.fullName), 'as it previously passed on Travis');
+      if (require('fs').existsSync(lockFile)) return console.warn('skipping', JSON.stringify(jasmine.currentTest.fullName), 'as it previously passed on Travis');
     }
     if (!process.env.HD_MNEMONIC_BIP84) {
       console.error('process.env.HD_MNEMONIC_BIP84 not set, skipped');
@@ -386,8 +383,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
   it('can manage UTXO', async () => {
     const lockFile = '/tmp/travislock.' + hashIt(jasmine.currentTest.fullName);
     if (process.env.TRAVIS) {
-      if (require('fs').existsSync(lockFile))
-        return console.warn('skipping', JSON.stringify(jasmine.currentTest.fullName), 'as it previously passed on Travis');
+      if (require('fs').existsSync(lockFile)) return console.warn('skipping', JSON.stringify(jasmine.currentTest.fullName), 'as it previously passed on Travis');
     }
     if (!process.env.HD_MNEMONIC_BIP84) {
       console.error('process.env.HD_MNEMONIC_BIP84 not set, skipped');

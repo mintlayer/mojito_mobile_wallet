@@ -106,15 +106,15 @@ const TransactionsDetails = () => {
   const handleOnSaveButtonTapped = () => {
     Keyboard.dismiss();
     txMetadata[tx.hash] = { memo };
-    saveToDisk().then(_success => alert(loc.transactions.transaction_note_saved));
+    saveToDisk().then((_success) => alert(loc.transactions.transaction_note_saved));
   };
 
   const handleOnOpenTransactionOnBlockExporerTapped = () => {
     const url = `https://mempool.space/tx/${tx.hash}`;
     Linking.canOpenURL(url)
-      .then(supported => {
+      .then((supported) => {
         if (supported) {
-          Linking.openURL(url).catch(e => {
+          Linking.openURL(url).catch((e) => {
             console.log('openURL failed in handleOnOpenTransactionOnBlockExporerTapped');
             console.log(e.message);
             alert(e.message);
@@ -124,7 +124,7 @@ const TransactionsDetails = () => {
           alert(loc.transactions.open_url_error);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.log('canOpenURL failed in handleOnOpenTransactionOnBlockExporerTapped');
         console.log(e.message);
         alert(e.message);
@@ -141,21 +141,11 @@ const TransactionsDetails = () => {
 
   return (
     <ScrollView style={styles.scroll} automaticallyAdjustContentInsets contentInsetAdjustmentBehavior="automatic">
-      <HandoffComponent
-        title={loc.transactions.details_title}
-        type={HandoffComponent.activityTypes.ViewInBlockExplorer}
-        url={`https://mempool.space/tx/${tx.hash}`}
-      />
+      <HandoffComponent title={loc.transactions.details_title} type={HandoffComponent.activityTypes.ViewInBlockExplorer} url={`https://mempool.space/tx/${tx.hash}`} />
       <StatusBar barStyle="default" />
       <BlueCard>
         <View>
-          <TextInput
-            placeholder={loc.send.details_note_placeholder}
-            value={memo}
-            placeholderTextColor="#81868e"
-            style={[styles.memoTextInput, stylesHooks.memoTextInput]}
-            onChangeText={setMemo}
-          />
+          <TextInput placeholder={loc.send.details_note_placeholder} value={memo} placeholderTextColor="#81868e" style={[styles.memoTextInput, stylesHooks.memoTextInput]} onChangeText={setMemo} />
           <BlueSpacing20 />
         </View>
 
@@ -317,18 +307,15 @@ const styles = StyleSheet.create({
 
 export default TransactionsDetails;
 
-TransactionsDetails.navigationOptions = navigationStyle(
-  { headerTitle: loc.transactions.details_title },
-  (options, { theme, navigation, route }) => {
-    return {
-      ...options,
-      headerStyle: {
-        backgroundColor: theme.colors.customHeader,
-        borderBottomWidth: 0,
-        elevation: 0,
-        shadowOpacity: 0,
-        shadowOffset: { height: 0, width: 0 },
-      },
-    };
-  },
-);
+TransactionsDetails.navigationOptions = navigationStyle({ headerTitle: loc.transactions.details_title }, (options, { theme, navigation, route }) => {
+  return {
+    ...options,
+    headerStyle: {
+      backgroundColor: theme.colors.customHeader,
+      borderBottomWidth: 0,
+      elevation: 0,
+      shadowOpacity: 0,
+      shadowOffset: { height: 0, width: 0 },
+    },
+  };
+});

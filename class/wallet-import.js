@@ -1,31 +1,13 @@
 import wif from 'wif';
 import bip38 from 'bip38';
 
-import {
-  HDAezeedWallet,
-  HDLegacyBreadwalletWallet,
-  HDLegacyElectrumSeedP2PKHWallet,
-  HDLegacyP2PKHWallet,
-  HDSegwitBech32Wallet,
-  HDSegwitElectrumSeedP2WPKHWallet,
-  HDSegwitP2SHWallet,
-  LegacyWallet,
-  LightningCustodianWallet,
-  LightningLdkWallet,
-  MultisigHDWallet,
-  SLIP39LegacyP2PKHWallet,
-  SLIP39SegwitBech32Wallet,
-  SLIP39SegwitP2SHWallet,
-  SegwitBech32Wallet,
-  SegwitP2SHWallet,
-  WatchOnlyWallet,
-} from '.';
+import { HDAezeedWallet, HDLegacyBreadwalletWallet, HDLegacyElectrumSeedP2PKHWallet, HDLegacyP2PKHWallet, HDSegwitBech32Wallet, HDSegwitElectrumSeedP2WPKHWallet, HDSegwitP2SHWallet, LegacyWallet, LightningCustodianWallet, LightningLdkWallet, MultisigHDWallet, SLIP39LegacyP2PKHWallet, SLIP39SegwitBech32Wallet, SLIP39SegwitP2SHWallet, SegwitBech32Wallet, SegwitP2SHWallet, WatchOnlyWallet } from '.';
 import loc from '../loc';
 import bip39WalletFormats from './bip39_wallet_formats.json'; // https://github.com/spesmilo/electrum/blob/master/electrum/bip39_wallet_formats.json
 import bip39WalletFormatsBlueWallet from './bip39_wallet_formats_bluewallet.json';
 
 // https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts#L43
-export const validateBip32 = path => path.match(/^(m\/)?(\d+'?\/)*\d+'?$/) !== null;
+export const validateBip32 = (path) => path.match(/^(m\/)?(\d+'?\/)*\d+'?$/) !== null;
 
 /**
  * Function that starts wallet search and import process. It has async generator inside, so
@@ -50,14 +32,14 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
   });
 
   // actions
-  const reportProgress = name => {
+  const reportProgress = (name) => {
     onProgress(name);
   };
   const reportFinish = (cancelled, stopped) => {
     promiseResolve({ cancelled, stopped, wallets });
   };
-  const reportWallet = wallet => {
-    if (wallets.some(w => w.getID() === wallet.getID())) return; // do not add duplicates
+  const reportWallet = (wallet) => {
+    if (wallets.some((w) => w.getID() === wallet.getID())) return; // do not add duplicates
     wallets.push(wallet);
     onWallet(wallet);
   };
@@ -194,7 +176,7 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
         let paths;
         if (i.iterate_accounts && searchAccounts) {
           const basicPath = i.derivation_path.slice(0, -2); // remove 0' from the end
-          paths = [...Array(10).keys()].map(j => basicPath + j + "'"); // add account number
+          paths = [...Array(10).keys()].map((j) => basicPath + j + "'"); // add account number
         } else {
           paths = [i.derivation_path];
         }
@@ -381,7 +363,7 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
       if (next.done) break; // break if generator has been finished
     }
     reportFinish();
-  })().catch(e => {
+  })().catch((e) => {
     if (e.message === 'Cancel Pressed') {
       reportFinish(true);
       return;

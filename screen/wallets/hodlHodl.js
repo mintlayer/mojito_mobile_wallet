@@ -1,24 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
-import {
-  ActivityIndicator,
-  Dimensions,
-  FlatList,
-  Image,
-  Keyboard,
-  KeyboardAvoidingView,
-  Linking,
-  Platform,
-  SectionList,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, Image, Keyboard, KeyboardAvoidingView, Linking, Platform, SectionList, StatusBar, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 
 import { BlueButtonLink, SafeBlueArea } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
@@ -108,10 +91,7 @@ export default class HodlHodl extends Component {
 
     const sort = {
       [HodlHodlApi.SORT_BY]: HodlHodlApi.SORT_BY_VALUE_PRICE,
-      [HodlHodlApi.SORT_DIRECTION]:
-        this.state.side === HodlHodlApi.FILTERS_SIDE_VALUE_SELL
-          ? HodlHodlApi.SORT_DIRECTION_VALUE_ASC
-          : HodlHodlApi.SORT_DIRECTION_VALUE_DESC,
+      [HodlHodlApi.SORT_DIRECTION]: this.state.side === HodlHodlApi.FILTERS_SIDE_VALUE_SELL ? HodlHodlApi.SORT_DIRECTION_VALUE_ASC : HodlHodlApi.SORT_DIRECTION_VALUE_DESC,
     };
     const offers = await this.state.HodlApi.getOffers(pagination, filters, sort);
 
@@ -150,7 +130,7 @@ export default class HodlHodl extends Component {
     this.setState({ methods });
   }
 
-  onFocus = async e => {
+  onFocus = async (e) => {
     if (!e.data.closing) return;
     const hodlApiKey = await this.context.getHodlHodlApiKey();
     const displayLoginButton = !hodlApiKey;
@@ -199,8 +179,8 @@ export default class HodlHodl extends Component {
     this.fetchListOfMethods();
   }
 
-  _onPress = item => {
-    const offers = this.state.offers.filter(value => value.id === item.id);
+  _onPress = (item) => {
+    const offers = this.state.offers.filter((value) => value.id === item.id);
     if (offers && offers[0]) {
       this.props.navigation.navigate('HodlHodlViewOffer', { offerToDisplay: offers[0] });
     } else {
@@ -341,11 +321,7 @@ export default class HodlHodl extends Component {
               ]}
               keyExtractor={(item, index) => item.code}
               renderItem={({ item, index, separators }) => (
-                <TouchableHighlight
-                  onShowUnderlay={separators.highlight}
-                  onHideUnderlay={separators.unhighlight}
-                  onPress={() => this._onSidePress(item)}
-                >
+                <TouchableHighlight onShowUnderlay={separators.highlight} onHideUnderlay={separators.unhighlight} onPress={() => this._onSidePress(item)}>
                   <View style={styles.itemNameWrapper}>
                     <Text style={this.state.side === item.code ? styles.itemNameBold : styles.itemNameNormal}>{item.name}</Text>
                   </View>
@@ -458,10 +434,7 @@ export default class HodlHodl extends Component {
         // except currently selected one
         if (this.state.countrySearchInput) {
           // if user typed something in search box we apply that filter
-          if (
-            country.name.toLocaleLowerCase().includes(this.state.countrySearchInput.toLocaleLowerCase()) ||
-            country.native_name.toLocaleLowerCase().includes(this.state.countrySearchInput.toLocaleLowerCase())
-          ) {
+          if (country.name.toLocaleLowerCase().includes(this.state.countrySearchInput.toLocaleLowerCase()) || country.native_name.toLocaleLowerCase().includes(this.state.countrySearchInput.toLocaleLowerCase())) {
             countries2render.push(country);
           }
         } else {
@@ -476,14 +449,7 @@ export default class HodlHodl extends Component {
         <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
           <View style={styles.modalContent}>
             <View style={styles.searchInputContainer}>
-              <TextInput
-                onChangeText={text => this.setState({ countrySearchInput: text })}
-                placeholder={loc.hodl.filter_search + '..'}
-                placeholderTextColor="#9AA0AA"
-                value={this.state.countrySearchInput || ''}
-                numberOfLines={1}
-                style={styles.searchTextInput}
-              />
+              <TextInput onChangeText={(text) => this.setState({ countrySearchInput: text })} placeholder={loc.hodl.filter_search + '..'} placeholderTextColor="#9AA0AA" value={this.state.countrySearchInput || ''} numberOfLines={1} style={styles.searchTextInput} />
               <Icon name="search" type="material" size={20} color="gray" containerStyle={styles.iconWithOffset} />
             </View>
             <FlatList
@@ -492,17 +458,11 @@ export default class HodlHodl extends Component {
               data={countries2render}
               keyExtractor={(item, index) => item.code}
               renderItem={({ item, index, separators }) => (
-                <TouchableHighlight
-                  onPress={() => this._onCountryPress(item)}
-                  onShowUnderlay={separators.highlight}
-                  onHideUnderlay={separators.unhighlight}
-                >
+                <TouchableHighlight onPress={() => this._onCountryPress(item)} onShowUnderlay={separators.highlight} onHideUnderlay={separators.unhighlight}>
                   <View style={styles.whiteBackground}>
                     <View style={styles.itemNameWrapper}>
                       <View style={styles.paddingLeft10}>
-                        <Text style={item.code === this.state.country ? styles.countryNativeNameBold : styles.countryNativeNameNormal}>
-                          {item.native_name}
-                        </Text>
+                        <Text style={item.code === this.state.country ? styles.countryNativeNameBold : styles.countryNativeNameNormal}>{item.native_name}</Text>
                       </View>
                     </View>
                   </View>
@@ -533,10 +493,7 @@ export default class HodlHodl extends Component {
     for (const curr of this.state.currencies) {
       if (this.state.currencySearchInput) {
         // if user typed something in search box we apply that filter
-        if (
-          curr.name.toLocaleLowerCase().includes(this.state.currencySearchInput.toLocaleLowerCase()) ||
-          curr.code.toLocaleLowerCase().includes(this.state.currencySearchInput.toLocaleLowerCase())
-        ) {
+        if (curr.name.toLocaleLowerCase().includes(this.state.currencySearchInput.toLocaleLowerCase()) || curr.code.toLocaleLowerCase().includes(this.state.currencySearchInput.toLocaleLowerCase())) {
           currencies2render.push(curr);
         }
       } else {
@@ -550,14 +507,7 @@ export default class HodlHodl extends Component {
         <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
           <View style={styles.modalContent}>
             <View style={styles.searchInputContainer}>
-              <TextInput
-                onChangeText={text => this.setState({ currencySearchInput: text })}
-                placeholder={loc.hodl.filter_search + '..'}
-                placeholderTextColor="#9AA0AA"
-                value={this.state.currencySearchInput || ''}
-                numberOfLines={1}
-                style={styles.curSearchInput}
-              />
+              <TextInput onChangeText={(text) => this.setState({ currencySearchInput: text })} placeholder={loc.hodl.filter_search + '..'} placeholderTextColor="#9AA0AA" value={this.state.currencySearchInput || ''} numberOfLines={1} style={styles.curSearchInput} />
               <Icon name="search" type="material" size={20} color="gray" containerStyle={styles.iconWithOffset} />
             </View>
             <FlatList
@@ -566,11 +516,7 @@ export default class HodlHodl extends Component {
               data={currencies2render}
               keyExtractor={(item, index) => item.code}
               renderItem={({ item, index, separators }) => (
-                <TouchableHighlight
-                  onPress={() => this._onCurrencyPress(item)}
-                  onShowUnderlay={separators.highlight}
-                  onHideUnderlay={separators.unhighlight}
-                >
+                <TouchableHighlight onPress={() => this._onCurrencyPress(item)} onShowUnderlay={separators.highlight} onHideUnderlay={separators.unhighlight}>
                   <View style={styles.whiteBackground}>
                     <View style={styles.itemNameWrapper}>
                       <View style={styles.paddingLeft10}>
@@ -607,10 +553,7 @@ export default class HodlHodl extends Component {
     for (const curr of this.state.methods) {
       if (this.state.methodSearchInput) {
         // if user typed something in search box we apply that filter
-        if (
-          curr.name.toLocaleLowerCase().includes(this.state.methodSearchInput.toLocaleLowerCase()) ||
-          curr.type.toLocaleLowerCase().includes(this.state.methodSearchInput.toLocaleLowerCase())
-        ) {
+        if (curr.name.toLocaleLowerCase().includes(this.state.methodSearchInput.toLocaleLowerCase()) || curr.type.toLocaleLowerCase().includes(this.state.methodSearchInput.toLocaleLowerCase())) {
           methods2render.push(curr);
         }
       } else {
@@ -624,14 +567,7 @@ export default class HodlHodl extends Component {
         <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
           <View style={styles.modalContent}>
             <View style={styles.searchInputContainer}>
-              <TextInput
-                onChangeText={text => this.setState({ methodSearchInput: text })}
-                placeholder={loc.hodl.filter_search + '..'}
-                placeholderTextColor="#9AA0AA"
-                value={this.state.methodSearchInput || ''}
-                numberOfLines={1}
-                style={styles.mthdSearchInput}
-              />
+              <TextInput onChangeText={(text) => this.setState({ methodSearchInput: text })} placeholder={loc.hodl.filter_search + '..'} placeholderTextColor="#9AA0AA" value={this.state.methodSearchInput || ''} numberOfLines={1} style={styles.mthdSearchInput} />
               <Icon name="search" type="material" size={20} color="gray" containerStyle={styles.iconWithOffset} />
             </View>
             <FlatList
@@ -640,21 +576,11 @@ export default class HodlHodl extends Component {
               data={methods2render}
               keyExtractor={(item, index) => item.id}
               renderItem={({ item, index, separators }) => (
-                <TouchableHighlight
-                  onPress={() => this._onMethodPress(item)}
-                  onShowUnderlay={separators.highlight}
-                  onHideUnderlay={separators.unhighlight}
-                >
+                <TouchableHighlight onPress={() => this._onMethodPress(item)} onShowUnderlay={separators.highlight} onHideUnderlay={separators.unhighlight}>
                   <View style={styles.whiteBackground}>
                     <View style={styles.itemNameWrapper}>
                       <View style={styles.paddingLeft10}>
-                        <Text
-                          style={
-                            item.id === this.state.method || (item.id === METHOD_ANY && this.state.method === false)
-                              ? styles.currencyTextBold
-                              : styles.currencyTextNormal
-                          }
-                        >
+                        <Text style={item.id === this.state.method || (item.id === METHOD_ANY && this.state.method === false) ? styles.currencyTextBold : styles.currencyTextNormal}>
                           {item.name} {item.id !== METHOD_ANY && '[' + item.type + ']'}
                         </Text>
                       </View>
@@ -696,22 +622,14 @@ export default class HodlHodl extends Component {
                 this.setState({ isChooseSideModalVisible: true });
               }}
             >
-              <Text style={styles.grayDropdownText}>
-                {this.state.side === HodlHodlApi.FILTERS_SIDE_VALUE_SELL ? loc.hodl.filter_buying : loc.hodl.filter_selling}
-              </Text>
+              <Text style={styles.grayDropdownText}>{this.state.side === HodlHodlApi.FILTERS_SIDE_VALUE_SELL ? loc.hodl.filter_buying : loc.hodl.filter_selling}</Text>
               <Icon name="expand-more" type="material" size={22} color="#9AA0AA" containerStyle={styles.noPaddingLeftOrRight} />
             </TouchableOpacity>
           </View>
 
           <View style={styles.grayTextContainerContainer}>
             <View style={styles.grayTextContainer}>
-              <Icon
-                name="place"
-                type="material"
-                size={20}
-                color={BlueCurrentTheme.colors.foregroundColor}
-                containerStyle={styles.paddingLeft10}
-              />
+              <Icon name="place" type="material" size={20} color={BlueCurrentTheme.colors.foregroundColor} containerStyle={styles.paddingLeft10} />
               {this.state.isLoading ? (
                 <ActivityIndicator />
               ) : (
@@ -728,13 +646,7 @@ export default class HodlHodl extends Component {
               >
                 <Text style={styles.blueText}>{loc.hodl.filter_filters}</Text>
 
-                <Icon
-                  name="filter-list"
-                  type="material"
-                  size={24}
-                  color={BlueCurrentTheme.colors.foregroundColor}
-                  containerStyle={styles.paddingLeft10}
-                />
+                <Icon name="filter-list" type="material" size={24} color={BlueCurrentTheme.colors.foregroundColor} containerStyle={styles.paddingLeft10} />
               </TouchableOpacity>
             </View>
           </View>
@@ -746,11 +658,7 @@ export default class HodlHodl extends Component {
   renderItem = ({ item, index, separators }) => {
     return (
       <View style={styles.marginHorizontal20}>
-        <TouchableHighlight
-          onPress={() => this._onPress(item)}
-          onShowUnderlay={separators.highlight}
-          onHideUnderlay={separators.unhighlight}
-        >
+        <TouchableHighlight onPress={() => this._onPress(item)} onShowUnderlay={separators.highlight} onHideUnderlay={separators.unhighlight}>
           <View style={styles.avatarWrapperWrapper}>
             <View style={styles.avatarWrapper}>
               <View>
@@ -772,9 +680,7 @@ export default class HodlHodl extends Component {
               </View>
               <View style={styles.paddingLeft10}>
                 <View style={styles.flexRow}>
-                  {item.trader.strong_hodler && (
-                    <Icon name="verified-user" type="material" size={14} color="#0071fc" containerStyle={styles.verifiedIcon} />
-                  )}
+                  {item.trader.strong_hodler && <Icon name="verified-user" type="material" size={14} color="#0071fc" containerStyle={styles.verifiedIcon} />}
                   <Text style={styles.nicknameText}>{item.trader.login}</Text>
                 </View>
                 <Text style={styles.traderRatingText2}>
@@ -862,11 +768,7 @@ HodlHodl.navigationOptions = navigationStyle(
       backgroundColor: theme.colors.customHeader,
     },
     headerRight: () => {
-      return route.params.displayLoginButton ? (
-        <BlueButtonLink title={loc.hodl.login} onPress={route.params.handleLoginPress} style={styles.marginHorizontal20} />
-      ) : (
-        <BlueButtonLink title={loc.hodl.mycont} onPress={route.params.handleMyContractsPress} style={styles.marginHorizontal20} />
-      );
+      return route.params.displayLoginButton ? <BlueButtonLink title={loc.hodl.login} onPress={route.params.handleLoginPress} style={styles.marginHorizontal20} /> : <BlueButtonLink title={loc.hodl.mycont} onPress={route.params.handleMyContractsPress} style={styles.marginHorizontal20} />;
     },
   }),
 );

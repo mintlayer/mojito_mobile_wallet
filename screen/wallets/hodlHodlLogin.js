@@ -30,7 +30,7 @@ const HodlHodlLogin = () => {
         injectedJavaScript={INJECTED_JAVASCRIPT}
         ref={webView}
         source={{ uri: url }}
-        onMessage={e => {
+        onMessage={(e) => {
           // this is a handler which receives messages sent from within the browser
 
           if (lastTimeIvebeenHere && +new Date() - lastTimeIvebeenHere < 5000) return;
@@ -58,7 +58,7 @@ HodlHodlLogin.navigationOptions = navigationStyle(
     closeButton: true,
     headerHideBackButton: true,
   },
-  opts => ({ ...opts, title: loc.hodl.login }),
+  (opts) => ({ ...opts, title: loc.hodl.login }),
 );
 
 export default HodlHodlLogin;

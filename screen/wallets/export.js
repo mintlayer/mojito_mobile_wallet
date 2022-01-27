@@ -44,7 +44,7 @@ const WalletExport = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { goBack } = useNavigation();
   const { colors } = useTheme();
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const [qrCodeSize, setQRCodeSize] = useState(90);
   const stylesHook = {
     ...styles,
@@ -100,7 +100,7 @@ const WalletExport = () => {
     secrets = [secrets];
   }
 
-  const onLayout = e => {
+  const onLayout = (e) => {
     const { height, width } = e.nativeEvent.layout;
     setQRCodeSize(height > width ? width - 40 : e.nativeEvent.layout.width / 1.8);
   };
@@ -119,7 +119,7 @@ const WalletExport = () => {
           </BlueCard>
         )}
         <BlueSpacing20 />
-        {secrets.map(s => (
+        {secrets.map((s) => (
           <React.Fragment key={s}>
             <QRCodeComponent isMenuAvailable={false} value={wallet.getSecret()} size={qrCodeSize} logoSize={70} />
             {wallet.type !== WatchOnlyWallet.type && <BlueText style={stylesHook.warning}>{loc.wallets.warning_do_not_disclose}</BlueText>}
@@ -131,13 +131,7 @@ const WalletExport = () => {
                 {wallet.getSecret()}
               </BlueText>
             )}
-            {wallet.type === WatchOnlyWallet.type && (
-              <HandoffComponent
-                title={loc.wallets.xpub_title}
-                type={HandoffComponent.activityTypes.Xpub}
-                userInfo={{ xpub: wallet.getSecret() }}
-              />
-            )}
+            {wallet.type === WatchOnlyWallet.type && <HandoffComponent title={loc.wallets.xpub_title} type={HandoffComponent.activityTypes.Xpub} userInfo={{ xpub: wallet.getSecret() }} />}
           </React.Fragment>
         ))}
       </ScrollView>
@@ -150,7 +144,7 @@ WalletExport.navigationOptions = navigationStyle(
     closeButton: true,
     headerHideBackButton: true,
   },
-  opts => ({ ...opts, title: loc.wallets.export_title }),
+  (opts) => ({ ...opts, title: loc.wallets.export_title }),
 );
 
 export default WalletExport;

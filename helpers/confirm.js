@@ -11,7 +11,7 @@ import loc from '../loc';
  * @return {Promise<boolean>}
  */
 module.exports = function (title = 'Are you sure?', text = '') {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     Alert.alert(
       title,
       text,

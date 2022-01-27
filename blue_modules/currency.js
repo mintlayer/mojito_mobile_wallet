@@ -54,7 +54,7 @@ async function _restoreSavedPreferredFiatCurrencyFromStorage() {
     }
   } catch (_) {
     const deviceCurrencies = RNLocalize.getCurrencies();
-    if (Object.keys(FiatUnit).some(unit => unit === deviceCurrencies[0])) {
+    if (Object.keys(FiatUnit).some((unit) => unit === deviceCurrencies[0])) {
       preferredFiatCurrency = FiatUnit[deviceCurrencies[0]];
     } else {
       preferredFiatCurrency = FiatUnit.USD;

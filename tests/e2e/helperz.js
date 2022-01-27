@@ -40,7 +40,7 @@ export async function helperImportWallet(importText, walletType, expectedWalletL
 }
 
 export async function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function hashIt(s) {
@@ -96,14 +96,14 @@ export async function extractTextFromElementById(id) {
       const [, restMessage] = errorMessage.split(start);
       const [label] = restMessage.split(end);
       const value = label.split(',');
-      const combineText = value.find(i => i.includes('text=')).trim();
+      const combineText = value.find((i) => i.includes('text=')).trim();
       const [, elementText] = combineText.split('=');
       return elementText;
     }
   }
 }
 
-export const expectToBeVisible = async id => {
+export const expectToBeVisible = async (id) => {
   try {
     await expect(element(by.id(id))).toBeVisible();
     return true;

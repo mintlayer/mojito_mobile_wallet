@@ -1,25 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
 import * as Keychain from 'react-native-keychain';
-import {
-  HDLegacyBreadwalletWallet,
-  HDSegwitP2SHWallet,
-  HDLegacyP2PKHWallet,
-  WatchOnlyWallet,
-  LegacyWallet,
-  SegwitP2SHWallet,
-  SegwitBech32Wallet,
-  HDSegwitBech32Wallet,
-  LightningCustodianWallet,
-  HDLegacyElectrumSeedP2PKHWallet,
-  HDSegwitElectrumSeedP2WPKHWallet,
-  HDAezeedWallet,
-  MultisigHDWallet,
-  LightningLdkWallet,
-  SLIP39SegwitP2SHWallet,
-  SLIP39LegacyP2PKHWallet,
-  SLIP39SegwitBech32Wallet,
-} from './';
+import { HDLegacyBreadwalletWallet, HDSegwitP2SHWallet, HDLegacyP2PKHWallet, WatchOnlyWallet, LegacyWallet, SegwitP2SHWallet, SegwitBech32Wallet, HDSegwitBech32Wallet, LightningCustodianWallet, HDLegacyElectrumSeedP2PKHWallet, HDSegwitElectrumSeedP2WPKHWallet, HDAezeedWallet, MultisigHDWallet, LightningLdkWallet, SLIP39SegwitP2SHWallet, SLIP39LegacyP2PKHWallet, SLIP39SegwitBech32Wallet } from './';
 import { randomBytes } from './rng';
 import alert from '../components/Alert';
 const encryption = require('../blue_modules/encryption');
@@ -83,7 +65,7 @@ export class AppStorage {
    * @param key
    * @returns {Promise<any>|*}
    */
-  getItem = key => {
+  getItem = (key) => {
     if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
       return RNSecureKeyStore.get(key);
     } else {
@@ -96,7 +78,7 @@ export class AppStorage {
    * @param key {string}
    * @returns {Promise<*>|null}
    */
-  getItemWithFallbackToRealm = async key => {
+  getItemWithFallbackToRealm = async (key) => {
     let value;
     try {
       return await this.getItem(key);
@@ -127,7 +109,7 @@ export class AppStorage {
     return !!data;
   };
 
-  isPasswordInUse = async password => {
+  isPasswordInUse = async (password) => {
     try {
       let data = await this.getItem('data');
       data = this.decryptData(data, password);
@@ -162,7 +144,7 @@ export class AppStorage {
     return false;
   }
 
-  decryptStorage = async password => {
+  decryptStorage = async (password) => {
     if (password === this.cachedPassword) {
       this.cachedPassword = undefined;
       await this.saveToDisk();
@@ -174,7 +156,7 @@ export class AppStorage {
     }
   };
 
-  encryptStorage = async password => {
+  encryptStorage = async (password) => {
     // assuming the storage is not yet encrypted
     await this.saveToDisk();
     let data = await this.getItem('data');
@@ -195,7 +177,7 @@ export class AppStorage {
    *
    * @returns {Promise.<boolean>} Success or failure
    */
-  createFakeStorage = async fakePassword => {
+  createFakeStorage = async (fakePassword) => {
     usedBucketNum = false; // resetting currently used bucket so we wont overwrite it
     this.wallets = [];
     this.tx_metadata = {};
@@ -214,7 +196,7 @@ export class AppStorage {
     return (await this.getItem('data')) === bucketsString;
   };
 
-  hashIt = s => {
+  hashIt = (s) => {
     return createHash('sha256').update(s).digest().toString('hex');
   };
 
@@ -424,7 +406,7 @@ export class AppStorage {
 
         // done
         const ID = unserializedWallet.getID();
-        if (!this.wallets.some(wallet => wallet.getID() === ID)) {
+        if (!this.wallets.some((wallet) => wallet.getID() === ID)) {
           this.wallets.push(unserializedWallet);
           this.tx_metadata = data.tx_metadata;
         }
@@ -442,7 +424,7 @@ export class AppStorage {
    *
    * @param wallet {AbstractWallet}
    */
-  deleteWallet = wallet => {
+  deleteWallet = (wallet) => {
     const ID = wallet.getID();
     const tempWallets = [];
 
@@ -470,8 +452,7 @@ export class AppStorage {
     for (const tx of transactionsForWallet) {
       if (tx.internal === false) {
         if (walletToInflate._hdWalletInstance) {
-          walletToInflate._hdWalletInstance._txs_by_external_index[tx.index] =
-            walletToInflate._hdWalletInstance._txs_by_external_index[tx.index] || [];
+          walletToInflate._hdWalletInstance._txs_by_external_index[tx.index] = walletToInflate._hdWalletInstance._txs_by_external_index[tx.index] || [];
           walletToInflate._hdWalletInstance._txs_by_external_index[tx.index].push(JSON.parse(tx.tx));
         } else {
           walletToInflate._txs_by_external_index[tx.index] = walletToInflate._txs_by_external_index[tx.index] || [];
@@ -479,8 +460,7 @@ export class AppStorage {
         }
       } else if (tx.internal === true) {
         if (walletToInflate._hdWalletInstance) {
-          walletToInflate._hdWalletInstance._txs_by_internal_index[tx.index] =
-            walletToInflate._hdWalletInstance._txs_by_internal_index[tx.index] || [];
+          walletToInflate._hdWalletInstance._txs_by_internal_index[tx.index] = walletToInflate._hdWalletInstance._txs_by_internal_index[tx.index] || [];
           walletToInflate._hdWalletInstance._txs_by_internal_index[tx.index].push(JSON.parse(tx.tx));
         } else {
           walletToInflate._txs_by_internal_index[tx.index] = walletToInflate._txs_by_internal_index[tx.index] || [];
@@ -576,7 +556,7 @@ export class AppStorage {
     if (savingInProgress) {
       console.warn('saveToDisk is in progress');
       if (++savingInProgress > 10) alert('Critical error. Last actions were not saved'); // should never happen
-      await new Promise(resolve => setTimeout(resolve, 1000 * savingInProgress)); // sleep
+      await new Promise((resolve) => setTimeout(resolve, 1000 * savingInProgress)); // sleep
       return this.saveToDisk();
     }
     savingInProgress = 1;
@@ -674,7 +654,7 @@ export class AppStorage {
    *
    * @return {Promise.<void>}
    */
-  fetchWalletBalances = async index => {
+  fetchWalletBalances = async (index) => {
     console.log('fetchWalletBalances for wallet#', typeof index === 'undefined' ? '(all)' : index);
     if (index || index === 0) {
       let c = 0;
@@ -700,7 +680,7 @@ export class AppStorage {
    *                        blank to fetch from all wallets
    * @return {Promise.<void>}
    */
-  fetchWalletTransactions = async index => {
+  fetchWalletTransactions = async (index) => {
     console.log('fetchWalletTransactions for wallet#', typeof index === 'undefined' ? '(all)' : index);
     if (index || index === 0) {
       let c = 0;
@@ -758,7 +738,7 @@ export class AppStorage {
     }
 
     let txs = [];
-    for (const wallet of this.wallets.filter(w => includeWalletsWithHideTransactionsEnabled || !w.getHideTransactionsInWalletsList())) {
+    for (const wallet of this.wallets.filter((w) => includeWalletsWithHideTransactionsEnabled || !w.getHideTransactionsInWalletsList())) {
       const walletTransactions = wallet.getTransactions();
       const walletID = wallet.getID();
       for (const t of walletTransactions) {
@@ -819,7 +799,7 @@ export class AppStorage {
     return [];
   };
 
-  addHodlHodlContract = async id => {
+  addHodlHodlContract = async (id) => {
     let json;
     try {
       json = await this.getItem(AppStorage.HODL_HODL_CONTRACTS);
@@ -844,7 +824,7 @@ export class AppStorage {
     return false;
   };
 
-  setIsAdancedModeEnabled = async value => {
+  setIsAdancedModeEnabled = async (value) => {
     await AsyncStorage.setItem(AppStorage.ADVANCED_MODE_ENABLED, value ? '1' : '');
   };
 
@@ -855,7 +835,7 @@ export class AppStorage {
     return false;
   };
 
-  setIsHandoffEnabled = async value => {
+  setIsHandoffEnabled = async (value) => {
     await AsyncStorage.setItem(AppStorage.HANDOFF_STORAGE_KEY, value ? '1' : '');
   };
 
@@ -866,7 +846,7 @@ export class AppStorage {
     return false;
   };
 
-  setDoNotTrack = async value => {
+  setDoNotTrack = async (value) => {
     await AsyncStorage.setItem(AppStorage.DO_NOT_TRACK, value ? '1' : '');
   };
 
@@ -876,8 +856,8 @@ export class AppStorage {
    * @param ms {number} Milliseconds to sleep
    * @returns {Promise<Promise<*> | Promise<*>>}
    */
-  sleep = ms => {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   };
 
   purgeRealmKeyValueFile() {

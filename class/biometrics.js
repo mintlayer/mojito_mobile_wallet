@@ -56,17 +56,17 @@ function Biometric() {
     return isBiometricUseEnabled && isDeviceBiometricCapable;
   };
 
-  Biometric.setBiometricUseEnabled = async value => {
+  Biometric.setBiometricUseEnabled = async (value) => {
     await setItem(Biometric.STORAGEKEY, value === true ? '1' : '');
   };
 
   Biometric.unlockWithBiometrics = async () => {
     const isDeviceBiometricCapable = await Biometric.isDeviceBiometricCapable();
     if (isDeviceBiometricCapable) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         FingerprintScanner.authenticate({ description: loc.settings.biom_conf_identity, fallbackEnabled: true })
           .then(() => resolve(true))
-          .catch(error => {
+          .catch((error) => {
             console.log('Biometrics authentication failed');
             console.log(error);
             resolve(false);

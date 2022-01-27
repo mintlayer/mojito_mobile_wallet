@@ -16,11 +16,11 @@ if (process.env.NODE_ENV !== 'development') {
   });
 }
 
-BlueApp.isDoNotTrackEnabled().then(value => {
+BlueApp.isDoNotTrackEnabled().then((value) => {
   if (value) userHasOptedOut = true;
 });
 
-const A = async event => {};
+const A = async (event) => {};
 
 A.ENUM = {
   INIT: 'INIT',
@@ -32,11 +32,11 @@ A.ENUM = {
   NAVIGATED_TO_WALLETS_HODLHODL: 'NAVIGATED_TO_WALLETS_HODLHODL',
 };
 
-A.setOptOut = value => {
+A.setOptOut = (value) => {
   if (value) userHasOptedOut = true;
 };
 
-A.logError = errorString => {
+A.logError = (errorString) => {
   console.error(errorString);
   Bugsnag.notify(new Error(String(errorString)));
 };

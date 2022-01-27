@@ -1,37 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Alert,
-  View,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Text,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Switch,
-  Pressable,
-} from 'react-native';
+import { Alert, View, TextInput, TouchableOpacity, StyleSheet, ScrollView, Text, Keyboard, KeyboardAvoidingView, Platform, Switch, Pressable } from 'react-native';
 import DefaultPreference from 'react-native-default-preference';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import loc from '../../loc';
 import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
 import navigationStyle from '../../components/navigationStyle';
-import {
-  BlueButton,
-  BlueButtonLink,
-  BlueCard,
-  BlueLoading,
-  BlueSpacing20,
-  BlueText,
-  SafeBlueArea,
-  BlueDoneAndDismissKeyboardInputAccessory,
-  BlueDismissKeyboardInputAccessory,
-  BlueListItem,
-} from '../../BlueComponents';
+import { BlueButton, BlueButtonLink, BlueCard, BlueLoading, BlueSpacing20, BlueText, SafeBlueArea, BlueDoneAndDismissKeyboardInputAccessory, BlueDismissKeyboardInputAccessory, BlueListItem } from '../../BlueComponents';
 import { BlueCurrentTheme } from '../../components/themes';
 import { isTorCapable } from '../../blue_modules/environment';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
@@ -119,7 +95,7 @@ export default class ElectrumSettings extends Component {
     });
   };
 
-  selectServer = async server => {
+  selectServer = async (server) => {
     this.setState({ host: server.host, port: server.port, sslPort: server.sslPort }, () => {
       this.save();
     });
@@ -149,9 +125,9 @@ export default class ElectrumSettings extends Component {
     });
   };
 
-  serverExists = server => {
+  serverExists = (server) => {
     const { serverHistory } = this.state;
-    return serverHistory.some(s => {
+    return serverHistory.some((s) => {
       return `${s.host}${s.port}${s.sslPort}` === `${server.host}${server.port}${server.sslPort}`;
     });
   };
@@ -218,7 +194,7 @@ export default class ElectrumSettings extends Component {
     });
   };
 
-  onBarScanned = value => {
+  onBarScanned = (value) => {
     if (DeeplinkSchemaMatch.getServerFromSetElectrumServerAction(value)) {
       // in case user scans a QR with a deeplink like `bluewallet:setelectrumserver?server=electrum1.bluewallet.io%3A443%3As`
       value = DeeplinkSchemaMatch.getServerFromSetElectrumServerAction(value);
@@ -240,22 +216,22 @@ export default class ElectrumSettings extends Component {
     });
   };
 
-  useSSLPortToggled = value => {
+  useSSLPortToggled = (value) => {
     switch (value) {
       case true:
-        this.setState(prevState => {
+        this.setState((prevState) => {
           return { port: '', sslPort: prevState.port };
         });
         break;
       case false:
-        this.setState(prevState => {
+        this.setState((prevState) => {
           return { port: prevState.sslPort, sslPort: '' };
         });
         break;
     }
   };
 
-  onElectrumConnectionEnabledSwitchValueChangd = async value => {
+  onElectrumConnectionEnabledSwitchValueChangd = async (value) => {
     if (value === true) {
       await BlueElectrum.setDisabled(true);
       this.context.setIsElectrumDisabled(true);
@@ -287,9 +263,7 @@ export default class ElectrumSettings extends Component {
           <BlueText style={styles.status}>{loc.settings.electrum_status}</BlueText>
           <View style={styles.connectWrap}>
             <View style={[styles.container, this.state.config.connected === 1 ? styles.containerConnected : styles.containerDisconnected]}>
-              <BlueText style={this.state.config.connected === 1 ? styles.textConnected : styles.textDisconnected}>
-                {this.state.config.connected === 1 ? loc.settings.electrum_connected : loc.settings.electrum_connected_not}
-              </BlueText>
+              <BlueText style={this.state.config.connected === 1 ? styles.textConnected : styles.textDisconnected}>{this.state.config.connected === 1 ? loc.settings.electrum_connected : loc.settings.electrum_connected_not}</BlueText>
             </View>
           </View>
           <BlueSpacing20 />
@@ -301,12 +275,9 @@ export default class ElectrumSettings extends Component {
           <BlueCard>
             <View style={styles.inputWrap}>
               <TextInput
-                placeholder={
-                  loc.formatString(loc.settings.electrum_host, { example: '10.20.30.40' }) +
-                  (isTorCapable ? ' (' + loc.settings.tor_supported + ')' : '')
-                }
+                placeholder={loc.formatString(loc.settings.electrum_host, { example: '10.20.30.40' }) + (isTorCapable ? ' (' + loc.settings.tor_supported + ')' : '')}
                 value={this.state.host}
-                onChangeText={text => {
+                onChangeText={(text) => {
                   const host = text.trim();
                   this.setState({ host }, () => {
                     if (host.endsWith('.onion')) {
@@ -333,8 +304,8 @@ export default class ElectrumSettings extends Component {
                 <TextInput
                   placeholder={loc.formatString(loc.settings.electrum_port, { example: '50001' })}
                   value={this.state.sslPort?.trim() === '' || this.state.sslPort === null ? this.state.port : this.state.sslPort}
-                  onChangeText={text =>
-                    this.setState(prevState => {
+                  onChangeText={(text) =>
+                    this.setState((prevState) => {
                       if (prevState.sslPort?.trim() === '') {
                         return { port: text.trim(), sslPort: '' };
                       } else {
@@ -357,12 +328,7 @@ export default class ElectrumSettings extends Component {
                 />
               </View>
               <BlueText style={styles.usePort}>{loc.settings.use_ssl}</BlueText>
-              <Switch
-                testID="SSLPortInput"
-                value={this.state.sslPort?.trim() > 0}
-                onValueChange={this.useSSLPortToggled}
-                disabled={this.state.host?.endsWith('.onion') ?? false}
-              />
+              <Switch testID="SSLPortInput" value={this.state.sslPort?.trim() > 0} onValueChange={this.useSSLPortToggled} disabled={this.state.host?.endsWith('.onion') ?? false} />
             </View>
             <BlueSpacing20 />
 
@@ -387,7 +353,7 @@ export default class ElectrumSettings extends Component {
             ios: (
               <BlueDoneAndDismissKeyboardInputAccessory
                 onClearTapped={() => this.setState({ host: '' })}
-                onPasteTapped={text => {
+                onPasteTapped={(text) => {
                   this.setState({ host: text });
                   Keyboard.dismiss();
                 }}
@@ -399,7 +365,7 @@ export default class ElectrumSettings extends Component {
                   this.setState({ host: '' });
                   Keyboard.dismiss();
                 }}
-                onPasteTapped={text => {
+                onPasteTapped={(text) => {
                   this.setState({ host: text });
                   Keyboard.dismiss();
                 }}
@@ -458,7 +424,7 @@ ElectrumSettings.propTypes = {
   }),
 };
 
-ElectrumSettings.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.electrum_settings_server }));
+ElectrumSettings.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.settings.electrum_settings_server }));
 
 const styles = StyleSheet.create({
   status: {

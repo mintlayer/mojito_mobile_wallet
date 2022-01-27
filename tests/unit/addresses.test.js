@@ -31,17 +31,17 @@ describe('Addresses', () => {
   it('Filter by type', () => {
     let currentTab = TABS.EXTERNAL;
 
-    const externalAddresses = mockAddressesList.filter(address => filterByAddressType(TABS.INTERNAL, address.isInternal, currentTab));
+    const externalAddresses = mockAddressesList.filter((address) => filterByAddressType(TABS.INTERNAL, address.isInternal, currentTab));
 
     currentTab = TABS.INTERNAL;
 
-    const internalAddresses = mockAddressesList.filter(address => filterByAddressType(TABS.INTERNAL, address.isInternal, currentTab));
+    const internalAddresses = mockAddressesList.filter((address) => filterByAddressType(TABS.INTERNAL, address.isInternal, currentTab));
 
-    externalAddresses.forEach(address => {
+    externalAddresses.forEach((address) => {
       assert.strictEqual(address.isInternal, false);
     });
 
-    internalAddresses.forEach(address => {
+    internalAddresses.forEach((address) => {
       assert.strictEqual(address.isInternal, true);
     });
   });
@@ -58,8 +58,8 @@ describe('Addresses', () => {
 
   it('Returns AddressItem object', () => {
     const fakeWallet = {
-      _getExternalAddressByIndex: index => `external_address_${index}`,
-      _getInternalAddressByIndex: index => `internal_address_${index}`,
+      _getExternalAddressByIndex: (index) => `external_address_${index}`,
+      _getInternalAddressByIndex: (index) => `internal_address_${index}`,
       _balances_by_external_index: [{ c: 0, u: 0 }],
       _balances_by_internal_index: [{ c: 0, u: 0 }],
       _txs_by_external_index: { 0: [{}] },

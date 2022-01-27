@@ -9,7 +9,7 @@
  * @return {Promise<string>}
  */
 module.exports = function scanQrHelper(navigateFunc, currentScreenName, showFileImportButton = true) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const params = {};
     params.showFileImportButton = !!showFileImportButton;
 

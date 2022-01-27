@@ -22,7 +22,7 @@ const Introduction = () => {
       <Carousel
         data={introductionContent}
         renderItem={_renderItem}
-        onSnapToItem={index => {
+        onSnapToItem={(index) => {
           setActivePage(index);
         }}
         useScrollView
@@ -31,18 +31,13 @@ const Introduction = () => {
         inactiveSlideScale={0.94}
         inactiveSlideOpacity={0.7}
       />
-      <Pagination
-        dotsLength={introductionContent.length}
-        activeDotIndex={activePage}
-        dotStyle={styles.activeDot}
-        inactiveDotStyle={styles.inActiveDot}
-      />
+      <Pagination dotsLength={introductionContent.length} activeDotIndex={activePage} dotStyle={styles.activeDot} inactiveDotStyle={styles.inActiveDot} />
 
       <View style={styles.skipButtonPortion}>{activePage === 3 ? StartButton() : Skip()}</View>
     </View>
   );
 };
-const navigateScreen = navigate => navigate('WalletsList');
+const navigateScreen = (navigate) => navigate('WalletsList');
 
 const Skip = () => {
   const { navigate } = useNavigation();
@@ -69,7 +64,7 @@ const pageContent = (image, title, subTitle) => (
 );
 
 export default Introduction;
-Introduction.navigationOptions = navigationStyle({}, opts => ({
+Introduction.navigationOptions = navigationStyle({}, (opts) => ({
   ...opts,
   headerTitle: '',
 }));

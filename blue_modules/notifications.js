@@ -178,7 +178,7 @@ function Notifications(props) {
   }
 
   async function _sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -191,8 +191,7 @@ function Notifications(props) {
    * @returns {Promise<object>} Response object from API rest call
    */
   Notifications.majorTomToGroundControl = async function (addresses, hashes, txids) {
-    if (!Array.isArray(addresses) || !Array.isArray(hashes) || !Array.isArray(txids))
-      throw new Error('no addresses or hashes or txids provided');
+    if (!Array.isArray(addresses) || !Array.isArray(hashes) || !Array.isArray(txids)) throw new Error('no addresses or hashes or txids provided');
     const pushToken = await Notifications.getPushToken();
     if (!pushToken || !pushToken.token || !pushToken.os) return;
 
@@ -221,8 +220,7 @@ function Notifications(props) {
    * @returns {Promise<object>} Response object from API rest call
    */
   Notifications.unsubscribe = async function (addresses, hashes, txids) {
-    if (!Array.isArray(addresses) || !Array.isArray(hashes) || !Array.isArray(txids))
-      throw new Error('no addresses or hashes or txids provided');
+    if (!Array.isArray(addresses) || !Array.isArray(hashes) || !Array.isArray(txids)) throw new Error('no addresses or hashes or txids provided');
     const pushToken = await Notifications.getPushToken();
     if (!pushToken || !pushToken.token || !pushToken.os) return;
 
@@ -261,7 +259,7 @@ function Notifications(props) {
     return AsyncStorage.getItem(GROUNDCONTROL_BASE_URI);
   };
 
-  Notifications.isGroundControlUriValid = async uri => {
+  Notifications.isGroundControlUriValid = async (uri) => {
     const apiCall = new Frisbee({
       baseURI: uri,
     });
@@ -288,7 +286,7 @@ function Notifications(props) {
    */
   Notifications.checkPermissions = async function () {
     return new Promise(function (resolve) {
-      PushNotification.checkPermissions(result => {
+      PushNotification.checkPermissions((result) => {
         resolve(result);
       });
     });
@@ -333,10 +331,7 @@ function Notifications(props) {
 
     let response;
     try {
-      response = await Promise.race([
-        api.post('/getTokenConfiguration', Object.assign({}, _getHeaders(), { body: { token: pushToken.token, os: pushToken.os } })),
-        _sleep(3000),
-      ]);
+      response = await Promise.race([api.post('/getTokenConfiguration', Object.assign({}, _getHeaders(), { body: { token: pushToken.token, os: pushToken.os } })), _sleep(3000)]);
     } catch (_) {}
 
     if (!response || !response.body) return {}; // either sleep expired or apiCall threw an exception
@@ -398,8 +393,8 @@ function Notifications(props) {
   };
 
   Notifications.getDeliveredNotifications = () => {
-    return new Promise(resolve => {
-      PushNotification.getDeliveredNotifications(notifications => resolve(notifications));
+    return new Promise((resolve) => {
+      PushNotification.getDeliveredNotifications((notifications) => resolve(notifications));
     });
   };
 

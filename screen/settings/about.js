@@ -113,7 +113,7 @@ const About = () => {
       openAppStoreIfInAppFails: true,
       fallbackPlatformURL: 'https://bluewallet.io',
     };
-    Rate.rate(options, success => {
+    Rate.rate(options, (success) => {
       if (success) {
         console.log('User Rated.');
       }
@@ -127,9 +127,7 @@ const About = () => {
           <Image style={styles.logo} source={require('../../img/bluebeast.png')} />
           <Text style={styles.textFree}>{loc.settings.about_free}</Text>
           <Text style={styles.textBackup}>{formatStringAddTwoWhiteSpaces(loc.settings.about_backup)}</Text>
-          {((Platform.OS === 'android' && hasGmsSync()) || Platform.OS !== 'android') && (
-            <BlueButton onPress={handleOnRatePress} title={loc.settings.about_review + ' ⭐🙏'} />
-          )}
+          {((Platform.OS === 'android' && hasGmsSync()) || Platform.OS !== 'android') && <BlueButton onPress={handleOnRatePress} title={loc.settings.about_review + ' ⭐🙏'} />}
         </View>
       </BlueCard>
       <BlueListItem
@@ -237,5 +235,5 @@ const About = () => {
   );
 };
 
-About.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.about }));
+About.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.settings.about }));
 export default About;

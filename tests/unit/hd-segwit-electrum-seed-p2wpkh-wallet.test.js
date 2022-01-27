@@ -18,10 +18,7 @@ describe('HDSegwitElectrumSeedP2WPKHWallet', () => {
     const hd = new HDSegwitElectrumSeedP2WPKHWallet();
     hd.setSecret('method goddess  humble  crumble output snake essay carpet monster barely trip betray ');
     assert.ok(hd.validateMnemonic());
-    assert.strictEqual(
-      hd.getXpub(),
-      'zpub6n6X5F7QEogTDXchPXXhrvDQ38D5JTFNFWhFrFyri3Sazo4x225nENMeN1kKs1cYbeZDtuDUXhDQepUkxjnAi67z2PJ4d33qo8Cu3HLw74c',
-    );
+    assert.strictEqual(hd.getXpub(), 'zpub6n6X5F7QEogTDXchPXXhrvDQ38D5JTFNFWhFrFyri3Sazo4x225nENMeN1kKs1cYbeZDtuDUXhDQepUkxjnAi67z2PJ4d33qo8Cu3HLw74c');
 
     let address = hd._getExternalAddressByIndex(0);
     assert.strictEqual(address, 'bc1q2yv6rhtw9ycqeq2rkch65sucf66ytwsd3csawr');
@@ -36,14 +33,8 @@ describe('HDSegwitElectrumSeedP2WPKHWallet', () => {
     wif = hd._getInternalWIFByIndex(0);
     assert.strictEqual(wif, 'KwsLfaB2y9QZRd5cxY3uM3L4r2fE7ZPzocwjkPbp1cSFMFfE9tBq');
 
-    assert.strictEqual(
-      hd._getPubkeyByAddress(hd._getExternalAddressByIndex(0)).toString('hex'),
-      '023cb68c37a1ca627c414e63dfb23706091eafb50e50d7de4e2a1a56d7085d42e6',
-    );
-    assert.strictEqual(
-      hd._getPubkeyByAddress(hd._getInternalAddressByIndex(0)).toString('hex'),
-      '02e7e6a8dc1fe62f7de88a7de3c5030f36ec6aec28c610bc1d573435fab18b9f94',
-    );
+    assert.strictEqual(hd._getPubkeyByAddress(hd._getExternalAddressByIndex(0)).toString('hex'), '023cb68c37a1ca627c414e63dfb23706091eafb50e50d7de4e2a1a56d7085d42e6');
+    assert.strictEqual(hd._getPubkeyByAddress(hd._getInternalAddressByIndex(0)).toString('hex'), '02e7e6a8dc1fe62f7de88a7de3c5030f36ec6aec28c610bc1d573435fab18b9f94');
 
     hd.setSecret('bs');
     assert.ok(!hd.validateMnemonic());
@@ -57,10 +48,7 @@ describe('HDSegwitElectrumSeedP2WPKHWallet', () => {
     hd.setSecret(mnemonic);
     hd.setPassphrase(UNICODE_HORROR);
 
-    assert.strictEqual(
-      hd.getXpub(),
-      'zpub6nD7dvF6ArArjskKHZLmEL9ky8FqaSti1LN5maDWGwFrqwwGTp1b6ic4EHwciFNaYDmCXcQYxXSiF9BjcLCMPcaYkVN2nQD6QjYQ8vpSR3Z',
-    );
+    assert.strictEqual(hd.getXpub(), 'zpub6nD7dvF6ArArjskKHZLmEL9ky8FqaSti1LN5maDWGwFrqwwGTp1b6ic4EHwciFNaYDmCXcQYxXSiF9BjcLCMPcaYkVN2nQD6QjYQ8vpSR3Z');
 
     assert.strictEqual(hd._getExternalAddressByIndex(0), 'bc1qx94dutas7ysn2my645cyttujrms5d9p57f6aam');
     assert.strictEqual(hd._getInternalAddressByIndex(0), 'bc1qcywwsy87sdp8vz5rfjh3sxdv6rt95kujdqq38g');

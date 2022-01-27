@@ -10,7 +10,7 @@ import WalletsCarousel from '../../components/WalletsCarousel';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 
-const DrawerList = props => {
+const DrawerList = (props) => {
   const walletsCarousel = useRef();
   const { wallets, selectedWallet } = useContext(BlueStorageContext);
   const { colors } = useTheme();
@@ -29,7 +29,7 @@ const DrawerList = props => {
     walletsCount.current = wallets.length;
   }, [wallets]);
 
-  const handleClick = index => {
+  const handleClick = (index) => {
     console.log('click', index);
     if (index <= wallets.length - 1) {
       const wallet = wallets[index];
@@ -64,19 +64,7 @@ const DrawerList = props => {
     );
   };
 
-  const renderWalletsCarousel = (
-    <WalletsCarousel
-      data={wallets.concat(false)}
-      extraData={[wallets]}
-      onPress={handleClick}
-      handleLongPress={handleLongPress}
-      ref={walletsCarousel}
-      testID="WalletsList"
-      selectedWallet={selectedWallet}
-      ListHeaderComponent={ListHeaderComponent}
-      scrollEnabled={isFocused}
-    />
-  );
+  const renderWalletsCarousel = <WalletsCarousel data={wallets.concat(false)} extraData={[wallets]} onPress={handleClick} handleLongPress={handleLongPress} ref={walletsCarousel} testID="WalletsList" selectedWallet={selectedWallet} ListHeaderComponent={ListHeaderComponent} scrollEnabled={isFocused} />;
 
   return (
     <DrawerContentScrollView {...props} contentInsetAdjustmentBehavior="automatic" automaticallyAdjustContentInsets>

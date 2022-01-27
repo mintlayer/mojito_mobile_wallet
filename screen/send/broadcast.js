@@ -8,17 +8,7 @@ import * as bitcoin from 'bitcoinjs-lib';
 import loc from '../../loc';
 import { HDSegwitBech32Wallet } from '../../class';
 import navigationStyle from '../../components/navigationStyle';
-import {
-  BlueBigCheckmark,
-  BlueButton,
-  BlueButtonLink,
-  BlueCard,
-  BlueFormLabel,
-  BlueSpacing10,
-  BlueSpacing20,
-  BlueTextCentered,
-  SafeBlueArea,
-} from '../../BlueComponents';
+import { BlueBigCheckmark, BlueButton, BlueButtonLink, BlueCard, BlueFormLabel, BlueSpacing10, BlueSpacing20, BlueTextCentered, SafeBlueArea } from '../../BlueComponents';
 import BlueElectrum from '../../blue_modules/BlueElectrum';
 import Notifications from '../../blue_modules/notifications';
 
@@ -53,7 +43,7 @@ const Broadcast = () => {
     },
   });
 
-  const handleUpdateTxHex = nextValue => setTxHex(nextValue.trim());
+  const handleUpdateTxHex = (nextValue) => setTxHex(nextValue.trim());
 
   const handleBroadcast = async () => {
     Keyboard.dismiss();
@@ -117,11 +107,7 @@ const Broadcast = () => {
 
   return (
     <SafeBlueArea>
-      <KeyboardAvoidingView
-        enabled={!Platform.isPad}
-        behavior={Platform.OS === 'ios' ? 'position' : null}
-        keyboardShouldPersistTaps="handled"
-      >
+      <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null} keyboardShouldPersistTaps="handled">
         <View style={styles.wrapper} testID="BroadcastView">
           {BROADCAST_RESULT.success !== broadcastResult && (
             <BlueCard style={styles.mainCard}>
@@ -131,32 +117,14 @@ const Broadcast = () => {
               </View>
 
               <View style={[styles.input, stylesHooks.input]}>
-                <TextInput
-                  style={styles.text}
-                  maxHeight={100}
-                  minHeight={100}
-                  maxWidth="100%"
-                  minWidth="100%"
-                  multiline
-                  editable
-                  placeholderTextColor="#81868e"
-                  value={txHex}
-                  onChangeText={handleUpdateTxHex}
-                  onSubmitEditing={Keyboard.dismiss}
-                  testID="TxHex"
-                />
+                <TextInput style={styles.text} maxHeight={100} minHeight={100} maxWidth="100%" minWidth="100%" multiline editable placeholderTextColor="#81868e" value={txHex} onChangeText={handleUpdateTxHex} onSubmitEditing={Keyboard.dismiss} testID="TxHex" />
               </View>
               <BlueSpacing20 />
 
               <BlueButton title={loc.multisig.scan_or_open_file} onPress={handleQRScan} />
               <BlueSpacing20 />
 
-              <BlueButton
-                title={loc.send.broadcastButton}
-                onPress={handleBroadcast}
-                disabled={broadcastResult === BROADCAST_RESULT.pending || txHex?.length === 0 || txHex === undefined}
-                testID="BroadcastButton"
-              />
+              <BlueButton title={loc.send.broadcastButton} onPress={handleBroadcast} disabled={broadcastResult === BROADCAST_RESULT.pending || txHex?.length === 0 || txHex === undefined} testID="BroadcastButton" />
               <BlueSpacing20 />
             </BlueCard>
           )}
@@ -168,7 +136,7 @@ const Broadcast = () => {
 };
 
 export default Broadcast;
-Broadcast.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.send.create_broadcast }));
+Broadcast.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.send.create_broadcast }));
 
 const styles = StyleSheet.create({
   wrapper: {

@@ -287,13 +287,7 @@ export class HDSegwitBech32Transaction {
     if (newFeerate <= feeRate) throw new Error('New feerate should be bigger than the old one');
     const myAddress = await this._wallet.getChangeAddressAsync();
 
-    return this._wallet.createTransaction(
-      utxos,
-      [{ address: myAddress }],
-      newFeerate,
-      /* meaningless in this context */ myAddress,
-      (await this.getMaxUsedSequence()) + 1,
-    );
+    return this._wallet.createTransaction(utxos, [{ address: myAddress }], newFeerate, /* meaningless in this context */ myAddress, (await this.getMaxUsedSequence()) + 1);
   }
 
   /**
@@ -349,13 +343,7 @@ export class HDSegwitBech32Transaction {
     let add = 0;
     while (add <= 128) {
       // eslint-disable-next-line no-var
-      var { tx, inputs, outputs, fee } = this._wallet.createTransaction(
-        unconfirmedUtxos,
-        [{ address: myAddress }],
-        targetFeeRate + add,
-        myAddress,
-        HDSegwitBech32Wallet.defaultRBFSequence,
-      );
+      var { tx, inputs, outputs, fee } = this._wallet.createTransaction(unconfirmedUtxos, [{ address: myAddress }], targetFeeRate + add, myAddress, HDSegwitBech32Wallet.defaultRBFSequence);
       const combinedFeeRate = (oldFee + fee) / (this._txDecoded.virtualSize() + tx.virtualSize()); // avg
       if (Math.round(combinedFeeRate) < newFeerate) {
         add *= 2;

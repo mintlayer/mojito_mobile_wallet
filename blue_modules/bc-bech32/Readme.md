@@ -1,7 +1,8 @@
 # bc-bech32
+
 this library is for implementing [BlockChain Commons bc-32](https://github.com/BlockchainCommons/Research/blob/master/papers/bcr-0004-bc32.md)
 
-an encoding 
+an encoding
 
 ## Installation
 
@@ -29,7 +30,6 @@ yarn add bc-bech32
     console.log(data) // fpjkcmr0ypmk7unvvsh4ra4j
 
 ```
-
 
 note: for using the node vesion should be upper than 10.16
 

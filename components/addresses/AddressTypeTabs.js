@@ -36,14 +36,14 @@ const AddressTypeTabs = ({ currentTab, setCurrentTab }) => {
     };
   });
 
-  const changeToTab = tabKey => {
+  const changeToTab = (tabKey) => {
     if (tabKey in TABS) {
       setCurrentTab(TABS[tabKey]);
     }
   };
 
   const render = () => {
-    const tabsButtons = tabs.map(tab => {
+    const tabsButtons = tabs.map((tab) => {
       const isActive = tab.value === currentTab;
 
       const tabStyle = isActive ? stylesHook.activeTab : stylesHook.inactiveTab;

@@ -4,12 +4,8 @@ import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 
 export const SquareEnumeratedWordsContentAlign = Object.freeze({ left: 'flex-start', center: 'center', right: 'flex-end' });
-const SquareEnumeratedWords = props => {
-  const {
-    entries = ['Empty entries prop. Please provide an array of strings'],
-    appendNumber = true,
-    contentAlign = SquareEnumeratedWordsContentAlign.center,
-  } = props;
+const SquareEnumeratedWords = (props) => {
+  const { entries = ['Empty entries prop. Please provide an array of strings'], appendNumber = true, contentAlign = SquareEnumeratedWordsContentAlign.center } = props;
   const { colors } = useTheme();
   const stylesHook = StyleSheet.create({
     entryTextContainer: {
@@ -35,11 +31,7 @@ const SquareEnumeratedWords = props => {
         );
       } else {
         component.push(
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={[styles.entryTextContainer, stylesHook.entryTextContainer]}
-            key={`${secret}${index}`}
-          >
+          <TouchableOpacity accessibilityRole="button" style={[styles.entryTextContainer, stylesHook.entryTextContainer]} key={`${secret}${index}`}>
             <Text textBreakStrategy="simple" style={[styles.entryText, stylesHook.entryText]}>
               {secret}
             </Text>

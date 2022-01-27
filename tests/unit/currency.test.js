@@ -28,9 +28,6 @@ describe('currency', () => {
     currency._setPreferredFiatCurrency(FiatUnit.JPY);
     currency._setExchangeRate('BTC_JPY', 1043740.8614);
 
-    assert.ok(
-      currency.satoshiToLocalCurrency(1) === '¥0.01' || currency.satoshiToLocalCurrency(1) === '￥0.01',
-      'Unexpected: ' + currency.satoshiToLocalCurrency(1),
-    );
+    assert.ok(currency.satoshiToLocalCurrency(1) === '¥0.01' || currency.satoshiToLocalCurrency(1) === '￥0.01', 'Unexpected: ' + currency.satoshiToLocalCurrency(1));
   });
 });

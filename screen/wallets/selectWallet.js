@@ -18,9 +18,7 @@ const SelectWallet = () => {
   const { pop, navigate } = useNavigation();
   const { wallets } = useContext(BlueStorageContext);
   const { colors } = useTheme();
-  let data = chainType
-    ? wallets.filter(item => item.chain === chainType && item.allowSend())
-    : wallets.filter(item => item.allowSend()) || [];
+  let data = chainType ? wallets.filter((item) => item.chain === chainType && item.allowSend()) : wallets.filter((item) => item.allowSend()) || [];
 
   if (availableWallets && availableWallets.length > 0) {
     // availableWallets if provided, overrides chainType argument and `allowSend()` check
@@ -178,6 +176,6 @@ const SelectWallet = () => {
   }
 };
 
-SelectWallet.navigationOptions = navigationStyle({}, opts => ({ ...opts, headerTitle: loc.wallets.select_wallet }));
+SelectWallet.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, headerTitle: loc.wallets.select_wallet }));
 
 export default SelectWallet;

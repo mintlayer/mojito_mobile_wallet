@@ -6,15 +6,9 @@ import { Icon } from 'react-native-elements';
 export const MultipleStepsListItemDashType = Object.freeze({ none: 0, top: 1, bottom: 2, topAndBottom: 3 });
 export const MultipleStepsListItemButtohType = Object.freeze({ partial: 0, full: 1 });
 
-const MultipleStepsListItem = props => {
+const MultipleStepsListItem = (props) => {
   const { colors } = useTheme();
-  const {
-    showActivityIndicator = false,
-    dashes = MultipleStepsListItemDashType.none,
-    circledText = '',
-    leftText = '',
-    checked = false,
-  } = props;
+  const { showActivityIndicator = false, dashes = MultipleStepsListItemDashType.none, circledText = '', leftText = '', checked = false } = props;
   const stylesHook = StyleSheet.create({
     root: {
       flex: 1,
@@ -138,12 +132,7 @@ const MultipleStepsListItem = props => {
           <>
             {props.button.buttonType === undefined ||
               (props.button.buttonType === MultipleStepsListItemButtohType.full && (
-                <TouchableOpacity
-                  accessibilityRole="button"
-                  disabled={props.button.disabled}
-                  style={[styles.provideKeyButton, stylesHook.provideKeyButton, buttonOpacity]}
-                  onPress={props.button.onPress}
-                >
+                <TouchableOpacity accessibilityRole="button" disabled={props.button.disabled} style={[styles.provideKeyButton, stylesHook.provideKeyButton, buttonOpacity]} onPress={props.button.onPress}>
                   <Text style={[styles.provideKeyButtonText, stylesHook.provideKeyButtonText]}>{props.button.text}</Text>
                 </TouchableOpacity>
               ))}
@@ -152,15 +141,8 @@ const MultipleStepsListItem = props => {
                 <Text numberOfLines={1} style={[styles.rowPartialLeftText, stylesHook.rowPartialLeftText]} lineBreakMode="middle">
                   {props.button.leftText}
                 </Text>
-                <TouchableOpacity
-                  accessibilityRole="button"
-                  disabled={props.button.disabled}
-                  style={[styles.rowPartialRightButton, stylesHook.provideKeyButton, rightButtonOpacity]}
-                  onPress={props.button.onPress}
-                >
-                  <Text style={[styles.provideKeyButtonText, stylesHook.provideKeyButtonText, styles.rightButton]}>
-                    {props.button.text}
-                  </Text>
+                <TouchableOpacity accessibilityRole="button" disabled={props.button.disabled} style={[styles.rowPartialRightButton, stylesHook.provideKeyButton, rightButtonOpacity]} onPress={props.button.onPress}>
+                  <Text style={[styles.provideKeyButtonText, stylesHook.provideKeyButtonText, styles.rightButton]}>{props.button.text}</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -168,12 +150,7 @@ const MultipleStepsListItem = props => {
         )}
         {!showActivityIndicator && props.rightButton && checked && (
           <View style={styles.rightButtonContainer} accessibilityComponentType>
-            <TouchableOpacity
-              accessibilityRole="button"
-              disabled={props.rightButton.disabled}
-              style={styles.rightButton}
-              onPress={props.rightButton.onPress}
-            >
+            <TouchableOpacity accessibilityRole="button" disabled={props.rightButton.disabled} style={styles.rightButton} onPress={props.rightButton.onPress}>
               <Text style={[styles.provideKeyButtonText, stylesHook.provideKeyButtonText]}>{props.rightButton.text}</Text>
             </TouchableOpacity>
           </View>

@@ -10,16 +10,7 @@ import loc, { formatBalanceWithoutSuffix, transactionTimeToReadable } from '../l
 import Lnurl from '../class/lnurl';
 import { BlueStorageContext } from '../blue_modules/storage-context';
 import ToolTipMenu from './TooltipMenu';
-import {
-  BlueListItem,
-  BlueTransactionExpiredIcon,
-  BlueTransactionIncomingIcon,
-  BlueTransactionOffchainIcon,
-  BlueTransactionOffchainIncomingIcon,
-  BlueTransactionOnchainIcon,
-  BlueTransactionOutgoingIcon,
-  BlueTransactionPendingIcon,
-} from '../BlueComponents';
+import { BlueListItem, BlueTransactionExpiredIcon, BlueTransactionIncomingIcon, BlueTransactionOffchainIcon, BlueTransactionOffchainIncomingIcon, BlueTransactionOnchainIcon, BlueTransactionOutgoingIcon, BlueTransactionPendingIcon } from '../BlueComponents';
 
 export const TransactionListItem = React.memo(({ item, itemPriceUnit = BitcoinUnit.BTC, walletID }) => {
   const [subtitleNumberOfLines, setSubtitleNumberOfLines] = useState(1);
@@ -186,7 +177,7 @@ export const TransactionListItem = React.memo(({ item, itemPriceUnit = BitcoinUn
     if (item.hash) {
       navigate('TransactionStatus', { hash: item.hash, walletID });
     } else if (item.type === 'user_invoice' || item.type === 'payment_request' || item.type === 'paid_invoice') {
-      const lightningWallet = wallets.filter(wallet => wallet?.getID() === item.walletID);
+      const lightningWallet = wallets.filter((wallet) => wallet?.getID() === item.walletID);
       if (lightningWallet.length === 1) {
         try {
           // is it a successful lnurl-pay?
@@ -233,7 +224,7 @@ export const TransactionListItem = React.memo(({ item, itemPriceUnit = BitcoinUn
   const handleOnCopyNote = useCallback(() => Clipboard.setString(subtitle), [subtitle]);
   const handleOnViewOnBlockExplorer = useCallback(() => {
     const url = `https://mempool.space/tx/${item.hash}`;
-    Linking.canOpenURL(url).then(supported => {
+    Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url);
       }
@@ -244,7 +235,7 @@ export const TransactionListItem = React.memo(({ item, itemPriceUnit = BitcoinUn
   }, [item.hash]);
 
   const onToolTipPress = useCallback(
-    id => {
+    (id) => {
       if (id === TransactionListItem.actionKeys.CopyAmount) {
         handleOnCopyAmountTap();
       } else if (id === TransactionListItem.actionKeys.CopyNote) {
@@ -259,14 +250,7 @@ export const TransactionListItem = React.memo(({ item, itemPriceUnit = BitcoinUn
         handleOnCopyTransactionID();
       }
     },
-    [
-      handleCopyOpenInBlockExplorerPress,
-      handleOnCopyAmountTap,
-      handleOnCopyNote,
-      handleOnCopyTransactionID,
-      handleOnExpandNote,
-      handleOnViewOnBlockExplorer,
-    ],
+    [handleCopyOpenInBlockExplorerPress, handleOnCopyAmountTap, handleOnCopyNote, handleOnCopyTransactionID, handleOnExpandNote, handleOnViewOnBlockExplorer],
   );
 
   const toolTipActions = useMemo(() => {
@@ -325,18 +309,7 @@ export const TransactionListItem = React.memo(({ item, itemPriceUnit = BitcoinUn
   return (
     <View style={styles.container}>
       <ToolTipMenu ref={menuRef} actions={toolTipActions} onPressMenuItem={onToolTipPress} onPress={onPress}>
-        <BlueListItem
-          leftAvatar={avatar}
-          title={title}
-          subtitleNumberOfLines={subtitleNumberOfLines}
-          subtitle={subtitle}
-          Component={View}
-          subtitleProps={subtitleProps}
-          chevron={false}
-          rightTitle={rowTitle}
-          rightTitleStyle={rowTitleStyle}
-          containerStyle={containerStyle}
-        />
+        <BlueListItem leftAvatar={avatar} title={title} subtitleNumberOfLines={subtitleNumberOfLines} subtitle={subtitle} Component={View} subtitleProps={subtitleProps} chevron={false} rightTitle={rowTitle} rightTitleStyle={rowTitleStyle} containerStyle={containerStyle} />
       </ToolTipMenu>
     </View>
   );

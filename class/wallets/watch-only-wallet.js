@@ -132,7 +132,7 @@ export class WatchOnlyWallet extends LegacyWallet {
   }
 
   async getAddressAsync() {
-    if (this.isAddressValid(this.secret)) return new Promise(resolve => resolve(this.secret));
+    if (this.isAddressValid(this.secret)) return new Promise((resolve) => resolve(this.secret));
     if (this._hdWalletInstance) return this._hdWalletInstance.getAddressAsync();
     throw new Error('Not initialized');
   }
@@ -205,16 +205,7 @@ export class WatchOnlyWallet extends LegacyWallet {
     if (masterFingerprintHex.length < 8) masterFingerprintHex = '0' + masterFingerprintHex; // conversion without explicit zero might result in lost byte
     // poor man's little-endian conversion:
     // ¯\_(ツ)_/¯
-    return (
-      masterFingerprintHex[6] +
-      masterFingerprintHex[7] +
-      masterFingerprintHex[4] +
-      masterFingerprintHex[5] +
-      masterFingerprintHex[2] +
-      masterFingerprintHex[3] +
-      masterFingerprintHex[0] +
-      masterFingerprintHex[1]
-    );
+    return masterFingerprintHex[6] + masterFingerprintHex[7] + masterFingerprintHex[4] + masterFingerprintHex[5] + masterFingerprintHex[2] + masterFingerprintHex[3] + masterFingerprintHex[0] + masterFingerprintHex[1];
   }
 
   isHd() {

@@ -109,6 +109,6 @@ const Currency = () => {
   );
 };
 
-Currency.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.currency }));
+Currency.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.settings.currency }));
 
 export default Currency;

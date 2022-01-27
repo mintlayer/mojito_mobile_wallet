@@ -94,7 +94,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
     const values = {};
     let keyPair;
 
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       if (!skipSigning) {
         // skiping signing related stuff
         keyPair = ECPair.fromWIF(this.secret); // secret is WIF
@@ -118,7 +118,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
       });
     });
 
-    outputs.forEach(output => {
+    outputs.forEach((output) => {
       // if output has no address - this is change output
       if (!output.address) {
         output.address = changeAddress;

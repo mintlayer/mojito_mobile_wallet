@@ -12,7 +12,7 @@ function DeviceQuickActions() {
   useEffect(() => {
     if (walletsInitialized) {
       isStorageEncrypted()
-        .then(value => {
+        .then((value) => {
           if (value) {
             QuickActions.clearShortcutItems();
           } else {
@@ -61,10 +61,7 @@ function DeviceQuickActions() {
             shortcutItems.push({
               type: 'Wallets', // Required
               title: wallet.getLabel(), // Optional, if empty, `type` will be used instead
-              subtitle:
-                wallet.hideBalance || wallet.getBalance() <= 0
-                  ? ''
-                  : formatBalance(Number(wallet.getBalance()), wallet.getPreferredBalanceUnit(), true),
+              subtitle: wallet.hideBalance || wallet.getBalance() <= 0 ? '' : formatBalance(Number(wallet.getBalance()), wallet.getPreferredBalanceUnit(), true),
               userInfo: {
                 url: `bluewallet://wallet/${wallet.getID()}`, // Provide any custom data like deep linking URL
               },

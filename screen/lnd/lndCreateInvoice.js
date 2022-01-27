@@ -1,19 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  Keyboard,
-  KeyboardAvoidingView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  Platform,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-  I18nManager,
-} from 'react-native';
+import { ActivityIndicator, Image, Keyboard, KeyboardAvoidingView, StatusBar, StyleSheet, Text, TextInput, Platform, TouchableOpacity, TouchableWithoutFeedback, View, I18nManager } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { Icon } from 'react-native-elements';
 import { useFocusEffect, useNavigation, useRoute, useTheme } from '@react-navigation/native';
@@ -34,7 +20,7 @@ const torrific = require('../../blue_modules/torrific');
 const LNDCreateInvoice = () => {
   const { wallets, saveToDisk, setSelectedWallet, isTorDisabled } = useContext(BlueStorageContext);
   const { walletID, uri } = useRoute().params;
-  const wallet = useRef(wallets.find(item => item.getID() === walletID) || wallets.find(item => item.chain === Chain.OFFCHAIN));
+  const wallet = useRef(wallets.find((item) => item.getID() === walletID) || wallets.find((item) => item.chain === Chain.OFFCHAIN));
   const { name } = useRoute();
   const { colors } = useTheme();
   const { navigate, dangerouslyGetParent, goBack, pop, setParams } = useNavigation();
@@ -98,7 +84,7 @@ const LNDCreateInvoice = () => {
 
   useEffect(() => {
     if (wallet.current && wallet.current.getID() !== walletID) {
-      const newWallet = wallets.find(w => w.getID() === walletID);
+      const newWallet = wallets.find((w) => w.getID() === walletID);
       if (newWallet) {
         wallet.current = newWallet;
         setSelectedWallet(newWallet.getID());
@@ -213,7 +199,7 @@ const LNDCreateInvoice = () => {
     }
   };
 
-  const processLnurl = async data => {
+  const processLnurl = async (data) => {
     setIsLoading(true);
     if (!wallet.current) {
       ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
@@ -296,15 +282,7 @@ const LNDCreateInvoice = () => {
   };
 
   const renderCreateButton = () => {
-    return (
-      <View style={styles.createButton}>
-        {isLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <BlueButton disabled={!(amount > 0)} onPress={createInvoice} title={loc.send.details_create} />
-        )}
-      </View>
-    );
+    return <View style={styles.createButton}>{isLoading ? <ActivityIndicator /> : <BlueButton disabled={!(amount > 0)} onPress={createInvoice} title={loc.send.details_create} />}</View>;
   };
 
   const navigateToScanQRCode = () => {
@@ -320,14 +298,7 @@ const LNDCreateInvoice = () => {
 
   const renderScanClickable = () => {
     return (
-      <TouchableOpacity
-        disabled={isLoading}
-        onPress={navigateToScanQRCode}
-        style={[styles.scanRoot, styleHooks.scanRoot]}
-        accessibilityRole="button"
-        accessibilityLabel={loc.send.details_scan}
-        accessibilityHint={loc.send.details_scan_hint}
-      >
+      <TouchableOpacity disabled={isLoading} onPress={navigateToScanQRCode} style={[styles.scanRoot, styleHooks.scanRoot]} accessibilityRole="button" accessibilityLabel={loc.send.details_scan} accessibilityHint={loc.send.details_scan_hint}>
         <Image style={{}} source={require('../../img/scan-white.png')} />
         <Text style={[styles.scanClick, styleHooks.scanClick]}>{loc.send.details_scan}</Text>
       </TouchableOpacity>
@@ -351,9 +322,7 @@ const LNDCreateInvoice = () => {
         <View style={styles.walletNameWrap}>
           <TouchableOpacity accessibilityRole="button" style={styles.walletNameTouch} onPress={navigateToSelectWallet}>
             <Text style={[styles.walletNameText, styleHooks.walletNameText]}>{wallet.current.getLabel()}</Text>
-            <Text style={[styles.walletNameBalance, styleHooks.walletNameBalance]}>
-              {formatBalanceWithoutSuffix(wallet.current.getBalance(), BitcoinUnit.SATS, false)}
-            </Text>
+            <Text style={[styles.walletNameBalance, styleHooks.walletNameBalance]}>{formatBalanceWithoutSuffix(wallet.current.getBalance(), BitcoinUnit.SATS, false)}</Text>
             <Text style={[styles.walletNameSats, styleHooks.walletNameSats]}>{BitcoinUnit.SATS}</Text>
           </TouchableOpacity>
         </View>
@@ -361,7 +330,7 @@ const LNDCreateInvoice = () => {
     );
   };
 
-  const onWalletSelect = selectedWallet => {
+  const onWalletSelect = (selectedWallet) => {
     setParams({ walletID: selectedWallet.getID() });
     pop();
   };
@@ -385,7 +354,7 @@ const LNDCreateInvoice = () => {
               isLoading={isLoading}
               amount={amount}
               onAmountUnitChange={setUnit}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 if (lnurlParams) {
                   // in this case we prevent the user from changing the amount to < min or > max
                   const { min, max } = lnurlParams;
@@ -404,17 +373,7 @@ const LNDCreateInvoice = () => {
               inputAccessoryViewID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID}
             />
             <View style={[styles.fiat, styleHooks.fiat]}>
-              <TextInput
-                onChangeText={setDescription}
-                placeholder={loc.receive.details_label}
-                value={description}
-                numberOfLines={1}
-                placeholderTextColor="#81868e"
-                style={styles.fiat2}
-                editable={!isLoading}
-                onSubmitEditing={Keyboard.dismiss}
-                inputAccessoryViewID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID}
-              />
+              <TextInput onChangeText={setDescription} placeholder={loc.receive.details_label} value={description} numberOfLines={1} placeholderTextColor="#81868e" style={styles.fiat2} editable={!isLoading} onSubmitEditing={Keyboard.dismiss} inputAccessoryViewID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID} />
               {lnurlParams ? null : renderScanClickable()}
             </View>
             <BlueDismissKeyboardInputAccessory />
@@ -521,5 +480,5 @@ LNDCreateInvoice.navigationOptions = navigationStyle(
     closeButton: true,
     headerHideBackButton: true,
   },
-  opts => ({ ...opts, title: loc.receive.header }),
+  (opts) => ({ ...opts, title: loc.receive.header }),
 );

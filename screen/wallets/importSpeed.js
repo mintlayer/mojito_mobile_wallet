@@ -90,6 +90,6 @@ const WalletsImportSpeed = () => {
   );
 };
 
-WalletsImportSpeed.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.wallets.import_title }));
+WalletsImportSpeed.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.wallets.import_title }));
 
 export default WalletsImportSpeed;

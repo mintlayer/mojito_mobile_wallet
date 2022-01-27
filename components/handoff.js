@@ -3,7 +3,7 @@ import Handoff from 'react-native-handoff';
 import { BlueStorageContext } from '../blue_modules/storage-context';
 import PropTypes from 'prop-types';
 
-const HandoffComponent = props => {
+const HandoffComponent = (props) => {
   const { isHandOffUseEnabled } = useContext(BlueStorageContext);
 
   return isHandOffUseEnabled ? <Handoff {...props} /> : null;

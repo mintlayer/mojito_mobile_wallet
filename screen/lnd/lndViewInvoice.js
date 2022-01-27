@@ -5,15 +5,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { Icon } from 'react-native-elements';
 import QRCodeComponent from '../../components/QRCodeComponent';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
-import {
-  BlueLoading,
-  BlueText,
-  SafeBlueArea,
-  BlueButton,
-  BlueCopyTextToClipboard,
-  BlueSpacing20,
-  BlueTextCentered,
-} from '../../BlueComponents';
+import { BlueLoading, BlueText, SafeBlueArea, BlueButton, BlueCopyTextToClipboard, BlueSpacing20, BlueTextCentered } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
@@ -23,7 +15,7 @@ import { SuccessView } from '../send/success';
 const LNDViewInvoice = () => {
   const { invoice, walletID, isModal } = useRoute().params;
   const { wallets, setSelectedWallet, fetchAndSaveWalletTransactions } = useContext(BlueStorageContext);
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const { colors, closeImage } = useTheme();
   const { goBack, navigate, setParams, setOptions, dangerouslyGetParent } = useNavigation();
   const [isLoading, setIsLoading] = useState(typeof invoice === 'string');
@@ -122,11 +114,7 @@ const LNDViewInvoice = () => {
             // fetching only last 20 invoices
             // for invoice that was created just now - that should be enough (it is basically the last one, so limit=1 would be sufficient)
             // but that might not work as intended IF user creates 21 invoices, and then tries to check the status of invoice #0, it just wont be updated
-            const updatedUserInvoice = userInvoices.filter(filteredInvoice =>
-              typeof invoice === 'object'
-                ? filteredInvoice.payment_request === invoice.payment_request
-                : filteredInvoice.payment_request === invoice,
-            )[0];
+            const updatedUserInvoice = userInvoices.filter((filteredInvoice) => (typeof invoice === 'object' ? filteredInvoice.payment_request === invoice.payment_request : filteredInvoice.payment_request === invoice))[0];
             if (typeof updatedUserInvoice !== 'undefined') {
               setInvoiceStatusChanged(true);
               setParams({ invoice: updatedUserInvoice });
@@ -175,7 +163,7 @@ const LNDViewInvoice = () => {
   };
 
   const handleOnSharePressed = () => {
-    Share.open({ message: `lightning:${invoice.payment_request}` }).catch(error => console.log(error));
+    Share.open({ message: `lightning:${invoice.payment_request}` }).catch((error) => console.log(error));
   };
 
   const handleOnViewAdditionalInformationPressed = () => {
@@ -195,7 +183,7 @@ const LNDViewInvoice = () => {
     }
   }, [invoiceStatusChanged]);
 
-  const onLayout = e => {
+  const onLayout = (e) => {
     const { height, width } = e.nativeEvent.layout;
     setQRCodeSize(height > width ? width - 40 : e.nativeEvent.layout.width / 1.8);
   };
@@ -226,22 +214,12 @@ const LNDViewInvoice = () => {
         }
         return (
           <View style={styles.root}>
-            <SuccessView
-              amount={amount}
-              amountUnit={BitcoinUnit.SATS}
-              invoiceDescription={description}
-              shouldAnimate={invoiceStatusChanged}
-            />
+            <SuccessView amount={amount} amountUnit={BitcoinUnit.SATS} invoiceDescription={description} shouldAnimate={invoiceStatusChanged} />
             <View style={styles.detailsRoot}>
               {invoice.payment_preimage && typeof invoice.payment_preimage === 'string' ? (
                 <TouchableOpacity accessibilityRole="button" style={styles.detailsTouch} onPress={navigateToPreImageScreen}>
                   <Text style={[styles.detailsText, stylesHook.detailsText]}>{loc.send.create_details}</Text>
-                  <Icon
-                    name={I18nManager.isRTL ? 'angle-left' : 'angle-right'}
-                    size={18}
-                    type="font-awesome"
-                    color={colors.alternativeTextColor}
-                  />
+                  <Icon name={I18nManager.isRTL ? 'angle-left' : 'angle-right'} size={18} type="font-awesome" color={colors.alternativeTextColor} />
                 </TouchableOpacity>
               ) : undefined}
             </View>
@@ -279,11 +257,7 @@ const LNDViewInvoice = () => {
             <BlueButton onPress={handleOnSharePressed} title={loc.receive.details_share} />
 
             <BlueSpacing20 />
-            <BlueButton
-              style={stylesHook.additionalInfo}
-              onPress={handleOnViewAdditionalInformationPressed}
-              title={loc.lndViewInvoice.additional_info}
-            />
+            <BlueButton style={stylesHook.additionalInfo} onPress={handleOnViewAdditionalInformationPressed} title={loc.lndViewInvoice.additional_info} />
           </View>
         </ScrollView>
       );

@@ -1,11 +1,5 @@
 import { useContext, useEffect, useRef } from 'react';
-import {
-  updateApplicationContext,
-  watchEvents,
-  useReachability,
-  useInstalled,
-  transferCurrentComplicationUserInfo,
-} from 'react-native-watch-connectivity';
+import { updateApplicationContext, watchEvents, useReachability, useInstalled, transferCurrentComplicationUserInfo } from 'react-native-watch-connectivity';
 import { Chain } from './models/bitcoinUnits';
 import loc, { formatBalance, transactionTimeToReadable } from './loc';
 import { BlueStorageContext } from './blue_modules/storage-context';
@@ -14,8 +8,7 @@ import { FiatUnit } from './models/fiatUnit';
 import { MultisigHDWallet } from './class';
 
 function WatchConnectivity() {
-  const { walletsInitialized, wallets, fetchWalletTransactions, saveToDisk, txMetadata, preferredFiatCurrency } =
-    useContext(BlueStorageContext);
+  const { walletsInitialized, wallets, fetchWalletTransactions, saveToDisk, txMetadata, preferredFiatCurrency } = useContext(BlueStorageContext);
   const isReachable = useReachability();
   const isInstalled = useInstalled(); // true | false
   const messagesListenerActive = useRef(false);
@@ -71,8 +64,8 @@ function WatchConnectivity() {
   const handleMessages = (message, reply) => {
     if (message.request === 'createInvoice') {
       handleLightningInvoiceCreateRequest(message.walletIndex, message.amount, message.description)
-        .then(createInvoiceRequest => reply({ invoicePaymentRequest: createInvoiceRequest }))
-        .catch(e => {
+        .then((createInvoiceRequest) => reply({ invoicePaymentRequest: createInvoiceRequest }))
+        .catch((e) => {
           console.log(e);
           reply({});
         });

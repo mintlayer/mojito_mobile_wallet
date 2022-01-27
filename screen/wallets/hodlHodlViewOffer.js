@@ -29,12 +29,7 @@ export default class HodlHodlViewOffer extends Component {
     horizontalScrollData.push({
       id: 'minmax',
       header: loc.hodl.offer_minmax,
-      body:
-        offerToDisplay.min_amount.replace('.00', '') +
-        ' - ' +
-        offerToDisplay.max_amount.replace('.00', '') +
-        ' ' +
-        offerToDisplay.currency_code,
+      body: offerToDisplay.min_amount.replace('.00', '') + ' - ' + offerToDisplay.max_amount.replace('.00', '') + ' ' + offerToDisplay.currency_code,
     });
     offerToDisplay.first_trade_limit &&
       horizontalScrollData.push({
@@ -92,7 +87,7 @@ export default class HodlHodlViewOffer extends Component {
       const buttons = [
         {
           text: loc._.yes,
-          onPress: async a => {
+          onPress: async (a) => {
             const sigKey = await this.context.getHodlHodlSignatureKey();
             if (!sigKey) {
               alert('Error: signature key not set'); // should never happen
@@ -106,7 +101,7 @@ export default class HodlHodlViewOffer extends Component {
         },
         {
           text: loc._.cancel,
-          onPress: async a => {},
+          onPress: async (a) => {},
         },
       ];
       Alert.alert('HodlHodl', loc.hodl.offer_account_finish, buttons, {
@@ -124,12 +119,7 @@ export default class HodlHodlViewOffer extends Component {
 
     let fiatValue;
     try {
-      fiatValue = await prompt(
-        loc.formatString(loc.hodl.offer_promt_fiat, { currency: offer.currency_code }),
-        loc.hodl.offer_promt_fiat_e,
-        true,
-        'numeric',
-      );
+      fiatValue = await prompt(loc.formatString(loc.hodl.offer_promt_fiat, { currency: offer.currency_code }), loc.hodl.offer_promt_fiat_e, true, 'numeric');
     } catch (_) {
       return;
     }
@@ -139,7 +129,7 @@ export default class HodlHodlViewOffer extends Component {
     for (const paym of offer.payment_method_instructions) {
       buttons.push({
         text: paym.payment_method_name + ' (' + paym.payment_method_type + ')',
-        onPress: async a => {
+        onPress: async (a) => {
           let noError = true;
           this.setState({ isLoading: true });
           let contract;
@@ -226,18 +216,13 @@ export default class HodlHodlViewOffer extends Component {
                 </View>
                 <View style={styles.traderWrapper}>
                   <View style={styles.flexDirRow}>
-                    {this.state.offerToDisplay.trader.strong_hodler && (
-                      <Icon name="verified-user" type="material" size={14} color="#0071fc" containerStyle={styles.verifiedIcon} />
-                    )}
+                    {this.state.offerToDisplay.trader.strong_hodler && <Icon name="verified-user" type="material" size={14} color="#0071fc" containerStyle={styles.verifiedIcon} />}
                     <Text style={styles.nicknameText}>{this.state.offerToDisplay.trader.login}</Text>
                   </View>
                   <Text style={styles.traderRatingText}>
                     {this.state.offerToDisplay.trader.trades_count > 0
                       ? loc.formatString(loc.hodl.item_rating, {
-                          rating:
-                            Math.round(this.state.offerToDisplay.trader.rating * 100) +
-                            '% / ' +
-                            this.state.offerToDisplay.trader.trades_count,
+                          rating: Math.round(this.state.offerToDisplay.trader.rating * 100) + '% / ' + this.state.offerToDisplay.trader.trades_count,
                         })
                       : loc.hodl.item_rating_no}
                   </Text>

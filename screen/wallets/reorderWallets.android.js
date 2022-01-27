@@ -95,7 +95,7 @@ const ReorderWallets = () => {
           onPress={() => {
             if (sortableList.current?.state.data.length === data.length && hasMovedARow) {
               const newWalletsOrderArray = [];
-              sortableList.current.state.order.forEach(element => {
+              sortableList.current.state.order.forEach((element) => {
                 newWalletsOrderArray.push(data[element]);
               });
               setWalletsWithNewOrder(newWalletsOrderArray);
@@ -157,9 +157,7 @@ const ReorderWallets = () => {
             {loc.wallets.list_latest_transaction}
           </Text>
           <Text numberOfLines={1} style={styles.latestTxValue}>
-            {item.getTransactions().find(tx => tx.confirmations === 0)
-              ? loc.transactions.pending.toLowerCase()
-              : transactionTimeToReadable(item.getLatestTransactionTime())}
+            {item.getTransactions().find((tx) => tx.confirmations === 0) ? loc.transactions.pending.toLowerCase() : transactionTimeToReadable(item.getLatestTransactionTime())}
           </Text>
         </LinearGradient>
       </View>
@@ -189,15 +187,7 @@ const ReorderWallets = () => {
     <View style={[styles.root, stylesHook.root]}>
       <StatusBar barStyle="light-content" />
       <ScrollView scrollEnabled={scrollEnabled}>
-        <SortableList
-          ref={sortableList}
-          data={data}
-          renderRow={renderItem}
-          scrollEnabled={false}
-          onChangeOrder={onChangeOrder}
-          onActivateRow={onActivateRow}
-          onReleaseRow={onReleaseRow}
-        />
+        <SortableList ref={sortableList} data={data} renderRow={renderItem} scrollEnabled={false} onChangeOrder={onChangeOrder} onActivateRow={onActivateRow} onReleaseRow={onReleaseRow} />
       </ScrollView>
     </View>
   );
@@ -207,7 +197,7 @@ ReorderWallets.navigationOptions = navigationStyle(
   {
     headerHideBackButton: true,
   },
-  opts => ({ ...opts, title: loc.wallets.reorder_title }),
+  (opts) => ({ ...opts, title: loc.wallets.reorder_title }),
 );
 
 export default ReorderWallets;

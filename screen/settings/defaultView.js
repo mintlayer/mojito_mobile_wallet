@@ -27,7 +27,7 @@ const DefaultView = () => {
     })();
   });
 
-  const onViewAllWalletsSwitchValueChanged = async value => {
+  const onViewAllWalletsSwitchValueChanged = async (value) => {
     await OnAppLaunch.setViewAllWalletsEnabled(value);
     if (value) {
       setViewAllWalletsEnabled(true);
@@ -43,7 +43,7 @@ const DefaultView = () => {
     navigate('SelectWallet', { onWalletSelect: onWalletSelectValueChanged });
   };
 
-  const onWalletSelectValueChanged = async wallet => {
+  const onWalletSelectValueChanged = async (wallet) => {
     await OnAppLaunch.setViewAllWalletsEnabled(false);
     await OnAppLaunch.setSelectedDefaultWallet(wallet.getID());
     setDefaultWalletLabel(wallet.getLabel());
@@ -66,14 +66,12 @@ const DefaultView = () => {
         <BlueCard>
           <BlueText>{loc.settings.default_desc}</BlueText>
         </BlueCard>
-        {!viewAllWalletsEnabled && (
-          <BlueListItem title={loc.settings.default_info} onPress={selectWallet} rightTitle={defaultWalletLabel} chevron />
-        )}
+        {!viewAllWalletsEnabled && <BlueListItem title={loc.settings.default_info} onPress={selectWallet} rightTitle={defaultWalletLabel} chevron />}
       </View>
     </SafeBlueArea>
   );
 };
 
-DefaultView.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.default_title }));
+DefaultView.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.settings.default_title }));
 
 export default DefaultView;

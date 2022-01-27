@@ -15,7 +15,7 @@ export default class BuyBitcoin extends Component {
   static contextType = BlueStorageContext;
   constructor(props, context) {
     super(props);
-    const wallet = context.wallets.find(w => w.getID() === props.route.params.walletID);
+    const wallet = context.wallets.find((w) => w.getID() === props.route.params.walletID);
     if (!wallet) console.warn('wallet was not passed to buyBitcoin');
 
     this.state = {
@@ -44,7 +44,7 @@ export default class BuyBitcoin extends Component {
     } else {
       // otherwise, lets call widely-used getAddressAsync()
       try {
-        address = await Promise.race([wallet.getAddressAsync(), new Promise(resolve => setTimeout(resolve, 2000))]);
+        address = await Promise.race([wallet.getAddressAsync(), new Promise((resolve) => setTimeout(resolve, 2000))]);
       } catch (_) {}
 
       if (!address) {
@@ -117,7 +117,7 @@ BuyBitcoin.navigationOptions = navigationStyle({
   headerHideBackButton: true,
 });
 
-BuyBitcoin.navigate = async wallet => {
+BuyBitcoin.navigate = async (wallet) => {
   NavigationService.navigate('BuyBitcoin', {
     walletID: wallet.getID(),
   });

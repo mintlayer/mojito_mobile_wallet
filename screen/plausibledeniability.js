@@ -62,11 +62,7 @@ const PlausibleDeniability = () => {
 
           <BlueSpacing20 />
 
-          <BlueButton
-            testID="CreateFakeStorageButton"
-            title={loc.plausibledeniability.create_fake_storage}
-            onPress={handleOnCreateFakeStorageButtonPressed}
-          />
+          <BlueButton testID="CreateFakeStorageButton" title={loc.plausibledeniability.create_fake_storage} onPress={handleOnCreateFakeStorageButtonPressed} />
         </ScrollView>
       </BlueCard>
     </SafeBlueArea>

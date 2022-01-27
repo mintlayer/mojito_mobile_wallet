@@ -8,13 +8,11 @@ const bitcoin = require('bitcoinjs-lib');
 const assert = require('assert');
 
 it.skip('can verify escrow address', () => {
-  const encryptedSeed =
-    'ES1:b2dc8bd89782f70ef11ff1d1c6bf6adde0bea78fb959391de48f49acbf7f9766ca128b89c1a9a013d158b6c4dabee77997f8a15764d1b083f213b1d6aa9fb3a14a1edb406930a25423a1df3be72306f120b08972cea669dba1284bd8:bf5af8737529b419cc20935a1c05c742:pbkdf2:10000';
+  const encryptedSeed = 'ES1:b2dc8bd89782f70ef11ff1d1c6bf6adde0bea78fb959391de48f49acbf7f9766ca128b89c1a9a013d158b6c4dabee77997f8a15764d1b083f213b1d6aa9fb3a14a1edb406930a25423a1df3be72306f120b08972cea669dba1284bd8:bf5af8737529b419cc20935a1c05c742:pbkdf2:10000';
   const encryptPassword = 'Qwert12345';
   const address = '34n3rBtPA16BQYWycphnhK7C9DoucWb527';
   const index = 10298;
-  const witnessScript =
-    '522103dc0edfea797214be15a69148bfb1dffa1c8295c05300b7632143a77d918b4a0821031fec42b60942633616aff7e245796b5caae6bf59ef5ba688b0a59f33f08b2896210351fd6e52d38a37b9834909e3f8345c471346e1f5990ec00dafcc53e238d3c7c553ae';
+  const witnessScript = '522103dc0edfea797214be15a69148bfb1dffa1c8295c05300b7632143a77d918b4a0821031fec42b60942633616aff7e245796b5caae6bf59ef5ba688b0a59f33f08b2896210351fd6e52d38a37b9834909e3f8345c471346e1f5990ec00dafcc53e238d3c7c553ae';
 
   const Hodl = new HodlHodlApi();
   assert.ok(Hodl.verifyEscrowAddress(encryptedSeed, encryptPassword, index, address, witnessScript));
@@ -30,7 +28,7 @@ it('can create escrow address', () => {
     keyPairServer.publicKey, // '03141024b18929bfec5b567c12b1693d4ae02783873e2e3aa444f0d6950cb97dee', // server
     keyPairSeller.publicKey, // '0208137b6cb23cef02c0529948a2ed12fbeed0813cce555de073319f56e215ee1b', // seller
     keyPairBuyer.publicKey, // '035ed5825258d4f1685df804f21296b9957cd319cf5949ace92fa5767eb7a946f2', // buyer
-  ].map(hex => Buffer.from(hex, 'hex'));
+  ].map((hex) => Buffer.from(hex, 'hex'));
 
   const p2shP2wshP2ms = bitcoin.payments.p2sh({
     redeem: bitcoin.payments.p2wsh({
@@ -62,10 +60,7 @@ it('can create escrow address', () => {
 
   for (const out of txDecoded.outs) {
     const scripthex = out.script.toString('hex');
-    const address =
-      LegacyWallet.scriptPubKeyToAddress(scripthex) ||
-      SegwitP2SHWallet.scriptPubKeyToAddress(scripthex) ||
-      SegwitBech32Wallet.scriptPubKeyToAddress(scripthex);
+    const address = LegacyWallet.scriptPubKeyToAddress(scripthex) || SegwitP2SHWallet.scriptPubKeyToAddress(scripthex) || SegwitBech32Wallet.scriptPubKeyToAddress(scripthex);
     psbt.addOutput({
       address,
       value: out.value,
@@ -162,13 +157,7 @@ describe.skip('HodlHodl API', function () {
     const paymentMethodInstructionId = offer.payment_method_instructions[0].id;
     const paymentMethodInstructionVersion = offer.payment_method_instructions[0].version;
     const fiatValue = 100;
-    const contract = await Hodl.acceptOffer(
-      offer.id,
-      offer.version,
-      paymentMethodInstructionId,
-      paymentMethodInstructionVersion,
-      fiatValue,
-    );
+    const contract = await Hodl.acceptOffer(offer.id, offer.version, paymentMethodInstructionId, paymentMethodInstructionVersion, fiatValue);
     console.warn({ contract });
   });
 
@@ -236,11 +225,7 @@ describe.skip('HodlHodl API', function () {
 
   it('can create signature for autologin', async () => {
     const Hodl = new HodlHodlApi('');
-    const sig = Hodl.createSignature(
-      'iqZC7uUmx4sVeIwFQN2YqGT5SyrXNLhxVX7QMGUeJK1CDdy87OcrOt3QvPE5LFC56Lgu7WLlg12U55Vy',
-      'cce14197a08ebab7cfbb41cfce9fe91e0f31d572d3f48571ca3c30bfd516f769',
-      1589980224,
-    );
+    const sig = Hodl.createSignature('iqZC7uUmx4sVeIwFQN2YqGT5SyrXNLhxVX7QMGUeJK1CDdy87OcrOt3QvPE5LFC56Lgu7WLlg12U55Vy', 'cce14197a08ebab7cfbb41cfce9fe91e0f31d572d3f48571ca3c30bfd516f769', 1589980224);
     assert.strictEqual(sig, '1d2a51ca2c54ff9107a3460b22f01bc877e527a9a719d81b32038741332159fc');
   });
 });

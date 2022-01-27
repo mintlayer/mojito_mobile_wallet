@@ -15,18 +15,17 @@ const styles = StyleSheet.create({
 });
 
 const GeneralSettings = () => {
-  const { isAdancedModeEnabled, setIsAdancedModeEnabled, wallets, isHandOffUseEnabled, setIsHandOffUseEnabledAsyncStorage } =
-    useContext(BlueStorageContext);
+  const { isAdancedModeEnabled, setIsAdancedModeEnabled, wallets, isHandOffUseEnabled, setIsHandOffUseEnabledAsyncStorage } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdancedModeSwitchEnabled, setIsAdancedModeSwitchEnabled] = useState(false);
   const [isURv1SwitchEnabled, setIsURv1SwitchEnabled] = useState(false);
   const { navigate } = useNavigation();
   const { colors } = useTheme();
-  const onAdvancedModeSwitch = async value => {
+  const onAdvancedModeSwitch = async (value) => {
     await setIsAdancedModeEnabled(value);
     setIsAdancedModeSwitchEnabled(value);
   };
-  const onLegacyURv1Switch = async value => {
+  const onLegacyURv1Switch = async (value) => {
     setIsURv1SwitchEnabled(value);
     return value ? setUseURv1() : clearUseURv1();
   };
@@ -70,37 +69,24 @@ const GeneralSettings = () => {
       <BlueListItem title={loc.settings.privacy} onPress={navigateToPrivacy} testID="SettingsPrivacy" chevron />
       {Platform.OS === 'ios' ? (
         <>
-          <BlueListItem
-            hideChevron
-            title={loc.settings.general_continuity}
-            Component={TouchableWithoutFeedback}
-            switch={{ onValueChange: setIsHandOffUseEnabledAsyncStorage, value: isHandOffUseEnabled }}
-          />
+          <BlueListItem hideChevron title={loc.settings.general_continuity} Component={TouchableWithoutFeedback} switch={{ onValueChange: setIsHandOffUseEnabledAsyncStorage, value: isHandOffUseEnabled }} />
           <BlueCard>
             <BlueText>{loc.settings.general_continuity_e}</BlueText>
           </BlueCard>
           <BlueSpacing20 />
         </>
       ) : null}
-      <BlueListItem
-        Component={TouchableWithoutFeedback}
-        title={loc.settings.general_adv_mode}
-        switch={{ onValueChange: onAdvancedModeSwitch, value: isAdancedModeSwitchEnabled, testID: 'AdvancedMode' }}
-      />
+      <BlueListItem Component={TouchableWithoutFeedback} title={loc.settings.general_adv_mode} switch={{ onValueChange: onAdvancedModeSwitch, value: isAdancedModeSwitchEnabled, testID: 'AdvancedMode' }} />
       <BlueCard>
         <BlueText>{loc.settings.general_adv_mode_e}</BlueText>
       </BlueCard>
       <BlueSpacing20 />
-      <BlueListItem
-        Component={TouchableWithoutFeedback}
-        title="Legacy URv1 QR"
-        switch={{ onValueChange: onLegacyURv1Switch, value: isURv1SwitchEnabled }}
-      />
+      <BlueListItem Component={TouchableWithoutFeedback} title="Legacy URv1 QR" switch={{ onValueChange: onLegacyURv1Switch, value: isURv1SwitchEnabled }} />
       <BlueSpacing20 />
     </ScrollView>
   );
 };
 
-GeneralSettings.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.general }));
+GeneralSettings.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.settings.general }));
 
 export default GeneralSettings;

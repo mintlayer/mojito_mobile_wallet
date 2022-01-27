@@ -120,13 +120,7 @@ async function connectMain() {
 
   try {
     console.log('begin connection:', JSON.stringify(usingPeer));
-    mainClient = new ElectrumClient(
-      usingPeer.host.endsWith('.onion') && !(await isTorDaemonDisabled()) ? torrific : global.net,
-      global.tls,
-      usingPeer.ssl || usingPeer.tcp,
-      usingPeer.host,
-      usingPeer.ssl ? 'tls' : 'tcp',
-    );
+    mainClient = new ElectrumClient(usingPeer.host.endsWith('.onion') && !(await isTorDaemonDisabled()) ? torrific : global.net, global.tls, usingPeer.ssl || usingPeer.tcp, usingPeer.host, usingPeer.ssl ? 'tls' : 'tcp');
 
     mainClient.onError = function (e) {
       console.log('electrum mainClient.onError():', e.message);
@@ -172,7 +166,7 @@ async function connectMain() {
       presentNetworkErrorAlert(usingPeer);
     } else {
       console.log('reconnection attempt #', connectionAttempt);
-      await new Promise(resolve => setTimeout(resolve, 500)); // sleep
+      await new Promise((resolve) => setTimeout(resolve, 500)); // sleep
       return connectMain();
     }
   }
@@ -180,17 +174,12 @@ async function connectMain() {
 
 async function presentNetworkErrorAlert(usingPeer) {
   if (await isDisabled()) {
-    console.log(
-      'Electrum connection disabled by user. Perhaps we are attempting to show this network error alert after the user disabled connections.',
-    );
+    console.log('Electrum connection disabled by user. Perhaps we are attempting to show this network error alert after the user disabled connections.');
     return;
   }
   Alert.alert(
     loc.errors.network,
-    loc.formatString(
-      usingPeer ? loc.settings.electrum_unable_to_connect : loc.settings.electrum_error_connect,
-      usingPeer ? { server: `${usingPeer.host}:${usingPeer.ssl ?? usingPeer.tcp}` } : {},
-    ),
+    loc.formatString(usingPeer ? loc.settings.electrum_unable_to_connect : loc.settings.electrum_error_connect, usingPeer ? { server: `${usingPeer.host}:${usingPeer.ssl ?? usingPeer.tcp}` } : {}),
     [
       {
         text: loc.wallets.list_tryagain,
@@ -780,7 +769,7 @@ module.exports.calcEstimateFeeFromFeeHistorgam = function (numberOfBlocks, feeHi
 module.exports.estimateFees = async function () {
   let histogram;
   try {
-    histogram = await Promise.race([mainClient.mempool_getFeeHistogram(), new Promise(resolve => setTimeout(resolve, 29000))]);
+    histogram = await Promise.race([mainClient.mempool_getFeeHistogram(), new Promise((resolve) => setTimeout(resolve, 29000))]);
   } catch (_) {}
 
   if (!histogram) throw new Error('timeout while getting mempool_getFeeHistogram');
@@ -869,19 +858,13 @@ module.exports.calculateBlockTime = function (height) {
  */
 module.exports.testConnection = async function (host, tcpPort, sslPort) {
   const isTorDisabled = await isTorDaemonDisabled();
-  const client = new ElectrumClient(
-    host.endsWith('.onion') && !isTorDisabled ? torrific : global.net,
-    global.tls,
-    sslPort || tcpPort,
-    host,
-    sslPort ? 'tls' : 'tcp',
-  );
+  const client = new ElectrumClient(host.endsWith('.onion') && !isTorDisabled ? torrific : global.net, global.tls, sslPort || tcpPort, host, sslPort ? 'tls' : 'tcp');
 
   client.onError = () => {}; // mute
   let timeoutId = false;
   try {
     const rez = await Promise.race([
-      new Promise(resolve => {
+      new Promise((resolve) => {
         timeoutId = setTimeout(() => resolve('timeout'), host.endsWith('.onion') && !isTorDisabled ? 21000 : 5000);
       }),
       client.connect(),

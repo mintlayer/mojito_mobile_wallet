@@ -16,10 +16,10 @@ const req = https.request(
     // headers: { 'User-Agent': 'BlueWallet bot', Authorization: auth },
     headers: { Authorization: auth },
   },
-  resp => {
+  (resp) => {
     let data = '';
 
-    resp.on('data', chunk => {
+    resp.on('data', (chunk) => {
       data += chunk;
     });
 
@@ -39,7 +39,7 @@ const req = https.request(
   },
 );
 
-req.on('error', e => {
+req.on('error', (e) => {
   console.error(e);
 });
 

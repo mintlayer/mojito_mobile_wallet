@@ -40,7 +40,7 @@ const ImportWalletDiscovery = () => {
     },
   });
 
-  const saveWallet = wallet => {
+  const saveWallet = (wallet) => {
     if (importing.current) return;
     importing.current = true;
     addAndSaveWallet(wallet);
@@ -48,16 +48,16 @@ const ImportWalletDiscovery = () => {
   };
 
   useEffect(() => {
-    const onProgress = data => setProgress(data);
+    const onProgress = (data) => setProgress(data);
 
-    const onWallet = wallet => {
+    const onWallet = (wallet) => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       const id = wallet.getID();
       let subtitle;
       try {
         subtitle = wallet.getDerivationPath?.();
       } catch (e) {}
-      setWallets(wallets => [...wallets, { wallet, subtitle, id }]);
+      setWallets((wallets) => [...wallets, { wallet, subtitle, id }]);
     };
 
     const onPassword = async (title, subtitle) => {
@@ -85,7 +85,7 @@ const ImportWalletDiscovery = () => {
           ReactNativeHapticFeedback.trigger('impactLight', { ignoreAndroidSystemSettings: false });
         }
       })
-      .catch(e => {
+      .catch((e) => {
         console.warn('import error', e);
         Alert.alert('import error', e.message);
       })
@@ -117,7 +117,7 @@ const ImportWalletDiscovery = () => {
     />
   );
 
-  const keyExtractor = w => w.id;
+  const keyExtractor = (w) => w.id;
 
   return (
     <SafeBlueArea style={[styles.root, stylesHook.root]}>
@@ -143,20 +143,10 @@ const ImportWalletDiscovery = () => {
             <BlueSpacing10 />
           </>
         )}
-        {bip39 && (
-          <BlueButtonLink
-            title={loc.wallets.import_discovery_derivation}
-            testID="CustomDerivationPathButton"
-            onPress={handleCustomDerivation}
-          />
-        )}
+        {bip39 && <BlueButtonLink title={loc.wallets.import_discovery_derivation} testID="CustomDerivationPathButton" onPress={handleCustomDerivation} />}
         <BlueSpacing10 />
         <View style={styles.buttonContainer}>
-          <BlueButton
-            disabled={wallets.length === 0}
-            title={loc.wallets.import_do_import}
-            onPress={() => saveWallet(wallets[selected].wallet)}
-          />
+          <BlueButton disabled={wallets.length === 0} title={loc.wallets.import_do_import} onPress={() => saveWallet(wallets[selected].wallet)} />
         </View>
       </View>
     </SafeBlueArea>
@@ -185,6 +175,6 @@ const styles = StyleSheet.create({
   },
 });
 
-ImportWalletDiscovery.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.wallets.import_discovery_title }));
+ImportWalletDiscovery.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.wallets.import_discovery_title }));
 
 export default ImportWalletDiscovery;

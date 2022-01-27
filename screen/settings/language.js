@@ -31,11 +31,11 @@ const Language = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language]);
 
-  const renderItem = item => {
+  const renderItem = (item) => {
     return (
       <BlueListItem
         onPress={() => {
-          const currentLanguage = AvailableLanguages.find(language => language.value === selectedLanguage);
+          const currentLanguage = AvailableLanguages.find((language) => language.value === selectedLanguage);
           loc.saveLanguage(item.item.value).then(() => {
             setSelectedLanguage(item.item.value);
             setLanguage();
@@ -50,18 +50,9 @@ const Language = () => {
     );
   };
 
-  return (
-    <FlatList
-      style={[styles.flex, stylesHook.flex]}
-      keyExtractor={(_item, index) => `${index}`}
-      data={AvailableLanguages}
-      renderItem={renderItem}
-      initialNumToRender={25}
-      contentInsetAdjustmentBehavior="automatic"
-    />
-  );
+  return <FlatList style={[styles.flex, stylesHook.flex]} keyExtractor={(_item, index) => `${index}`} data={AvailableLanguages} renderItem={renderItem} initialNumToRender={25} contentInsetAdjustmentBehavior="automatic" />;
 };
 
-Language.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.language }));
+Language.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.settings.language }));
 
 export default Language;

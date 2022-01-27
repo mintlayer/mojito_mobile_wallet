@@ -5,15 +5,7 @@ import { I18nManager, Image, ScrollView, StyleSheet, Text, TouchableOpacity, Vie
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
 
-import {
-  BlueButton,
-  BlueCard,
-  BlueDismissKeyboardInputAccessory,
-  BlueLoading,
-  BlueSpacing20,
-  BlueText,
-  SafeBlueArea,
-} from '../../BlueComponents';
+import { BlueButton, BlueCard, BlueDismissKeyboardInputAccessory, BlueLoading, BlueSpacing20, BlueText, SafeBlueArea } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import AmountInput from '../../components/AmountInput';
 import Lnurl from '../../class/lnurl';
@@ -28,7 +20,7 @@ const currency = require('../../blue_modules/currency');
 const LnurlPay = () => {
   const { wallets } = useContext(BlueStorageContext);
   const { walletID, lnurl } = useRoute().params;
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const [unit, setUnit] = useState(wallet.getPreferredBalanceUnit());
   const [isLoading, setIsLoading] = useState(true);
   const [LN, setLN] = useState();
@@ -58,7 +50,7 @@ const LnurlPay = () => {
       const ln = new Lnurl(lnurl, AsyncStorage);
       ln.callLnurlPayService()
         .then(setPayload)
-        .catch(error => {
+        .catch((error) => {
           alert(error.message);
           pop();
         });
@@ -86,7 +78,7 @@ const LnurlPay = () => {
     }
   }, [payload]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const onWalletSelect = wallet => {
+  const onWalletSelect = (wallet) => {
     setParams({ walletID: wallet.getID() });
     pop();
   };
@@ -155,25 +147,15 @@ const LnurlPay = () => {
   const renderWalletSelectionButton = (
     <View style={styles.walletSelectRoot}>
       {!isLoading && (
-        <TouchableOpacity
-          accessibilityRole="button"
-          style={styles.walletSelectTouch}
-          onPress={() => navigate('SelectWallet', { onWalletSelect, chainType: Chain.OFFCHAIN })}
-        >
+        <TouchableOpacity accessibilityRole="button" style={styles.walletSelectTouch} onPress={() => navigate('SelectWallet', { onWalletSelect, chainType: Chain.OFFCHAIN })}>
           <Text style={styles.walletSelectText}>{loc.wallets.select_wallet.toLowerCase()}</Text>
           <Icon name={I18nManager.isRTL ? 'angle-left' : 'angle-right'} size={18} type="font-awesome" color="#9aa0aa" />
         </TouchableOpacity>
       )}
       <View style={styles.walletWrap}>
-        <TouchableOpacity
-          accessibilityRole="button"
-          style={styles.walletWrapTouch}
-          onPress={() => navigate('SelectWallet', { onWalletSelect, chainType: Chain.OFFCHAIN })}
-        >
+        <TouchableOpacity accessibilityRole="button" style={styles.walletWrapTouch} onPress={() => navigate('SelectWallet', { onWalletSelect, chainType: Chain.OFFCHAIN })}>
           <Text style={[styles.walletWrapLabel, stylesHook.walletWrapLabel]}>{wallet.getLabel()}</Text>
-          <Text style={[styles.walletWrapBalance, stylesHook.walletWrapBalance]}>
-            {formatBalanceWithoutSuffix(wallet.getBalance(), BitcoinUnit.SATS, false)}
-          </Text>
+          <Text style={[styles.walletWrapBalance, stylesHook.walletWrapBalance]}>{formatBalanceWithoutSuffix(wallet.getBalance(), BitcoinUnit.SATS, false)}</Text>
           <Text style={[styles.walletWrapSats, stylesHook.walletWrapSats]}>{BitcoinUnit.SATS}</Text>
         </TouchableOpacity>
       </View>
@@ -185,15 +167,7 @@ const LnurlPay = () => {
       <SafeBlueArea>
         <ScrollView contentContainertyle={{ justifyContent: 'space-around' }}>
           <BlueCard>
-            <AmountInput
-              isLoading={isLoading}
-              amount={amount && amount.toString()}
-              onAmountUnitChange={setUnit}
-              onChangeText={setAmount}
-              disabled={payload && payload.fixed}
-              unit={unit}
-              inputAccessoryViewID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID}
-            />
+            <AmountInput isLoading={isLoading} amount={amount && amount.toString()} onAmountUnitChange={setUnit} onChangeText={setAmount} disabled={payload && payload.fixed} unit={unit} inputAccessoryViewID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID} />
             <BlueText style={styles.alignSelfCenter}>
               {loc.formatString(loc.lndViewInvoice.please_pay_between_and, {
                 min: formatBalance(payload?.min, unit),

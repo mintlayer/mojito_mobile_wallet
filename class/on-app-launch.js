@@ -29,7 +29,7 @@ export default class OnAppLaunch {
     let selectedWallet = false;
     try {
       const selectedWalletID = JSON.parse(await AsyncStorage.getItem(OnAppLaunch.STORAGE_KEY));
-      selectedWallet = BlueApp.getWallets().find(wallet => wallet.getID() === selectedWalletID);
+      selectedWallet = BlueApp.getWallets().find((wallet) => wallet.getID() === selectedWalletID);
       if (!selectedWallet) {
         await AsyncStorage.setItem(OnAppLaunch.STORAGE_KEY, '');
       }

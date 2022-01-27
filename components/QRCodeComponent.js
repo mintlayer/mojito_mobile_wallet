@@ -8,28 +8,20 @@ import loc from '../loc';
 import PropTypes from 'prop-types';
 import Clipboard from '@react-native-clipboard/clipboard';
 
-const QRCodeComponent = ({
-  value,
-  isLogoRendered = true,
-  isMenuAvailable = true,
-  logoSize = 90,
-  size = 300,
-  ecl = 'H',
-  onError = () => {},
-}) => {
+const QRCodeComponent = ({ value, isLogoRendered = true, isMenuAvailable = true, logoSize = 90, size = 300, ecl = 'H', onError = () => {} }) => {
   const qrCode = useRef();
   const { colors } = useTheme();
 
   const handleShareQRCode = () => {
-    qrCode.current.toDataURL(data => {
+    qrCode.current.toDataURL((data) => {
       const shareImageBase64 = {
         url: `data:image/png;base64,${data}`,
       };
-      Share.open(shareImageBase64).catch(error => console.log(error));
+      Share.open(shareImageBase64).catch((error) => console.log(error));
     });
   };
 
-  const onPressMenuItem = id => {
+  const onPressMenuItem = (id) => {
     if (id === QRCodeComponent.actionKeys.Share) {
       handleShareQRCode();
     } else if (id === QRCodeComponent.actionKeys.Copy) {
@@ -54,20 +46,7 @@ const QRCodeComponent = ({
     return actions;
   };
 
-  const renderQRCode = (
-    <QRCode
-      value={value}
-      {...(isLogoRendered ? { logo: require('../img/qr-code.png') } : {})}
-      size={size}
-      logoSize={logoSize}
-      color="#000000"
-      logoBackgroundColor={colors.brandingColor}
-      backgroundColor="#FFFFFF"
-      ecl={ecl}
-      getRef={qrCode}
-      onError={onError}
-    />
-  );
+  const renderQRCode = <QRCode value={value} {...(isLogoRendered ? { logo: require('../img/qr-code.png') } : {})} size={size} logoSize={logoSize} color="#000000" logoBackgroundColor={colors.brandingColor} backgroundColor="#FFFFFF" ecl={ecl} getRef={qrCode} onError={onError} />;
 
   return (
     <View style={styles.qrCodeContainer} testID="BitcoinAddressQRCodeContainer">

@@ -21,7 +21,7 @@ const ToolTipMenu = (props, ref) => {
     return item;
   };
 
-  const menuItems = props.actions.map(action => {
+  const menuItems = props.actions.map((action) => {
     if (Array.isArray(action)) {
       const mapped = [];
       for (const actionToMap of action) {

@@ -28,10 +28,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     hd.setSecret(process.env.HD_MNEMONIC);
     assert.ok(hd.validateMnemonic());
 
-    assert.strictEqual(
-      'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP',
-      hd.getXpub(),
-    );
+    assert.strictEqual('zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP', hd.getXpub());
 
     assert.strictEqual(hd._getExternalAddressByIndex(0), 'bc1qvd6w54sydc08z3802svkxr7297ez7cusd6266p');
     assert.strictEqual(hd._getExternalAddressByIndex(1), 'bc1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh');
@@ -154,10 +151,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     const hd = new HDSegwitBech32Wallet();
     hd.setSecret(process.env.HD_MNEMONIC_BIP84);
     assert.ok(hd.validateMnemonic());
-    assert.strictEqual(
-      hd.getXpub(),
-      'zpub6qoWjSiZRHzSYPGYJ6EzxEXJXP1b2Rj9syWwJZFNCmupMwkbSAWSBk3UvSkJyQLEhQpaBAwvhmNj3HPKpwCJiTBB9Tutt46FtEmjL2DoU3J',
-    );
+    assert.strictEqual(hd.getXpub(), 'zpub6qoWjSiZRHzSYPGYJ6EzxEXJXP1b2Rj9syWwJZFNCmupMwkbSAWSBk3UvSkJyQLEhQpaBAwvhmNj3HPKpwCJiTBB9Tutt46FtEmjL2DoU3J');
 
     let start = +new Date();
     await hd.fetchBalance();
@@ -213,10 +207,8 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     await hd.fetchUtxo();
     assert.strictEqual(hd.getUtxo().length, 4);
     assert.strictEqual(hd.getDerivedUtxoFromOurTransaction().length, 4);
-    const u1 = hd.getUtxo().find(utxo => utxo.txid === '8b0ab2c7196312e021e0d3dc73f801693826428782970763df6134457bd2ec20');
-    const u2 = hd
-      .getDerivedUtxoFromOurTransaction()
-      .find(utxo => utxo.txid === '8b0ab2c7196312e021e0d3dc73f801693826428782970763df6134457bd2ec20');
+    const u1 = hd.getUtxo().find((utxo) => utxo.txid === '8b0ab2c7196312e021e0d3dc73f801693826428782970763df6134457bd2ec20');
+    const u2 = hd.getDerivedUtxoFromOurTransaction().find((utxo) => utxo.txid === '8b0ab2c7196312e021e0d3dc73f801693826428782970763df6134457bd2ec20');
     delete u1.confirmations;
     delete u2.confirmations;
     delete u1.height;
@@ -225,12 +217,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     const changeAddress = await hd.getChangeAddressAsync();
     assert.ok(changeAddress && changeAddress.startsWith('bc1'));
 
-    const { tx, inputs, outputs, fee } = hd.createTransaction(
-      hd.getUtxo(),
-      [{ address: 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 51000 }],
-      13,
-      changeAddress,
-    );
+    const { tx, inputs, outputs, fee } = hd.createTransaction(hd.getUtxo(), [{ address: 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 51000 }], 13, changeAddress);
 
     assert.strictEqual(Math.round(fee / tx.virtualSize()), 13);
 

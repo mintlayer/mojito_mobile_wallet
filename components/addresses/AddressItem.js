@@ -65,10 +65,10 @@ const AddressItem = ({ item, balanceUnit, walletID, allowSignVerifyMessage }) =>
   };
 
   const handleSharePress = () => {
-    Share.open({ message: item.address }).catch(error => console.log(error));
+    Share.open({ message: item.address }).catch((error) => console.log(error));
   };
 
-  const onToolTipPress = id => {
+  const onToolTipPress = (id) => {
     if (id === AddressItem.actionKeys.CopyToClipboard) {
       handleCopyPress();
     } else if (id === AddressItem.actionKeys.Share) {
@@ -105,20 +105,11 @@ const AddressItem = ({ item, balanceUnit, walletID, allowSignVerifyMessage }) =>
 
   const render = () => {
     return (
-      <TooltipMenu
-        title={item.address}
-        ref={menuRef}
-        actions={getAvailableActions()}
-        onPressMenuItem={onToolTipPress}
-        previewQRCode
-        previewValue={item.address}
-        onPress={navigateToReceive}
-      >
+      <TooltipMenu title={item.address} ref={menuRef} actions={getAvailableActions()} onPressMenuItem={onToolTipPress} previewQRCode previewValue={item.address} onPress={navigateToReceive}>
         <ListItem key={`${item.key}`} containerStyle={stylesHook.container}>
           <ListItem.Content style={stylesHook.list}>
             <ListItem.Title style={stylesHook.list} numberOfLines={1} ellipsizeMode="middle">
-              <Text style={[styles.index, stylesHook.index]}>{item.index + 1}</Text>{' '}
-              <Text style={[stylesHook.address, styles.address]}>{item.address}</Text>
+              <Text style={[styles.index, stylesHook.index]}>{item.index + 1}</Text> <Text style={[stylesHook.address, styles.address]}>{item.address}</Text>
             </ListItem.Title>
             <View style={styles.subtitle}>
               <Text style={[stylesHook.list, styles.balance, stylesHook.balance]}>{balance}</Text>

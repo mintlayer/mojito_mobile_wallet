@@ -9,7 +9,7 @@ const ToolTipMenu = (props, ref) => {
   const isMenuPrimaryAction = props.isMenuPrimaryAction ?? false;
   // eslint-disable-next-line react/prop-types
   const buttonStyle = props.buttonStyle ?? {};
-  const handleToolTipSelection = selection => {
+  const handleToolTipSelection = (selection) => {
     props.onPressMenuItem(selection.id);
   };
 
@@ -39,12 +39,7 @@ const ToolTipMenu = (props, ref) => {
   };
 
   return (
-    <TouchableOpacity
-      style={buttonStyle}
-      ref={menuRef}
-      disabled={disabled}
-      {...(isMenuPrimaryAction ? { onPress: showMenu } : { onPress: props.onPress, onLongPress: showMenu })}
-    >
+    <TouchableOpacity style={buttonStyle} ref={menuRef} disabled={disabled} {...(isMenuPrimaryAction ? { onPress: showMenu } : { onPress: props.onPress, onLongPress: showMenu })}>
       {props.children}
     </TouchableOpacity>
   );
