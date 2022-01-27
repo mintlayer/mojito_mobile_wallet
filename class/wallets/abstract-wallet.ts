@@ -54,7 +54,7 @@ export class AbstractWallet {
 
   constructor() {
     // eslint-disable-next-line prettier/prettier
-    const Constructor = (this.constructor as unknown) as WalletStatics;
+    const Constructor = this.constructor as unknown as WalletStatics;
 
     this.type = Constructor.type;
     this.typeReadable = Constructor.typeReadable;
@@ -86,7 +86,7 @@ export class AbstractWallet {
 
   getID(): string {
     // eslint-disable-next-line prettier/prettier
-    const thisWithPassphrase = (this as unknown) as WalletWithPassphrase;
+    const thisWithPassphrase = this as unknown as WalletWithPassphrase;
     const passphrase = thisWithPassphrase.getPassphrase ? thisWithPassphrase.getPassphrase() : '';
     const path = this._derivationPath ?? '';
     const string2hash = this.type + this.getSecret() + passphrase + path;
