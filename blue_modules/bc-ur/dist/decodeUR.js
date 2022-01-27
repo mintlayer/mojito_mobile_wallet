@@ -1,5 +1,6 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
+// eslint-disable-next-line no-void
 exports.extractSingleWorkload = exports.decodeUR = void 0;
 var utils_1 = require('./utils');
 var miniCbor_1 = require('./miniCbor');
@@ -17,25 +18,27 @@ var checkDigest = function (digest, payload) {
   }
 };
 var checkURHeader = function (UR, type) {
+  // eslint-disable-next-line no-void
   if (type === void 0) {
     type = 'bytes';
   }
   if (UR.toUpperCase() !== ('ur:' + type).toUpperCase()) throw new Error('invalid UR header: ' + UR);
 };
 var dealWithSingleWorkload = function (workload, type) {
+  // eslint-disable-next-line no-void
   if (type === void 0) {
     type = 'bytes';
   }
   var pieces = workload.split('/');
   switch (pieces.length) {
     case 2: {
-      //UR:Type/[Fragment]
+      // UR:Type/[Fragment]
       checkURHeader(pieces[0], type);
       return pieces[1];
     }
     case 3: {
-      //UR:Type/[Digest]/[Fragment] when Sequencing is omitted, Digest MAY be omitted;
-      //should check digest
+      // UR:Type/[Digest]/[Fragment] when Sequencing is omitted, Digest MAY be omitted;
+      // should check digest
       checkURHeader(pieces[0], type);
       var digest = pieces[1];
       var fragment = pieces[2];
@@ -43,11 +46,13 @@ var dealWithSingleWorkload = function (workload, type) {
       return fragment;
     }
     case 4: {
-      //UR:Type/[Sequencing]/[Digest]/[Fragment]
-      //should check sequencing and digest
+      // UR:Type/[Sequencing]/[Digest]/[Fragment]
+      // should check sequencing and digest
       checkURHeader(pieces[0], type);
       checkAndGetSequence(pieces[1]);
+      // eslint-disable-next-line no-redeclare
       var digest = pieces[2];
+      // eslint-disable-next-line no-redeclare
       var fragment = pieces[3];
       checkDigest(digest, fragment);
       return fragment;
@@ -57,6 +62,7 @@ var dealWithSingleWorkload = function (workload, type) {
   }
 };
 var dealWithMultipleWorkloads = function (workloads, type) {
+  // eslint-disable-next-line no-void
   if (type === void 0) {
     type = 'bytes';
   }
@@ -70,7 +76,8 @@ var dealWithMultipleWorkloads = function (workloads, type) {
       index = _a[0],
       total = _a[1];
     if (total !== length) throw new Error('invalid workload: ' + workload + ', total ' + total + ' not equal workloads length ' + length);
-    if (digest && digest !== pieces[2]) throw new Error('invalid workload: ' + workload + ', checksum changed ' + digest + ', ' + pieces[2]);
+    if (digest && digest !== pieces[2])
+      throw new Error('invalid workload: ' + workload + ', checksum changed ' + digest + ', ' + pieces[2]);
     digest = pieces[2];
     if (fragments[index - 1]) throw new Error('invalid workload: ' + workload + ', index ' + index + ' has already been set');
     fragments[index - 1] = pieces[3];
@@ -80,6 +87,7 @@ var dealWithMultipleWorkloads = function (workloads, type) {
   return payload;
 };
 var getBC32Payload = function (workloads, type) {
+  // eslint-disable-next-line no-void
   if (type === void 0) {
     type = 'bytes';
   }
@@ -105,17 +113,17 @@ exports.decodeUR = function (workloads, type) {
 exports.extractSingleWorkload = function (workload) {
   var pieces = workload.toUpperCase().split('/');
   switch (pieces.length) {
-    case 2: //UR:Type/[Fragment]
+    case 2: // UR:Type/[Fragment]
     case 3: {
-      //UR:Type/[Digest]/[Fragment] when Sequencing is omitted, Digest MAY be omitted;
+      // UR:Type/[Digest]/[Fragment] when Sequencing is omitted, Digest MAY be omitted;
       return [1, 1];
     }
     case 4: {
-      //UR:Type/[Sequencing]/[Digest]/[Fragment]
+      // UR:Type/[Sequencing]/[Digest]/[Fragment]
       return checkAndGetSequence(pieces[1]);
     }
     default:
       throw new Error('invalid workload pieces length: expect 2 / 3 / 4 bug got ' + pieces.length);
   }
 };
-//# sourceMappingURL=decodeUR.js.map
+// # sourceMappingURL=decodeUR.js.map

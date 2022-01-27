@@ -49,4 +49,4 @@ exports.encodeUR = function (payload, fragmentCapacity) {
   var fragments = bc32Payload.match(new RegExp('.{1,' + fragmentCapacity + '}', 'g'));
   return composeHeadersToFragments(fragments, bc32Digest, 'bytes');
 };
-//# sourceMappingURL=encodeUR.js.map
+// # sourceMappingURL=encodeUR.js.map

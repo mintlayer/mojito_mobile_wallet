@@ -20,4 +20,4 @@ Object.defineProperty(exports, 'extractSingleWorkload', {
     return decodeUR_1.extractSingleWorkload;
   },
 });
-//# sourceMappingURL=index.js.map
+// # sourceMappingURL=index.js.map

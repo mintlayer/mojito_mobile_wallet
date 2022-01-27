@@ -19,6 +19,13 @@
     "react/jsx-handler-names": "off", // activated by standard-react config
     "react/display-name": "off",
     "react-native/no-inline-styles": "error",
+    "@typescript-eslint/camelcase": "off",
+    "camelcase": "off",
+    "no-var":"off",
+    "one-var":"off",
+    "no-void":"off",
+    "eqeqeq":"off",
+    "no-redeclare":"off",
     "prettier/prettier": [
       "warn",
       {
@@ -65,7 +72,8 @@
     }
   ],
   "env": {
-    "es6": true
+    "es6": true,
+    "jest": true
   },
   "globals": { "fetch": false }
 }

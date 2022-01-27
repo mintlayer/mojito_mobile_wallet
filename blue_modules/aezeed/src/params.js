@@ -1,5 +1,6 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
+// eslint-disable-next-line no-void
 exports.ONE_DAY = exports.CIPHER_SEED_VERSION = exports.DEFAULT_PASSWORD = exports.PARAMS = void 0;
 exports.PARAMS = [
   {

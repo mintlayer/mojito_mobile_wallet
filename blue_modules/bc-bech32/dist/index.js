@@ -5,12 +5,18 @@ var __importDefault =
     return mod && mod.__esModule ? mod : { default: mod };
   };
 Object.defineProperty(exports, '__esModule', { value: true });
-exports.decodeBc32Data = exports.encodeBc32Data = exports.encodeSegwitAddress = exports.decodeSegwitAddress = exports.Bech32Version = void 0;
+// eslint-disable-next-line no-void
+exports.decodeBc32Data =
+  exports.encodeBc32Data =
+  exports.encodeSegwitAddress =
+  exports.decodeSegwitAddress =
+  exports.Bech32Version =
+    void 0;
 var bech32_1 = __importDefault(require('./bech32'));
 var Bech32Version;
 (function (Bech32Version) {
-  Bech32Version[(Bech32Version['Origin'] = 1)] = 'Origin';
-  Bech32Version[(Bech32Version['bis'] = 2)] = 'bis';
+  Bech32Version[(Bech32Version.Origin = 1)] = 'Origin';
+  Bech32Version[(Bech32Version.bis = 2)] = 'bis';
 })((Bech32Version = exports.Bech32Version || (exports.Bech32Version = {})));
 var convertBits = function (data, fromBits, toBits, pad) {
   var acc = 0;
@@ -72,4 +78,4 @@ exports.decodeBc32Data = function (data) {
     return null;
   }
 };
-//# sourceMappingURL=index.js.map
+// # sourceMappingURL=index.js.map

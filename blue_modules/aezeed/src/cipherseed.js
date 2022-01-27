@@ -1,5 +1,6 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
+// eslint-disable-next-line no-void
 exports.CipherSeed = void 0;
 const BlueCrypto = require('react-native-blue-crypto');
 const scrypt = require('scryptsy');
@@ -9,7 +10,7 @@ const params_1 = require('./params');
 const aez = require('aez');
 const crc = require('junderw-crc32c');
 const BITCOIN_GENESIS = new Date('2009-01-03T18:15:05.000Z').getTime();
-const daysSinceGenesis = (time) => Math.floor((time.getTime() - BITCOIN_GENESIS) / params_1.ONE_DAY);
+const daysSinceGenesis = time => Math.floor((time.getTime() - BITCOIN_GENESIS) / params_1.ONE_DAY);
 
 async function scryptWrapper(secret, salt, N, r, p, dkLen, progressCallback) {
   if (BlueCrypto.isAvailable()) {

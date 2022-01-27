@@ -16,11 +16,13 @@ exports.composeHeader = function (length) {
     header = Buffer.concat([Buffer.from([0x58]), headerLength]);
   }
   if (length >= 256 && length <= 65535) {
+    // eslint-disable-next-line no-redeclare
     var headerLength = Buffer.alloc(2);
     headerLength.writeUInt16BE(length);
     header = Buffer.concat([Buffer.from([0x59]), headerLength]);
   }
   if (length >= 65536 && length <= Math.pow(2, 32) - 1) {
+    // eslint-disable-next-line no-redeclare
     var headerLength = Buffer.alloc(4);
     headerLength.writeUInt32BE(length);
     header = Buffer.concat([Buffer.from([0x60]), headerLength]);
@@ -46,7 +48,9 @@ exports.decodeSimpleCBOR = function (data) {
     var dataLength = header - 0x40;
     return dataBuffer.slice(1, 1 + dataLength).toString('hex');
   }
+  // eslint-disable-next-line eqeqeq
   if (header == 0x58) {
+    // eslint-disable-next-line no-redeclare
     var dataLength = dataBuffer.slice(1, 2).readUInt8();
     return dataBuffer.slice(2, 2 + dataLength).toString('hex');
   }
@@ -59,4 +63,4 @@ exports.decodeSimpleCBOR = function (data) {
     return dataBuffer.slice(5, 5 + dataLength).toString('hex');
   }
 };
-//# sourceMappingURL=miniCbor.js.map
+// # sourceMappingURL=miniCbor.js.map

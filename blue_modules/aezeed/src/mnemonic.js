@@ -1,10 +1,11 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
+// eslint-disable-next-line no-void
 exports.mnemonicToBytes = exports.mnemonicFromBytes = void 0;
 function mnemonicFromBytes(bytes) {
   const bits = bytesToBinary(Array.from(bytes));
   const chunks = bits.match(/(.{1,11})/g);
-  const words = chunks.map((binary) => {
+  const words = chunks.map(binary => {
     const index = binaryToByte(binary);
     return WORDLIST[index];
   });
@@ -16,7 +17,7 @@ function mnemonicToBytes(mnemonic) {
   const words = mnemonic.split(' ');
   if (words.length !== 24) throw new Error(INVALID);
   const bits = words
-    .map((word) => {
+    .map(word => {
       const index = WORDLIST.indexOf(word);
       if (index === -1) throw new Error(INVALID);
       return lpad(index.toString(2), '0', 11);
@@ -27,7 +28,7 @@ function mnemonicToBytes(mnemonic) {
 }
 exports.mnemonicToBytes = mnemonicToBytes;
 function bytesToBinary(bytes) {
-  return bytes.map((x) => lpad(x.toString(2), '0', 8)).join('');
+  return bytes.map(x => lpad(x.toString(2), '0', 8)).join('');
 }
 function binaryToByte(bin) {
   return parseInt(bin, 2);

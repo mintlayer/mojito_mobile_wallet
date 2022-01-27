@@ -10,4 +10,4 @@ exports.compose3 = function (f, g, h) {
     return f(g(h(x)));
   };
 };
-//# sourceMappingURL=utils.js.map
+// # sourceMappingURL=utils.js.map
