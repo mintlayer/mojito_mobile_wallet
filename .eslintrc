@@ -72,16 +72,14 @@
   ],
   "env": {
     "es6": true,
-    "jest": true,
-    "node": true,
-    "browser": true
+    "jest": true
   },
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
+  // "parserOptions": {
+  //   "ecmaVersion": 2018,
+  //   "sourceType": "module",
+  //   "ecmaFeatures": {
+  //     "jsx": true
+  //   }
+  // },
   "globals": { "fetch": false }
 }
