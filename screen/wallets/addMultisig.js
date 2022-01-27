@@ -109,12 +109,7 @@ const WalletsAddMultisig = () => {
             <View style={styles.rowCenter}>
               <View style={styles.column}>
                 <TouchableOpacity accessibilityRole="button" onPress={increaseM} disabled={n === m || m === 7} style={styles.chevron}>
-                  <Icon
-                    name="chevron-up"
-                    size={22}
-                    type="octicon"
-                    color={n === m || m === 7 ? colors.buttonDisabledTextColor : '#007AFF'}
-                  />
+                  <Icon name="chevron-up" size={22} type="octicon" color={n === m || m === 7 ? colors.buttonDisabledTextColor : '#007AFF'} />
                 </TouchableOpacity>
                 <Text style={[styles.textM, stylesHook.textHeader]}>{m}</Text>
                 <TouchableOpacity accessibilityRole="button" onPress={decreaseM} disabled={m === 2} style={styles.chevron}>
@@ -141,27 +136,9 @@ const WalletsAddMultisig = () => {
 
             <Text style={[styles.textHeader, stylesHook.textHeader]}>{loc.multisig.wallet_type}</Text>
             <BlueSpacing20 />
-            <BlueListItem
-              bottomDivider={false}
-              onPress={setFormatP2wsh}
-              title={`${loc.multisig.native_segwit_title} (${MultisigHDWallet.FORMAT_P2WSH})`}
-              checkmark={isP2wsh()}
-              containerStyle={[styles.borderRadius6, styles.item, isP2wsh() ? stylesHook.selectedItem : stylesHook.deSelectedItem]}
-            />
-            <BlueListItem
-              bottomDivider={false}
-              onPress={setFormatP2shP2wsh}
-              title={`${loc.multisig.wrapped_segwit_title} (${MultisigHDWallet.FORMAT_P2SH_P2WSH})`}
-              checkmark={isP2shP2wsh()}
-              containerStyle={[styles.borderRadius6, styles.item, isP2shP2wsh() ? stylesHook.selectedItem : stylesHook.deSelectedItem]}
-            />
-            <BlueListItem
-              bottomDivider={false}
-              onPress={setFormatP2sh}
-              title={`${loc.multisig.legacy_title} (${MultisigHDWallet.FORMAT_P2SH})`}
-              checkmark={isP2sh()}
-              containerStyle={[styles.borderRadius6, styles.item, isP2sh() ? stylesHook.selectedItem : stylesHook.deSelectedItem]}
-            />
+            <BlueListItem bottomDivider={false} onPress={setFormatP2wsh} title={`${loc.multisig.native_segwit_title} (${MultisigHDWallet.FORMAT_P2WSH})`} checkmark={isP2wsh()} containerStyle={[styles.borderRadius6, styles.item, isP2wsh() ? stylesHook.selectedItem : stylesHook.deSelectedItem]} />
+            <BlueListItem bottomDivider={false} onPress={setFormatP2shP2wsh} title={`${loc.multisig.wrapped_segwit_title} (${MultisigHDWallet.FORMAT_P2SH_P2WSH})`} checkmark={isP2shP2wsh()} containerStyle={[styles.borderRadius6, styles.item, isP2shP2wsh() ? stylesHook.selectedItem : stylesHook.deSelectedItem]} />
+            <BlueListItem bottomDivider={false} onPress={setFormatP2sh} title={`${loc.multisig.legacy_title} (${MultisigHDWallet.FORMAT_P2SH})`} checkmark={isP2sh()} containerStyle={[styles.borderRadius6, styles.item, isP2sh() ? stylesHook.selectedItem : stylesHook.deSelectedItem]} />
           </ScrollView>
         </View>
       </BottomModal>
@@ -172,7 +149,7 @@ const WalletsAddMultisig = () => {
     setIsModalVisible(true);
   };
 
-  const getCurrentlySelectedFormat = code => {
+  const getCurrentlySelectedFormat = (code) => {
     switch (code) {
       case 'format':
         return WalletsAddMultisig.getCurrentFormatReadable(format);
@@ -192,9 +169,7 @@ const WalletsAddMultisig = () => {
         <BlueSpacing20 />
         <Text style={[styles.textdesc, stylesHook.textdesc]}>
           {loc.multisig.what_is_vault}
-          <Text style={[styles.textdescBold, stylesHook.textdesc]}>
-            {loc.formatString(loc.multisig.what_is_vault_numberOfWallets, { m, n })}
-          </Text>
+          <Text style={[styles.textdescBold, stylesHook.textdesc]}>{loc.formatString(loc.multisig.what_is_vault_numberOfWallets, { m, n })}</Text>
           <Text style={[styles.textdesc, stylesHook.textdesc]}>{loc.multisig.what_is_vault_wallet}</Text>
         </Text>
 
@@ -202,22 +177,13 @@ const WalletsAddMultisig = () => {
 
         <Text style={[styles.textdesc, stylesHook.textdesc]}>
           {loc.multisig.needs}
-          <Text style={[styles.textdescBold, stylesHook.textdesc]}>
-            {loc.formatString(loc.multisig.what_is_vault_description_number_of_vault_keys, { m })}
-          </Text>
-          <Text style={[styles.textdesc, stylesHook.textdesc]}>
-            {m === 2 && n === 3 ? loc.multisig.what_is_vault_description_to_spend : loc.multisig.what_is_vault_description_to_spend_other}
-          </Text>
+          <Text style={[styles.textdescBold, stylesHook.textdesc]}>{loc.formatString(loc.multisig.what_is_vault_description_number_of_vault_keys, { m })}</Text>
+          <Text style={[styles.textdesc, stylesHook.textdesc]}>{m === 2 && n === 3 ? loc.multisig.what_is_vault_description_to_spend : loc.multisig.what_is_vault_description_to_spend_other}</Text>
         </Text>
       </View>
       {isAdvancedModeEnabledRender && (
         <View style={styles.advancedOptionsContainer}>
-          <BlueListItem
-            onPress={showAdvancedOptionsModal}
-            title={loc.multisig.vault_advanced_customize}
-            subtitle={`${getCurrentlySelectedFormat('format')}, ${getCurrentlySelectedFormat('quorum')}`}
-            chevron
-          />
+          <BlueListItem onPress={showAdvancedOptionsModal} title={loc.multisig.vault_advanced_customize} subtitle={`${getCurrentlySelectedFormat('format')}, ${getCurrentlySelectedFormat('quorum')}`} chevron />
         </View>
       )}
       <View style={styles.buttonContainer}>
@@ -330,7 +296,7 @@ const styles = StyleSheet.create({
   },
 });
 
-WalletsAddMultisig.getCurrentFormatReadable = f => {
+WalletsAddMultisig.getCurrentFormatReadable = (f) => {
   switch (f) {
     case MultisigHDWallet.FORMAT_P2WSH:
       return loc.multisig.native_segwit_title;

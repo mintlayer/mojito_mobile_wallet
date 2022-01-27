@@ -42,7 +42,7 @@ class AmountInput extends Component {
    */
   static conversionCache = {};
 
-  static getCachedSatoshis = amount => {
+  static getCachedSatoshis = (amount) => {
     return AmountInput.conversionCache[amount + BitcoinUnit.LOCAL_CURRENCY] || false;
   };
 
@@ -58,11 +58,11 @@ class AmountInput extends Component {
   componentDidMount() {
     currency
       .mostRecentFetchedRate()
-      .then(mostRecentFetchedRate => {
+      .then((mostRecentFetchedRate) => {
         this.setState({ mostRecentFetchedRate });
       })
       .finally(() => {
-        currency.isRateOutdated().then(isRateOutdated => this.setState({ isRateOutdated }));
+        currency.isRateOutdated().then((isRateOutdated) => this.setState({ isRateOutdated }));
       });
   }
 
@@ -141,7 +141,7 @@ class AmountInput extends Component {
     this.textInput.current.focus();
   };
 
-  handleChangeText = text => {
+  handleChangeText = (text) => {
     text = text.trim();
     if (this.props.unit !== BitcoinUnit.LOCAL_CURRENCY) {
       text = text.replace(',', '.');
@@ -192,7 +192,7 @@ class AmountInput extends Component {
     this.setState({ isRateBeingUpdated: true }, async () => {
       try {
         await currency.updateExchangeRate();
-        currency.mostRecentFetchedRate().then(mostRecentFetchedRate => {
+        currency.mostRecentFetchedRate().then((mostRecentFetchedRate) => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
           this.setState({ mostRecentFetchedRate });
         });
@@ -245,9 +245,7 @@ class AmountInput extends Component {
             {!disabled && <View style={[styles.center, stylesHook.center]} />}
             <View style={styles.flex}>
               <View style={styles.container}>
-                {unit === BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX && (
-                  <Text style={[styles.localCurrency, stylesHook.localCurrency]}>{currency.getCurrencySymbol() + ' '}</Text>
-                )}
+                {unit === BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX && <Text style={[styles.localCurrency, stylesHook.localCurrency]}>{currency.getCurrencySymbol() + ' '}</Text>}
                 {amount !== BitcoinUnit.MAX ? (
                   <TextInput
                     {...this.props}
@@ -263,7 +261,7 @@ class AmountInput extends Component {
                     }}
                     placeholder="0"
                     maxLength={this.maxLength()}
-                    ref={textInput => (this.textInput = textInput)}
+                    ref={(textInput) => (this.textInput = textInput)}
                     editable={!this.props.isLoading && !disabled}
                     value={amount === BitcoinUnit.MAX ? loc.units.MAX : parseFloat(amount) >= 0 ? String(amount) : undefined}
                     placeholderTextColor={disabled ? colors.buttonDisabledTextColor : colors.alternativeTextColor2}
@@ -274,26 +272,17 @@ class AmountInput extends Component {
                     <Text style={[styles.input, stylesHook.input]}>{BitcoinUnit.MAX}</Text>
                   </Pressable>
                 )}
-                {unit !== BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX && (
-                  <Text style={[styles.cryptoCurrency, stylesHook.cryptoCurrency]}>{' ' + loc.units[unit]}</Text>
-                )}
+                {unit !== BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX && <Text style={[styles.cryptoCurrency, stylesHook.cryptoCurrency]}>{' ' + loc.units[unit]}</Text>}
               </View>
               <View style={styles.secondaryRoot}>
                 <Text style={styles.secondaryText}>
-                  {unit === BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX
-                    ? removeTrailingZeros(secondaryDisplayCurrency)
-                    : secondaryDisplayCurrency}
+                  {unit === BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX ? removeTrailingZeros(secondaryDisplayCurrency) : secondaryDisplayCurrency}
                   {unit === BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX ? ` ${loc.units[BitcoinUnit.BTC]}` : null}
                 </Text>
               </View>
             </View>
             {!disabled && amount !== BitcoinUnit.MAX && (
-              <TouchableOpacity
-                accessibilityRole="button"
-                testID="changeAmountUnitButton"
-                style={styles.changeAmountUnit}
-                onPress={this.changeAmountUnit}
-              >
+              <TouchableOpacity accessibilityRole="button" testID="changeAmountUnitButton" style={styles.changeAmountUnit} onPress={this.changeAmountUnit}>
                 <Image source={require('../img/round-compare-arrows-24-px.png')} />
               </TouchableOpacity>
             )}
@@ -302,15 +291,9 @@ class AmountInput extends Component {
             <View style={styles.outdatedRateContainer}>
               <Badge status="warning" />
               <View style={styles.spacing8} />
-              <BlueText>
-                {loc.formatString(loc.send.outdated_rate, { date: dayjs(this.state.mostRecentFetchedRate.LastUpdated).format('l LT') })}
-              </BlueText>
+              <BlueText>{loc.formatString(loc.send.outdated_rate, { date: dayjs(this.state.mostRecentFetchedRate.LastUpdated).format('l LT') })}</BlueText>
               <View style={styles.spacing8} />
-              <TouchableOpacity
-                onPress={this.updateRate}
-                disabled={this.state.isRateBeingUpdated}
-                style={this.state.isRateBeingUpdated ? styles.disabledButton : styles.enabledButon}
-              >
+              <TouchableOpacity onPress={this.updateRate} disabled={this.state.isRateBeingUpdated} style={this.state.isRateBeingUpdated ? styles.disabledButton : styles.enabledButon}>
                 <Icon name="sync" type="font-awesome-5" size={16} color={colors.buttonAlternativeTextColor} />
               </TouchableOpacity>
             </View>
@@ -388,7 +371,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const AmountInputWithStyle = props => {
+const AmountInputWithStyle = (props) => {
   const { colors } = useTheme();
 
   return <AmountInput {...props} colors={colors} />;

@@ -1,41 +1,17 @@
 import React, { useContext, useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  I18nManager,
-  Keyboard,
-  KeyboardAvoidingView,
-  LayoutAnimation,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  findNodeHandle,
-} from 'react-native';
+import { ActivityIndicator, FlatList, I18nManager, Keyboard, KeyboardAvoidingView, LayoutAnimation, Platform, StyleSheet, Text, TouchableOpacity, View, findNodeHandle } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { getSystemName } from 'react-native-device-info';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
-import {
-  BlueButton,
-  BlueButtonLink,
-  BlueFormMultiInput,
-  BlueSpacing10,
-  BlueSpacing20,
-  BlueSpacing40,
-  BlueTextCentered,
-} from '../../BlueComponents';
+import { BlueButton, BlueButtonLink, BlueFormMultiInput, BlueSpacing10, BlueSpacing20, BlueSpacing40, BlueTextCentered } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import { HDSegwitBech32Wallet, MultisigCosigner, MultisigHDWallet } from '../../class';
 import loc from '../../loc';
 import { SquareButton } from '../../components/SquareButton';
 import BottomModal from '../../components/BottomModal';
-import MultipleStepsListItem, {
-  MultipleStepsListItemButtohType,
-  MultipleStepsListItemDashType,
-} from '../../components/MultipleStepsListItem';
+import MultipleStepsListItem, { MultipleStepsListItemButtohType, MultipleStepsListItemDashType } from '../../components/MultipleStepsListItem';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import { encodeUR } from '../../blue_modules/ur';
 import QRCodeComponent from '../../components/QRCodeComponent';
@@ -218,7 +194,7 @@ const WalletsAddMultisigStep2 = () => {
     return path;
   };
 
-  const viewKey = cosigner => {
+  const viewKey = (cosigner) => {
     if (MultisigHDWallet.isXpubValid(cosigner[0])) {
       setCosignerXpub(MultisigCosigner.exportToJson(cosigner[1], cosigner[0], cosigner[2]));
       setCosignerXpubURv2(encodeUR(MultisigCosigner.exportToJson(cosigner[1], cosigner[0], cosigner[2]))[0]);
@@ -236,12 +212,12 @@ const WalletsAddMultisigStep2 = () => {
     }
   };
 
-  const getXpubCacheForMnemonics = seed => {
+  const getXpubCacheForMnemonics = (seed) => {
     const path = getPath();
     return staticCache[seed + path] || setXpubCacheForMnemonics(seed);
   };
 
-  const setXpubCacheForMnemonics = seed => {
+  const setXpubCacheForMnemonics = (seed) => {
     const path = getPath();
     const w = new MultisigHDWallet();
     w.setDerivationPath(path);
@@ -249,11 +225,11 @@ const WalletsAddMultisigStep2 = () => {
     return staticCache[seed + path];
   };
 
-  const getFpCacheForMnemonics = seed => {
+  const getFpCacheForMnemonics = (seed) => {
     return staticCache[seed] || setFpCacheForMnemonics(seed);
   };
 
-  const setFpCacheForMnemonics = seed => {
+  const setFpCacheForMnemonics = (seed) => {
     staticCache[seed] = MultisigHDWallet.mnemonicToFingerprint(seed);
     return staticCache[seed];
   };
@@ -262,7 +238,7 @@ const WalletsAddMultisigStep2 = () => {
     setIsProvideMnemonicsModalVisible(true);
   };
 
-  const tryUsingXpub = async xpub => {
+  const tryUsingXpub = async (xpub) => {
     if (!MultisigHDWallet.isXpubForMultisig(xpub)) {
       setIsProvideMnemonicsModalVisible(false);
       setIsLoading(false);
@@ -274,12 +250,7 @@ const WalletsAddMultisigStep2 = () => {
     fp = (fp + '').toUpperCase();
     if (!MultisigHDWallet.isFpValid(fp)) fp = '00000000';
 
-    let path = await prompt(
-      loc.multisig.input_path,
-      loc.formatString(loc.multisig.input_path_explain, { default: getPath() }),
-      false,
-      'plain-text',
-    );
+    let path = await prompt(loc.multisig.input_path, loc.formatString(loc.multisig.input_path_explain, { default: getPath() }), false, 'plain-text');
     if (!MultisigHDWallet.isPathValid(path)) path = getPath();
 
     setIsProvideMnemonicsModalVisible(false);
@@ -315,13 +286,13 @@ const WalletsAddMultisigStep2 = () => {
     setImportText('');
   };
 
-  const isValidMnemonicSeed = mnemonicSeed => {
+  const isValidMnemonicSeed = (mnemonicSeed) => {
     const hd = new HDSegwitBech32Wallet();
     hd.setSecret(mnemonicSeed);
     return hd.validateMnemonic();
   };
 
-  const onBarScanned = ret => {
+  const onBarScanned = (ret) => {
     if (!isDesktop) navigation.dangerouslyGetParent().pop();
     if (!ret.data) ret = { data: ret };
     if (ret.data.toUpperCase().startsWith('UR')) {
@@ -441,7 +412,7 @@ const WalletsAddMultisigStep2 = () => {
     }
   };
 
-  const _renderKeyItem = el => {
+  const _renderKeyItem = (el) => {
     const renderProvideKeyButtons = el.index === cosigners.length;
     const isChecked = el.index < cosigners.length;
     return (
@@ -491,7 +462,7 @@ const WalletsAddMultisigStep2 = () => {
     );
   };
 
-  const renderSecret = entries => {
+  const renderSecret = (entries) => {
     const component = [];
     const entriesObject = entries.entries();
     for (const [index, secret] of entriesObject) {
@@ -527,9 +498,7 @@ const WalletsAddMultisigStep2 = () => {
               <Icon size={24} name="check" type="ionicons" color={colors.msSuccessCheck} />
             </View>
             <View style={styles.vaultKeyTextWrapper}>
-              <Text style={[styles.vaultKeyText, stylesHook.vaultKeyText]}>
-                {loc.formatString(loc.multisig.vault_key, { number: vaultKeyData.keyIndex })}
-              </Text>
+              <Text style={[styles.vaultKeyText, stylesHook.vaultKeyText]}>{loc.formatString(loc.multisig.vault_key, { number: vaultKeyData.keyIndex })}</Text>
             </View>
           </View>
           <BlueSpacing20 />
@@ -539,11 +508,7 @@ const WalletsAddMultisigStep2 = () => {
           <BlueSpacing10 />
           <View style={styles.secretContainer}>{renderSecret(vaultKeyData.seed.split(' '))}</View>
           <BlueSpacing20 />
-          {isLoading ? (
-            <ActivityIndicator />
-          ) : (
-            <BlueButton title={loc.send.success_done} onPress={() => setIsMnemonicsModalVisible(false)} />
-          )}
+          {isLoading ? <ActivityIndicator /> : <BlueButton title={loc.send.success_done} onPress={() => setIsMnemonicsModalVisible(false)} />}
         </View>
       </BottomModal>
     );
@@ -564,11 +529,7 @@ const WalletsAddMultisigStep2 = () => {
             <BlueSpacing20 />
             <BlueFormMultiInput value={importText} onChangeText={setImportText} />
             <BlueSpacing40 />
-            {isLoading ? (
-              <ActivityIndicator />
-            ) : (
-              <BlueButton disabled={importText.trim().length === 0} title={loc.wallets.import_do_import} onPress={useMnemonicPhrase} />
-            )}
+            {isLoading ? <ActivityIndicator /> : <BlueButton disabled={importText.trim().length === 0} title={loc.wallets.import_do_import} onPress={useMnemonicPhrase} />}
             <BlueButtonLink ref={openScannerButton} disabled={isLoading} onPress={scanOrOpenFile} title={loc.wallets.import_scan_qr} />
           </View>
         </KeyboardAvoidingView>
@@ -595,13 +556,7 @@ const WalletsAddMultisigStep2 = () => {
             <BlueSpacing20 />
             <QRCodeComponent value={cosignerXpubURv2} size={260} />
             <BlueSpacing20 />
-            <View style={styles.squareButtonWrapper}>
-              {isLoading ? (
-                <ActivityIndicator />
-              ) : (
-                <SquareButton style={[styles.exportButton, stylesHook.exportButton]} onPress={exportCosigner} title={loc.multisig.share} />
-              )}
-            </View>
+            <View style={styles.squareButtonWrapper}>{isLoading ? <ActivityIndicator /> : <SquareButton style={[styles.exportButton, stylesHook.exportButton]} onPress={exportCosigner} title={loc.multisig.share} />}</View>
           </View>
         </KeyboardAvoidingView>
       </BottomModal>
@@ -619,11 +574,7 @@ const WalletsAddMultisigStep2 = () => {
     );
   };
 
-  const footer = (
-    <View style={styles.buttonBottom}>
-      {isLoading ? <ActivityIndicator /> : <BlueButton title={loc.multisig.create} onPress={onCreate} disabled={cosigners.length !== n} />}
-    </View>
-  );
+  const footer = <View style={styles.buttonBottom}>{isLoading ? <ActivityIndicator /> : <BlueButton title={loc.multisig.create} onPress={onCreate} disabled={cosigners.length !== n} />}</View>;
 
   return (
     <View style={[styles.root, stylesHook.root]}>

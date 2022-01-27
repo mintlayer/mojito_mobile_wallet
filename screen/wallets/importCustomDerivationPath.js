@@ -30,9 +30,9 @@ const ImportCustomDerivationPath = () => {
   const importing = useRef(false);
 
   const debouncedSavePath = useRef(
-    debounce(async path => {
+    debounce(async (path) => {
       if (!validateBip32(path)) {
-        setWallets(ws => ({ ...ws, [path]: WRONG_PATH }));
+        setWallets((ws) => ({ ...ws, [path]: WRONG_PATH }));
         return;
       }
 
@@ -45,17 +45,17 @@ const ImportCustomDerivationPath = () => {
         wallet.setDerivationPath(path);
         wallets[Wallet.type] = wallet;
       }
-      setWallets(ws => ({ ...ws, [path]: wallets }));
+      setWallets((ws) => ({ ...ws, [path]: wallets }));
 
       // discover was they ever used
       const res = {};
-      const promises = Object.values(wallets).map(w => w.wasEverUsed().then(v => (res[w.type] = v ? WALLET_FOUND : WALLET_NOTFOUND)));
+      const promises = Object.values(wallets).map((w) => w.wasEverUsed().then((v) => (res[w.type] = v ? WALLET_FOUND : WALLET_NOTFOUND)));
       try {
         await Promise.all(promises); // wait for all promises to be resolved
       } catch (e) {
-        Object.values(wallets).forEach(w => (res[w.type] = WALLET_UNKNOWN));
+        Object.values(wallets).forEach((w) => (res[w.type] = WALLET_UNKNOWN));
       }
-      setUsed(u => ({ ...u, [path]: res }));
+      setUsed((u) => ({ ...u, [path]: res }));
     }, 500),
   );
   useEffect(() => {
@@ -86,7 +86,7 @@ const ImportCustomDerivationPath = () => {
     },
   });
 
-  const saveWallet = type => {
+  const saveWallet = (type) => {
     if (importing.current) return;
     importing.current = true;
     const wallet = wallets[path][type];
@@ -120,30 +120,12 @@ const ImportCustomDerivationPath = () => {
       <BlueSpacing20 />
       <BlueFormLabel>{loc.wallets.import_derivation_subtitle}</BlueFormLabel>
       <BlueSpacing20 />
-      <TextInput
-        testID="DerivationPathInput"
-        placeholder={loc.send.details_note_placeholder}
-        value={path}
-        placeholderTextColor="#81868e"
-        style={[styles.pathInput, stylesHook.pathInput]}
-        onChangeText={setPath}
-      />
-      <FlatList
-        data={items}
-        keyExtractor={w => path + w[0]}
-        renderItem={renderItem}
-        contentContainerStyle={styles.flatListContainer}
-        ListEmptyComponent={() => <BlueTextCentered>{loc.wallets.import_wrong_path}</BlueTextCentered>}
-      />
+      <TextInput testID="DerivationPathInput" placeholder={loc.send.details_note_placeholder} value={path} placeholderTextColor="#81868e" style={[styles.pathInput, stylesHook.pathInput]} onChangeText={setPath} />
+      <FlatList data={items} keyExtractor={(w) => path + w[0]} renderItem={renderItem} contentContainerStyle={styles.flatListContainer} ListEmptyComponent={() => <BlueTextCentered>{loc.wallets.import_wrong_path}</BlueTextCentered>} />
 
       <View style={[styles.center, stylesHook.center]}>
         <View style={styles.buttonContainer}>
-          <BlueButton
-            disabled={wallets[path]?.[selected] === undefined}
-            title={loc.wallets.import_do_import}
-            testID="ImportButton"
-            onPress={() => saveWallet(selected)}
-          />
+          <BlueButton disabled={wallets[path]?.[selected] === undefined} title={loc.wallets.import_do_import} testID="ImportButton" onPress={() => saveWallet(selected)} />
         </View>
       </View>
     </SafeBlueArea>
@@ -182,6 +164,6 @@ const styles = StyleSheet.create({
   },
 });
 
-ImportCustomDerivationPath.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.wallets.import_derivation_title }));
+ImportCustomDerivationPath.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.wallets.import_derivation_title }));
 
 export default ImportCustomDerivationPath;

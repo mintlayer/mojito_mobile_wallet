@@ -45,7 +45,7 @@ const navigationStyle = (
   },
   formatter: OptionsFormatter,
 ): NavigationOptionsGetter => {
-  return theme =>
+  return (theme) =>
     ({ navigation, route }) => {
       let headerRight;
       if (closeButton) {
@@ -90,7 +90,7 @@ const navigationStyle = (
 export default navigationStyle;
 
 export const navigationStyleTx = (opts: NavigationOptions, formatter: OptionsFormatter): NavigationOptionsGetter => {
-  return theme =>
+  return (theme) =>
     ({ navigation, route }) => {
       let options: NavigationOptions = {
         headerStyle: {

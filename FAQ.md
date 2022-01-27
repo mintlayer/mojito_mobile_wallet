@@ -2,11 +2,11 @@
 
 ## Too much nodejs dependencies! Who audits all of that?
 
-We do. Really, when we bump deps we glance over the diff, and all versions are 
-pinned. Also, we use paid audit solution https://snyk.io which is specifically 
+We do. Really, when we bump deps we glance over the diff, and all versions are
+pinned. Also, we use paid audit solution https://snyk.io which is specifically
 designed to keep an eye on deps.
 
-And yes, we have too many of them, and PRs cutting deps are welcome 
+And yes, we have too many of them, and PRs cutting deps are welcome
 (see https://github.com/BlueWallet/BlueWallet/blob/master/CONTRIBUTING.md)
 
 Also, really risky dependencies (like, from not-reputable/anonymous maintainers)

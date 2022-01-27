@@ -123,26 +123,16 @@ export default class Lnurl {
   async requestBolt11FromLnurlPayService(amountSat, comment = '') {
     if (!this._lnurlPayServicePayload) throw new Error('this._lnurlPayServicePayload is not set');
     if (!this._lnurlPayServicePayload.callback) throw new Error('this._lnurlPayServicePayload.callback is not set');
-    if (amountSat < this._lnurlPayServicePayload.min || amountSat > this._lnurlPayServicePayload.max)
-      throw new Error(
-        'The specified amount is invalid, ' +
-          amountSat +
-          ' it should be between ' +
-          this._lnurlPayServicePayload.min +
-          ' and ' +
-          this._lnurlPayServicePayload.max,
-      );
+    if (amountSat < this._lnurlPayServicePayload.min || amountSat > this._lnurlPayServicePayload.max) throw new Error('The specified amount is invalid, ' + amountSat + ' it should be between ' + this._lnurlPayServicePayload.min + ' and ' + this._lnurlPayServicePayload.max);
     const nonce = Math.floor(Math.random() * 2e16).toString(16);
     const separator = this._lnurlPayServicePayload.callback.indexOf('?') === -1 ? '?' : '&';
     if (this.getCommentAllowed() && comment && comment.length > this.getCommentAllowed()) {
       comment = comment.substr(0, this.getCommentAllowed());
     }
     if (comment) comment = `&comment=${encodeURIComponent(comment)}`;
-    const urlToFetch =
-      this._lnurlPayServicePayload.callback + separator + 'amount=' + Math.floor(amountSat * 1000) + '&nonce=' + nonce + comment;
+    const urlToFetch = this._lnurlPayServicePayload.callback + separator + 'amount=' + Math.floor(amountSat * 1000) + '&nonce=' + nonce + comment;
     this._lnurlPayServiceBolt11Payload = await this.fetchGet(urlToFetch);
-    if (this._lnurlPayServiceBolt11Payload.status === 'ERROR')
-      throw new Error(this._lnurlPayServiceBolt11Payload.reason || 'requestBolt11FromLnurlPayService() error');
+    if (this._lnurlPayServiceBolt11Payload.status === 'ERROR') throw new Error(this._lnurlPayServiceBolt11Payload.reason || 'requestBolt11FromLnurlPayService() error');
 
     // check pr description_hash, amount etc:
     const decoded = this.decodeInvoice(this._lnurlPayServiceBolt11Payload.pr);

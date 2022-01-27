@@ -1,41 +1,15 @@
 import React, { useContext, useRef, useState, useCallback } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  findNodeHandle,
-  FlatList,
-  InteractionManager,
-  Keyboard,
-  KeyboardAvoidingView,
-  LayoutAnimation,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Alert, findNodeHandle, FlatList, InteractionManager, Keyboard, KeyboardAvoidingView, LayoutAnimation, Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { Icon, Badge } from 'react-native-elements';
 import { useFocusEffect, useNavigation, useRoute, useTheme } from '@react-navigation/native';
-import {
-  BlueButton,
-  BlueButtonLink,
-  BlueFormMultiInput,
-  BlueLoading,
-  BlueSpacing10,
-  BlueSpacing20,
-  BlueSpacing40,
-  BlueTextCentered,
-} from '../../BlueComponents';
+import { BlueButton, BlueButtonLink, BlueFormMultiInput, BlueLoading, BlueSpacing10, BlueSpacing20, BlueSpacing40, BlueTextCentered } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import SquareEnumeratedWords, { SquareEnumeratedWordsContentAlign } from '../../components/SquareEnumeratedWords';
 import BottomModal from '../../components/BottomModal';
 import { HDSegwitBech32Wallet, MultisigCosigner, MultisigHDWallet } from '../../class';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import MultipleStepsListItem, {
-  MultipleStepsListItemButtohType,
-  MultipleStepsListItemDashType,
-} from '../../components/MultipleStepsListItem';
+import MultipleStepsListItem, { MultipleStepsListItemButtohType, MultipleStepsListItemDashType } from '../../components/MultipleStepsListItem';
 import Privacy from '../../blue_modules/Privacy';
 import Biometric from '../../class/biometrics';
 import { SquareButton } from '../../components/SquareButton';
@@ -53,7 +27,7 @@ const ViewEditMultisigCosigners = () => {
   const route = useRoute();
   const openScannerButtonRef = useRef();
   const { walletId } = route.params;
-  const w = useRef(wallets.find(wallet => wallet.getID() === walletId));
+  const w = useRef(wallets.find((wallet) => wallet.getID() === walletId));
   const tempWallet = useRef(new MultisigHDWallet());
   const [wallet, setWallet] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -153,7 +127,7 @@ const ViewEditMultisigCosigners = () => {
     }
 
     // eslint-disable-next-line prefer-const
-    let newWallets = wallets.filter(w => {
+    let newWallets = wallets.filter((w) => {
       return w.getID() !== walletId;
     });
     if (!isElectrumDisabled) {
@@ -215,9 +189,7 @@ const ViewEditMultisigCosigners = () => {
               <Icon size={24} name="check" type="ionicons" color={colors.msSuccessCheck} />
             </View>
             <View style={styles.vaultKeyTextWrapper}>
-              <Text style={[styles.vaultKeyText, stylesHook.vaultKeyText]}>
-                {loc.formatString(loc.multisig.vault_key, { number: vaultKeyData.keyIndex })}
-              </Text>
+              <Text style={[styles.vaultKeyText, stylesHook.vaultKeyText]}>{loc.formatString(loc.multisig.vault_key, { number: vaultKeyData.keyIndex })}</Text>
             </View>
           </View>
           <BlueSpacing20 />
@@ -225,11 +197,7 @@ const ViewEditMultisigCosigners = () => {
             <>
               <Text style={[styles.textDestination, stylesHook.textDestination]}>{loc._.wallet_key}</Text>
               <BlueSpacing10 />
-              <SquareEnumeratedWords
-                contentAlign={SquareEnumeratedWordsContentAlign.left}
-                entries={[vaultKeyData.xpub, vaultKeyData.fp, vaultKeyData.path]}
-                appendNumber={false}
-              />
+              <SquareEnumeratedWords contentAlign={SquareEnumeratedWordsContentAlign.left} entries={[vaultKeyData.xpub, vaultKeyData.fp, vaultKeyData.path]} appendNumber={false} />
             </>
           )}
           {vaultKeyData.seed.length > 1 && (
@@ -237,11 +205,7 @@ const ViewEditMultisigCosigners = () => {
               <BlueSpacing20 />
               <Text style={[styles.textDestination, stylesHook.textDestination]}>{loc._.seed}</Text>
               <BlueSpacing10 />
-              <SquareEnumeratedWords
-                contentAlign={SquareEnumeratedWordsContentAlign.left}
-                entries={vaultKeyData.seed.split(' ')}
-                appendNumber
-              />
+              <SquareEnumeratedWords contentAlign={SquareEnumeratedWordsContentAlign.left} entries={vaultKeyData.seed.split(' ')} appendNumber />
             </>
           )}
           <BlueSpacing20 />
@@ -261,7 +225,7 @@ const ViewEditMultisigCosigners = () => {
     );
   };
 
-  const _renderKeyItem = el => {
+  const _renderKeyItem = (el) => {
     const isXpub = MultisigHDWallet.isXpubValid(wallet.getCosigner(el.index + 1));
     let leftText;
     if (isXpub) {
@@ -276,11 +240,7 @@ const ViewEditMultisigCosigners = () => {
     }
     return (
       <View>
-        <MultipleStepsListItem
-          checked
-          leftText={loc.formatString(loc.multisig.vault_key, { number: el.index + 1 })}
-          dashes={el.index === data.length - 1 ? MultipleStepsListItemDashType.bottom : MultipleStepsListItemDashType.topAndBottom}
-        />
+        <MultipleStepsListItem checked leftText={loc.formatString(loc.multisig.vault_key, { number: el.index + 1 })} dashes={el.index === data.length - 1 ? MultipleStepsListItemDashType.bottom : MultipleStepsListItemDashType.topAndBottom} />
 
         {isXpub ? (
           <View>
@@ -413,7 +373,7 @@ const ViewEditMultisigCosigners = () => {
     return _handleUseMnemonicPhrase(importText);
   };
 
-  const _handleUseMnemonicPhrase = mnemonic => {
+  const _handleUseMnemonicPhrase = (mnemonic) => {
     const hd = new HDSegwitBech32Wallet();
     hd.setSecret(mnemonic);
     if (!hd.validateMnemonic()) return alert(loc.multisig.invalid_mnemonics);
@@ -429,7 +389,7 @@ const ViewEditMultisigCosigners = () => {
     setIsSaveButtonDisabled(false);
   };
 
-  const xpubInsteadOfSeed = index => {
+  const xpubInsteadOfSeed = (index) => {
     return new Promise((resolve, reject) => {
       InteractionManager.runAfterInteractions(() => {
         try {
@@ -454,7 +414,7 @@ const ViewEditMultisigCosigners = () => {
 
   const scanOrOpenFile = () => {
     if (isMacCatalina) {
-      fs.showActionSheet({ anchor: findNodeHandle(openScannerButtonRef.current) }).then(result => {
+      fs.showActionSheet({ anchor: findNodeHandle(openScannerButtonRef.current) }).then((result) => {
         // Triggers FlatList re-render
         setImportText(result);
         //
@@ -468,7 +428,7 @@ const ViewEditMultisigCosigners = () => {
             screen: 'ScanQRCode',
             params: {
               launchedBy: route.name,
-              onBarScanned: result => {
+              onBarScanned: (result) => {
                 // Triggers FlatList re-render
                 setImportText(result);
                 //
@@ -501,15 +461,7 @@ const ViewEditMultisigCosigners = () => {
             <BlueSpacing20 />
             <BlueFormMultiInput value={importText} onChangeText={setImportText} />
             <BlueSpacing40 />
-            {isLoading ? (
-              <ActivityIndicator />
-            ) : (
-              <BlueButton
-                disabled={importText.trim().length === 0}
-                title={loc.wallets.import_do_import}
-                onPress={handleUseMnemonicPhrase}
-              />
-            )}
+            {isLoading ? <ActivityIndicator /> : <BlueButton disabled={importText.trim().length === 0} title={loc.wallets.import_do_import} onPress={handleUseMnemonicPhrase} />}
             <BlueButtonLink ref={openScannerButtonRef} disabled={isLoading} onPress={scanOrOpenFile} title={loc.wallets.import_scan_qr} />
           </View>
         </KeyboardAvoidingView>
@@ -541,21 +493,9 @@ const ViewEditMultisigCosigners = () => {
       </View>
     );
 
-  const howMany = (
-    <Badge
-      value={wallet.getM()}
-      badgeStyle={[styles.tipLabel, stylesHook.tipLabel]}
-      textStyle={[styles.tipLabelText, stylesHook.tipLabelText]}
-    />
-  );
+  const howMany = <Badge value={wallet.getM()} badgeStyle={[styles.tipLabel, stylesHook.tipLabel]} textStyle={[styles.tipLabelText, stylesHook.tipLabelText]} />;
 
-  const andHere = (
-    <Badge
-      value={wallet.howManySignaturesCanWeMake()}
-      badgeStyle={[styles.tipLabel, stylesHook.tipLabel]}
-      textStyle={[styles.tipLabelText, stylesHook.tipLabelText]}
-    />
-  );
+  const andHere = <Badge value={wallet.howManySignaturesCanWeMake()} badgeStyle={[styles.tipLabel, stylesHook.tipLabel]} textStyle={[styles.tipLabelText, stylesHook.tipLabelText]} />;
 
   const tipKeys = () => {
     return (
@@ -576,19 +516,8 @@ const ViewEditMultisigCosigners = () => {
   return (
     <View style={[styles.root, stylesHook.root]}>
       <StatusBar barStyle="light-content" />
-      <KeyboardAvoidingView
-        enabled={!Platform.isPad}
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
-        keyboardVerticalOffset={62}
-        style={[styles.mainBlock, styles.root]}
-      >
-        <FlatList
-          ListHeaderComponent={tipKeys}
-          data={data.current}
-          extraData={vaultKeyData}
-          renderItem={_renderKeyItem}
-          keyExtractor={(_item, index) => `${index}`}
-        />
+      <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'padding' : null} keyboardVerticalOffset={62} style={[styles.mainBlock, styles.root]}>
+        <FlatList ListHeaderComponent={tipKeys} data={data.current} extraData={vaultKeyData} renderItem={_renderKeyItem} keyExtractor={(_item, index) => `${index}`} />
         <BlueSpacing10 />
         {footer}
         <BlueSpacing40 />
@@ -718,7 +647,7 @@ ViewEditMultisigCosigners.navigationOptions = navigationStyle(
     closeButton: true,
     headerHideBackButton: true,
   },
-  opts => ({ ...opts, headerTitle: loc.multisig.manage_keys }),
+  (opts) => ({ ...opts, headerTitle: loc.multisig.manage_keys }),
 );
 
 export default ViewEditMultisigCosigners;

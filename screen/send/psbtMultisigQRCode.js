@@ -46,7 +46,7 @@ const PsbtMultisigQRCode = () => {
     }
   }, [isFocused]);
 
-  const onBarScanned = ret => {
+  const onBarScanned = (ret) => {
     if (!ret.data) ret = { data: ret };
     if (ret.data.toUpperCase().startsWith('UR')) {
       alert('BC-UR not decoded. This should never happen');
@@ -62,7 +62,7 @@ const PsbtMultisigQRCode = () => {
 
   const openScanner = () => {
     if (isDesktop) {
-      fs.showActionSheet({ anchor: findNodeHandle(openScannerButton.current) }).then(data => onBarScanned({ data }));
+      fs.showActionSheet({ anchor: findNodeHandle(openScannerButton.current) }).then((data) => onBarScanned({ data }));
     } else {
       navigate('ScanQRCodeRoot', {
         screen: 'ScanQRCode',
@@ -95,21 +95,11 @@ const PsbtMultisigQRCode = () => {
           {!isShowOpenScanner && (
             <>
               <BlueSpacing20 />
-              <SquareButton
-                testID="CosignedScanOrImportFile"
-                style={[styles.exportButton, stylesHook.exportButton]}
-                onPress={openScanner}
-                ref={openScannerButton}
-                title={loc.multisig.scan_or_import_file}
-              />
+              <SquareButton testID="CosignedScanOrImportFile" style={[styles.exportButton, stylesHook.exportButton]} onPress={openScanner} ref={openScannerButton} title={loc.multisig.scan_or_import_file} />
             </>
           )}
           <BlueSpacing20 />
-          {isLoading ? (
-            <ActivityIndicator />
-          ) : (
-            <SquareButton style={[styles.exportButton, stylesHook.exportButton]} onPress={exportPSBT} title={loc.multisig.share} />
-          )}
+          {isLoading ? <ActivityIndicator /> : <SquareButton style={[styles.exportButton, stylesHook.exportButton]} onPress={exportPSBT} title={loc.multisig.share} />}
         </View>
       </ScrollView>
     </SafeBlueArea>
@@ -138,6 +128,6 @@ const styles = StyleSheet.create({
   },
 });
 
-PsbtMultisigQRCode.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.multisig.header }));
+PsbtMultisigQRCode.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.multisig.header }));
 
 export default PsbtMultisigQRCode;

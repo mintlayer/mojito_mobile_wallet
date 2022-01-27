@@ -48,7 +48,7 @@ export const BlueStorageProvider = ({ children }) => {
     setIsTorDaemonDisabled(isTorDisabled);
   }, [isTorDisabled]);
 
-  const setIsHandOffUseEnabledAsyncStorage = value => {
+  const setIsHandOffUseEnabledAsyncStorage = (value) => {
     setIsHandOffUseEnabled(value);
     return BlueApp.setIsHandoffEnabled(value);
   };
@@ -108,7 +108,7 @@ export const BlueStorageProvider = ({ children }) => {
     setWallets(BlueApp.getWallets());
   };
 
-  const setWalletsWithNewOrder = wallets => {
+  const setWalletsWithNewOrder = (wallets) => {
     BlueApp.wallets = wallets;
     saveToDisk();
   };
@@ -137,8 +137,8 @@ export const BlueStorageProvider = ({ children }) => {
     if (noErr) await saveToDisk(); // caching
   };
 
-  const fetchAndSaveWalletTransactions = async walletID => {
-    const index = wallets.findIndex(wallet => wallet.getID() === walletID);
+  const fetchAndSaveWalletTransactions = async (walletID) => {
+    const index = wallets.findIndex((wallet) => wallet.getID() === walletID);
     let noErr = true;
     try {
       // 5sec debounce:
@@ -167,18 +167,18 @@ export const BlueStorageProvider = ({ children }) => {
     if (noErr) await saveToDisk(); // caching
   };
 
-  const addWallet = wallet => {
+  const addWallet = (wallet) => {
     BlueApp.wallets.push(wallet);
     setWallets([...BlueApp.getWallets()]);
   };
 
-  const deleteWallet = wallet => {
+  const deleteWallet = (wallet) => {
     BlueApp.deleteWallet(wallet);
     setWallets([...BlueApp.getWallets()]);
   };
 
-  const addAndSaveWallet = async w => {
-    if (wallets.some(i => i.getID() === w.getID())) {
+  const addAndSaveWallet = async (w) => {
+    if (wallets.some((i) => i.getID() === w.getID())) {
       ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
       Alert.alert('', 'This wallet has been previously imported.');
       return;

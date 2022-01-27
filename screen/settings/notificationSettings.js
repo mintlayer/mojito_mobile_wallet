@@ -19,7 +19,7 @@ const NotificationSettings = () => {
 
   const { colors } = useTheme();
 
-  const onNotificationsSwitch = async value => {
+  const onNotificationsSwitch = async (value) => {
     setNotificationsEnabled(value); // so the slider is not 'jumpy'
     if (value) {
       // user is ENABLING notifications
@@ -43,14 +43,7 @@ const NotificationSettings = () => {
     (async () => {
       setNotificationsEnabled(await Notifications.isNotificationsEnabled());
       setURI(await Notifications.getSavedUri());
-      setTokenInfo(
-        'token: ' +
-          JSON.stringify(await Notifications.getPushToken()) +
-          ' permissions: ' +
-          JSON.stringify(await Notifications.checkPermissions()) +
-          ' stored notifications: ' +
-          JSON.stringify(await Notifications.getStoredNotifications()),
-      );
+      setTokenInfo('token: ' + JSON.stringify(await Notifications.getPushToken()) + ' permissions: ' + JSON.stringify(await Notifications.checkPermissions()) + ' stored notifications: ' + JSON.stringify(await Notifications.getStoredNotifications()));
       setIsLoading(false);
     })();
   }, []);
@@ -95,11 +88,7 @@ const NotificationSettings = () => {
     <BlueLoading />
   ) : (
     <ScrollView style={stylesWithThemeHook.scroll}>
-      <BlueListItem
-        Component={TouchableWithoutFeedback}
-        title={loc.settings.push_notifications}
-        switch={{ onValueChange: onNotificationsSwitch, value: isNotificationsEnabled, testID: 'NotificationsSwitch' }}
-      />
+      <BlueListItem Component={TouchableWithoutFeedback} title={loc.settings.push_notifications} switch={{ onValueChange: onNotificationsSwitch, value: isNotificationsEnabled, testID: 'NotificationsSwitch' }} />
       <BlueSpacing20 />
 
       <BlueCard>
@@ -121,18 +110,7 @@ const NotificationSettings = () => {
 
       <BlueCard>
         <View style={styles.uri}>
-          <TextInput
-            placeholder={Notifications.getDefaultUri()}
-            value={URI}
-            onChangeText={setURI}
-            numberOfLines={1}
-            style={styles.uriText}
-            placeholderTextColor="#81868e"
-            editable={!isLoading}
-            textContentType="URL"
-            autoCapitalize="none"
-            underlineColorAndroid="transparent"
-          />
+          <TextInput placeholder={Notifications.getDefaultUri()} value={URI} onChangeText={setURI} numberOfLines={1} style={styles.uriText} placeholderTextColor="#81868e" editable={!isLoading} textContentType="URL" autoCapitalize="none" underlineColorAndroid="transparent" />
         </View>
 
         <BlueSpacing20 />
@@ -156,7 +134,7 @@ const NotificationSettings = () => {
   );
 };
 
-NotificationSettings.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.notifications }));
+NotificationSettings.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.settings.notifications }));
 
 const styles = StyleSheet.create({
   root: {

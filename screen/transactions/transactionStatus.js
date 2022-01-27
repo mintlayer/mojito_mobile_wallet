@@ -3,18 +3,7 @@ import { View, ActivityIndicator, Text, TouchableOpacity, StyleSheet, StatusBar,
 import { Icon } from 'react-native-elements';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 
-import {
-  BlueButton,
-  BlueCard,
-  BlueLoading,
-  BlueSpacing10,
-  BlueSpacing20,
-  BlueText,
-  BlueTransactionIncomingIcon,
-  BlueTransactionOutgoingIcon,
-  BlueTransactionPendingIcon,
-  SafeBlueArea,
-} from '../../BlueComponents';
+import { BlueButton, BlueCard, BlueLoading, BlueSpacing10, BlueSpacing20, BlueText, BlueTransactionIncomingIcon, BlueTransactionOutgoingIcon, BlueTransactionPendingIcon, SafeBlueArea } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import { HDSegwitBech32Transaction } from '../../class';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
@@ -35,7 +24,7 @@ const TransactionsStatus = () => {
   const { hash, walletID } = useRoute().params;
   const { navigate, setOptions, goBack } = useNavigation();
   const { colors } = useTheme();
-  const wallet = useRef(wallets.find(w => w.getID() === walletID));
+  const wallet = useRef(wallets.find((w) => w.getID() === walletID));
   const [isCPFPPossible, setIsCPFPPossible] = useState();
   const [isRBFBumpFeePossible, setIsRBFBumpFeePossible] = useState();
   const [isRBFCancelPossible, setIsRBFCancelPossible] = useState();
@@ -71,12 +60,7 @@ const TransactionsStatus = () => {
   useEffect(() => {
     setOptions({
       headerRight: () => (
-        <TouchableOpacity
-          accessibilityRole="button"
-          testID="TransactionDetailsButton"
-          style={[styles.details, stylesHook.details]}
-          onPress={navigateToTransactionDetials}
-        >
+        <TouchableOpacity accessibilityRole="button" testID="TransactionDetailsButton" style={[styles.details, stylesHook.details]} onPress={navigateToTransactionDetials}>
           <Text style={[styles.detailsText, stylesHook.detailsText]}>{loc.send.create_details}</Text>
         </TouchableOpacity>
       ),
@@ -96,7 +80,7 @@ const TransactionsStatus = () => {
   }, [hash, wallet.current]);
 
   useEffect(() => {
-    wallet.current = wallets.find(w => w.getID() === walletID);
+    wallet.current = wallets.find((w) => w.getID() === walletID);
   }, [walletID, wallets]);
 
   // re-fetching tx status periodically
@@ -150,7 +134,7 @@ const TransactionsStatus = () => {
           // now, handling a case when tx became confirmed!
           ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
           setEta('');
-          setTX(prevState => {
+          setTX((prevState) => {
             return Object.assign({}, prevState, { confirmations: txFromElectrum.confirmations });
           });
           clearInterval(fetchTxInterval.current);
@@ -229,12 +213,7 @@ const TransactionsStatus = () => {
     }
 
     const rbfTx = new HDSegwitBech32Transaction(null, tx.hash, wallet.current);
-    if (
-      (await rbfTx.isOurTransaction()) &&
-      (await rbfTx.getRemoteConfirmationsNum()) === 0 &&
-      (await rbfTx.isSequenceReplaceable()) &&
-      (await rbfTx.canBumpTx())
-    ) {
+    if ((await rbfTx.isOurTransaction()) && (await rbfTx.getRemoteConfirmationsNum()) === 0 && (await rbfTx.isSequenceReplaceable()) && (await rbfTx.canBumpTx())) {
       return setIsRBFBumpFeePossible(buttonStatus.possible);
     } else {
       return setIsRBFBumpFeePossible(buttonStatus.notPossible);
@@ -247,12 +226,7 @@ const TransactionsStatus = () => {
     }
 
     const rbfTx = new HDSegwitBech32Transaction(null, tx.hash, wallet.current);
-    if (
-      (await rbfTx.isOurTransaction()) &&
-      (await rbfTx.getRemoteConfirmationsNum()) === 0 &&
-      (await rbfTx.isSequenceReplaceable()) &&
-      (await rbfTx.canCancelTx())
-    ) {
+    if ((await rbfTx.isOurTransaction()) && (await rbfTx.getRemoteConfirmationsNum()) === 0 && (await rbfTx.isSequenceReplaceable()) && (await rbfTx.canCancelTx())) {
       return setIsRBFCancelPossible(buttonStatus.possible);
     } else {
       return setIsRBFCancelPossible(buttonStatus.notPossible);
@@ -362,21 +336,14 @@ const TransactionsStatus = () => {
   }
   return (
     <SafeBlueArea>
-      <HandoffComponent
-        title={loc.transactions.details_title}
-        type={HandoffComponent.activityTypes.ViewInBlockExplorer}
-        url={`https://mempool.space/tx/${tx.hash}`}
-      />
+      <HandoffComponent title={loc.transactions.details_title} type={HandoffComponent.activityTypes.ViewInBlockExplorer} url={`https://mempool.space/tx/${tx.hash}`} />
 
       <StatusBar barStyle="default" />
       <View style={styles.container}>
         <BlueCard>
           <View style={styles.center}>
             <Text style={[styles.value, stylesHook.value]}>
-              {formatBalanceWithoutSuffix(tx.value, wallet.current.preferredBalanceUnit, true)}{' '}
-              {wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && (
-                <Text style={[styles.valueUnit, stylesHook.valueUnit]}>{loc.units[wallet.current.preferredBalanceUnit]}</Text>
-              )}
+              {formatBalanceWithoutSuffix(tx.value, wallet.current.preferredBalanceUnit, true)} {wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && <Text style={[styles.valueUnit, stylesHook.valueUnit]}>{loc.units[wallet.current.preferredBalanceUnit]}</Text>}
             </Text>
           </View>
 
@@ -414,8 +381,7 @@ const TransactionsStatus = () => {
           {tx.fee && (
             <View style={styles.fee}>
               <BlueText style={styles.feeText}>
-                {loc.send.create_fee.toLowerCase()} {formatBalanceWithoutSuffix(tx.fee, wallet.current.preferredBalanceUnit, true)}{' '}
-                {wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit}
+                {loc.send.create_fee.toLowerCase()} {formatBalanceWithoutSuffix(tx.fee, wallet.current.preferredBalanceUnit, true)} {wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit}
               </BlueText>
             </View>
           )}

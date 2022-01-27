@@ -27,12 +27,7 @@ export default class RBFCancel extends CPFP {
     }
 
     const tx = new HDSegwitBech32Transaction(null, this.state.txid, this.state.wallet);
-    if (
-      (await tx.isOurTransaction()) &&
-      (await tx.getRemoteConfirmationsNum()) === 0 &&
-      (await tx.isSequenceReplaceable()) &&
-      (await tx.canCancelTx())
-    ) {
+    if ((await tx.isOurTransaction()) && (await tx.getRemoteConfirmationsNum()) === 0 && (await tx.isSequenceReplaceable()) && (await tx.canCancelTx())) {
       const info = await tx.getInfo();
       console.log({ info });
       return this.setState({ nonReplaceable: false, feeRate: info.feeRate + 1, isLoading: false, tx });
@@ -121,4 +116,4 @@ RBFCancel.propTypes = {
   }),
 };
 
-RBFCancel.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.transactions.cancel_title }));
+RBFCancel.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.transactions.cancel_title }));

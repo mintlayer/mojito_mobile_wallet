@@ -41,7 +41,7 @@ const SettingsPrivacy = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onValueChange = async value => {
+  const onValueChange = async (value) => {
     setIsLoading(sections.CLIPBOARDREAD);
     try {
       await BlueClipboard.setReadClipboardAllowed(value);
@@ -52,7 +52,7 @@ const SettingsPrivacy = () => {
     setIsLoading(false);
   };
 
-  const onDoNotTrackValueChange = async value => {
+  const onDoNotTrackValueChange = async (value) => {
     setIsLoading(sections.ALL);
     try {
       setDoNotTrackSwitchValue(value);
@@ -64,7 +64,7 @@ const SettingsPrivacy = () => {
     setIsLoading(false);
   };
 
-  const onQuickActionsValueChange = async value => {
+  const onQuickActionsValueChange = async (value) => {
     setIsLoading(sections.QUICKACTION);
     try {
       await DeviceQuickActions.setEnabled(value);
@@ -75,7 +75,7 @@ const SettingsPrivacy = () => {
     setIsLoading(false);
   };
 
-  const onWidgetsTotalBalanceValueChange = async value => {
+  const onWidgetsTotalBalanceValueChange = async (value) => {
     setIsLoading(sections.WIDGETS);
     try {
       await WidgetCommunication.setBalanceDisplayAllowed(value);
@@ -98,7 +98,7 @@ const SettingsPrivacy = () => {
 
   const onDisablePrivacyTapped = () => {
     setIsPrivacyBlurEnabled(!(isPrivacyBlurEnabledTapped >= 10));
-    setIsPrivacyBlurEnabledTapped(prev => prev + 1);
+    setIsPrivacyBlurEnabledTapped((prev) => prev + 1);
   };
 
   return (
@@ -106,12 +106,7 @@ const SettingsPrivacy = () => {
       <Pressable onPress={onDisablePrivacyTapped}>
         <BlueHeaderDefaultSub leftText={loc.settings.general} rightComponent={null} />
       </Pressable>
-      <BlueListItem
-        hideChevron
-        title={loc.settings.privacy_read_clipboard}
-        Component={TouchableWithoutFeedback}
-        switch={{ onValueChange, value: isReadClipboardAllowed, disabled: isLoading === sections.ALL, testID: 'ClipboardSwith' }}
-      />
+      <BlueListItem hideChevron title={loc.settings.privacy_read_clipboard} Component={TouchableWithoutFeedback} switch={{ onValueChange, value: isReadClipboardAllowed, disabled: isLoading === sections.ALL, testID: 'ClipboardSwith' }} />
       <BlueCard>
         <BlueText>{loc.settings.privacy_clipboard_explanation}</BlueText>
       </BlueCard>
@@ -154,12 +149,7 @@ const SettingsPrivacy = () => {
       )}
       <BlueSpacing20 />
 
-      <BlueListItem
-        hideChevron
-        title={loc.settings.privacy_do_not_track}
-        Component={TouchableWithoutFeedback}
-        switch={{ onValueChange: onDoNotTrackValueChange, value: doNotTrackSwitchValue, disabled: isLoading === sections.ALL }}
-      />
+      <BlueListItem hideChevron title={loc.settings.privacy_do_not_track} Component={TouchableWithoutFeedback} switch={{ onValueChange: onDoNotTrackValueChange, value: doNotTrackSwitchValue, disabled: isLoading === sections.ALL }} />
       <BlueCard>
         <BlueText>{loc.settings.privacy_do_not_track_explanation}</BlueText>
       </BlueCard>
@@ -176,6 +166,6 @@ const styles = StyleSheet.create({
   },
 });
 
-SettingsPrivacy.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.privacy }));
+SettingsPrivacy.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.settings.privacy }));
 
 export default SettingsPrivacy;

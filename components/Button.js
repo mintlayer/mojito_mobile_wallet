@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useTheme } from '@react-navigation/native';
 
 export const ButtonStyle = { default: 'default', destroy: 'destroy', grey: 'grey' };
-const Button = props => {
+const Button = (props) => {
   const { onPress, text = '', disabled = false, buttonStyle = ButtonStyle.default } = props;
   const { colors } = useTheme();
   const stylesHook = StyleSheet.create({

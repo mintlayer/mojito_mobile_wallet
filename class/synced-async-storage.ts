@@ -53,13 +53,7 @@ export default class SyncedAsyncStorage {
 
     SyncedAsyncStorage.assertEquals(this.decrypt(clear), clear);
 
-    SyncedAsyncStorage.assertEquals(
-      this.decrypt(
-        'encrypted://U2FsdGVkX19XQWgwS8q5XjQSQ19OmBsNax4k6NZOAsKFhCgw9sJFwb+qVYfqy6X5',
-        '3a013f391e59daf2f5074fa66652784d17511ea072d7a8329ff9bddf371932ab',
-      ),
-      'text line to be encrypted',
-    );
+    SyncedAsyncStorage.assertEquals(this.decrypt('encrypted://U2FsdGVkX19XQWgwS8q5XjQSQ19OmBsNax4k6NZOAsKFhCgw9sJFwb+qVYfqy6X5', '3a013f391e59daf2f5074fa66652784d17511ea072d7a8329ff9bddf371932ab'), 'text line to be encrypted');
 
     return true;
   }
@@ -81,12 +75,12 @@ export default class SyncedAsyncStorage {
         },
         body: value,
       })
-        .then(async response => {
+        .then(async (response) => {
           const text = await response.text();
           console.log('saved, seq num:', text);
           resolve(text);
         })
-        .catch(reason => reject(reason));
+        .catch((reason) => reject(reason));
     });
   }
 
@@ -118,9 +112,7 @@ export default class SyncedAsyncStorage {
   }
 
   async getAllKeys(): Promise<string[]> {
-    return (await AsyncStorage.getAllKeys())
-      .filter(key => key.startsWith(this.namespace + '_'))
-      .map(key => key.replace(this.namespace + '_', ''));
+    return (await AsyncStorage.getAllKeys()).filter((key) => key.startsWith(this.namespace + '_')).map((key) => key.replace(this.namespace + '_', ''));
   }
 
   async getLocalSeqNum() {

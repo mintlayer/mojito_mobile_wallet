@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import React from 'react';
 
-export const TransactionPendingIconBig = props => {
+export const TransactionPendingIconBig = (props) => {
   const { colors } = useTheme();
 
   const stylesBlueIconHooks = StyleSheet.create({
@@ -24,14 +24,7 @@ export const TransactionPendingIconBig = props => {
     <View {...props}>
       <View style={stylesBlueIconHooks.boxIncoming}>
         <View style={[stylesBlueIconHooks.ball2, stylesBlueIconHooks.ball]}>
-          <Icon
-            {...props}
-            name="kebab-horizontal"
-            size={100}
-            type="octicon"
-            color={colors.foregroundColor}
-            iconStyle={{ left: 0, top: 25 }}
-          />
+          <Icon {...props} name="kebab-horizontal" size={100} type="octicon" color={colors.foregroundColor} iconStyle={{ left: 0, top: 25 }} />
         </View>
       </View>
     </View>

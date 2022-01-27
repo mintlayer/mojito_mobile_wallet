@@ -7,16 +7,11 @@ type OnPopupMenuItemSelect = (selectedPopupMenuItem: PopupMenuItem) => void;
 type PopupAnchor = Element<typeof Text | typeof TouchableNativeFeedback | typeof TouchableWithoutFeedback | typeof View>;
 type PopupMenuOptions = { onCancel?: () => void };
 
-function showPopupMenu(
-  items: PopupMenuItem[],
-  onSelect: OnPopupMenuItemSelect,
-  anchor: PopupAnchor,
-  { onCancel }: PopupMenuOptions = {},
-): void {
+function showPopupMenu(items: PopupMenuItem[], onSelect: OnPopupMenuItemSelect, anchor: PopupAnchor, { onCancel }: PopupMenuOptions = {}): void {
   UIManager.showPopupMenu(
     // @ts-ignore: Ignore
     findNodeHandle(anchor),
-    items.map(item => item.label),
+    items.map((item) => item.label),
     function () {
       if (onCancel) onCancel();
     },

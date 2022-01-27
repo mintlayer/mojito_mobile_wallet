@@ -4,7 +4,7 @@ import { Image, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import React from 'react';
 
-export const LdkButton = props => {
+export const LdkButton = (props) => {
   const { colors } = useTheme();
   return (
     <TouchableOpacity onPress={props.onPress}>

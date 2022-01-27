@@ -118,7 +118,7 @@ export class LightningLdkWallet extends LightningCustodianWallet {
   async isStarted() {
     let rez;
     try {
-      rez = await Promise.race([new Promise(resolve => setTimeout(() => resolve('timeout'), 1000)), RnLdk.getNodeId()]);
+      rez = await Promise.race([new Promise((resolve) => setTimeout(() => resolve('timeout'), 1000)), RnLdk.getNodeId()]);
     } catch (_) {}
 
     if (rez === 'timeout' || !rez) {
@@ -137,7 +137,7 @@ export class LightningLdkWallet extends LightningCustodianWallet {
   async waitTillStarted() {
     for (let c = 0; c < 30; c++) {
       if (await this.isStarted()) return true;
-      await new Promise(resolve => setTimeout(resolve, 500)); // sleep
+      await new Promise((resolve) => setTimeout(resolve, 500)); // sleep
     }
 
     return false;
@@ -165,7 +165,7 @@ export class LightningLdkWallet extends LightningCustodianWallet {
         await RnLdk.connectPeer(pubkeyHex, host, +port);
       }
 
-      await new Promise(resolve => setTimeout(resolve, 500)); // sleep
+      await new Promise((resolve) => setTimeout(resolve, 500)); // sleep
     }
 
     throw new Error('timeout waiting for peer connection');
@@ -310,7 +310,7 @@ export class LightningLdkWallet extends LightningCustodianWallet {
 
     // ok, it was sent. now, waiting for an event that it was _actually_ paid:
     for (let c = 0; c < 60; c++) {
-      await new Promise(resolve => setTimeout(resolve, 500)); // sleep
+      await new Promise((resolve) => setTimeout(resolve, 500)); // sleep
 
       for (const sentPayment of RnLdk.sentPayments || []) {
         const paidHash = LightningLdkWallet.preimage2hash(sentPayment.payment_preimage);
@@ -397,7 +397,7 @@ export class LightningLdkWallet extends LightningCustodianWallet {
   }
 
   isInvoiceGeneratedByWallet(paymentRequest: string) {
-    return Boolean(this?._listInvoices?.some(invoice => invoice.payment_request === paymentRequest));
+    return Boolean(this?._listInvoices?.some((invoice) => invoice.payment_request === paymentRequest));
   }
 
   weOwnAddress(address: string) {
@@ -595,13 +595,13 @@ export class LightningLdkWallet extends LightningCustodianWallet {
 
   async getLogs() {
     return RnLdk.getLogs()
-      .map(log => log.line)
+      .map((log) => log.line)
       .join('\n');
   }
 
   async getLogsWithTs() {
     return RnLdk.getLogs()
-      .map(log => log.ts + ' ' + log.line)
+      .map((log) => log.ts + ' ' + log.line)
       .join('\n');
   }
 
@@ -629,17 +629,17 @@ export class LightningLdkWallet extends LightningCustodianWallet {
 
   async channelsNeedReestablish() {
     const freshListChannels = await this.listChannels();
-    const active = freshListChannels.filter(chan => !!chan.is_usable && chan.is_funding_locked).length;
+    const active = freshListChannels.filter((chan) => !!chan.is_usable && chan.is_funding_locked).length;
     return freshListChannels.length !== +active;
   }
 
   async waitForAtLeastOneChannelBecomeActive() {
-    const active = (await this.listChannels()).filter(chan => !!chan.is_usable).length;
+    const active = (await this.listChannels()).filter((chan) => !!chan.is_usable).length;
 
     for (let c = 0; c < 10; c++) {
-      await new Promise(resolve => setTimeout(resolve, 500)); // sleep
+      await new Promise((resolve) => setTimeout(resolve, 500)); // sleep
       const freshListChannels = await this.listChannels();
-      const active2 = freshListChannels.filter(chan => !!chan.is_usable).length;
+      const active2 = freshListChannels.filter((chan) => !!chan.is_usable).length;
       if (freshListChannels.length === +active2) return true; // all active kek
 
       if (freshListChannels.length === 0) return true; // no channels at all

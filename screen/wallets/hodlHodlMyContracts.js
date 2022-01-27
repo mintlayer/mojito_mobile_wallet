@@ -1,18 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Alert,
-  FlatList,
-  Keyboard,
-  KeyboardAvoidingView,
-  Linking,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, FlatList, Keyboard, KeyboardAvoidingView, Linking, Platform, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 
 import { BlueButton, BlueCopyTextToClipboard, BlueLoading, BlueSpacing10, BlueSpacing20, BlueText } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
@@ -72,16 +60,10 @@ export default class HodlHodlMyContracts extends Component {
           ItemSeparatorComponent={() => <View style={styles.itemSeparatorComponent} />}
           data={this.state.contracts}
           renderItem={({ item: contract, index, separators }) => (
-            <TouchableHighlight
-              onShowUnderlay={separators.highlight}
-              onHideUnderlay={separators.unhighlight}
-              onPress={() => this._onContractPress(contract)}
-            >
+            <TouchableHighlight onShowUnderlay={separators.highlight} onHideUnderlay={separators.unhighlight} onPress={() => this._onContractPress(contract)}>
               <View style={styles.flexDirectionRow}>
                 <View style={['paid', 'completed'].includes(contract.status) ? styles.statusGreenWrapper : styles.statusGrayWrapper}>
-                  <Text style={['paid', 'completed'].includes(contract.status) ? styles.statusGreenText : styles.statusGrayText}>
-                    {contract.status}
-                  </Text>
+                  <Text style={['paid', 'completed'].includes(contract.status) ? styles.statusGreenText : styles.statusGrayText}>{contract.status}</Text>
                 </View>
 
                 <View style={styles.flexDirectionColumn}>
@@ -131,8 +113,7 @@ export default class HodlHodlMyContracts extends Component {
       if (contract.status === 'canceled') continue;
       if (contract.escrow && contract.escrow.address && hodlApi.verifyEscrowAddress()) {
         await hodlApi.markContractAsConfirmed(id);
-        contract.isDepositedEnought =
-          contract.escrow.confirmations >= contract.confirmations && +contract.escrow.amount_deposited >= +contract.volume;
+        contract.isDepositedEnought = contract.escrow.confirmations >= contract.confirmations && +contract.escrow.amount_deposited >= +contract.volume;
         // technically, we could fetch balance of escrow address ourselved and verify, but we are relying on api here
 
         contract.statusText = loc.hodl.cont_st_waiting;
@@ -189,10 +170,7 @@ export default class HodlHodlMyContracts extends Component {
             <Text style={styles.subheaderText}>{loc.hodl.cont_address_to}</Text>
             <View style={styles.modalContentCentered}>
               <View style={styles.statusGrayWrapper2}>
-                <Text
-                  style={styles.statusGrayText2}
-                  onPress={() => Linking.openURL(`https://blockstream.info/address/${this.state.contractToDisplay.release_address}`)}
-                >
+                <Text style={styles.statusGrayText2} onPress={() => Linking.openURL(`https://blockstream.info/address/${this.state.contractToDisplay.release_address}`)}>
                   {this.state.contractToDisplay.release_address}
                 </Text>
               </View>
@@ -202,10 +180,7 @@ export default class HodlHodlMyContracts extends Component {
             <Text style={styles.subheaderText}>{loc.hodl.cont_address_escrow}</Text>
             <View style={styles.modalContentCentered}>
               <View style={styles.statusGrayWrapper2}>
-                <Text
-                  style={styles.statusGrayText2}
-                  onPress={() => Linking.openURL(`https://blockstream.info/address/${this.state.contractToDisplay.escrow.address}`)}
-                >
+                <Text style={styles.statusGrayText2} onPress={() => Linking.openURL(`https://blockstream.info/address/${this.state.contractToDisplay.escrow.address}`)}>
                   {this.state.contractToDisplay.escrow.address}
                 </Text>
               </View>

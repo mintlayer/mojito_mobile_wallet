@@ -90,7 +90,7 @@ export const convertToBuffer = ({ entropy, bits }) => {
       arr.unshift(v);
     }
   });
-  arr = arr.map(i => parseInt(i, 16));
+  arr = arr.map((i) => parseInt(i, 16));
 
   if (arr.length > bytes) {
     arr.shift();
@@ -131,7 +131,7 @@ const Dice = ({ push, sides }) => {
       backgroundColor: colors.elevated,
     },
   });
-  const diceIcon = i => {
+  const diceIcon = (i) => {
     switch (i) {
       case 1:
         return 'dice-one';
@@ -172,10 +172,7 @@ Dice.propTypes = {
   push: PropTypes.func.isRequired,
 };
 
-const buttonFontSize =
-  PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26) > 22
-    ? 22
-    : PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26);
+const buttonFontSize = PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26) > 22 ? 22 : PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26);
 
 const Buttons = ({ pop, save, colors }) => (
   <FContainer>
@@ -225,7 +222,7 @@ const Entropy = () => {
     },
   });
 
-  const push = v => v && dispatch({ type: 'push', value: v.value, bits: v.bits });
+  const push = (v) => v && dispatch({ type: 'push', value: v.value, bits: v.bits });
   const pop = () => dispatch({ type: 'pop' });
   const save = () => {
     navigation.pop();
@@ -246,21 +243,7 @@ const Entropy = () => {
         </View>
       </TouchableOpacity>
 
-      <BlueTabs
-        active={tab}
-        onSwitch={setTab}
-        tabs={[
-          ({ active }) => (
-            <Icon name="toll" type="material" color={active ? colors.buttonAlternativeTextColor : colors.buttonBackgroundColor} />
-          ),
-          ({ active }) => (
-            <Icon name="dice" type="font-awesome-5" color={active ? colors.buttonAlternativeTextColor : colors.buttonBackgroundColor} />
-          ),
-          ({ active }) => (
-            <Icon name="dice-d20" type="font-awesome-5" color={active ? colors.buttonAlternativeTextColor : colors.buttonBackgroundColor} />
-          ),
-        ]}
-      />
+      <BlueTabs active={tab} onSwitch={setTab} tabs={[({ active }) => <Icon name="toll" type="material" color={active ? colors.buttonAlternativeTextColor : colors.buttonBackgroundColor} />, ({ active }) => <Icon name="dice" type="font-awesome-5" color={active ? colors.buttonAlternativeTextColor : colors.buttonBackgroundColor} />, ({ active }) => <Icon name="dice-d20" type="font-awesome-5" color={active ? colors.buttonAlternativeTextColor : colors.buttonBackgroundColor} />]} />
 
       {tab === 0 && <Coin push={push} />}
       {tab === 1 && <Dice sides={6} push={push} />}
@@ -271,7 +254,7 @@ const Entropy = () => {
   );
 };
 
-Entropy.navigationOptions = navigationStyle({}, opts => ({ ...opts, headerTitle: loc.entropy.title }));
+Entropy.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, headerTitle: loc.entropy.title }));
 
 const styles = StyleSheet.create({
   entropy: {

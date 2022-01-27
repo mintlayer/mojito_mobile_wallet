@@ -15,7 +15,7 @@ const fs = require('../../blue_modules/fs');
 const ExportMultisigCoordinationSetup = () => {
   const walletId = useRoute().params.walletId;
   const { wallets } = useContext(BlueStorageContext);
-  const wallet = wallets.find(w => w.getID() === walletId);
+  const wallet = wallets.find((w) => w.getID() === walletId);
   const qrCodeContents = useRef();
   const dynamicQRCode = useRef();
   const [isLoading, setIsLoading] = useState(true);
@@ -84,11 +84,7 @@ const ExportMultisigCoordinationSetup = () => {
         <BlueSpacing20 />
         <DynamicQRCode value={qrCodeContents.current} ref={dynamicQRCode} />
         <BlueSpacing20 />
-        {isShareButtonTapped ? (
-          <ActivityIndicator />
-        ) : (
-          <SquareButton style={[styles.exportButton, stylesHook.exportButton]} onPress={exportTxtFile} title={loc.multisig.share} />
-        )}
+        {isShareButtonTapped ? <ActivityIndicator /> : <SquareButton style={[styles.exportButton, stylesHook.exportButton]} onPress={exportTxtFile} title={loc.multisig.share} />}
         <BlueSpacing20 />
         <BlueText style={[styles.secret, stylesHook.secret]}>{wallet.getXpub()}</BlueText>
       </ScrollView>
@@ -132,7 +128,7 @@ ExportMultisigCoordinationSetup.navigationOptions = navigationStyle(
     closeButton: true,
     headerHideBackButton: true,
   },
-  opts => ({ ...opts, title: loc.multisig.export_coordination_setup }),
+  (opts) => ({ ...opts, title: loc.multisig.export_coordination_setup }),
 );
 
 export default ExportMultisigCoordinationSetup;

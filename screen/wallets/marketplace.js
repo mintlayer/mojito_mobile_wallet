@@ -14,7 +14,7 @@ export default class Marketplace extends Component {
   constructor(props, context) {
     super(props);
     if (!props.route.params.walletID) throw new Error('Invalid param');
-    const fromWallet = context.wallets.find(w => w.getID() === props.route.params.walletID);
+    const fromWallet = context.wallets.find((w) => w.getID() === props.route.params.walletID);
 
     this.state = {
       url: '',
@@ -48,7 +48,7 @@ export default class Marketplace extends Component {
     return true;
   };
 
-  _onNavigationStateChange = webViewState => {
+  _onNavigationStateChange = (webViewState) => {
     this.setState({ canGoBack: webViewState.canGoBack });
   };
 

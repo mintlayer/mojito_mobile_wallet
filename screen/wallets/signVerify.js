@@ -1,17 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  LayoutAnimation,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  TextInput,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Alert, Keyboard, KeyboardAvoidingView, LayoutAnimation, Platform, StatusBar, StyleSheet, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import { useRoute, useTheme, useNavigation } from '@react-navigation/native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { Icon } from 'react-native-elements';
@@ -38,7 +26,7 @@ const SignVerify = () => {
   const [messageHasFocus, setMessageHasFocus] = useState(false);
   const [isShareVisible, setIsShareVisible] = useState(false);
 
-  const wallet = wallets.find(w => w.getID() === params.walletID);
+  const wallet = wallets.find((w) => w.getID() === params.walletID);
   const isToolbarVisibleForAndroid = Platform.OS === 'android' && messageHasFocus && isKeyboardVisible;
 
   useEffect(() => {
@@ -65,7 +53,7 @@ const SignVerify = () => {
   const handleShare = () => {
     const baseUri = 'https://bluewallet.github.io/VerifySignature';
     const uri = `${baseUri}?a=${address}&m=${encodeURIComponent(message)}&s=${encodeURIComponent(signature)}`;
-    Share.open({ message: uri }).catch(error => console.log(error));
+    Share.open({ message: uri }).catch((error) => console.log(error));
   };
 
   const handleSign = async () => {
@@ -92,13 +80,7 @@ const SignVerify = () => {
       Alert.alert(loc.errors.error, e.message);
     }
 
-    if (
-      !(await confirm(
-        loc.addresses.sign_aopp_title,
-        loc.formatString(loc.addresses.sign_aopp_confirm, { hostname: aopp.callbackHostname }),
-      ))
-    )
-      return setLoading(false);
+    if (!(await confirm(loc.addresses.sign_aopp_title, loc.formatString(loc.addresses.sign_aopp_confirm, { hostname: aopp.callbackHostname })))) return setLoading(false);
 
     try {
       await aopp.send({ address, signature: newSignature });
@@ -117,10 +99,7 @@ const SignVerify = () => {
     await sleep(10); // wait for loading indicator to appear
     try {
       const res = wallet.verifyMessage(message, address, signature);
-      Alert.alert(
-        res ? loc._.success : loc.errors.error,
-        res ? loc.addresses.sign_signature_correct : loc.addresses.sign_signature_incorrect,
-      );
+      Alert.alert(res ? loc._.success : loc.errors.error, res ? loc.addresses.sign_signature_correct : loc.addresses.sign_signature_incorrect);
       if (res) {
         ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
       }
@@ -131,7 +110,7 @@ const SignVerify = () => {
     setLoading(false);
   };
 
-  const handleFocus = value => {
+  const handleFocus = (value) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setMessageHasFocus(value);
   };
@@ -156,56 +135,13 @@ const SignVerify = () => {
             </>
           )}
 
-          <TextInput
-            multiline
-            textAlignVertical="top"
-            blurOnSubmit
-            placeholder={loc.addresses.sign_placeholder_address}
-            placeholderTextColor="#81868e"
-            value={address}
-            onChangeText={t => setAddress(t.replace('\n', ''))}
-            testID="Signature"
-            style={[styles.text, stylesHooks.text]}
-            autoCorrect={false}
-            autoCapitalize="none"
-            spellCheck={false}
-            editable={!loading}
-          />
+          <TextInput multiline textAlignVertical="top" blurOnSubmit placeholder={loc.addresses.sign_placeholder_address} placeholderTextColor="#81868e" value={address} onChangeText={(t) => setAddress(t.replace('\n', ''))} testID="Signature" style={[styles.text, stylesHooks.text]} autoCorrect={false} autoCapitalize="none" spellCheck={false} editable={!loading} />
           <BlueSpacing10 />
 
-          <TextInput
-            multiline
-            textAlignVertical="top"
-            blurOnSubmit
-            placeholder={loc.addresses.sign_placeholder_signature}
-            placeholderTextColor="#81868e"
-            value={signature}
-            onChangeText={t => setSignature(t.replace('\n', ''))}
-            testID="Signature"
-            style={[styles.text, stylesHooks.text]}
-            autoCorrect={false}
-            autoCapitalize="none"
-            spellCheck={false}
-            editable={!loading}
-          />
+          <TextInput multiline textAlignVertical="top" blurOnSubmit placeholder={loc.addresses.sign_placeholder_signature} placeholderTextColor="#81868e" value={signature} onChangeText={(t) => setSignature(t.replace('\n', ''))} testID="Signature" style={[styles.text, stylesHooks.text]} autoCorrect={false} autoCapitalize="none" spellCheck={false} editable={!loading} />
           <BlueSpacing10 />
 
-          <TextInput
-            multiline
-            placeholder={loc.addresses.sign_placeholder_message}
-            placeholderTextColor="#81868e"
-            value={message}
-            onChangeText={setMessage}
-            testID="Message"
-            inputAccessoryViewID={BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID}
-            style={[styles.flex, styles.text, styles.textMessage, stylesHooks.text]}
-            autoCorrect={false}
-            autoCapitalize="none"
-            spellCheck={false}
-            editable={!loading}
-            onFocus={() => handleFocus(true)}
-            onBlur={() => handleFocus(false)}
-          />
+          <TextInput multiline placeholder={loc.addresses.sign_placeholder_message} placeholderTextColor="#81868e" value={message} onChangeText={setMessage} testID="Message" inputAccessoryViewID={BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID} style={[styles.flex, styles.text, styles.textMessage, stylesHooks.text]} autoCorrect={false} autoCapitalize="none" spellCheck={false} editable={!loading} onFocus={() => handleFocus(true)} onBlur={() => handleFocus(false)} />
           <BlueSpacing10 />
 
           {isShareVisible && !isKeyboardVisible && (
@@ -228,11 +164,7 @@ const SignVerify = () => {
           {!isKeyboardVisible && (
             <>
               <FContainer inline>
-                <FButton
-                  onPress={handleSign}
-                  text={params.aoppURI ? loc.addresses.sign_sign_submit : loc.addresses.sign_sign}
-                  disabled={loading}
-                />
+                <FButton onPress={handleSign} text={params.aoppURI ? loc.addresses.sign_sign_submit : loc.addresses.sign_sign} disabled={loading} />
                 <FButton onPress={handleVerify} text={loc.addresses.sign_verify} disabled={loading} />
               </FContainer>
               <BlueSpacing10 />
@@ -243,7 +175,7 @@ const SignVerify = () => {
             ios: (
               <BlueDoneAndDismissKeyboardInputAccessory
                 onClearTapped={() => setMessage('')}
-                onPasteTapped={text => {
+                onPasteTapped={(text) => {
                   setMessage(text);
                   Keyboard.dismiss();
                 }}
@@ -255,7 +187,7 @@ const SignVerify = () => {
                   setMessage('');
                   Keyboard.dismiss();
                 }}
-                onPasteTapped={text => {
+                onPasteTapped={(text) => {
                   setMessage(text);
                   Keyboard.dismiss();
                 }}
@@ -268,7 +200,7 @@ const SignVerify = () => {
   );
 };
 
-SignVerify.navigationOptions = navigationStyle({ closeButton: true, headerHideBackButton: true }, opts => ({
+SignVerify.navigationOptions = navigationStyle({ closeButton: true, headerHideBackButton: true }, (opts) => ({
   ...opts,
   title: loc.addresses.sign_title,
 }));

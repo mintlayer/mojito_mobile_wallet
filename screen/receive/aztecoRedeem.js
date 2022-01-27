@@ -85,7 +85,7 @@ export default class AztecoRedeem extends Component {
     console.log('AztecoRedeem - componentDidMount');
   }
 
-  onWalletSelect = toWallet => {
+  onWalletSelect = (toWallet) => {
     this.setState({ toWallet }, () => {
       this.props.navigation.pop();
     });
@@ -185,4 +185,4 @@ AztecoRedeem.propTypes = {
   }),
 };
 
-AztecoRedeem.navigationOptions = navigationStyleTx({}, opts => ({ ...opts, title: loc.azteco.title }));
+AztecoRedeem.navigationOptions = navigationStyleTx({}, (opts) => ({ ...opts, title: loc.azteco.title }));

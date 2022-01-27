@@ -117,4 +117,4 @@ RBFBumpFee.propTypes = {
     }),
   }),
 };
-RBFBumpFee.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.transactions.rbf_title }));
+RBFBumpFee.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.transactions.rbf_title }));

@@ -33,7 +33,7 @@ export const FContainer = forwardRef((props, ref) => {
   const [newWidth, setNewWidth] = useState();
   const layoutCalculated = useRef(false);
 
-  const onLayout = event => {
+  const onLayout = (event) => {
     if (layoutCalculated.current) return;
     const maxWidth = Dimensions.get('window').width - BORDER_RADIUS - 20;
     const { width } = event.nativeEvent.layout;
@@ -46,11 +46,7 @@ export const FContainer = forwardRef((props, ref) => {
   };
 
   return (
-    <View
-      ref={ref}
-      onLayout={onLayout}
-      style={[cStyles.root, props.inline ? cStyles.rootInline : cStyles.rootAbsolute, newWidth ? cStyles.rootPost : cStyles.rootPre]}
-    >
+    <View ref={ref} onLayout={onLayout} style={[cStyles.root, props.inline ? cStyles.rootInline : cStyles.rootAbsolute, newWidth ? cStyles.rootPost : cStyles.rootPre]}>
       {newWidth
         ? React.Children.toArray(props.children)
             .filter(Boolean)
@@ -72,10 +68,7 @@ FContainer.propTypes = {
   inline: PropTypes.bool,
 };
 
-const buttonFontSize =
-  PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26) > 22
-    ? 22
-    : PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26);
+const buttonFontSize = PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26) > 22 ? 22 : PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26);
 
 const bStyles = StyleSheet.create({
   root: {

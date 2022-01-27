@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { BitcoinUnit } from '../models/bitcoinUnits';
 import { useTheme } from '@react-navigation/native';
 
-export const LNNodeBar = props => {
+export const LNNodeBar = (props) => {
   const { canReceive = 0, canSend = 0, nodeAlias = '', disabled = false, itemPriceUnit = BitcoinUnit.SATS } = props;
   const { colors } = useTheme();
   const opacity = { opacity: disabled ? 0.5 : 1.0 };

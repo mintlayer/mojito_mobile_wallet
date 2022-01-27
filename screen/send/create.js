@@ -61,7 +61,7 @@ const SendCreate = () => {
         url: 'file://' + filePath,
         saveToFiles: isDesktop,
       })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         })
         .finally(() => {
@@ -122,9 +122,7 @@ const SendCreate = () => {
           <Text style={[styles.transactionDetailsSubtitle, styleHooks.transactionDetailsSubtitle]}>
             {currency.satoshiToBTC(item.value)} {BitcoinUnit.BTC}
           </Text>
-          {recipients.length > 1 && (
-            <BlueText style={styles.itemOf}>{loc.formatString(loc._.of, { number: index + 1, total: recipients.length })}</BlueText>
-          )}
+          {recipients.length > 1 && <BlueText style={styles.itemOf}>{loc.formatString(loc._.of, { number: index + 1, total: recipients.length })}</BlueText>}
         </View>
       </>
     );
@@ -150,11 +148,7 @@ const SendCreate = () => {
       <TouchableOpacity accessibilityRole="button" style={styles.actionTouch} onPress={() => Clipboard.setString(tx)}>
         <Text style={styles.actionText}>{loc.send.create_copy}</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        accessibilityRole="button"
-        style={styles.actionTouch}
-        onPress={() => Linking.openURL('https://coinb.in/?verify=' + tx)}
-      >
+      <TouchableOpacity accessibilityRole="button" style={styles.actionTouch} onPress={() => Linking.openURL('https://coinb.in/?verify=' + tx)}>
         <Text style={styles.actionText}>{loc.send.create_verify}</Text>
       </TouchableOpacity>
     </View>
@@ -179,20 +173,7 @@ const SendCreate = () => {
     </View>
   );
 
-  return (
-    <FlatList
-      contentContainerStyle={[styles.root, styleHooks.root]}
-      extraData={recipients}
-      data={recipients}
-      renderItem={_renderItem}
-      keyExtractor={(_item, index) => `${index}`}
-      ItemSeparatorComponent={renderSeparator}
-      ListHeaderComponent={ListHeaderComponent}
-      ListFooterComponent={ListFooterComponent}
-      contentInsetAdjustmentBehavior="automatic"
-      automaticallyAdjustContentInsets
-    />
-  );
+  return <FlatList contentContainerStyle={[styles.root, styleHooks.root]} extraData={recipients} data={recipients} renderItem={_renderItem} keyExtractor={(_item, index) => `${index}`} ItemSeparatorComponent={renderSeparator} ListHeaderComponent={ListHeaderComponent} ListFooterComponent={ListFooterComponent} contentInsetAdjustmentBehavior="automatic" automaticallyAdjustContentInsets />;
 };
 
 export default SendCreate;

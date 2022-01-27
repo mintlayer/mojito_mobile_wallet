@@ -53,6 +53,7 @@ export class AbstractWallet {
   masterFingerprint: number | false;
 
   constructor() {
+    // eslint-disable-next-line prettier/prettier
     const Constructor = this.constructor as unknown as WalletStatics;
 
     this.type = Constructor.type;
@@ -84,6 +85,7 @@ export class AbstractWallet {
   }
 
   getID(): string {
+    // eslint-disable-next-line prettier/prettier
     const thisWithPassphrase = this as unknown as WalletWithPassphrase;
     const passphrase = thisWithPassphrase.getPassphrase ? thisWithPassphrase.getPassphrase() : '';
     const path = this._derivationPath ?? '';
@@ -261,9 +263,7 @@ export class AbstractWallet {
         this.secret = parsedSecret.ExtPubKey;
         const mfp = Buffer.from(parsedSecret.MasterFingerprint, 'hex').reverse().toString('hex');
         this.masterFingerprint = parseInt(mfp, 16);
-        this._derivationPath = parsedSecret.AccountKeyPath.startsWith('m/')
-          ? parsedSecret.AccountKeyPath
-          : `m/${parsedSecret.AccountKeyPath}`;
+        this._derivationPath = parsedSecret.AccountKeyPath.startsWith('m/') ? parsedSecret.AccountKeyPath : `m/${parsedSecret.AccountKeyPath}`;
         if (parsedSecret.CoboVaultFirmwareVersion) this.use_with_hardware_wallet = true;
       }
     } catch (_) {}
@@ -336,11 +336,11 @@ export class AbstractWallet {
   }
 
   getAddressAsync(): Promise<string | false | undefined> {
-    return new Promise(resolve => resolve(this.getAddress()));
+    return new Promise((resolve) => resolve(this.getAddress()));
   }
 
   async getChangeAddressAsync(): Promise<string | false | undefined> {
-    return new Promise(resolve => resolve(this.getAddress()));
+    return new Promise((resolve) => resolve(this.getAddress()));
   }
 
   useWithHardwareWalletEnabled(): boolean {

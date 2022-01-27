@@ -1,13 +1,11 @@
-* check lint 2 
-* check lint 1 
-* linter 3 
-* Super Linter 1 
-* Super Linter 
-* lint file 2 
-* lint file 1 
-* lint file 
-* lint file 
-* fonts integration 
-* refactor code 
-* Code refactor and eslint issue resolved 
-* Introduction 
+* lint and jest working 
+* change yml file 2 
+* change yml file 1 
+* git auth error fix 
+* jest fix 
+* work on ci cd for jest 
+* jest error fix 
+* working fine lint 
+* working 2 
+* wokring 1 
+* wokring 1 

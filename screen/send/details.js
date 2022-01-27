@@ -1,22 +1,5 @@
 import React, { useState, useRef, useEffect, useContext, useMemo } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  Dimensions,
-  FlatList,
-  I18nManager,
-  Keyboard,
-  KeyboardAvoidingView,
-  LayoutAnimation,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, FlatList, I18nManager, Keyboard, KeyboardAvoidingView, LayoutAnimation, Platform, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -132,12 +115,12 @@ const SendDetails = () => {
       try {
         const { address, amount, memo, payjoinUrl } = DeeplinkSchemaMatch.decodeBitcoinUri(routeParams.uri);
 
-        setUnits(units => {
+        setUnits((units) => {
           units[scrollIndex.current] = BitcoinUnit.BTC; // also resetting current unit to BTC
           return [...units];
         });
 
-        setAddresses(addresses => {
+        setAddresses((addresses) => {
           if (currentAddress) {
             currentAddress.address = address;
             if (Number(amount) > 0) {
@@ -162,7 +145,7 @@ const SendDetails = () => {
       }
     } else if (routeParams.address) {
       const { amount, amountSats, unit = BitcoinUnit.BTC } = routeParams;
-      setAddresses(addresses => {
+      setAddresses((addresses) => {
         if (currentAddress) {
           currentAddress.address = routeParams.address;
           addresses[scrollIndex.current] = currentAddress;
@@ -174,7 +157,7 @@ const SendDetails = () => {
       if (routeParams.memo?.trim().length > 0) {
         setTransactionMemo(routeParams.memo);
       }
-      setUnits(units => {
+      setUnits((units) => {
         units[scrollIndex.current] = unit;
         return [...units];
       });
@@ -186,13 +169,13 @@ const SendDetails = () => {
 
   useEffect(() => {
     // check if we have a suitable wallet
-    const suitable = wallets.filter(wallet => wallet.chain === Chain.ONCHAIN && wallet.allowSend());
+    const suitable = wallets.filter((wallet) => wallet.chain === Chain.ONCHAIN && wallet.allowSend());
     if (suitable.length === 0) {
       Alert.alert(loc.errors.error, loc.send.details_wallet_before_tx);
       navigation.goBack();
       return;
     }
-    const wallet = (routeParams.walletID && wallets.find(w => w.getID() === routeParams.walletID)) || suitable[0];
+    const wallet = (routeParams.walletID && wallets.find((w) => w.getID() === routeParams.walletID)) || suitable[0];
     setWallet(wallet);
     setFeeUnit(wallet.getPreferredBalanceUnit());
     setAmountUnit(wallet.preferredBalanceUnit); // default for whole screen
@@ -202,23 +185,23 @@ const SendDetails = () => {
 
     // load cached fees
     AsyncStorage.getItem(NetworkTransactionFee.StorageKey)
-      .then(res => {
+      .then((res) => {
         const fees = JSON.parse(res);
         if (!fees?.fastestFee) return;
         setNetworkTransactionFees(fees);
       })
-      .catch(e => console.log('loading cached recommendedFees error', e));
+      .catch((e) => console.log('loading cached recommendedFees error', e));
 
     // load fresh fees from servers
 
     setNetworkTransactionFeesIsLoading(true);
     NetworkTransactionFees.recommendedFees()
-      .then(async fees => {
+      .then(async (fees) => {
         if (!fees?.fastestFee) return;
         setNetworkTransactionFees(fees);
         await AsyncStorage.setItem(NetworkTransactionFee.StorageKey, JSON.stringify(fees));
       })
-      .catch(e => console.log('loading recommendedFees error', e))
+      .catch((e) => console.log('loading recommendedFees error', e))
       .finally(() => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setNetworkTransactionFeesIsLoading(false);
@@ -240,9 +223,9 @@ const SendDetails = () => {
       .fetchUtxo()
       .then(() => {
         // we need to re-calculate fees
-        setDumb(v => !v);
+        setDumb((v) => !v);
       })
-      .catch(e => console.log('fetchUtxo error', e));
+      .catch((e) => console.log('fetchUtxo error', e));
   }, [wallet]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // recalc fees in effect so we don't block render
@@ -286,7 +269,7 @@ const SendDetails = () => {
       }
 
       // replace wrong addresses with dump
-      targets = targets.map(t => {
+      targets = targets.map((t) => {
         if (!wallet.isAddressValid(t.address)) {
           return { ...t, address: '36JxaUrpDzkEerkTf1FzwHNE1Hb7cCjgJV' };
         } else {
@@ -369,7 +352,7 @@ const SendDetails = () => {
    *
    * @param data {String} Can be address or `bitcoin:xxxxxxx` uri scheme, or invalid garbage
    */
-  const processAddressData = data => {
+  const processAddressData = (data) => {
     const currentIndex = scrollIndex.current;
     setIsLoading(true);
     if (!data.replace) {
@@ -380,7 +363,7 @@ const SendDetails = () => {
 
     const dataWithoutSchema = data.replace('bitcoin:', '').replace('BITCOIN:', '');
     if (wallet.isAddressValid(dataWithoutSchema)) {
-      setAddresses(addresses => {
+      setAddresses((addresses) => {
         addresses[scrollIndex.current].address = dataWithoutSchema;
         return [...addresses];
       });
@@ -405,13 +388,13 @@ const SendDetails = () => {
 
     console.log('options', options);
     if (btcAddressRx.test(address) || address.startsWith('bc1') || address.startsWith('BC1')) {
-      setAddresses(addresses => {
+      setAddresses((addresses) => {
         addresses[scrollIndex.current].address = address;
         addresses[scrollIndex.current].amount = options.amount;
         addresses[scrollIndex.current].amountSats = new BigNumber(options.amount).multipliedBy(100000000).toNumber();
         return [...addresses];
       });
-      setUnits(units => {
+      setUnits((units) => {
         units[scrollIndex.current] = BitcoinUnit.BTC; // also resetting current unit to BTC
         return [...units];
       });
@@ -503,13 +486,7 @@ const SendDetails = () => {
       }
     }
 
-    const { tx, outputs, psbt, fee } = wallet.createTransaction(
-      lutxo,
-      targets,
-      requestedSatPerByte,
-      changeAddress,
-      isTransactionReplaceable ? HDSegwitBech32Wallet.defaultRBFSequence : HDSegwitBech32Wallet.finalRBFSequence,
-    );
+    const { tx, outputs, psbt, fee } = wallet.createTransaction(lutxo, targets, requestedSatPerByte, changeAddress, isTransactionReplaceable ? HDSegwitBech32Wallet.defaultRBFSequence : HDSegwitBech32Wallet.finalRBFSequence);
 
     if (tx && routeParams.launchedBy && psbt) {
       console.warn('navigating back to ', routeParams.launchedBy);
@@ -568,7 +545,7 @@ const SendDetails = () => {
     setIsLoading(false);
   };
 
-  const onWalletSelect = wallet => {
+  const onWalletSelect = (wallet) => {
     setWallet(wallet);
     navigation.pop();
   };
@@ -594,7 +571,7 @@ const SendDetails = () => {
     });
   };
 
-  const importQrTransactionOnBarScanned = ret => {
+  const importQrTransactionOnBarScanned = (ret) => {
     navigation.dangerouslyGetParent().pop();
     if (!ret.data) ret = { data: ret };
     if (ret.data.toUpperCase().startsWith('UR')) {
@@ -633,10 +610,7 @@ const SendDetails = () => {
 
     try {
       const res = await DocumentPicker.pick({
-        type:
-          Platform.OS === 'ios'
-            ? ['io.bluewallet.psbt', 'io.bluewallet.psbt.txn', DocumentPicker.types.plainText, 'public.json']
-            : [DocumentPicker.types.allFiles],
+        type: Platform.OS === 'ios' ? ['io.bluewallet.psbt', 'io.bluewallet.psbt.txn', DocumentPicker.types.plainText, 'public.json'] : [DocumentPicker.types.allFiles],
       });
 
       if (DeeplinkSchemaMatch.isPossiblySignedPSBTFile(res.uri)) {
@@ -680,7 +654,7 @@ const SendDetails = () => {
   };
 
   const askCosignThisTransaction = async () => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       Alert.alert(
         '',
         loc.multisig.cosign_this_transaction,
@@ -700,7 +674,7 @@ const SendDetails = () => {
     });
   };
 
-  const _importTransactionMultisig = async base64arg => {
+  const _importTransactionMultisig = async (base64arg) => {
     try {
       const base64 = base64arg || (await fs.openSignedTransaction());
       if (!base64) return;
@@ -731,7 +705,7 @@ const SendDetails = () => {
     return _importTransactionMultisig();
   };
 
-  const onBarScanned = ret => {
+  const onBarScanned = (ret) => {
     navigation.dangerouslyGetParent().pop();
     if (!ret.data) ret = { data: ret };
     if (ret.data.toUpperCase().startsWith('UR')) {
@@ -758,7 +732,7 @@ const SendDetails = () => {
 
   const handleAddRecipient = async () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut, () => scrollView.current.scrollToEnd());
-    setAddresses(addresses => [...addresses, { address: '', key: String(Math.random()) }]);
+    setAddresses((addresses) => [...addresses, { address: '', key: String(Math.random()) }]);
     setOptionsVisible(false);
     scrollView.current.scrollToEnd();
     if (addresses.length === 0) return;
@@ -769,7 +743,7 @@ const SendDetails = () => {
   const handleRemoveRecipient = async () => {
     const last = scrollIndex.current === addresses.length - 1;
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setAddresses(addresses => {
+    setAddresses((addresses) => {
       addresses.splice(scrollIndex.current, 1);
       return [...addresses];
     });
@@ -784,14 +758,14 @@ const SendDetails = () => {
     setOptionsVisible(false);
     navigation.navigate('CoinControl', {
       walletID: wallet.getID(),
-      onUTXOChoose: utxo => setUtxo(utxo),
+      onUTXOChoose: (utxo) => setUtxo(utxo),
     });
   };
 
   const handlePsbtSign = async () => {
     setIsLoading(true);
     setOptionsVisible(false);
-    await new Promise(resolve => setTimeout(resolve, 100)); // sleep for animations
+    await new Promise((resolve) => setTimeout(resolve, 100)); // sleep for animations
     const scannedData = await scanqr(navigation.navigate, name);
     if (!scannedData) return setIsLoading(false);
 
@@ -835,7 +809,7 @@ const SendDetails = () => {
 
   // Header Right Button
 
-  const headerRightOnPress = id => {
+  const headerRightOnPress = (id) => {
     if (id === SendDetails.actionKeys.AddRecipient) {
       handleAddRecipient();
     } else if (id === SendDetails.actionKeys.RemoveRecipient) {
@@ -862,7 +836,7 @@ const SendDetails = () => {
   const headerRightActions = () => {
     const actions = [];
     if (isEditable) {
-      const isSendMaxUsed = addresses.some(element => element.amount === BitcoinUnit.MAX);
+      const isSendMaxUsed = addresses.some((element) => element.amount === BitcoinUnit.MAX);
 
       actions.push([{ id: SendDetails.actionKeys.SendMax, text: loc.send.details_adv_full, disabled: balance === 0 || isSendMaxUsed }]);
       if (wallet.type === HDSegwitBech32Wallet.type) {
@@ -923,13 +897,7 @@ const SendDetails = () => {
     navigation.setOptions({
       headerRight: Platform.select({
         ios: () => (
-          <ToolTipMenu
-            disabled={isLoading}
-            isButton
-            isMenuPrimaryAction
-            onPressMenuItem={headerRightOnPress}
-            actions={headerRightActions()}
-          >
+          <ToolTipMenu disabled={isLoading} isButton isMenuPrimaryAction onPressMenuItem={headerRightOnPress} actions={headerRightActions()}>
             <Icon size={22} name="kebab-horizontal" type="octicon" color={colors.foregroundColor} style={styles.advancedOptions} />
           </ToolTipMenu>
         ),
@@ -951,7 +919,7 @@ const SendDetails = () => {
     });
   };
 
-  const onReplaceableFeeSwitchValueChanged = value => {
+  const onReplaceableFeeSwitchValueChanged = (value) => {
     setIsTransactionReplaceable(value);
   };
 
@@ -959,7 +927,7 @@ const SendDetails = () => {
 
   // because of https://github.com/facebook/react-native/issues/21718 we use
   // onScroll for android and onMomentumScrollEnd for iOS
-  const handleRecipientsScrollEnds = e => {
+  const handleRecipientsScrollEnds = (e) => {
     if (Platform.OS === 'android') return; // for android we use handleRecipientsScroll
     const contentOffset = e.nativeEvent.contentOffset;
     const viewSize = e.nativeEvent.layoutMeasurement;
@@ -967,7 +935,7 @@ const SendDetails = () => {
     scrollIndex.current = index;
   };
 
-  const handleRecipientsScroll = e => {
+  const handleRecipientsScroll = (e) => {
     if (Platform.OS === 'ios') return; // for iOS we use handleRecipientsScrollEnds
     const contentOffset = e.nativeEvent.contentOffset;
     const viewSize = e.nativeEvent.layoutMeasurement;
@@ -985,12 +953,12 @@ const SendDetails = () => {
           text: loc._.ok,
           onPress: () => {
             Keyboard.dismiss();
-            setAddresses(addresses => {
+            setAddresses((addresses) => {
               addresses[scrollIndex.current].amount = BitcoinUnit.MAX;
               addresses[scrollIndex.current].amountSats = BitcoinUnit.MAX;
               return [...addresses];
             });
-            setUnits(units => {
+            setUnits((units) => {
               units[scrollIndex.current] = BitcoinUnit.BTC;
               return [...units];
             });
@@ -1005,7 +973,7 @@ const SendDetails = () => {
     );
   };
 
-  const formatFee = fee => formatBalance(fee, feeUnit, true);
+  const formatFee = (fee) => formatBalance(fee, feeUnit, true);
 
   const stylesHook = StyleSheet.create({
     loading: {
@@ -1099,11 +1067,7 @@ const SendDetails = () => {
     ];
 
     return (
-      <BottomModal
-        deviceWidth={width + width / 2}
-        isVisible={isFeeSelectionModalVisible}
-        onClose={() => setIsFeeSelectionModalVisible(false)}
-      >
+      <BottomModal deviceWidth={width + width / 2} isVisible={isFeeSelectionModalVisible} onClose={() => setIsFeeSelectionModalVisible(false)}>
         <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
           <View style={[styles.modalContent, stylesHook.modalContent]}>
             {options.map(({ label, time, fee, rate, active, disabled }, index) => (
@@ -1112,16 +1076,14 @@ const SendDetails = () => {
                 key={label}
                 disabled={disabled}
                 onPress={() => {
-                  setFeePrecalc(fp => ({ ...fp, current: fee }));
+                  setFeePrecalc((fp) => ({ ...fp, current: fee }));
                   setIsFeeSelectionModalVisible(false);
                   setCustomFee(rate.toString());
                 }}
                 style={[styles.feeModalItem, active && styles.feeModalItemActive, active && !disabled && stylesHook.feeModalItemActive]}
               >
                 <View style={styles.feeModalRow}>
-                  <Text style={[styles.feeModalLabel, disabled ? stylesHook.feeModalItemTextDisabled : stylesHook.feeModalLabel]}>
-                    {label}
-                  </Text>
+                  <Text style={[styles.feeModalLabel, disabled ? stylesHook.feeModalItemTextDisabled : stylesHook.feeModalLabel]}>{label}</Text>
                   <View style={[styles.feeModalTime, disabled ? stylesHook.feeModalItemDisabled : stylesHook.feeModalTime]}>
                     <Text style={stylesHook.feeModalTimeText}>~{time}</Text>
                   </View>
@@ -1171,86 +1133,26 @@ const SendDetails = () => {
   };
 
   const renderOptionsModal = () => {
-    const isSendMaxUsed = addresses.some(element => element.amount === BitcoinUnit.MAX);
+    const isSendMaxUsed = addresses.some((element) => element.amount === BitcoinUnit.MAX);
 
     return (
       <BottomModal deviceWidth={width + width / 2} isVisible={optionsVisible} onClose={hideOptions}>
         <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
           <View style={[styles.optionsContent, stylesHook.optionsContent]}>
-            {isEditable && (
-              <BlueListItem
-                testID="sendMaxButton"
-                disabled={balance === 0 || isSendMaxUsed}
-                title={loc.send.details_adv_full}
-                hideChevron
-                component={TouchableOpacity}
-                onPress={onUseAllPressed}
-              />
-            )}
-            {wallet.type === HDSegwitBech32Wallet.type && isEditable && (
-              <BlueListItem
-                title={loc.send.details_adv_fee_bump}
-                Component={TouchableWithoutFeedback}
-                switch={{ value: isTransactionReplaceable, onValueChange: onReplaceableFeeSwitchValueChanged }}
-              />
-            )}
-            {wallet.type === WatchOnlyWallet.type && wallet.isHd() && (
-              <BlueListItem title={loc.send.details_adv_import} hideChevron component={TouchableOpacity} onPress={importTransaction} />
-            )}
-            {wallet.type === WatchOnlyWallet.type && wallet.isHd() && (
-              <BlueListItem
-                testID="ImportQrTransactionButton"
-                title={loc.send.details_adv_import_qr}
-                hideChevron
-                component={TouchableOpacity}
-                onPress={importQrTransaction}
-              />
-            )}
-            {wallet.type === MultisigHDWallet.type && isEditable && (
-              <BlueListItem
-                title={loc.send.details_adv_import}
-                hideChevron
-                component={TouchableOpacity}
-                onPress={importTransactionMultisig}
-              />
-            )}
-            {wallet.type === MultisigHDWallet.type && wallet.howManySignaturesCanWeMake() > 0 && isEditable && (
-              <BlueListItem
-                title={loc.multisig.co_sign_transaction}
-                hideChevron
-                component={TouchableOpacity}
-                onPress={importTransactionMultisigScanQr}
-              />
-            )}
+            {isEditable && <BlueListItem testID="sendMaxButton" disabled={balance === 0 || isSendMaxUsed} title={loc.send.details_adv_full} hideChevron component={TouchableOpacity} onPress={onUseAllPressed} />}
+            {wallet.type === HDSegwitBech32Wallet.type && isEditable && <BlueListItem title={loc.send.details_adv_fee_bump} Component={TouchableWithoutFeedback} switch={{ value: isTransactionReplaceable, onValueChange: onReplaceableFeeSwitchValueChanged }} />}
+            {wallet.type === WatchOnlyWallet.type && wallet.isHd() && <BlueListItem title={loc.send.details_adv_import} hideChevron component={TouchableOpacity} onPress={importTransaction} />}
+            {wallet.type === WatchOnlyWallet.type && wallet.isHd() && <BlueListItem testID="ImportQrTransactionButton" title={loc.send.details_adv_import_qr} hideChevron component={TouchableOpacity} onPress={importQrTransaction} />}
+            {wallet.type === MultisigHDWallet.type && isEditable && <BlueListItem title={loc.send.details_adv_import} hideChevron component={TouchableOpacity} onPress={importTransactionMultisig} />}
+            {wallet.type === MultisigHDWallet.type && wallet.howManySignaturesCanWeMake() > 0 && isEditable && <BlueListItem title={loc.multisig.co_sign_transaction} hideChevron component={TouchableOpacity} onPress={importTransactionMultisigScanQr} />}
             {isEditable && (
               <>
-                <BlueListItem
-                  testID="AddRecipient"
-                  title={loc.send.details_add_rec_add}
-                  hideChevron
-                  component={TouchableOpacity}
-                  onPress={handleAddRecipient}
-                />
-                <BlueListItem
-                  testID="RemoveRecipient"
-                  title={loc.send.details_add_rec_rem}
-                  hideChevron
-                  disabled={addresses.length < 2}
-                  component={TouchableOpacity}
-                  onPress={handleRemoveRecipient}
-                />
+                <BlueListItem testID="AddRecipient" title={loc.send.details_add_rec_add} hideChevron component={TouchableOpacity} onPress={handleAddRecipient} />
+                <BlueListItem testID="RemoveRecipient" title={loc.send.details_add_rec_rem} hideChevron disabled={addresses.length < 2} component={TouchableOpacity} onPress={handleRemoveRecipient} />
               </>
             )}
             <BlueListItem testID="CoinControl" title={loc.cc.header} hideChevron component={TouchableOpacity} onPress={handleCoinControl} />
-            {wallet.allowCosignPsbt() && isEditable && (
-              <BlueListItem
-                testID="PsbtSign"
-                title={loc.send.psbt_sign}
-                hideChevron
-                component={TouchableOpacity}
-                onPress={handlePsbtSign}
-              />
-            )}
+            {wallet.allowCosignPsbt() && isEditable && <BlueListItem testID="PsbtSign" title={loc.send.psbt_sign} hideChevron component={TouchableOpacity} onPress={handlePsbtSign} />}
           </View>
         </KeyboardAvoidingView>
       </BottomModal>
@@ -1258,15 +1160,7 @@ const SendDetails = () => {
   };
 
   const renderCreateButton = () => {
-    return (
-      <View style={styles.createButton}>
-        {isLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <BlueButton onPress={createTransaction} title={loc.send.details_next} testID="CreateTransactionButton" />
-        )}
-      </View>
-    );
+    return <View style={styles.createButton}>{isLoading ? <ActivityIndicator /> : <BlueButton onPress={createTransaction} title={loc.send.details_next} testID="CreateTransactionButton" />}</View>;
   };
 
   const renderWalletSelectionOrCoinsSelected = () => {
@@ -1289,22 +1183,13 @@ const SendDetails = () => {
     return (
       <View style={styles.select}>
         {!isLoading && isEditable && (
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={styles.selectTouch}
-            onPress={() => navigation.navigate('SelectWallet', { onWalletSelect, chainType: Chain.ONCHAIN })}
-          >
+          <TouchableOpacity accessibilityRole="button" style={styles.selectTouch} onPress={() => navigation.navigate('SelectWallet', { onWalletSelect, chainType: Chain.ONCHAIN })}>
             <Text style={styles.selectText}>{loc.wallets.select_wallet.toLowerCase()}</Text>
             <Icon name={I18nManager.isRTL ? 'angle-left' : 'angle-right'} size={18} type="font-awesome" color="#9aa0aa" />
           </TouchableOpacity>
         )}
         <View style={styles.selectWrap}>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={styles.selectTouch}
-            onPress={() => navigation.navigate('SelectWallet', { onWalletSelect, chainType: Chain.ONCHAIN })}
-            disabled={!isEditable || isLoading}
-          >
+          <TouchableOpacity accessibilityRole="button" style={styles.selectTouch} onPress={() => navigation.navigate('SelectWallet', { onWalletSelect, chainType: Chain.ONCHAIN })} disabled={!isEditable || isLoading}>
             <Text style={[styles.selectLabel, stylesHook.selectLabel]}>{wallet.getLabel()}</Text>
           </TouchableOpacity>
         </View>
@@ -1312,15 +1197,15 @@ const SendDetails = () => {
     );
   };
 
-  const renderBitcoinTransactionInfoFields = params => {
+  const renderBitcoinTransactionInfoFields = (params) => {
     const { item, index } = params;
     return (
       <View style={{ width }} testID={'Transaction' + index}>
         <AmountInput
           isLoading={isLoading}
           amount={item.amount ? item.amount.toString() : null}
-          onAmountUnitChange={unit => {
-            setAddresses(addresses => {
+          onAmountUnitChange={(unit) => {
+            setAddresses((addresses) => {
               const item = addresses[index];
 
               switch (unit) {
@@ -1339,13 +1224,13 @@ const SendDetails = () => {
               addresses[index] = item;
               return [...addresses];
             });
-            setUnits(units => {
+            setUnits((units) => {
               units[index] = unit;
               return [...units];
             });
           }}
-          onChangeText={text => {
-            setAddresses(addresses => {
+          onChangeText={(text) => {
+            setAddresses((addresses) => {
               item.amount = text;
               switch (units[index] || amountUnit) {
                 case BitcoinUnit.BTC:
@@ -1369,10 +1254,10 @@ const SendDetails = () => {
           inputAccessoryViewID={InputAccessoryAllFunds.InputAccessoryViewID}
         />
         <AddressInput
-          onChangeText={text => {
+          onChangeText={(text) => {
             text = text.trim();
             const { address, amount, memo, payjoinUrl } = DeeplinkSchemaMatch.decodeBitcoinUri(text);
-            setAddresses(addresses => {
+            setAddresses((addresses) => {
               item.address = address || text;
               item.amount = amount || item.amount;
               addresses[index] = item;
@@ -1389,9 +1274,7 @@ const SendDetails = () => {
           launchedBy={name}
           editable={isEditable}
         />
-        {addresses.length > 1 && (
-          <Text style={[styles.of, stylesHook.of]}>{loc.formatString(loc._.of, { number: index + 1, total: addresses.length })}</Text>
-        )}
+        {addresses.length > 1 && <Text style={[styles.of, stylesHook.of]}>{loc.formatString(loc._.of, { number: index + 1, total: addresses.length })}</Text>}
       </View>
     );
   };
@@ -1405,55 +1288,22 @@ const SendDetails = () => {
   }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={[styles.root, stylesHook.root]} onLayout={e => setWidth(e.nativeEvent.layout.width)}>
+      <View style={[styles.root, stylesHook.root]} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
         <StatusBar barStyle="light-content" />
         <View>
           <KeyboardAvoidingView enabled={!Platform.isPad} behavior="position">
-            <FlatList
-              keyboardShouldPersistTaps="always"
-              scrollEnabled={addresses.length > 1}
-              data={addresses}
-              renderItem={renderBitcoinTransactionInfoFields}
-              ref={scrollView}
-              horizontal
-              pagingEnabled
-              removeClippedSubviews={false}
-              onMomentumScrollBegin={Keyboard.dismiss}
-              onMomentumScrollEnd={handleRecipientsScrollEnds}
-              onScroll={handleRecipientsScroll}
-              scrollEventThrottle={200}
-              scrollIndicatorInsets={styles.scrollViewIndicator}
-              contentContainerStyle={styles.scrollViewContent}
-            />
+            <FlatList keyboardShouldPersistTaps="always" scrollEnabled={addresses.length > 1} data={addresses} renderItem={renderBitcoinTransactionInfoFields} ref={scrollView} horizontal pagingEnabled removeClippedSubviews={false} onMomentumScrollBegin={Keyboard.dismiss} onMomentumScrollEnd={handleRecipientsScrollEnds} onScroll={handleRecipientsScroll} scrollEventThrottle={200} scrollIndicatorInsets={styles.scrollViewIndicator} contentContainerStyle={styles.scrollViewContent} />
             <View style={[styles.memo, stylesHook.memo]}>
-              <TextInput
-                onChangeText={setTransactionMemo}
-                placeholder={loc.send.details_note_placeholder}
-                placeholderTextColor="#81868e"
-                value={transactionMemo}
-                numberOfLines={1}
-                style={styles.memoText}
-                editable={!isLoading}
-                onSubmitEditing={Keyboard.dismiss}
-                inputAccessoryViewID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID}
-              />
+              <TextInput onChangeText={setTransactionMemo} placeholder={loc.send.details_note_placeholder} placeholderTextColor="#81868e" value={transactionMemo} numberOfLines={1} style={styles.memoText} editable={!isLoading} onSubmitEditing={Keyboard.dismiss} inputAccessoryViewID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID} />
             </View>
-            <TouchableOpacity
-              testID="chooseFee"
-              accessibilityRole="button"
-              onPress={() => setIsFeeSelectionModalVisible(true)}
-              disabled={isLoading}
-              style={styles.fee}
-            >
+            <TouchableOpacity testID="chooseFee" accessibilityRole="button" onPress={() => setIsFeeSelectionModalVisible(true)} disabled={isLoading} style={styles.fee}>
               <Text style={[styles.feeLabel, stylesHook.feeLabel]}>{loc.send.create_fee}</Text>
 
               {networkTransactionFeesIsLoading ? (
                 <ActivityIndicator />
               ) : (
                 <View style={[styles.feeRow, stylesHook.feeRow]}>
-                  <Text style={stylesHook.feeValue}>
-                    {feePrecalc.current ? formatFee(feePrecalc.current) : feeRate + ' ' + loc.units.sat_vbyte}
-                  </Text>
+                  <Text style={stylesHook.feeValue}>{feePrecalc.current ? formatFee(feePrecalc.current) : feeRate + ' ' + loc.units.sat_vbyte}</Text>
                 </View>
               )}
             </TouchableOpacity>
@@ -1465,9 +1315,7 @@ const SendDetails = () => {
         <BlueDismissKeyboardInputAccessory />
         {Platform.select({
           ios: <InputAccessoryAllFunds canUseAll={balance > 0} onUseAllPressed={onUseAllPressed} balance={allBalance} />,
-          android: isAmountToolbarVisibleForAndroid && (
-            <InputAccessoryAllFunds canUseAll={balance > 0} onUseAllPressed={onUseAllPressed} balance={allBalance} />
-          ),
+          android: isAmountToolbarVisibleForAndroid && <InputAccessoryAllFunds canUseAll={balance > 0} onUseAllPressed={onUseAllPressed} balance={allBalance} />,
         })}
 
         {renderWalletSelectionOrCoinsSelected()}
@@ -1639,7 +1487,7 @@ const styles = StyleSheet.create({
   },
 });
 
-SendDetails.navigationOptions = navigationStyleTx({}, options => ({
+SendDetails.navigationOptions = navigationStyleTx({}, (options) => ({
   ...options,
   title: loc.send.header,
 }));

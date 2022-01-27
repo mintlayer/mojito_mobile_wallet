@@ -1,18 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {
-  ActivityIndicator,
-  Alert,
-  BackHandler,
-  Keyboard,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Alert, BackHandler, Keyboard, Platform, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 import { SafeBlueArea } from '../../BlueComponents';
@@ -56,7 +45,8 @@ var webln = {
     var id = Math.random(); // eslint-disable-line
     window.ReactNativeWebView.postMessage(JSON.stringify({ makeInvoice: RequestInvoiceArgs, id: id }));
     return new Promise(function (resolve, reject) {
-      var interval = setInterval(function () { // eslint-disable-line
+      var interval = setInterval(function () {
+        // eslint-disable-line
         if (bluewalletResponses[id]) {
           clearInterval(interval);
           resolve(bluewalletResponses[id]);
@@ -302,7 +292,7 @@ export default class Browser extends Component {
 
     this.state = {
       url: url || 'https://bluewallet.io/marketplace/',
-      fromWallet: context.wallets.find(w => w.getID() === props.route.params.walletID),
+      fromWallet: context.wallets.find((w) => w.getID() === props.route.params.walletID),
       canGoBack: false,
       pageIsLoading: false,
       stateURL: url || 'https://bluewallet.io/marketplace/',
@@ -319,7 +309,7 @@ export default class Browser extends Component {
     return true;
   }
 
-  _onNavigationStateChange = webViewState => {
+  _onNavigationStateChange = (webViewState) => {
     this.setState({ canGoBack: webViewState.canGoBack, stateURL: webViewState.url });
   };
 
@@ -329,7 +319,7 @@ export default class Browser extends Component {
         onNavigationStateChange={this._onNavigationStateChange}
         ref={this.webView}
         source={{ uri: this.state.url }}
-        onMessage={e => {
+        onMessage={(e) => {
           // this is a handler which receives messages sent from within the browser
           console.log('---- message from the bus:', e.nativeEvent.data);
           let json = false;
@@ -375,12 +365,7 @@ export default class Browser extends Component {
           }
 
           if (json && json.makeInvoice) {
-            const amount = Math.max(
-              json.makeInvoice.minimumAmount || 0,
-              json.makeInvoice.maximumAmount || 0,
-              json.makeInvoice.defaultAmount || 0,
-              json.makeInvoice.amount || 0,
-            );
+            const amount = Math.max(json.makeInvoice.minimumAmount || 0, json.makeInvoice.maximumAmount || 0, json.makeInvoice.defaultAmount || 0, json.makeInvoice.amount || 0);
             Alert.alert(
               'Page',
               'This page wants to pay you ' + amount + ' sats (' + json.makeInvoice.defaultMemo + ')',
@@ -396,9 +381,7 @@ export default class Browser extends Component {
                     // Since webview.postMessage is removed from webview, we inject javascript that will manually triger document
                     // event; note how data is passed in 'detail', not 'data'
                     const jsonstr = JSON.stringify({ bluewalletResponse: { paymentRequest: payreq }, id: json.id });
-                    this.webView.current?.injectJavaScript(
-                      "document.dispatchEvent( new CustomEvent('message', { detail: '" + jsonstr + "' }) );",
-                    );
+                    this.webView.current?.injectJavaScript("document.dispatchEvent( new CustomEvent('message', { detail: '" + jsonstr + "' }) );");
 
                     // lets decode payreq and subscribe groundcontrol so we can receive push notification when our invoice is paid
                     const decoded = await fromWallet.decodeInvoice(payreq);
@@ -416,16 +399,16 @@ export default class Browser extends Component {
             this.setState({ weblnEnabled: true });
           }
         }}
-        onLoadStart={e => {
+        onLoadStart={(e) => {
           alreadyInjected = false;
           console.log('load start');
           this.setState({ pageIsLoading: true, weblnEnabled: false });
         }}
-        onLoadEnd={e => {
+        onLoadEnd={(e) => {
           console.log('load end');
           this.setState({ url: e.nativeEvent.url, pageIsLoading: false });
         }}
-        onLoadProgress={e => {
+        onLoadProgress={(e) => {
           console.log('progress:', e.nativeEvent.progress);
           if (!alreadyInjected && e.nativeEvent.progress > 0.5) {
             this.webView.current?.injectJavaScript(injectedParadise);
@@ -459,7 +442,7 @@ export default class Browser extends Component {
           <View style={styles.safeURL}>
             <View style={styles.safeURLTextWrap}>
               <TextInput
-                onChangeText={text => this.setState({ stateURL: text })}
+                onChangeText={(text) => this.setState({ stateURL: text })}
                 value={this.state.stateURL}
                 numberOfLines={1}
                 placeholderTextColor="#81868e"
@@ -489,11 +472,7 @@ export default class Browser extends Component {
                   this.setState({ url: 'https://bluewallet.io/marketplace/' });
                 }}
               >
-                <Ionicons
-                  name="ios-home"
-                  size={36}
-                  style={[styles.transparent, this.state.weblnEnabled ? styles.colorGreen : styles.colorRed]}
-                />
+                <Ionicons name="ios-home" size={36} style={[styles.transparent, this.state.weblnEnabled ? styles.colorGreen : styles.colorRed]} />
               </TouchableOpacity>
             )}
 
@@ -536,5 +515,5 @@ Browser.navigationOptions = navigationStyle(
     headerHideBackButton: true,
     closeButton: true,
   },
-  opts => ({ ...opts, title: loc.wallets.list_ln_browser }),
+  (opts) => ({ ...opts, title: loc.wallets.list_ln_browser }),
 );

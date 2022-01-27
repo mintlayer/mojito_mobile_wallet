@@ -7,14 +7,7 @@ import bip38 from 'bip38';
 import loc from '../loc';
 import { BlueSpacing20, SafeBlueArea, BlueCard, BlueText, BlueLoading } from '../BlueComponents';
 import navigationStyle from '../components/navigationStyle';
-import {
-  SegwitP2SHWallet,
-  LegacyWallet,
-  HDSegwitP2SHWallet,
-  HDSegwitBech32Wallet,
-  HDAezeedWallet,
-  SLIP39LegacyP2PKHWallet,
-} from '../class';
+import { SegwitP2SHWallet, LegacyWallet, HDSegwitP2SHWallet, HDSegwitBech32Wallet, HDAezeedWallet, SLIP39LegacyP2PKHWallet } from '../class';
 const bitcoin = require('bitcoinjs-lib');
 const BlueCrypto = require('react-native-blue-crypto');
 const encryption = require('../blue_modules/encryption');
@@ -61,8 +54,7 @@ export default class Selftest extends Component {
         await BlueElectrum.waitTillConnected();
         const addr4elect = '3GCvDBAktgQQtsbN6x5DYiQCMmgZ9Yk8BK';
         const electrumBalance = await BlueElectrum.getBalanceByAddress(addr4elect);
-        if (electrumBalance.confirmed !== 51432)
-          throw new Error('BlueElectrum getBalanceByAddress failure, got ' + JSON.stringify(electrumBalance));
+        if (electrumBalance.confirmed !== 51432) throw new Error('BlueElectrum getBalanceByAddress failure, got ' + JSON.stringify(electrumBalance));
 
         const electrumTxs = await BlueElectrum.getTransactionsByAddress(addr4elect);
         if (electrumTxs.length !== 1) throw new Error('BlueElectrum getTransactionsByAddress failure, got ' + JSON.stringify(electrumTxs));
@@ -72,9 +64,7 @@ export default class Selftest extends Component {
 
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         const aezeed = new HDAezeedWallet();
-        aezeed.setSecret(
-          'abstract rhythm weird food attract treat mosquito sight royal actor surround ride strike remove guilt catch filter summer mushroom protect poverty cruel chaos pattern',
-        );
+        aezeed.setSecret('abstract rhythm weird food attract treat mosquito sight royal actor surround ride strike remove guilt catch filter summer mushroom protect poverty cruel chaos pattern');
         assertStrictEqual(await aezeed.validateMnemonicAsync(), true, 'Aezeed failed');
         assertStrictEqual(aezeed._getExternalAddressByIndex(0), 'bc1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn', 'Aezeed failed');
       } else {
@@ -89,17 +79,13 @@ export default class Selftest extends Component {
           txid: 'cc44e933a094296d9fe424ad7306f16916253a3d154d52e4f1a757c18242cec4',
           vout: 0,
           value: 100000,
-          txhex:
-            '0200000000010161890cd52770c150da4d7d190920f43b9f88e7660c565a5a5ad141abb6de09de00000000000000008002a0860100000000001976a91426e01119d265aa980390c49eece923976c218f1588ac3e17000000000000160014c1af8c9dd85e0e55a532a952282604f820746fcd02473044022072b3f28808943c6aa588dd7a4e8f29fad7357a2814e05d6c5d767eb6b307b4e6022067bc6a8df2dbee43c87b8ce9ddd9fe678e00e0f7ae6690d5cb81eca6170c47e8012102e8fba5643e15ab70ec79528833a2c51338c1114c4eebc348a235b1a3e13ab07100000000',
+          txhex: '0200000000010161890cd52770c150da4d7d190920f43b9f88e7660c565a5a5ad141abb6de09de00000000000000008002a0860100000000001976a91426e01119d265aa980390c49eece923976c218f1588ac3e17000000000000160014c1af8c9dd85e0e55a532a952282604f820746fcd02473044022072b3f28808943c6aa588dd7a4e8f29fad7357a2814e05d6c5d767eb6b307b4e6022067bc6a8df2dbee43c87b8ce9ddd9fe678e00e0f7ae6690d5cb81eca6170c47e8012102e8fba5643e15ab70ec79528833a2c51338c1114c4eebc348a235b1a3e13ab07100000000',
         },
       ];
 
       let txNew = l.createTransaction(utxos, [{ value: 90000, address: '1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB' }], 1, l.getAddress());
       const txBitcoin = bitcoin.Transaction.fromHex(txNew.tx.toHex());
-      assertStrictEqual(
-        txNew.tx.toHex(),
-        '0200000001c4ce4282c157a7f1e4524d153d3a251669f10673ad24e49f6d2994a033e944cc000000006b48304502210091e58bd2021f2eeea8d39d7f7b053c9ccc52a747b60f1c3584ba33285e2d150602205b2d35a2536cbe157015e8c54a26f5fc350cc7c72b5ca80b9e548917993f652201210337c09b3cb889801638078fd4e6998218b28c92d338ea2602720a88847aedceb3ffffffff02905f0100000000001976a914aa381cd428a4e91327fd4434aa0a08ff131f1a5a88ac2e260000000000001976a91426e01119d265aa980390c49eece923976c218f1588ac00000000',
-      );
+      assertStrictEqual(txNew.tx.toHex(), '0200000001c4ce4282c157a7f1e4524d153d3a251669f10673ad24e49f6d2994a033e944cc000000006b48304502210091e58bd2021f2eeea8d39d7f7b053c9ccc52a747b60f1c3584ba33285e2d150602205b2d35a2536cbe157015e8c54a26f5fc350cc7c72b5ca80b9e548917993f652201210337c09b3cb889801638078fd4e6998218b28c92d338ea2602720a88847aedceb3ffffffff02905f0100000000001976a914aa381cd428a4e91327fd4434aa0a08ff131f1a5a88ac2e260000000000001976a91426e01119d265aa980390c49eece923976c218f1588ac00000000');
       assertStrictEqual(txBitcoin.ins.length, 1);
       assertStrictEqual(txBitcoin.outs.length, 2);
       assertStrictEqual('1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB', bitcoin.address.fromOutputScript(txBitcoin.outs[0].script)); // to address
@@ -151,8 +137,7 @@ export default class Selftest extends Component {
       //
 
       const bip39 = require('bip39');
-      const mnemonic =
-        'honey risk juice trip orient galaxy win situate shoot anchor bounce remind horse traffic exotic since escape mimic ramp skin judge owner topple erode';
+      const mnemonic = 'honey risk juice trip orient galaxy win situate shoot anchor bounce remind horse traffic exotic since escape mimic ramp skin judge owner topple erode';
       const seed = bip39.mnemonicToSeedSync(mnemonic);
       const root = bip32.fromSeed(seed);
 
@@ -207,23 +192,14 @@ export default class Selftest extends Component {
       // BlueCrypto test
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         const hex = await BlueCrypto.scrypt('717765727479', '4749345a22b23cf3', 64, 8, 8, 32); // using non-default parameters to speed it up (not-bip38 compliant)
-        if (hex.toUpperCase() !== 'F36AB2DC12377C788D61E6770126D8A01028C8F6D8FE01871CE0489A1F696A90')
-          throw new Error('react-native-blue-crypto is not ok');
+        if (hex.toUpperCase() !== 'F36AB2DC12377C788D61E6770126D8A01028C8F6D8FE01871CE0489A1F696A90') throw new Error('react-native-blue-crypto is not ok');
       }
 
       // bip38 test
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         let callbackWasCalled = false;
-        const decryptedKey = await bip38.decryptAsync(
-          '6PnU5voARjBBykwSddwCdcn6Eu9EcsK24Gs5zWxbJbPZYW7eiYQP8XgKbN',
-          'qwerty',
-          () => (callbackWasCalled = true),
-        );
-        assertStrictEqual(
-          wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed),
-          'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc',
-          'bip38 failed',
-        );
+        const decryptedKey = await bip38.decryptAsync('6PnU5voARjBBykwSddwCdcn6Eu9EcsK24Gs5zWxbJbPZYW7eiYQP8XgKbN', 'qwerty', () => (callbackWasCalled = true));
+        assertStrictEqual(wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc', 'bip38 failed');
         // bip38 with BlueCrypto doesn't support progress callback
         assertStrictEqual(callbackWasCalled, false, "bip38 doesn't use BlueCrypto");
       }
@@ -231,10 +207,7 @@ export default class Selftest extends Component {
       // slip39 test
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         const w = new SLIP39LegacyP2PKHWallet();
-        w.setSecret(
-          'shadow pistol academic always adequate wildlife fancy gross oasis cylinder mustang wrist rescue view short owner flip making coding armed\n' +
-            'shadow pistol academic acid actress prayer class unknown daughter sweater depict flip twice unkind craft early superior advocate guest smoking',
-        );
+        w.setSecret('shadow pistol academic always adequate wildlife fancy gross oasis cylinder mustang wrist rescue view short owner flip making coding armed\n' + 'shadow pistol academic acid actress prayer class unknown daughter sweater depict flip twice unkind craft early superior advocate guest smoking');
         assertStrictEqual(w._getExternalAddressByIndex(0), '18pvMjy7AJbCDtv4TLYbGPbR7SzGzjqUpj', 'SLIP39 failed');
       }
 

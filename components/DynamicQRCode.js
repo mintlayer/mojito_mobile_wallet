@@ -53,7 +53,7 @@ export class DynamicQRCode extends Component {
         index: 0,
       });
     } else {
-      this.setState(state => ({
+      this.setState((state) => ({
         index: state.index + 1,
       }));
     }
@@ -76,11 +76,11 @@ export class DynamicQRCode extends Component {
   moveToPreviousFragment = () => {
     const { index, total } = this.state;
     if (index > 0) {
-      this.setState(state => ({
+      this.setState((state) => ({
         index: state.index - 1,
       }));
     } else {
-      this.setState(state => ({
+      this.setState((state) => ({
         index: total - 1,
       }));
     }
@@ -109,19 +109,12 @@ export class DynamicQRCode extends Component {
           testID="DynamicCode"
           onPress={() => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-            this.setState(prevState => ({ hideControls: !prevState.hideControls }));
+            this.setState((prevState) => ({ hideControls: !prevState.hideControls }));
           }}
         >
           {this.state.displayQRCode && (
             <View style={animatedQRCodeStyle.qrcodeContainer}>
-              <QRCodeComponent
-                isLogoRendered={false}
-                value={currentFragment.toUpperCase()}
-                size={this.state.qrCodeHeight}
-                isMenuAvailable={false}
-                ecl="L"
-                onError={this.onError}
-              />
+              <QRCodeComponent isLogoRendered={false} value={currentFragment.toUpperCase()} size={this.state.qrCodeHeight} isMenuAvailable={false} ecl="L" onError={this.onError} />
             </View>
           )}
         </TouchableOpacity>
@@ -130,31 +123,17 @@ export class DynamicQRCode extends Component {
           <View style={animatedQRCodeStyle.container}>
             <BlueSpacing20 />
             <View>
-              <Text style={animatedQRCodeStyle.text}>
-                {loc.formatString(loc._.of, { number: this.state.index + 1, total: this.state.total })}
-              </Text>
+              <Text style={animatedQRCodeStyle.text}>{loc.formatString(loc._.of, { number: this.state.index + 1, total: this.state.total })}</Text>
             </View>
             <BlueSpacing20 />
             <View style={animatedQRCodeStyle.controller}>
-              <TouchableOpacity
-                accessibilityRole="button"
-                style={[animatedQRCodeStyle.button, { width: '25%', alignItems: 'flex-start' }]}
-                onPress={this.moveToPreviousFragment}
-              >
+              <TouchableOpacity accessibilityRole="button" style={[animatedQRCodeStyle.button, { width: '25%', alignItems: 'flex-start' }]} onPress={this.moveToPreviousFragment}>
                 <Text style={animatedQRCodeStyle.text}>{loc.send.dynamic_prev}</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                accessibilityRole="button"
-                style={[animatedQRCodeStyle.button, { width: '50%' }]}
-                onPress={this.state.intervalHandler ? this.stopAutoMove : this.startAutoMove}
-              >
+              <TouchableOpacity accessibilityRole="button" style={[animatedQRCodeStyle.button, { width: '50%' }]} onPress={this.state.intervalHandler ? this.stopAutoMove : this.startAutoMove}>
                 <Text style={animatedQRCodeStyle.text}>{this.state.intervalHandler ? loc.send.dynamic_stop : loc.send.dynamic_start}</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                accessibilityRole="button"
-                style={[animatedQRCodeStyle.button, { width: '25%', alignItems: 'flex-end' }]}
-                onPress={this.moveToNextFragment}
-              >
+              <TouchableOpacity accessibilityRole="button" style={[animatedQRCodeStyle.button, { width: '25%', alignItems: 'flex-end' }]} onPress={this.moveToNextFragment}>
                 <Text style={animatedQRCodeStyle.text}>{loc.send.dynamic_next}</Text>
               </TouchableOpacity>
             </View>

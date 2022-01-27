@@ -5,7 +5,7 @@ import { HDLegacyBreadwalletWallet } from '../../class';
 import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 300 * 1000;
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 afterAll(async () => {
   // after all tests we close socket so the test suite can actually terminate
@@ -38,12 +38,7 @@ it('Legacy HD Breadwallet can fetch balance and create transaction', async () =>
 
   // try to create a tx
   await wallet.fetchUtxo();
-  const { tx } = wallet.createTransaction(
-    wallet.getUtxo(),
-    [{ address: 'bc1q47efz9aav8g4mnnz9r6ql4pf48phy3g509p7gx' }],
-    1,
-    'bc1qk9hvkxqsqmps6ex3qawr79rvtg8es4ecjfu5v0',
-  );
+  const { tx } = wallet.createTransaction(wallet.getUtxo(), [{ address: 'bc1q47efz9aav8g4mnnz9r6ql4pf48phy3g509p7gx' }], 1, 'bc1qk9hvkxqsqmps6ex3qawr79rvtg8es4ecjfu5v0');
 
   const transaction = bitcoin.Transaction.fromHex(tx.toHex());
   assert.ok(transaction.ins.length === 4);

@@ -11,20 +11,7 @@ const fs = require('../blue_modules/fs');
 
 const isDesktop = getSystemName() === 'Mac OS X';
 
-const AddressInput = ({
-  isLoading = false,
-  address = '',
-  placeholder = loc.send.details_address,
-  onChangeText,
-  onBarScanned,
-  onBarScannerDismissWithoutData = () => {},
-  scanButtonTapped = () => {},
-  launchedBy,
-  editable = true,
-  inputAccessoryViewID,
-  onBlur = () => {},
-  keyboardType = 'default',
-}) => {
+const AddressInput = ({ isLoading = false, address = '', placeholder = loc.send.details_address, onChangeText, onBarScanned, onBarScannerDismissWithoutData = () => {}, scanButtonTapped = () => {}, launchedBy, editable = true, inputAccessoryViewID, onBlur = () => {}, keyboardType = 'default' }) => {
   const { colors } = useTheme();
   const scanButtonRef = useRef();
 
@@ -49,22 +36,7 @@ const AddressInput = ({
 
   return (
     <View style={[styles.root, stylesHook.root]}>
-      <TextInput
-        testID="AddressInput"
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor="#81868e"
-        value={address}
-        style={styles.input}
-        editable={!isLoading && editable}
-        multiline={!editable}
-        inputAccessoryViewID={inputAccessoryViewID}
-        clearButtonMode="while-editing"
-        onBlur={onBlurEditing}
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType={keyboardType}
-      />
+      <TextInput testID="AddressInput" onChangeText={onChangeText} placeholder={placeholder} placeholderTextColor="#81868e" value={address} style={styles.input} editable={!isLoading && editable} multiline={!editable} inputAccessoryViewID={inputAccessoryViewID} clearButtonMode="while-editing" onBlur={onBlurEditing} autoCapitalize="none" autoCorrect={false} keyboardType={keyboardType} />
       {editable ? (
         <TouchableOpacity
           testID="BlueAddressInputScanQrButton"

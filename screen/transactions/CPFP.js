@@ -1,16 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  ActivityIndicator,
-  Platform,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Linking,
-  ScrollView,
-  StyleSheet,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { ActivityIndicator, Platform, View, TextInput, TouchableOpacity, Linking, ScrollView, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { Text } from 'react-native-elements';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
@@ -179,13 +169,9 @@ export default class CPFP extends Component {
           <BlueCard style={styles.center}>
             <BlueText>{text}</BlueText>
             <BlueSpacing20 />
-            <BlueReplaceFeeSuggestions onFeeSelected={fee => this.setState({ newFeeRate: fee })} transactionMinimum={this.state.feeRate} />
+            <BlueReplaceFeeSuggestions onFeeSelected={(fee) => this.setState({ newFeeRate: fee })} transactionMinimum={this.state.feeRate} />
             <BlueSpacing />
-            <BlueButton
-              disabled={this.state.newFeeRate <= this.state.feeRate}
-              onPress={() => this.createTransaction()}
-              title={loc.transactions.cpfp_create}
-            />
+            <BlueButton disabled={this.state.newFeeRate <= this.state.feeRate} onPress={() => this.createTransaction()} title={loc.transactions.cpfp_create} />
           </BlueCard>
         </SafeBlueArea>
       </KeyboardAvoidingView>
@@ -202,11 +188,7 @@ export default class CPFP extends Component {
           <TouchableOpacity accessibilityRole="button" style={styles.action} onPress={() => Clipboard.setString(this.state.txhex)}>
             <Text style={styles.actionText}>{loc.send.create_copy}</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            accessibilityRole="button"
-            style={styles.action}
-            onPress={() => Linking.openURL('https://coinb.in/?verify=' + this.state.txhex)}
-          >
+          <TouchableOpacity accessibilityRole="button" style={styles.action} onPress={() => Linking.openURL('https://coinb.in/?verify=' + this.state.txhex)}>
             <Text style={styles.actionText}>{loc.send.create_verify}</Text>
           </TouchableOpacity>
           <BlueButton disabled={this.context.isElectrumDisabled} onPress={this.broadcast} title={loc.send.confirm_sendNow} />
@@ -262,4 +244,4 @@ CPFP.propTypes = {
     }),
   }),
 };
-CPFP.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.transactions.cpfp_title }));
+CPFP.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.transactions.cpfp_title }));

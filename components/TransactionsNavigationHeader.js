@@ -76,7 +76,7 @@ export default class TransactionsNavigationHeader extends Component {
 
   menuRef = React.createRef();
 
-  handleCopyPress = _item => {
+  handleCopyPress = (_item) => {
     Clipboard.setString(formatBalance(this.state.wallet.getBalance(), this.state.wallet.getPreferredBalanceUnit()).toString());
   };
 
@@ -92,8 +92,8 @@ export default class TransactionsNavigationHeader extends Component {
     if (this.state.wallet.type === LightningCustodianWallet.type) {
       this.state.wallet
         .allowOnchainAddress()
-        .then(value => this.setState({ allowOnchainAddress: value }))
-        .catch(e => {
+        .then((value) => this.setState({ allowOnchainAddress: value }))
+        .catch((e) => {
           console.log('This Lndhub wallet does not have an onchain address API.');
           this.setState({ allowOnchainAddress: false });
         });
@@ -104,7 +104,7 @@ export default class TransactionsNavigationHeader extends Component {
     this.verifyIfWalletAllowsOnchainAddress();
   }
 
-  handleBalanceVisibility = async _item => {
+  handleBalanceVisibility = async (_item) => {
     const wallet = this.state.wallet;
 
     const isBiometricsEnabled = await Biometric.isBiometricUseCapableAndEnabled();
@@ -143,11 +143,11 @@ export default class TransactionsNavigationHeader extends Component {
     });
   };
 
-  manageFundsPressed = id => {
+  manageFundsPressed = (id) => {
     this.props.onManageFundsPressed(id);
   };
 
-  onPressMenuItem = id => {
+  onPressMenuItem = (id) => {
     if (id === TransactionsNavigationHeader.actionKeys.WalletBalanceVisibility) {
       this.handleBalanceVisibility();
     } else if (id === TransactionsNavigationHeader.actionKeys.CopyToClipboard) {
@@ -181,16 +181,10 @@ export default class TransactionsNavigationHeader extends Component {
   ];
 
   render() {
-    const balance =
-      !this.state.wallet.hideBalance &&
-      formatBalance(this.state.wallet.getBalance(), this.state.wallet.getPreferredBalanceUnit(), true).toString();
+    const balance = !this.state.wallet.hideBalance && formatBalance(this.state.wallet.getBalance(), this.state.wallet.getPreferredBalanceUnit(), true).toString();
 
     return (
-      <LinearGradient
-        colors={WalletGradient.gradientsFor(this.state.wallet.type)}
-        style={styles.lineaderGradient}
-        {...WalletGradient.linearGradientProps(this.state.wallet.type)}
-      >
+      <LinearGradient colors={WalletGradient.gradientsFor(this.state.wallet.type)} style={styles.lineaderGradient} {...WalletGradient.linearGradientProps(this.state.wallet.type)}>
         <Image
           source={(() => {
             switch (this.state.wallet.type) {
@@ -253,13 +247,7 @@ export default class TransactionsNavigationHeader extends Component {
           </View>
         </ToolTipMenu>
         {this.state.wallet.type === LightningCustodianWallet.type && this.state.allowOnchainAddress && (
-          <ToolTipMenu
-            isMenuPrimaryAction
-            isButton
-            onPressMenuItem={this.manageFundsPressed}
-            actions={this.toolTipMenuActions}
-            buttonStyle={styles.manageFundsButton}
-          >
+          <ToolTipMenu isMenuPrimaryAction isButton onPressMenuItem={this.manageFundsPressed} actions={this.toolTipMenuActions} buttonStyle={styles.manageFundsButton}>
             <Text style={styles.manageFundsButtonText}>{loc.lnd.title}</Text>
           </ToolTipMenu>
         )}

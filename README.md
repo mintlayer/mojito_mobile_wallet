@@ -15,15 +15,13 @@ Website: [bluewallet.io](https://bluewallet.io)
 
 Community: [telegram group](https://t.me/bluewallet)
 
-* Private keys never leave your device
-* Lightning Network supported
-* SegWit-first. Replace-By-Fee support
-* Encryption. Plausible deniability
-* And many more [features...](https://bluewallet.io/features)
-
+- Private keys never leave your device
+- Lightning Network supported
+- SegWit-first. Replace-By-Fee support
+- Encryption. Plausible deniability
+- And many more [features...](https://bluewallet.io/features)
 
 <img src="https://i.imgur.com/hHYJnMj.png" width="100%">
-
 
 ## BUILD & RUN IT
 
@@ -35,7 +33,7 @@ To view the version of Node and npm in your environment, run the following in yo
 node --version && npm --version
 ```
 
-* In your console:
+- In your console:
 
 ```
 git clone https://github.com/BlueWallet/BlueWallet.git
@@ -45,7 +43,7 @@ npm install
 
 Please make sure that your console is running the most stable versions of npm and node (even-numbered versions).
 
-* To run on Android:
+- To run on Android:
 
 You will now need to either connect an Android device to your computer or run an emulated Android device using AVD Manager which comes shipped with Android Studio. To run an emulator using AVD Manager:
 
@@ -53,7 +51,7 @@ You will now need to either connect an Android device to your computer or run an
 2. Click on "Open an existing Android Studio Project"
 3. Open `build.gradle` file under `BlueWallet/android/` folder
 4. Android Studio will take some time to set things up. Once everything is set up, go to `Tools` -> `AVD Manager`.
-    * 📝 This option [may take some time to appear in the menu](https://stackoverflow.com/questions/47173708/why-avd-manager-options-are-not-showing-in-android-studio) if you're opening the project in a freshly-installed version of Android Studio.
+   - 📝 This option [may take some time to appear in the menu](https://stackoverflow.com/questions/47173708/why-avd-manager-options-are-not-showing-in-android-studio) if you're opening the project in a freshly-installed version of Android Studio.
 5. Click on "Create Virtual Device..." and go through the steps to create a virtual device
 6. Launch your newly created virtual device by clicking the `Play` button under `Actions` column
 
@@ -65,7 +63,7 @@ npx react-native run-android
 
 The above command will build the app and install it. Once you launch the app it will take some time for all of the dependencies to load. Once everything loads up, you should have the built app running.
 
-* To run on iOS:
+- To run on iOS:
 
 ```
 npx pod-install
@@ -73,11 +71,12 @@ npm start
 ```
 
 In another terminal window within the BlueWallet folder:
+
 ```
 npx react-native run-ios
 ```
 
-* To run on macOS using Mac Catalyst:
+- To run on macOS using Mac Catalyst:
 
 ```
 npm run maccatalystpatches
@@ -85,20 +84,17 @@ npm run maccatalystpatches
 
 Once the patches are applied, open Xcode and select "My Mac" as destination. If you are running macOS Catalina, you may need to remove all iOS 14 Widget targets.
 
-
 ## TESTS
 
 ```bash
 npm run test
 ```
 
-
 ## MOTIVATION TO BUILD IT
 
 I was not satisfied with existing iOS Bitcoin apps, especially with BreadWallet (the one I mainly used) where development stalled and they could not even deliver such features as SegWit, RBF and custom fees (at the times where custom fees were especially needed).
 So I knew I could create one to use myself and let others use it.
 I had experience with awesome bitcoin-js lib (javascript), and since I don't own any Macs, I don't plan to, and not going to learn ObjC/Swift - ReactNative (where you also write in javascript) was an obvious choice.
-
 
 ## LICENSE
 
@@ -113,6 +109,7 @@ Grab an issue from [the backlog](https://github.com/BlueWallet/BlueWallet/projec
 We accepts translations via [Transifex](https://www.transifex.com/bluewallet/bluewallet/)
 
 To participate you need to:
+
 1. Sign up to Transifex
 2. Find BlueWallet project
 3. Send join request
@@ -131,7 +128,6 @@ Builds automated and tested with BrowserStack
 Bugs reported via BugSnag
 
 <a href="https://www.bugsnag.com"><img src="https://images.typeform.com/images/QKuaAssrFCq7/image/default" width="160px"></a>
-
 
 ## RESPONSIBLE DISCLOSURE
 

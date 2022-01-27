@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 const WalletXpub = () => {
   const { wallets } = useContext(BlueStorageContext);
   const { walletID, xpub } = useRoute().params;
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const [isLoading, setIsLoading] = useState(true);
   const [xPubText, setXPubText] = useState();
   const { goBack, setParams } = useNavigation();
@@ -63,7 +63,7 @@ const WalletXpub = () => {
     setXPubText(xpub);
   }, [xpub]);
 
-  const onLayout = e => {
+  const onLayout = (e) => {
     const { height, width } = e.nativeEvent.layout;
     setQRCodeSize(height > width ? width - 40 : e.nativeEvent.layout.width / 1.8);
   };
@@ -99,7 +99,7 @@ WalletXpub.navigationOptions = navigationStyle(
     closeButton: true,
     headerHideBackButton: true,
   },
-  opts => ({ ...opts, headerTitle: loc.wallets.xpub_title }),
+  (opts) => ({ ...opts, headerTitle: loc.wallets.xpub_title }),
 );
 
 export default WalletXpub;

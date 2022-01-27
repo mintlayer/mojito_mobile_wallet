@@ -1,15 +1,6 @@
 import { URDecoder } from '@ngraveio/bc-ur';
 import b58 from 'bs58check';
-import {
-  CryptoHDKey,
-  CryptoKeypath,
-  CryptoOutput,
-  PathComponent,
-  ScriptExpressions,
-  CryptoPSBT,
-  CryptoAccount,
-  Bytes,
-} from '@keystonehq/bc-ur-registry/dist';
+import { CryptoHDKey, CryptoKeypath, CryptoOutput, PathComponent, ScriptExpressions, CryptoPSBT, CryptoAccount, Bytes } from '@keystonehq/bc-ur-registry/dist';
 import { decodeUR as origDecodeUr, encodeUR as origEncodeUR, extractSingleWorkload as origExtractSingleWorkload } from '../bc-ur/dist';
 import { MultisigCosigner, MultisigHDWallet } from '../../class';
 import { Psbt } from 'bitcoinjs-lib';

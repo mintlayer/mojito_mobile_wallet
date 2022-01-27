@@ -10,7 +10,7 @@ const BlueApp = new AppStorage();
 // If attempt reaches 10, a wipe keychain option will be provided to the user.
 let unlockAttempt = 0;
 
-const startAndDecrypt = async retry => {
+const startAndDecrypt = async (retry) => {
   console.log('startAndDecrypt');
   if (BlueApp.getWallets().length > 0) {
     console.log('App already has some wallets, so we are in already started state, exiting startAndDecrypt');
@@ -37,7 +37,7 @@ const startAndDecrypt = async retry => {
   if (wasException) {
     // retrying, but only once
     try {
-      await new Promise(resolve => setTimeout(resolve, 3000)); // sleep
+      await new Promise((resolve) => setTimeout(resolve, 3000)); // sleep
       success = await BlueApp.loadFromDisk(password);
     } catch (error) {
       console.warn('second exception loading from disk:', error);

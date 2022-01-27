@@ -13,10 +13,7 @@ describe('Legacy HD (BIP44)', () => {
     hd.setSecret(process.env.HD_MNEMONIC);
     assert.ok(hd.validateMnemonic());
 
-    assert.strictEqual(
-      hd.getXpub(),
-      'xpub6ByZUAv558PPheJgcPYHpxPLwz8M7TtueYMAik84NADeQcvbzS8W3WxxJ3C9NzfYkMoChiMAumWbeEvMWhTVpH75NqGv5c9wF3wKDbfQShb',
-    );
+    assert.strictEqual(hd.getXpub(), 'xpub6ByZUAv558PPheJgcPYHpxPLwz8M7TtueYMAik84NADeQcvbzS8W3WxxJ3C9NzfYkMoChiMAumWbeEvMWhTVpH75NqGv5c9wF3wKDbfQShb');
 
     assert.strictEqual(hd._getExternalAddressByIndex(0), '186FBQmCV5W1xY7ywaWtTZPAQNciVN8Por');
     assert.strictEqual(hd._getInternalAddressByIndex(0), '1J9zoJz5LsAJ361SQHYnLTWg46Tc2AXUCj');
@@ -27,14 +24,8 @@ describe('Legacy HD (BIP44)', () => {
     assert.ok(hd.getAllExternalAddresses().includes('186FBQmCV5W1xY7ywaWtTZPAQNciVN8Por'));
     assert.ok(!hd.getAllExternalAddresses().includes('1J9zoJz5LsAJ361SQHYnLTWg46Tc2AXUCj')); // not internal
 
-    assert.strictEqual(
-      hd._getPubkeyByAddress(hd._getExternalAddressByIndex(0)).toString('hex'),
-      '0316e84a2556f30a199541633f5dda6787710ccab26771b7084f4c9e1104f47667',
-    );
-    assert.strictEqual(
-      hd._getPubkeyByAddress(hd._getInternalAddressByIndex(0)).toString('hex'),
-      '02ad7b2216f3a2b38d56db8a7ee5c540fd12c4bbb7013106eff78cc2ace65aa002',
-    );
+    assert.strictEqual(hd._getPubkeyByAddress(hd._getExternalAddressByIndex(0)).toString('hex'), '0316e84a2556f30a199541633f5dda6787710ccab26771b7084f4c9e1104f47667');
+    assert.strictEqual(hd._getPubkeyByAddress(hd._getInternalAddressByIndex(0)).toString('hex'), '02ad7b2216f3a2b38d56db8a7ee5c540fd12c4bbb7013106eff78cc2ace65aa002');
 
     assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/44'/0'/0'/0/0");
     assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/44'/0'/0'/1/0");
@@ -104,12 +95,7 @@ describe('Legacy HD (BIP44)', () => {
       },
     ];
 
-    let txNew = hd.createTransaction(
-      utxo,
-      [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 80000 }],
-      1,
-      hd._getInternalAddressByIndex(hd.next_free_change_address_index),
-    );
+    let txNew = hd.createTransaction(utxo, [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 80000 }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
     let tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
     assert.strictEqual(tx.ins.length, 3);
     assert.strictEqual(tx.outs.length, 2);
@@ -121,12 +107,7 @@ describe('Legacy HD (BIP44)', () => {
     assert.strictEqual(hd._getInternalAddressByIndex(hd.next_free_change_address_index), changeAddress);
 
     // testing sendMax
-    txNew = hd.createTransaction(
-      utxo,
-      [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }],
-      1,
-      hd._getInternalAddressByIndex(hd.next_free_change_address_index),
-    );
+    txNew = hd.createTransaction(utxo, [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
     tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
     assert.strictEqual(tx.ins.length, 4);
     assert.strictEqual(tx.outs.length, 1);
@@ -166,10 +147,7 @@ describe('Legacy HD (BIP44)', () => {
     hd.setSecret(mnemonic);
     hd.setPassphrase(UNICODE_HORROR);
 
-    assert.strictEqual(
-      hd.getXpub(),
-      'xpub6D85QDBajeLe2JXJrZeGyQCaw47PWKi3J9DPuHakjTkVBWCxVQQkmMVMSSfnw39tj9FntbozpRtb1AJ8ubjeVSBhyK4M5mzdvsXZzKPwodT',
-    );
+    assert.strictEqual(hd.getXpub(), 'xpub6D85QDBajeLe2JXJrZeGyQCaw47PWKi3J9DPuHakjTkVBWCxVQQkmMVMSSfnw39tj9FntbozpRtb1AJ8ubjeVSBhyK4M5mzdvsXZzKPwodT');
 
     assert.strictEqual(hd._getExternalAddressByIndex(0), '1F88g2naBMhDB7pYFttPWGQgryba3hPevM');
     assert.strictEqual(hd._getInternalAddressByIndex(0), '1H4QD1rg2zQJ4UjuAVJr5eW1fEM8WMqyxh');
@@ -181,10 +159,7 @@ describe('Legacy HD (BIP44)', () => {
     hd.setSecret('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about');
     hd.setDerivationPath("m/44'/0'/1'");
 
-    assert.strictEqual(
-      hd.getXpub(),
-      'xpub6BosfCnifzxcJJ1wYuntGJfF2zPJkDeG9ELNHcKNjezuea4tumswN9sH1psMdSVqCMoJC21Bv8usSeqSP4Sp1tLzW7aY59fGn9GCYzx5UTo',
-    );
+    assert.strictEqual(hd.getXpub(), 'xpub6BosfCnifzxcJJ1wYuntGJfF2zPJkDeG9ELNHcKNjezuea4tumswN9sH1psMdSVqCMoJC21Bv8usSeqSP4Sp1tLzW7aY59fGn9GCYzx5UTo');
 
     assert.strictEqual(hd._getExternalAddressByIndex(0), '15qucUWKf95Fo58FdCBhUTSAtsm22HHE2Q');
     assert.strictEqual(hd._getInternalAddressByIndex(0), '1DgjtFUiXvqxGic9A9fiDPrHNyKC4cGtTH');

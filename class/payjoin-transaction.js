@@ -5,7 +5,7 @@ import { ECPairFactory } from 'ecpair';
 const ecc = require('tiny-secp256k1');
 const ECPair = ECPairFactory(ecc);
 
-const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
+const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 // Implements IPayjoinClientWallet
 // https://github.com/bitcoinjs/payjoin-client/blob/master/ts_src/wallet.ts

@@ -20,7 +20,7 @@ function BlueClipboard() {
     }
   };
 
-  BlueClipboard.setReadClipboardAllowed = value => {
+  BlueClipboard.setReadClipboardAllowed = (value) => {
     setIsClipboardAccessAllowed(JSON.stringify(!!value));
   };
 

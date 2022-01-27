@@ -24,7 +24,7 @@ function WidgetCommunication() {
     }
   };
 
-  WidgetCommunication.setBalanceDisplayAllowed = async value => {
+  WidgetCommunication.setBalanceDisplayAllowed = async (value) => {
     await AsyncStorage.setItem(WidgetCommunication.WidgetCommunicationDisplayBalanceAllowed, JSON.stringify(value));
     setValues();
   };
@@ -59,10 +59,7 @@ function WidgetCommunication() {
     await DefaultPreference.setName('group.io.bluewallet.bluewallet');
     const { allWalletsBalance, latestTransactionTime } = await allWalletsBalanceAndTransactionTime();
     await DefaultPreference.set(WidgetCommunication.WidgetCommunicationAllWalletsSatoshiBalance, JSON.stringify(allWalletsBalance));
-    await DefaultPreference.set(
-      WidgetCommunication.WidgetCommunicationAllWalletsLatestTransactionTime,
-      JSON.stringify(latestTransactionTime),
-    );
+    await DefaultPreference.set(WidgetCommunication.WidgetCommunicationAllWalletsLatestTransactionTime, JSON.stringify(latestTransactionTime));
     RNWidgetCenter.reloadAllTimelines();
   };
 

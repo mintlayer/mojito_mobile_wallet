@@ -11,10 +11,7 @@ it('bip38 decodes', async () => {
     { N: 1, r: 8, p: 8 }, // using non-default parameters to speed it up (not-bip38 compliant)
   );
 
-  assert.strictEqual(
-    wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed),
-    '5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR',
-  );
+  assert.strictEqual(wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed), '5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR');
 });
 
 it('bip38 decodes slow', async () => {
@@ -34,10 +31,7 @@ it('bip38 decodes slow', async () => {
 
   assert.ok(callbackWasCalled);
 
-  assert.strictEqual(
-    wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed),
-    'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc',
-  );
+  assert.strictEqual(wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc');
 
   await assert.rejects(async () => await bip38.decryptAsync(encryptedKey, 'a'), {
     message: 'Incorrect passphrase.',

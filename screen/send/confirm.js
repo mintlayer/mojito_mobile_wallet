@@ -29,7 +29,7 @@ const Confirm = () => {
   const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt } = params;
   const [isLoading, setIsLoading] = useState(false);
   const [isPayjoinEnabled, setIsPayjoinEnabled] = useState(false);
-  const wallet = wallets.find(wallet => wallet.getID() === walletID);
+  const wallet = wallets.find((wallet) => wallet.getID() === walletID);
   const payjoinUrl = wallet.allowPayJoin() ? params.payjoinUrl : false;
   const feeSatoshi = new Bignumber(fee).multipliedBy(100000000).toNumber();
   const { navigate, setOptions } = useNavigation();
@@ -117,7 +117,7 @@ const Confirm = () => {
       if (!isPayjoinEnabled) {
         await broadcast(tx);
       } else {
-        const payJoinWallet = new PayjoinTransaction(psbt, txHex => broadcast(txHex), wallet);
+        const payJoinWallet = new PayjoinTransaction(psbt, (txHex) => broadcast(txHex), wallet);
         const paymentScript = getPaymentScript();
         let payjoinClient;
         if (!isTorDisabled && payjoinUrl.includes('.onion')) {
@@ -175,7 +175,7 @@ const Confirm = () => {
 
       setIsLoading(false);
 
-      await new Promise(resolve => setTimeout(resolve, 3000)); // sleep to make sure network propagates
+      await new Promise((resolve) => setTimeout(resolve, 3000)); // sleep to make sure network propagates
       fetchAndSaveWalletTransactions(walletID);
     } catch (error) {
       ReactNativeHapticFeedback.trigger('notificationError', {
@@ -186,7 +186,7 @@ const Confirm = () => {
     }
   };
 
-  const broadcast = async tx => {
+  const broadcast = async (tx) => {
     await BlueElectrum.ping();
     await BlueElectrum.waitTillConnected();
 
@@ -220,9 +220,7 @@ const Confirm = () => {
             {item.address}
           </Text>
         </BlueCard>
-        {recipients.length > 1 && (
-          <BlueText style={styles.valueOf}>{loc.formatString(loc._.of, { number: index + 1, total: recipients.length })}</BlueText>
-        )}
+        {recipients.length > 1 && <BlueText style={styles.valueOf}>{loc.formatString(loc._.of, { number: index + 1, total: recipients.length })}</BlueText>}
       </>
     );
   };
@@ -238,14 +236,7 @@ const Confirm = () => {
   return (
     <SafeBlueArea style={[styles.root, stylesHook.root]}>
       <View style={styles.cardTop}>
-        <FlatList
-          scrollEnabled={recipients.length > 1}
-          extraData={recipients}
-          data={recipients}
-          renderItem={_renderItem}
-          keyExtractor={(_item, index) => `${index}`}
-          ItemSeparatorComponent={renderSeparator}
-        />
+        <FlatList scrollEnabled={recipients.length > 1} extraData={recipients} data={recipients} renderItem={_renderItem} keyExtractor={(_item, index) => `${index}`} ItemSeparatorComponent={renderSeparator} />
         {!!payjoinUrl && (
           <View style={styles.cardContainer}>
             <BlueCard>
@@ -367,4 +358,4 @@ const styles = StyleSheet.create({
   },
 });
 
-Confirm.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.send.confirm_header }));
+Confirm.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.send.confirm_header }));

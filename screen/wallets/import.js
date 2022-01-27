@@ -2,16 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Platform, View, Keyboard, StyleSheet, Switch, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 
-import {
-  BlueButton,
-  BlueButtonLink,
-  BlueDoneAndDismissKeyboardInputAccessory,
-  BlueFormLabel,
-  BlueFormMultiInput,
-  BlueSpacing20,
-  BlueText,
-  SafeBlueArea,
-} from '../../BlueComponents';
+import { BlueButton, BlueButtonLink, BlueDoneAndDismissKeyboardInputAccessory, BlueFormLabel, BlueFormMultiInput, BlueSpacing20, BlueText, SafeBlueArea } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import Privacy from '../../blue_modules/Privacy';
 import loc from '../../loc';
@@ -83,11 +74,11 @@ const WalletsImport = () => {
     importMnemonic(textToImport);
   };
 
-  const importMnemonic = importText => {
+  const importMnemonic = (importText) => {
     navigation.navigate('ImportWalletDiscovery', { importText, askPassphrase, searchAccounts });
   };
 
-  const onBarScanned = value => {
+  const onBarScanned = (value) => {
     if (value && value.data) value = value.data + ''; // no objects here, only strings
     setImportText(value);
     setTimeout(() => importMnemonic(value), 500);
@@ -109,7 +100,7 @@ const WalletsImport = () => {
   };
 
   const speedBackdoorTap = () => {
-    setSpeedBackdoor(v => {
+    setSpeedBackdoor((v) => {
       v += 1;
       if (v < 5) return v;
       navigation.navigate('ImportSpeed');
@@ -135,12 +126,7 @@ const WalletsImport = () => {
       <BlueSpacing20 />
       <View style={styles.center}>
         <>
-          <BlueButton
-            disabled={importText.trim().length === 0}
-            title={loc.wallets.import_do_import}
-            testID="DoImport"
-            onPress={importButtonPressed}
-          />
+          <BlueButton disabled={importText.trim().length === 0} title={loc.wallets.import_do_import} testID="DoImport" onPress={importButtonPressed} />
           <BlueSpacing20 />
           <BlueButtonLink title={loc.wallets.import_scan_qr} onPress={importScan} testID="ScanImport" />
         </>
@@ -155,13 +141,7 @@ const WalletsImport = () => {
         <BlueFormLabel>{loc.wallets.import_explanation}</BlueFormLabel>
       </TouchableWithoutFeedback>
       <BlueSpacing20 />
-      <BlueFormMultiInput
-        value={importText}
-        onBlur={onBlur}
-        onChangeText={setImportText}
-        testID="MnemonicInput"
-        inputAccessoryViewID={BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID}
-      />
+      <BlueFormMultiInput value={importText} onBlur={onBlur} onChangeText={setImportText} testID="MnemonicInput" inputAccessoryViewID={BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID} />
 
       {Platform.select({ android: !isToolbarVisibleForAndroid && renderOptionsAndImportButton, default: renderOptionsAndImportButton })}
       {Platform.select({
@@ -170,7 +150,7 @@ const WalletsImport = () => {
             onClearTapped={() => {
               setImportText('');
             }}
-            onPasteTapped={text => {
+            onPasteTapped={(text) => {
               setImportText(text);
               Keyboard.dismiss();
             }}
@@ -182,7 +162,7 @@ const WalletsImport = () => {
               setImportText('');
               Keyboard.dismiss();
             }}
-            onPasteTapped={text => {
+            onPasteTapped={(text) => {
               setImportText(text);
               Keyboard.dismiss();
             }}
@@ -193,6 +173,6 @@ const WalletsImport = () => {
   );
 };
 
-WalletsImport.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.wallets.import_title }));
+WalletsImport.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.wallets.import_title }));
 
 export default WalletsImport;

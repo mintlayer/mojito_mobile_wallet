@@ -1,39 +1,11 @@
 import React, { useEffect, useState, useCallback, useContext, useRef, useMemo } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Alert,
-  KeyboardAvoidingView,
-  TouchableOpacity,
-  Keyboard,
-  TouchableWithoutFeedback,
-  Switch,
-  Platform,
-  Linking,
-  StyleSheet,
-  StatusBar,
-  ScrollView,
-  PermissionsAndroid,
-  InteractionManager,
-  ActivityIndicator,
-  I18nManager,
-} from 'react-native';
+import { View, Text, TextInput, Alert, KeyboardAvoidingView, TouchableOpacity, Keyboard, TouchableWithoutFeedback, Switch, Platform, Linking, StyleSheet, StatusBar, ScrollView, PermissionsAndroid, InteractionManager, ActivityIndicator, I18nManager } from 'react-native';
 import { BlueCard, BlueLoading, BlueSpacing10, BlueSpacing20, BlueText, SecondButton, BlueListItem } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import { LightningCustodianWallet } from '../../class/wallets/lightning-custodian-wallet';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import Biometric from '../../class/biometrics';
-import {
-  HDSegwitBech32Wallet,
-  SegwitP2SHWallet,
-  LegacyWallet,
-  SegwitBech32Wallet,
-  WatchOnlyWallet,
-  MultisigHDWallet,
-  HDAezeedWallet,
-  LightningLdkWallet,
-} from '../../class';
+import { HDSegwitBech32Wallet, SegwitP2SHWallet, LegacyWallet, SegwitBech32Wallet, WatchOnlyWallet, MultisigHDWallet, HDAezeedWallet, LightningLdkWallet } from '../../class';
 import loc from '../../loc';
 import { useTheme, useRoute, useNavigation } from '@react-navigation/native';
 import RNFS from 'react-native-fs';
@@ -119,7 +91,7 @@ const WalletDetails = () => {
   const { walletID } = useRoute().params;
   const [isLoading, setIsLoading] = useState(false);
   const [backdoorPressed, setBackdoorPressed] = useState(0);
-  const wallet = useRef(wallets.find(w => w.getID() === walletID)).current;
+  const wallet = useRef(wallets.find((w) => w.getID() === walletID)).current;
   const [walletName, setWalletName] = useState(wallet.getLabel());
   const [useWithHardwareWallet, setUseWithHardwareWallet] = useState(wallet.useWithHardwareWalletEnabled());
   const { isAdancedModeEnabled } = useContext(BlueStorageContext);
@@ -185,7 +157,7 @@ const WalletDetails = () => {
         alert(loc.wallets.details_wallet_updated);
         goBack();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error.message);
         setIsLoading(false);
       });
@@ -205,7 +177,7 @@ const WalletDetails = () => {
   }, [isLoading, colors.outputValue, walletName, useWithHardwareWallet, hideTransactionsInWalletsList]);
 
   useEffect(() => {
-    if (wallets.some(wallet => wallet.getID() === walletID)) {
+    if (wallets.some((wallet) => wallet.getID() === walletID)) {
       setSelectedWallet(walletID);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -223,14 +195,7 @@ const WalletDetails = () => {
   const presentWalletHasBalanceAlert = useCallback(async () => {
     ReactNativeHapticFeedback.trigger('notificationWarning', { ignoreAndroidSystemSettings: false });
     try {
-      const walletBalanceConfirmation = await prompt(
-        loc.wallets.details_delete_wallet,
-        loc.formatString(loc.wallets.details_del_wb_q, { balance: wallet.getBalance() }),
-        true,
-        'plain-text',
-        true,
-        loc.wallets.details_delete,
-      );
+      const walletBalanceConfirmation = await prompt(loc.wallets.details_delete_wallet, loc.formatString(loc.wallets.details_del_wb_q, { balance: wallet.getBalance() }), true, 'plain-text', true, loc.wallets.details_delete);
       if (Number(walletBalanceConfirmation) === wallet.getBalance()) {
         navigateToOverviewAndDeleteWallet();
       } else {
@@ -358,7 +323,7 @@ const WalletDetails = () => {
         url: 'file://' + filePath,
         saveToFiles: isDesktop,
       })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           alert(error.message);
         })
@@ -456,12 +421,7 @@ const WalletDetails = () => {
   };
 
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      centerContent={isLoading}
-      contentContainerStyle={styles.scrollViewContent}
-      testID="WalletDetailsScroll"
-    >
+    <ScrollView contentInsetAdjustmentBehavior="automatic" centerContent={isLoading} contentContainerStyle={styles.scrollViewContent} testID="WalletDetailsScroll">
       {isLoading ? (
         <BlueLoading />
       ) : (
@@ -471,10 +431,7 @@ const WalletDetails = () => {
               <StatusBar barStyle="default" />
 
               {(() => {
-                if (
-                  [LegacyWallet.type, SegwitBech32Wallet.type, SegwitP2SHWallet.type].includes(wallet.type) ||
-                  (wallet.type === WatchOnlyWallet.type && !wallet.isHd())
-                ) {
+                if ([LegacyWallet.type, SegwitBech32Wallet.type, SegwitP2SHWallet.type].includes(wallet.type) || (wallet.type === WatchOnlyWallet.type && !wallet.isHd())) {
                   return (
                     <>
                       <Text style={[styles.textLabel1, stylesHook.textLabel1]}>{loc.wallets.details_address.toLowerCase()}</Text>
@@ -486,17 +443,7 @@ const WalletDetails = () => {
               <Text style={[styles.textLabel2, stylesHook.textLabel2]}>{loc.wallets.add_wallet_name.toLowerCase()}</Text>
               <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
                 <View style={[styles.input, stylesHook.input]}>
-                  <TextInput
-                    value={walletName}
-                    onChangeText={setWalletName}
-                    onBlur={walletNameTextInputOnBlur}
-                    numberOfLines={1}
-                    placeholderTextColor="#81868e"
-                    style={styles.inputText}
-                    editable={!isLoading}
-                    underlineColorAndroid="transparent"
-                    testID="WalletNameInput"
-                  />
+                  <TextInput value={walletName} onChangeText={setWalletName} onBlur={walletNameTextInputOnBlur} numberOfLines={1} placeholderTextColor="#81868e" style={styles.inputText} editable={!isLoading} underlineColorAndroid="transparent" testID="WalletNameInput" />
                 </View>
               </KeyboardAvoidingView>
               <BlueSpacing20 />
@@ -578,9 +525,7 @@ const WalletDetails = () => {
                   <View style={styles.row}>
                     {wallet.allowMasterFingerprint() && (
                       <View style={styles.marginRight16}>
-                        <Text style={[styles.textLabel2, stylesHook.textLabel2]}>
-                          {loc.wallets.details_master_fingerprint.toLowerCase()}
-                        </Text>
+                        <Text style={[styles.textLabel2, stylesHook.textLabel2]}>{loc.wallets.details_master_fingerprint.toLowerCase()}</Text>
                         <BlueText>{masterFingerprint ?? <ActivityIndicator />}</BlueText>
                       </View>
                     )}
@@ -595,9 +540,7 @@ const WalletDetails = () => {
                 )}
               </View>
             </BlueCard>
-            {(wallet instanceof AbstractHDElectrumWallet || (wallet.type === WatchOnlyWallet.type && wallet.isHd())) && (
-              <BlueListItem onPress={navigateToAddresses} title={loc.wallets.details_show_addresses} chevron />
-            )}
+            {(wallet instanceof AbstractHDElectrumWallet || (wallet.type === WatchOnlyWallet.type && wallet.isHd())) && <BlueListItem onPress={navigateToAddresses} title={loc.wallets.details_show_addresses} chevron />}
             <BlueCard style={styles.address}>
               <View>
                 <BlueSpacing20 />
@@ -606,22 +549,14 @@ const WalletDetails = () => {
                 {wallet.type === MultisigHDWallet.type && (
                   <>
                     <BlueSpacing20 />
-                    <SecondButton
-                      onPress={navigateToMultisigCoordinationSetup}
-                      testID="MultisigCoordinationSetup"
-                      title={loc.multisig.export_coordination_setup.replace(/^\w/, c => c.toUpperCase())}
-                    />
+                    <SecondButton onPress={navigateToMultisigCoordinationSetup} testID="MultisigCoordinationSetup" title={loc.multisig.export_coordination_setup.replace(/^\w/, (c) => c.toUpperCase())} />
                   </>
                 )}
 
                 {wallet.type === MultisigHDWallet.type && (
                   <>
                     <BlueSpacing20 />
-                    <SecondButton
-                      onPress={navigateToViewEditCosigners}
-                      testID="ViewEditCosigners"
-                      title={loc.multisig.view_edit_cosigners}
-                    />
+                    <SecondButton onPress={navigateToViewEditCosigners} testID="ViewEditCosigners" title={loc.multisig.view_edit_cosigners} />
                   </>
                 )}
 
@@ -658,6 +593,6 @@ const WalletDetails = () => {
   );
 };
 
-WalletDetails.navigationOptions = navigationStyle({}, opts => ({ ...opts, headerTitle: loc.wallets.details_title }));
+WalletDetails.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, headerTitle: loc.wallets.details_title }));
 
 export default WalletDetails;

@@ -35,13 +35,7 @@ const LdkOpenChannel = (props: any) => {
   const [isBiometricUseCapableAndEnabled, setIsBiometricUseCapableAndEnabled] = useState(false);
   const { colors }: { colors: any } = useTheme();
   const { navigate, setParams } = useNavigation();
-  const {
-    fundingWalletID,
-    isPrivateChannel,
-    ldkWalletID,
-    psbt,
-    remoteHostWithPubkey = '030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f@52.50.244.44:9735' /* Bitrefill */,
-  } = useRoute<LdkOpenChannelProps>().params;
+  const { fundingWalletID, isPrivateChannel, ldkWalletID, psbt, remoteHostWithPubkey = '030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f@52.50.244.44:9735' /* Bitrefill */ } = useRoute<LdkOpenChannelProps>().params;
   const fundingWallet: HDSegwitBech32Wallet = wallets.find((w: AbstractWallet) => w.getID() === fundingWalletID);
   const ldkWallet: LightningLdkWallet = wallets.find((w: AbstractWallet) => w.getID() === ldkWalletID);
   const [unit, setUnit] = useState<BitcoinUnit | string>(ldkWallet.getPreferredBalanceUnit());
@@ -127,7 +121,7 @@ const LdkOpenChannel = (props: any) => {
       return alert('Something wend wrong during opening channel tx broadcast');
     }
     fetchAndSaveWalletTransactions(ldkWallet.getID());
-    await new Promise(resolve => setTimeout(resolve, 3000)); // sleep to make sure network propagates
+    await new Promise((resolve) => setTimeout(resolve, 3000)); // sleep to make sure network propagates
     fetchAndSaveWalletTransactions(fundingWalletID);
     ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
     navigate('Success', { amount: undefined });
@@ -268,24 +262,16 @@ const LdkOpenChannel = (props: any) => {
           inputAccessoryViewID={(BlueDismissKeyboardInputAccessory as any).InputAccessoryViewID}
         />
 
-        <AddressInput
-          placeholder={loc.lnd.remote_host}
-          address={remoteHostWithPubkey}
-          isLoading={isLoading}
-          inputAccessoryViewID={(BlueDismissKeyboardInputAccessory as any).InputAccessoryViewID}
-          onChangeText={text => setParams({ remoteHostWithPubkey: text })}
-          onBarScanned={onBarScanned}
-          launchedBy={name}
-        />
+        <AddressInput placeholder={loc.lnd.remote_host} address={remoteHostWithPubkey} isLoading={isLoading} inputAccessoryViewID={(BlueDismissKeyboardInputAccessory as any).InputAccessoryViewID} onChangeText={(text) => setParams({ remoteHostWithPubkey: text })} onBarScanned={onBarScanned} launchedBy={name} />
         <BlueDismissKeyboardInputAccessory />
 
         <ArrowPicker
-          onChange={newKey => {
+          onChange={(newKey) => {
             const nodes = LightningLdkWallet.getPredefinedNodes();
             if (nodes[newKey]) setParams({ remoteHostWithPubkey: nodes[newKey] });
           }}
           items={LightningLdkWallet.getPredefinedNodes()}
-          isItemUnknown={!Object.values(LightningLdkWallet.getPredefinedNodes()).some(node => node === remoteHostWithPubkey)}
+          isItemUnknown={!Object.values(LightningLdkWallet.getPredefinedNodes()).some((node) => node === remoteHostWithPubkey)}
         />
         <BlueSpacing20 />
         <View style={styles.horizontalButtons}>

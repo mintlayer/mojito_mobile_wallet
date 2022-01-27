@@ -4,8 +4,7 @@ import { SegwitP2SHWallet, SegwitBech32Wallet, HDSegwitP2SHWallet, HDLegacyP2PKH
 
 describe('P2SH Segwit HD (BIP49)', () => {
   it('can create a wallet', async () => {
-    const mnemonic =
-      'honey risk juice trip orient galaxy win situate shoot anchor bounce remind horse traffic exotic since escape mimic ramp skin judge owner topple erode';
+    const mnemonic = 'honey risk juice trip orient galaxy win situate shoot anchor bounce remind horse traffic exotic since escape mimic ramp skin judge owner topple erode';
     const hd = new HDSegwitP2SHWallet();
     hd.setSecret(mnemonic);
     assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', hd._getExternalAddressByIndex(0));
@@ -16,23 +15,14 @@ describe('P2SH Segwit HD (BIP49)', () => {
     assert.ok(!hd.getAllExternalAddresses().includes('32yn5CdevZQLk3ckuZuA8fEKBco8mEkLei')); // not internal
     assert.strictEqual(true, hd.validateMnemonic());
 
-    assert.strictEqual(
-      hd._getPubkeyByAddress(hd._getExternalAddressByIndex(0)).toString('hex'),
-      '0348192db90b753484601aaf1e6220644ffe37d83a9a5feff32b4da43739f736be',
-    );
-    assert.strictEqual(
-      hd._getPubkeyByAddress(hd._getInternalAddressByIndex(0)).toString('hex'),
-      '03c107e6976d59e17490513fbed3fb321736b7231d24f3d09306c72714acf1859d',
-    );
+    assert.strictEqual(hd._getPubkeyByAddress(hd._getExternalAddressByIndex(0)).toString('hex'), '0348192db90b753484601aaf1e6220644ffe37d83a9a5feff32b4da43739f736be');
+    assert.strictEqual(hd._getPubkeyByAddress(hd._getInternalAddressByIndex(0)).toString('hex'), '03c107e6976d59e17490513fbed3fb321736b7231d24f3d09306c72714acf1859d');
 
     assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/49'/0'/0'/0/0");
     assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/49'/0'/0'/1/0");
 
     assert.strictEqual('L4MqtwJm6hkbACLG4ho5DF8GhcXdLEbbvpJnbzA9abfD6RDpbr2m', hd._getExternalWIFByIndex(0));
-    assert.strictEqual(
-      'ypub6WhHmKBmHNjcrUVNCa3sXduH9yxutMipDcwiKW31vWjcMbfhQHjXdyx4rqXbEtVgzdbhFJ5mZJWmfWwnP4Vjzx97admTUYKQt6b9D7jjSCp',
-      hd.getXpub(),
-    );
+    assert.strictEqual('ypub6WhHmKBmHNjcrUVNCa3sXduH9yxutMipDcwiKW31vWjcMbfhQHjXdyx4rqXbEtVgzdbhFJ5mZJWmfWwnP4Vjzx97admTUYKQt6b9D7jjSCp', hd.getXpub());
   });
 
   it('can convert witness to address', () => {
@@ -103,8 +93,7 @@ describe('P2SH Segwit HD (BIP49)', () => {
   });
 
   it('can work with malformed mnemonic', () => {
-    let mnemonic =
-      'honey risk juice trip orient galaxy win situate shoot anchor bounce remind horse traffic exotic since escape mimic ramp skin judge owner topple erode';
+    let mnemonic = 'honey risk juice trip orient galaxy win situate shoot anchor bounce remind horse traffic exotic since escape mimic ramp skin judge owner topple erode';
     let hd = new HDSegwitP2SHWallet();
     hd.setSecret(mnemonic);
     const seed1 = hd._getSeed().toString('hex');
@@ -117,8 +106,7 @@ describe('P2SH Segwit HD (BIP49)', () => {
 
     // now, malformed mnemonic
 
-    mnemonic =
-      '    honey  risk   juice    trip     orient      galaxy win !situate ;; shoot   ;;;   anchor Bounce remind\nhorse \n traffic exotic since escape mimic ramp skin judge owner topple erode ';
+    mnemonic = '    honey  risk   juice    trip     orient      galaxy win !situate ;; shoot   ;;;   anchor Bounce remind\nhorse \n traffic exotic since escape mimic ramp skin judge owner topple erode ';
     hd = new HDSegwitP2SHWallet();
     hd.setSecret(mnemonic);
     const seed2 = hd._getSeed().toString('hex');
@@ -143,10 +131,7 @@ describe('P2SH Segwit HD (BIP49)', () => {
     const hd = new HDSegwitP2SHWallet();
     const zeroes = [...Array(32)].map(() => 0);
     await hd.generateFromEntropy(Buffer.from(zeroes));
-    assert.strictEqual(
-      hd.getSecret(),
-      'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon art',
-    );
+    assert.strictEqual(hd.getSecret(), 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon art');
   });
 
   it('can fullfill user generated entropy if less than 32 bytes provided', async () => {
@@ -159,10 +144,7 @@ describe('P2SH Segwit HD (BIP49)', () => {
     let secretWithoutChecksum = secret.split(' ');
     secretWithoutChecksum.pop();
     secretWithoutChecksum = secretWithoutChecksum.join(' ');
-    assert.strictEqual(
-      secretWithoutChecksum.endsWith('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon'),
-      false,
-    );
+    assert.strictEqual(secretWithoutChecksum.endsWith('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon'), false);
 
     assert.ok(secret.split(' ').length === 12 || secret.split(' ').length === 24);
   });
@@ -198,10 +180,7 @@ describe('P2SH Segwit HD (BIP49)', () => {
     hd.setSecret(mnemonic);
     hd.setPassphrase(passphrase);
 
-    assert.strictEqual(
-      hd.getXpub(),
-      'ypub6Xa3WiyXHriYt1fxZGWS8B1iduw92yxHCMWKSwJkW6w92FUCTJxwWQQHLXjRHBSsMLY6SvRu8ErqFEC3JmrkTHEm7KSUfbzhUhj7Yopo2JR',
-    );
+    assert.strictEqual(hd.getXpub(), 'ypub6Xa3WiyXHriYt1fxZGWS8B1iduw92yxHCMWKSwJkW6w92FUCTJxwWQQHLXjRHBSsMLY6SvRu8ErqFEC3JmrkTHEm7KSUfbzhUhj7Yopo2JR');
 
     assert.strictEqual(hd._getExternalAddressByIndex(0), '3BtnNenqpGTXwwjb5a1KgzzoKV4TjCuySm');
     assert.strictEqual(hd._getInternalAddressByIndex(0), '3EJctafkUBvcSHYhunQRa2iYUHjrMGLXBV');
@@ -213,10 +192,7 @@ describe('P2SH Segwit HD (BIP49)', () => {
     hd.setSecret('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about');
     hd.setDerivationPath("m/49'/0'/1'");
 
-    assert.strictEqual(
-      hd.getXpub(),
-      'ypub6Ww3ibxVfGzLtJR4F9SRBicspAfvmvw54yern9Q6qZWFC9T6FYA34K57La5Sgs8pXuyvpDfEHX5KNZRiZRukUWaVPyL4NxA69sEAqdoV8ve',
-    );
+    assert.strictEqual(hd.getXpub(), 'ypub6Ww3ibxVfGzLtJR4F9SRBicspAfvmvw54yern9Q6qZWFC9T6FYA34K57La5Sgs8pXuyvpDfEHX5KNZRiZRukUWaVPyL4NxA69sEAqdoV8ve');
 
     assert.strictEqual(hd._getExternalAddressByIndex(0), '35eszW2wmZ4hn7hfG5LGqxw5xCPjZcEJPM');
     assert.strictEqual(hd._getInternalAddressByIndex(0), '35gZZo6xPJEPgcz1cj1mTQHRMiPP97NGRY');

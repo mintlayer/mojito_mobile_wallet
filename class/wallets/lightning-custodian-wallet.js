@@ -206,11 +206,11 @@ export class LightningCustodianWallet extends LegacyWallet {
   }
 
   isInvoiceGeneratedByWallet(paymentRequest) {
-    return this.user_invoices_raw.some(invoice => invoice.payment_request === paymentRequest);
+    return this.user_invoices_raw.some((invoice) => invoice.payment_request === paymentRequest);
   }
 
   weOwnAddress(address) {
-    return this.refill_addressess.some(refillAddress => address === refillAddress);
+    return this.refill_addressess.some((refillAddress) => address === refillAddress);
   }
 
   async addInvoice(amt, memo) {

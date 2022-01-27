@@ -1,38 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {
-  Text,
-  ScrollView,
-  ActivityIndicator,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  View,
-  StatusBar,
-  TextInput,
-  StyleSheet,
-  useColorScheme,
-} from 'react-native';
+import { Text, ScrollView, ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, View, StatusBar, TextInput, StyleSheet, useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  BlueText,
-  BlueListItem,
-  LightningButton,
-  BitcoinButton,
-  VaultButton,
-  BlueFormLabel,
-  BlueButton,
-  BlueButtonLink,
-  BlueSpacing20,
-} from '../../BlueComponents';
+import { BlueText, BlueListItem, LightningButton, BitcoinButton, VaultButton, BlueFormLabel, BlueButton, BlueButtonLink, BlueSpacing20 } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
-import {
-  HDSegwitBech32Wallet,
-  SegwitP2SHWallet,
-  HDSegwitP2SHWallet,
-  LightningCustodianWallet,
-  AppStorage,
-  LightningLdkWallet,
-} from '../../class';
+import { HDSegwitBech32Wallet, SegwitP2SHWallet, HDSegwitP2SHWallet, LightningCustodianWallet, AppStorage, LightningLdkWallet } from '../../class';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useTheme, useNavigation } from '@react-navigation/native';
 import { Chain } from '../../models/bitcoinUnits';
@@ -86,7 +57,7 @@ const WalletsAdd = () => {
 
   useEffect(() => {
     AsyncStorage.getItem(AppStorage.LNDHUB)
-      .then(url => setWalletBaseURI(url || 'https://lndhub.io'))
+      .then((url) => setWalletBaseURI(url || 'https://lndhub.io'))
       .catch(() => setWalletBaseURI(''));
     isAdancedModeEnabled()
       .then(setIsAdvancedOptionsEnabled)
@@ -94,7 +65,7 @@ const WalletsAdd = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdvancedOptionsEnabled]);
 
-  const entropyGenerated = newEntropy => {
+  const entropyGenerated = (newEntropy) => {
     let entropyTitle;
     if (!newEntropy) {
       entropyTitle = loc.wallets.add_entropy_provide;
@@ -169,8 +140,8 @@ const WalletsAdd = () => {
     }
   };
 
-  const createLightningLdkWallet = async wallet => {
-    const foundLdk = wallets.find(w => w.type === LightningLdkWallet.type);
+  const createLightningLdkWallet = async (wallet) => {
+    const foundLdk = wallets.find((w) => w.type === LightningLdkWallet.type);
     if (foundLdk) {
       return alert('LDK wallet already exists');
     }
@@ -191,7 +162,7 @@ const WalletsAdd = () => {
     });
   };
 
-  const createLightningWallet = async wallet => {
+  const createLightningWallet = async (wallet) => {
     wallet = new LightningCustodianWallet();
     wallet.setLabel(label || loc.wallets.details_title);
 
@@ -245,7 +216,7 @@ const WalletsAdd = () => {
   };
 
   const handleOnLightningButtonPressed = () => {
-    setBackdoorPressed(prevState => {
+    setBackdoorPressed((prevState) => {
       return prevState + 1;
     });
     Keyboard.dismiss();
@@ -259,46 +230,18 @@ const WalletsAdd = () => {
 
   return (
     <ScrollView style={stylesHook.root}>
-      <StatusBar
-        barStyle={Platform.select({ ios: 'light-content', default: useColorScheme() === 'dark' ? 'light-content' : 'dark-content' })}
-      />
+      <StatusBar barStyle={Platform.select({ ios: 'light-content', default: useColorScheme() === 'dark' ? 'light-content' : 'dark-content' })} />
       <BlueSpacing20 />
       <KeyboardAvoidingView enabled behavior={Platform.OS === 'ios' ? 'padding' : null} keyboardVerticalOffset={62}>
         <BlueFormLabel>{loc.wallets.add_wallet_name}</BlueFormLabel>
         <View style={[styles.label, stylesHook.label]}>
-          <TextInput
-            testID="WalletNameInput"
-            value={label}
-            placeholderTextColor="#81868e"
-            placeholder={loc.wallets.add_placeholder}
-            onChangeText={setLabel}
-            style={styles.textInputCommon}
-            editable={!isLoading}
-            underlineColorAndroid="transparent"
-          />
+          <TextInput testID="WalletNameInput" value={label} placeholderTextColor="#81868e" placeholder={loc.wallets.add_placeholder} onChangeText={setLabel} style={styles.textInputCommon} editable={!isLoading} underlineColorAndroid="transparent" />
         </View>
         <BlueFormLabel>{loc.wallets.add_wallet_type}</BlueFormLabel>
         <View style={styles.buttons}>
-          <BitcoinButton
-            testID="ActivateBitcoinButton"
-            active={selectedWalletType === ButtonSelected.ONCHAIN}
-            onPress={handleOnBitcoinButtonPressed}
-            style={styles.button}
-          />
-          <LightningButton
-            active={selectedWalletType === ButtonSelected.OFFCHAIN}
-            onPress={handleOnLightningButtonPressed}
-            style={styles.button}
-          />
-          {backdoorPressed > 10 ? (
-            <LdkButton
-              active={selectedWalletType === ButtonSelected.LDK}
-              onPress={handleOnLdkButtonPressed}
-              style={styles.button}
-              subtext={LightningLdkWallet.getPackageVersion()}
-              text="LDK"
-            />
-          ) : null}
+          <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} />
+          <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} />
+          {backdoorPressed > 10 ? <LdkButton active={selectedWalletType === ButtonSelected.LDK} onPress={handleOnLdkButtonPressed} style={styles.button} subtext={LightningLdkWallet.getPackageVersion()} text="LDK" /> : null}
           <VaultButton active={selectedWalletType === ButtonSelected.VAULT} onPress={handleOnVaultButtonPressed} style={styles.button} />
         </View>
 
@@ -309,27 +252,9 @@ const WalletsAdd = () => {
                 <View>
                   <BlueSpacing20 />
                   <Text style={[styles.advancedText, stylesHook.advancedText]}>{loc.settings.advanced_options}</Text>
-                  <BlueListItem
-                    containerStyle={[styles.noPadding, stylesHook.noPadding]}
-                    bottomDivider={false}
-                    onPress={() => setSelectedIndex(0)}
-                    title={HDSegwitBech32Wallet.typeReadable}
-                    checkmark={selectedIndex === 0}
-                  />
-                  <BlueListItem
-                    containerStyle={[styles.noPadding, stylesHook.noPadding]}
-                    bottomDivider={false}
-                    onPress={() => setSelectedIndex(1)}
-                    title={SegwitP2SHWallet.typeReadable}
-                    checkmark={selectedIndex === 1}
-                  />
-                  <BlueListItem
-                    containerStyle={[styles.noPadding, stylesHook.noPadding]}
-                    bottomDivider={false}
-                    onPress={() => setSelectedIndex(2)}
-                    title={HDSegwitP2SHWallet.typeReadable}
-                    checkmark={selectedIndex === 2}
-                  />
+                  <BlueListItem containerStyle={[styles.noPadding, stylesHook.noPadding]} bottomDivider={false} onPress={() => setSelectedIndex(0)} title={HDSegwitBech32Wallet.typeReadable} checkmark={selectedIndex === 0} />
+                  <BlueListItem containerStyle={[styles.noPadding, stylesHook.noPadding]} bottomDivider={false} onPress={() => setSelectedIndex(1)} title={SegwitP2SHWallet.typeReadable} checkmark={selectedIndex === 1} />
+                  <BlueListItem containerStyle={[styles.noPadding, stylesHook.noPadding]} bottomDivider={false} onPress={() => setSelectedIndex(2)} title={HDSegwitP2SHWallet.typeReadable} checkmark={selectedIndex === 2} />
                 </View>
               );
             } else if (selectedWalletType === ButtonSelected.OFFCHAIN) {
@@ -340,49 +265,16 @@ const WalletsAdd = () => {
                   <BlueSpacing20 />
                   <BlueText>{loc.wallets.add_lndhub}</BlueText>
                   <View style={[styles.lndUri, stylesHook.lndUri]}>
-                    <TextInput
-                      value={walletBaseURI}
-                      onChangeText={setWalletBaseURI}
-                      onSubmitEditing={Keyboard.dismiss}
-                      placeholder={loc.wallets.add_lndhub_placeholder}
-                      clearButtonMode="while-editing"
-                      autoCapitalize="none"
-                      textContentType="URL"
-                      autoCorrect={false}
-                      placeholderTextColor="#81868e"
-                      style={styles.textInputCommon}
-                      editable={!isLoading}
-                      underlineColorAndroid="transparent"
-                    />
+                    <TextInput value={walletBaseURI} onChangeText={setWalletBaseURI} onSubmitEditing={Keyboard.dismiss} placeholder={loc.wallets.add_lndhub_placeholder} clearButtonMode="while-editing" autoCapitalize="none" textContentType="URL" autoCorrect={false} placeholderTextColor="#81868e" style={styles.textInputCommon} editable={!isLoading} underlineColorAndroid="transparent" />
                   </View>
                 </>
               );
             }
           })()}
-          {isAdvancedOptionsEnabled && selectedWalletType === ButtonSelected.ONCHAIN && !isLoading && (
-            <BlueButtonLink style={styles.import} title={entropyButtonText} onPress={navigateToEntropy} />
-          )}
+          {isAdvancedOptionsEnabled && selectedWalletType === ButtonSelected.ONCHAIN && !isLoading && <BlueButtonLink style={styles.import} title={entropyButtonText} onPress={navigateToEntropy} />}
           <BlueSpacing20 />
-          <View style={styles.createButton}>
-            {!isLoading ? (
-              <BlueButton
-                testID="Create"
-                title={loc.wallets.add_create}
-                disabled={!selectedWalletType || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)}
-                onPress={createWallet}
-              />
-            ) : (
-              <ActivityIndicator />
-            )}
-          </View>
-          {!isLoading && (
-            <BlueButtonLink
-              testID="ImportWallet"
-              style={styles.import}
-              title={loc.wallets.add_import_wallet}
-              onPress={navigateToImportWallet}
-            />
-          )}
+          <View style={styles.createButton}>{!isLoading ? <BlueButton testID="Create" title={loc.wallets.add_create} disabled={!selectedWalletType || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)} onPress={createWallet} /> : <ActivityIndicator />}</View>
+          {!isLoading && <BlueButtonLink testID="ImportWallet" style={styles.import} title={loc.wallets.add_import_wallet} onPress={navigateToImportWallet} />}
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
@@ -394,7 +286,7 @@ WalletsAdd.navigationOptions = navigationStyle(
     closeButton: true,
     headerHideBackButton: true,
   },
-  opts => ({ ...opts, title: loc.wallets.add_title }),
+  (opts) => ({ ...opts, title: loc.wallets.add_title }),
 );
 
 const styles = StyleSheet.create({

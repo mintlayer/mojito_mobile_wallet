@@ -45,10 +45,7 @@ export class HDLegacyBreadwalletWallet extends HDLegacyP2PKHWallet {
     }
 
     let p2wpkh = false;
-    if (
-      (node === 0 && this._external_segwit_index !== null && index >= this._external_segwit_index) ||
-      (node === 1 && this._internal_segwit_index !== null && index >= this._internal_segwit_index)
-    ) {
+    if ((node === 0 && this._external_segwit_index !== null && index >= this._external_segwit_index) || (node === 1 && this._internal_segwit_index !== null && index >= this._internal_segwit_index)) {
       p2wpkh = true;
     }
 
@@ -67,14 +64,8 @@ export class HDLegacyBreadwalletWallet extends HDLegacyP2PKHWallet {
     try {
       if (this.next_free_change_address_index === 0 && this.next_free_address_index === 0) {
         // doing binary search for last used addresses external/internal and legacy/bech32:
-        const [nextFreeExternalLegacy, nextFreeInternalLegacy] = await Promise.all([
-          this._binarySearchIteration(0, 1000, 0, false),
-          this._binarySearchIteration(0, 1000, 1, false),
-        ]);
-        const [nextFreeExternalBech32, nextFreeInternalBech32] = await Promise.all([
-          this._binarySearchIteration(nextFreeExternalLegacy, nextFreeExternalLegacy + 1000, 0, true),
-          this._binarySearchIteration(nextFreeInternalLegacy, nextFreeInternalLegacy + 1000, 1, true),
-        ]);
+        const [nextFreeExternalLegacy, nextFreeInternalLegacy] = await Promise.all([this._binarySearchIteration(0, 1000, 0, false), this._binarySearchIteration(0, 1000, 1, false)]);
+        const [nextFreeExternalBech32, nextFreeInternalBech32] = await Promise.all([this._binarySearchIteration(nextFreeExternalLegacy, nextFreeExternalLegacy + 1000, 0, true), this._binarySearchIteration(nextFreeInternalLegacy, nextFreeInternalLegacy + 1000, 1, true)]);
 
         // trying to detect if segwit activated. This condition can be deleted when BRD will enable segwit by default
         if (nextFreeExternalLegacy < nextFreeExternalBech32) {
@@ -94,7 +85,7 @@ export class HDLegacyBreadwalletWallet extends HDLegacyP2PKHWallet {
   }
 
   async _binarySearchIteration(startIndex, endIndex, node = 0, p2wpkh = false) {
-    const gerenateChunkAddresses = chunkNum => {
+    const gerenateChunkAddresses = (chunkNum) => {
       const ret = [];
       for (let c = this.gap_limit * chunkNum; c < this.gap_limit * (chunkNum + 1); c++) {
         ret.push(this._calcNodeAddressByIndex(node, c, p2wpkh));
@@ -120,11 +111,7 @@ export class HDLegacyBreadwalletWallet extends HDLegacyP2PKHWallet {
 
     if (lastHistoriesWithUsedAddresses) {
       // now searching for last used address in batch lastChunkWithUsedAddressesNum
-      for (
-        let c = lastChunkWithUsedAddressesNum * this.gap_limit;
-        c < lastChunkWithUsedAddressesNum * this.gap_limit + this.gap_limit;
-        c++
-      ) {
+      for (let c = lastChunkWithUsedAddressesNum * this.gap_limit; c < lastChunkWithUsedAddressesNum * this.gap_limit + this.gap_limit; c++) {
         const address = this._calcNodeAddressByIndex(node, c, p2wpkh);
         if (lastHistoriesWithUsedAddresses[address] && lastHistoriesWithUsedAddresses[address].length > 0) {
           lastUsedIndex = Math.max(c, lastUsedIndex) + 1; // point to next, which is supposed to be unsued

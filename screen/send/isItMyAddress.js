@@ -32,7 +32,7 @@ const IsItMyAddress = () => {
     },
   });
 
-  const handleUpdateAddress = nextValue => setAddress(nextValue.trim());
+  const handleUpdateAddress = (nextValue) => setAddress(nextValue.trim());
 
   const checkAddress = () => {
     Keyboard.dismiss();
@@ -53,7 +53,7 @@ const IsItMyAddress = () => {
     setResult(_result.join('\n\n'));
   };
 
-  const onBarScanned = value => {
+  const onBarScanned = (value) => {
     setAddress(value);
     setResultCleanAddress(value);
   };
@@ -90,28 +90,11 @@ const IsItMyAddress = () => {
 
   return (
     <SafeBlueArea style={styles.blueArea}>
-      <KeyboardAvoidingView
-        enabled={!Platform.isPad}
-        behavior={Platform.OS === 'ios' ? 'position' : null}
-        keyboardShouldPersistTaps="handled"
-      >
+      <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null} keyboardShouldPersistTaps="handled">
         <View style={styles.wrapper}>
           <BlueCard style={styles.mainCard}>
             <View style={[styles.input, stylesHooks.input]}>
-              <TextInput
-                style={styles.text}
-                maxHeight={100}
-                minHeight={100}
-                maxWidth="100%"
-                minWidth="100%"
-                multiline
-                editable
-                placeholder={loc.is_it_my_address.enter_address}
-                placeholderTextColor="#81868e"
-                value={address}
-                onChangeText={handleUpdateAddress}
-                testID="AddressInput"
-              />
+              <TextInput style={styles.text} maxHeight={100} minHeight={100} maxWidth="100%" minWidth="100%" multiline editable placeholder={loc.is_it_my_address.enter_address} placeholderTextColor="#81868e" value={address} onChangeText={handleUpdateAddress} testID="AddressInput" />
             </View>
 
             <BlueSpacing10 />
@@ -125,12 +108,7 @@ const IsItMyAddress = () => {
                 <BlueSpacing20 />
               </>
             )}
-            <BlueButton
-              disabled={address.trim().length === 0}
-              title={loc.is_it_my_address.check_address}
-              onPress={checkAddress}
-              testID="CheckAddress"
-            />
+            <BlueButton disabled={address.trim().length === 0} title={loc.is_it_my_address.check_address} onPress={checkAddress} testID="CheckAddress" />
             <BlueSpacing20 />
             <BlueText testID="Result">{result}</BlueText>
           </BlueCard>
@@ -141,7 +119,7 @@ const IsItMyAddress = () => {
 };
 
 export default IsItMyAddress;
-IsItMyAddress.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.is_it_my_address.title }));
+IsItMyAddress.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.is_it_my_address.title }));
 
 const styles = StyleSheet.create({
   wrapper: {

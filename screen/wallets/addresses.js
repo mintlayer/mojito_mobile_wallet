@@ -63,7 +63,7 @@ const WalletAddresses = () => {
 
   const addressList = useRef();
 
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
 
   const balanceUnit = wallet.getPreferredBalanceUnit();
 
@@ -82,9 +82,7 @@ const WalletAddresses = () => {
   });
 
   // computed property
-  const filteredAddresses = addresses
-    .filter(address => filterByAddressType(TABS.INTERNAL, address.isInternal, currentTab))
-    .sort(sortByAddressIndex);
+  const filteredAddresses = addresses.filter((address) => filterByAddressType(TABS.INTERNAL, address.isInternal, currentTab)).sort(sortByAddressIndex);
 
   useEffect(() => {
     if (showAddresses) {
@@ -121,25 +119,14 @@ const WalletAddresses = () => {
     }, []),
   );
 
-  const renderRow = item => {
+  const renderRow = (item) => {
     return <AddressItem {...item} balanceUnit={balanceUnit} walletID={walletID} allowSignVerifyMessage={allowSignVerifyMessage} />;
   };
 
   return (
     <View style={[styles.root, stylesHook.root]}>
       <StatusBar barStyle="default" />
-      <FlatList
-        contentContainerStyle={stylesHook.root}
-        ref={addressList}
-        data={filteredAddresses}
-        extraData={filteredAddresses}
-        initialNumToRender={20}
-        renderItem={renderRow}
-        ListEmptyComponent={<ActivityIndicator />}
-        centerContent={!showAddresses}
-        contentInsetAdjustmentBehavior="automatic"
-        ListHeaderComponent={<AddressTypeTabs currentTab={currentTab} setCurrentTab={setCurrentTab} />}
-      />
+      <FlatList contentContainerStyle={stylesHook.root} ref={addressList} data={filteredAddresses} extraData={filteredAddresses} initialNumToRender={20} renderItem={renderRow} ListEmptyComponent={<ActivityIndicator />} centerContent={!showAddresses} contentInsetAdjustmentBehavior="automatic" ListHeaderComponent={<AddressTypeTabs currentTab={currentTab} setCurrentTab={setCurrentTab} />} />
     </View>
   );
 };

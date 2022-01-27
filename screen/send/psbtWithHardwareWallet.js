@@ -1,16 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  TouchableOpacity,
-  ScrollView,
-  View,
-  TextInput,
-  Linking,
-  Platform,
-  Text,
-  StyleSheet,
-  findNodeHandle,
-} from 'react-native';
+import { ActivityIndicator, TouchableOpacity, ScrollView, View, TextInput, Linking, Platform, Text, StyleSheet, findNodeHandle } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import DocumentPicker from 'react-native-document-picker';
@@ -67,11 +56,11 @@ const PsbtWithHardwareWallet = () => {
     },
   });
 
-  const _combinePSBT = receivedPSBT => {
+  const _combinePSBT = (receivedPSBT) => {
     return fromWallet.combinePsbt(psbt, receivedPSBT);
   };
 
-  const onBarScanned = ret => {
+  const onBarScanned = (ret) => {
     if (ret && !ret.data) ret = { data: ret };
     if (ret.data.toUpperCase().startsWith('UR')) {
       alert('BC-UR not decoded. This should never happen');
@@ -146,7 +135,7 @@ const PsbtWithHardwareWallet = () => {
           txMetadata[txid] = { memo };
         }
         navigation.navigate('Success', { amount: undefined });
-        await new Promise(resolve => setTimeout(resolve, 3000)); // sleep to make sure network propagates
+        await new Promise((resolve) => setTimeout(resolve, 3000)); // sleep to make sure network propagates
         fetchAndSaveWalletTransactions(fromWallet.getID());
       } else {
         ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
@@ -182,12 +171,7 @@ const PsbtWithHardwareWallet = () => {
             <Text style={[styles.hexText, stylesHook.hexText]}>{loc.send.create_verify}</Text>
           </TouchableOpacity>
           <BlueSpacing20 />
-          <SecondButton
-            disabled={isElectrumDisabled}
-            onPress={broadcast}
-            title={loc.send.confirm_sendNow}
-            testID="PsbtWithHardwareWalletBroadcastTransactionButton"
-          />
+          <SecondButton disabled={isElectrumDisabled} onPress={broadcast} title={loc.send.confirm_sendNow} testID="PsbtWithHardwareWalletBroadcastTransactionButton" />
         </BlueCard>
       </View>
     );
@@ -221,7 +205,7 @@ const PsbtWithHardwareWallet = () => {
 
   const openScanner = () => {
     if (isMacCatalina) {
-      fs.showActionSheet({ anchor: findNodeHandle(openScannerButton.current) }).then(data => onBarScanned({ data }));
+      fs.showActionSheet({ anchor: findNodeHandle(openScannerButton.current) }).then((data) => onBarScanned({ data }));
     } else {
       navigation.navigate('ScanQRCodeRoot', {
         screen: 'ScanQRCode',
@@ -285,10 +269,7 @@ const PsbtWithHardwareWallet = () => {
             />
             <BlueSpacing20 />
             <View style={styles.copyToClipboard}>
-              <BlueCopyToClipboardButton
-                stringToCopy={typeof psbt === 'string' ? psbt : psbt.toBase64()}
-                displayText={loc.send.psbt_clipboard}
-              />
+              <BlueCopyToClipboardButton stringToCopy={typeof psbt === 'string' ? psbt : psbt.toBase64()} displayText={loc.send.psbt_clipboard} />
             </View>
           </BlueCard>
         </View>
@@ -299,7 +280,7 @@ const PsbtWithHardwareWallet = () => {
 
 export default PsbtWithHardwareWallet;
 
-PsbtWithHardwareWallet.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.send.header }));
+PsbtWithHardwareWallet.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.send.header }));
 
 const styles = StyleSheet.create({
   scrollViewContent: {

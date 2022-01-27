@@ -361,16 +361,7 @@ export class MultisigHDWallet extends AbstractHDElectrumWallet {
 
     // poor man's little-endian conversion:
     // ¯\_(ツ)_/¯
-    return (
-      masterFingerprintHex[6] +
-      masterFingerprintHex[7] +
-      masterFingerprintHex[4] +
-      masterFingerprintHex[5] +
-      masterFingerprintHex[2] +
-      masterFingerprintHex[3] +
-      masterFingerprintHex[0] +
-      masterFingerprintHex[1]
-    ).toUpperCase();
+    return (masterFingerprintHex[6] + masterFingerprintHex[7] + masterFingerprintHex[4] + masterFingerprintHex[5] + masterFingerprintHex[2] + masterFingerprintHex[3] + masterFingerprintHex[0] + masterFingerprintHex[1]).toUpperCase();
   }
 
   getXpub() {
@@ -420,10 +411,7 @@ export class MultisigHDWallet extends AbstractHDElectrumWallet {
     ret += '\n';
 
     for (let index = 0; index < this.getN(); index++) {
-      if (
-        this._cosignersCustomPaths[index] &&
-        ((printedGlobalDerivation && this._cosignersCustomPaths[index] !== this.getDerivationPath()) || !printedGlobalDerivation)
-      ) {
+      if (this._cosignersCustomPaths[index] && ((printedGlobalDerivation && this._cosignersCustomPaths[index] !== this.getDerivationPath()) || !printedGlobalDerivation)) {
         ret += '# derivation: ' + this._cosignersCustomPaths[index] + '\n';
         // if we printed global derivation and this cosigned _has_ derivation and its different from global - we print it ;
         // or we print it if cosigner _has_ some derivation set and we did not print global
@@ -432,9 +420,7 @@ export class MultisigHDWallet extends AbstractHDElectrumWallet {
         ret += this._cosignersFingerprints[index] + ': ' + this._cosigners[index] + '\n';
       } else {
         if (coordinationSetup) {
-          const xpub = this.convertXpubToMultisignatureXpub(
-            MultisigHDWallet.seedToXpub(this._cosigners[index], this._cosignersCustomPaths[index] || this._derivationPath),
-          );
+          const xpub = this.convertXpubToMultisignatureXpub(MultisigHDWallet.seedToXpub(this._cosigners[index], this._cosignersCustomPaths[index] || this._derivationPath));
           const fingerprint = MultisigHDWallet.mnemonicToFingerprint(this._cosigners[index]);
           ret += fingerprint + ': ' + xpub + '\n';
         } else {
@@ -474,10 +460,7 @@ export class MultisigHDWallet extends AbstractHDElectrumWallet {
       for (let c = 1; c <= n; c++) {
         const cosignerData = json['x' + c + '/'];
         if (cosignerData) {
-          const fingerprint =
-            (cosignerData.ckcc_xfp
-              ? MultisigHDWallet.ckccXfp2fingerprint(cosignerData.ckcc_xfp)
-              : cosignerData.root_fingerprint?.toUpperCase()) || '00000000';
+          const fingerprint = (cosignerData.ckcc_xfp ? MultisigHDWallet.ckccXfp2fingerprint(cosignerData.ckcc_xfp) : cosignerData.root_fingerprint?.toUpperCase()) || '00000000';
           if (cosignerData.seed) {
             this.addCosigner(ELECTRUM_SEED_PREFIX + cosignerData.seed, fingerprint, cosignerData.derivation);
           } else if (cosignerData.xprv && MultisigHDWallet.isXprvValid(cosignerData.xprv)) {
@@ -732,10 +715,7 @@ export class MultisigHDWallet extends AbstractHDElectrumWallet {
     const pubkeys = [];
     for (let c = 0; c < this._cosigners.length; c++) {
       const cosigner = this._cosigners[c];
-      const path = this._getDerivationPathByAddressWithCustomPath(
-        outputData.address,
-        this._cosignersCustomPaths[c] || this._derivationPath,
-      );
+      const path = this._getDerivationPathByAddressWithCustomPath(outputData.address, this._cosignersCustomPaths[c] || this._derivationPath);
       // ^^ path resembles _custom path_, if provided by user during setup, otherwise default path for wallet type gona be used
       const masterFingerprint = Buffer.from(this._cosignersFingerprints[c], 'hex');
 
@@ -815,12 +795,12 @@ export class MultisigHDWallet extends AbstractHDElectrumWallet {
     let psbt = new bitcoin.Psbt();
 
     let c = 0;
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       c++;
       psbt = this._addPsbtInput(psbt, input, sequence);
     });
 
-    outputs.forEach(output => {
+    outputs.forEach((output) => {
       // if output has no address - this is change output
       let change = false;
       if (!output.address) {
@@ -920,7 +900,7 @@ export class MultisigHDWallet extends AbstractHDElectrumWallet {
     await super.fetchUtxo();
     // now we need to fetch txhash for each input as required by PSBT
     const txhexes = await BlueElectrum.multiGetTransactionByTxid(
-      this.getUtxo(true).map(x => x.txid),
+      this.getUtxo(true).map((x) => x.txid),
       50,
       false,
     );

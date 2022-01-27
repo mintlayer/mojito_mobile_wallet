@@ -12,7 +12,7 @@ export const openPrivacyDesktopSettings = () => {
   }
 };
 
-export const presentCameraNotAuthorizedAlert = error => {
+export const presentCameraNotAuthorizedAlert = (error) => {
   Alert.alert(
     loc.errors.error,
     error,

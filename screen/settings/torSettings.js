@@ -85,12 +85,7 @@ const TorSettings = () => {
 
   return (
     <SafeBlueArea>
-      <BlueListItem
-        hideChevron
-        title={loc._.disabled}
-        Component={View}
-        switch={{ onValueChange: setIsTorDisabled, value: isTorDisabled }}
-      />
+      <BlueListItem hideChevron title={loc._.disabled} Component={View} switch={{ onValueChange: setIsTorDisabled, value: isTorDisabled }} />
       {!isTorDisabled && (
         <>
           <BlueCard>
@@ -111,6 +106,6 @@ const TorSettings = () => {
   );
 };
 
-TorSettings.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.tor_settings }));
+TorSettings.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.settings.tor_settings }));
 
 export default TorSettings;

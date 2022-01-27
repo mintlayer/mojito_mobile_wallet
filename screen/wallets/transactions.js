@@ -1,22 +1,5 @@
 import React, { useEffect, useState, useCallback, useContext, useRef } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  Dimensions,
-  FlatList,
-  InteractionManager,
-  Linking,
-  PixelRatio,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  findNodeHandle,
-  TouchableOpacity,
-  View,
-  I18nManager,
-} from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, FlatList, InteractionManager, Linking, PixelRatio, Platform, ScrollView, StatusBar, StyleSheet, Text, findNodeHandle, TouchableOpacity, View, I18nManager } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useRoute, useNavigation, useTheme, useFocusEffect } from '@react-navigation/native';
 import { Chain } from '../../models/bitcoinUnits';
@@ -39,17 +22,14 @@ import alert from '../../components/Alert';
 const fs = require('../../blue_modules/fs');
 const BlueElectrum = require('../../blue_modules/BlueElectrum');
 
-const buttonFontSize =
-  PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26) > 22
-    ? 22
-    : PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26);
+const buttonFontSize = PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26) > 22 ? 22 : PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26);
 
 const WalletTransactions = () => {
   const { wallets, saveToDisk, setSelectedWallet, walletTransactionUpdateStatus, isElectrumDisabled } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(false);
   const { walletID } = useRoute().params;
   const { name } = useRoute();
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const [itemPriceUnit, setItemPriceUnit] = useState(wallet.getPreferredBalanceUnit());
   const [dataSource, setDataSource] = useState(wallet.getTransactions(15));
   const [timeElapsed, setTimeElapsed] = useState(0);
@@ -103,7 +83,7 @@ const WalletTransactions = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => setTimeElapsed(prev => prev + 1), 60000);
+    const interval = setInterval(() => setTimeElapsed((prev) => prev + 1), 60000);
     return () => {
       clearInterval(interval);
     };
@@ -137,7 +117,7 @@ const WalletTransactions = () => {
   }, [wallets, wallet, walletID]);
 
   useEffect(() => {
-    const newWallet = wallets.find(w => w.getID() === walletID);
+    const newWallet = wallets.find((w) => w.getID() === walletID);
     if (newWallet) {
       setParams({ walletID, isLoading: false });
     }
@@ -156,7 +136,7 @@ const WalletTransactions = () => {
   // if description of transaction has been changed we want to show new one
   useFocusEffect(
     useCallback(() => {
-      setTimeElapsed(prev => prev + 1);
+      setTimeElapsed((prev) => prev + 1);
     }, []),
   );
 
@@ -211,7 +191,7 @@ const WalletTransactions = () => {
       noErr = false;
       alert(err.message);
       setIsLoading(false);
-      setTimeElapsed(prev => prev + 1);
+      setTimeElapsed((prev) => prev + 1);
     }
     if (noErr && smthChanged) {
       console.log('saving to disk');
@@ -219,7 +199,7 @@ const WalletTransactions = () => {
       //    setDataSource([...getTransactionsSliced(limit)]);
     }
     setIsLoading(false);
-    setTimeElapsed(prev => prev + 1);
+    setTimeElapsed((prev) => prev + 1);
   };
 
   const _keyExtractor = (_item, index) => index.toString();
@@ -259,10 +239,7 @@ const WalletTransactions = () => {
             The idea is to avoid showing on iOS an appstore/market style app that goes against the TOS.
 
            */}
-          {wallet.getTransactions().length > 0 &&
-            wallet.chain !== Chain.OFFCHAIN &&
-            wallet.type !== LightningLdkWallet.type &&
-            renderSellFiat()}
+          {wallet.getTransactions().length > 0 && wallet.chain !== Chain.OFFCHAIN && wallet.type !== LightningLdkWallet.type && renderSellFiat()}
           {wallet.chain === Chain.OFFCHAIN && renderMarketplaceButton()}
           {wallet.chain === Chain.OFFCHAIN && Platform.OS === 'ios' && renderLappBrowserButton()}
         </View>
@@ -273,13 +250,7 @@ const WalletTransactions = () => {
         )}
         <View style={[styles.listHeaderTextRow, stylesHook.listHeaderTextRow]}>
           <Text style={[styles.listHeaderText, stylesHook.listHeaderText]}>{loc.transactions.list_title}</Text>
-          <TouchableOpacity
-            accessibilityRole="button"
-            testID="refreshTransactions"
-            style={style}
-            onPress={refreshTransactions}
-            disabled={isLoading}
-          >
+          <TouchableOpacity accessibilityRole="button" testID="refreshTransactions" style={style} onPress={refreshTransactions} disabled={isLoading}>
             <Icon name="refresh" type="font-awesome" color={colors.feeText} />
           </TouchableOpacity>
         </View>
@@ -352,17 +323,13 @@ const WalletTransactions = () => {
 
   const renderSellFiat = () => {
     return (
-      <TouchableOpacity
-        accessibilityRole="button"
-        onPress={navigateToBuyBitcoin}
-        style={[styles.marketplaceButton2, stylesHook.marketplaceButton2]}
-      >
+      <TouchableOpacity accessibilityRole="button" onPress={navigateToBuyBitcoin} style={[styles.marketplaceButton2, stylesHook.marketplaceButton2]}>
         <Text style={[styles.marketpalceText1, stylesHook.marketpalceText1]}>{loc.wallets.list_tap_here_to_buy}</Text>
       </TouchableOpacity>
     );
   };
 
-  const onWalletSelect = async selectedWallet => {
+  const onWalletSelect = async (selectedWallet) => {
     if (selectedWallet) {
       navigate('WalletTransactions', {
         walletType: wallet.type,
@@ -400,11 +367,9 @@ const WalletTransactions = () => {
     });
   };
 
-  const renderItem = item => (
-    <TransactionListItem item={item.item} itemPriceUnit={itemPriceUnit} timeElapsed={timeElapsed} walletID={walletID} />
-  );
+  const renderItem = (item) => <TransactionListItem item={item.item} itemPriceUnit={itemPriceUnit} timeElapsed={timeElapsed} walletID={walletID} />;
 
-  const onBarCodeRead = ret => {
+  const onBarCodeRead = (ret) => {
     if (!isLoading) {
       setIsLoading(true);
       const params = {
@@ -467,25 +432,22 @@ const WalletTransactions = () => {
         if (!isClipboardEmpty) {
           options.push(loc.wallets.list_long_clipboard);
         }
-        ActionSheet.showActionSheetWithOptions(
-          { options, cancelButtonIndex: 0, anchor: findNodeHandle(walletActionButtonsRef.current) },
-          buttonIndex => {
-            if (buttonIndex === 1) {
-              choosePhoto();
-            } else if (buttonIndex === 2) {
-              navigate('ScanQRCodeRoot', {
-                screen: 'ScanQRCode',
-                params: {
-                  launchedBy: name,
-                  onBarScanned: onBarCodeRead,
-                  showFileImportButton: false,
-                },
-              });
-            } else if (buttonIndex === 3) {
-              copyFromClipboard();
-            }
-          },
-        );
+        ActionSheet.showActionSheetWithOptions({ options, cancelButtonIndex: 0, anchor: findNodeHandle(walletActionButtonsRef.current) }, (buttonIndex) => {
+          if (buttonIndex === 1) {
+            choosePhoto();
+          } else if (buttonIndex === 2) {
+            navigate('ScanQRCodeRoot', {
+              screen: 'ScanQRCode',
+              params: {
+                launchedBy: name,
+                onBarScanned: onBarCodeRead,
+                showFileImportButton: false,
+              },
+            });
+          } else if (buttonIndex === 3) {
+            copyFromClipboard();
+          }
+        });
       } else if (Platform.OS === 'android') {
         const buttons = [
           {
@@ -538,7 +500,7 @@ const WalletTransactions = () => {
     if (id === TransactionsNavigationHeader.actionKeys.Exchange) {
       Linking.openURL('https://zigzag.io/?utm_source=integration&utm_medium=bluewallet&utm_campaign=withdrawLink');
     } else if (id === TransactionsNavigationHeader.actionKeys.Refill) {
-      const availableWallets = [...wallets.filter(item => item.chain === Chain.ONCHAIN && item.allowSend())];
+      const availableWallets = [...wallets.filter((item) => item.chain === Chain.ONCHAIN && item.allowSend())];
       if (availableWallets.length === 0) {
         alert(loc.lnd.refill_create);
       } else {
@@ -563,13 +525,13 @@ const WalletTransactions = () => {
       <StatusBar barStyle="light-content" backgroundColor={WalletGradient.headerColorFor(wallet.type)} animated />
       <TransactionsNavigationHeader
         wallet={wallet}
-        onWalletUnitChange={passedWallet =>
+        onWalletUnitChange={(passedWallet) =>
           InteractionManager.runAfterInteractions(async () => {
             setItemPriceUnit(passedWallet.getPreferredBalanceUnit());
             saveToDisk();
           })
         }
-        onManageFundsPressed={id => {
+        onManageFundsPressed={(id) => {
           if (wallet.type === MultisigHDWallet.type) {
             navigateToViewEditCosigners();
           } else if (wallet.type === LightningLdkWallet.type) {
@@ -610,8 +572,8 @@ const WalletTransactions = () => {
             }
 
             setDataSource(getTransactionsSliced(limit + pageSize));
-            setLimit(prev => prev + pageSize);
-            setPageSize(prev => prev * 2);
+            setLimit((prev) => prev + pageSize);
+            setPageSize((prev) => prev * 2);
           }}
           ListFooterComponent={renderListFooterComponent}
           ListEmptyComponent={

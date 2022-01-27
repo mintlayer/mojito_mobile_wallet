@@ -56,11 +56,7 @@ export function getBalanceByAddress(address: string): Promise<{ confirmed: numbe
 export function multiGetUtxoByAddress(addresses: string[]): Promise<Record<string, Utxo[]>>;
 
 // TODO: this function returns different results based on the value of `verbose`, consider splitting it into two
-export function multiGetTransactionByTxid(
-  txIds: string[],
-  batchsize: number = 45,
-  verbose: true = true,
-): Promise<Record<string, Transaction>>;
+export function multiGetTransactionByTxid(txIds: string[], batchsize: number = 45, verbose: true = true): Promise<Record<string, Transaction>>;
 export function multiGetTransactionByTxid(txIds: string[], batchsize: number, verbose: false): Promise<Record<string, string>>;
 
 export function getTransactionsByAddress(address: string): Transaction[];

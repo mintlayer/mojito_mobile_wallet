@@ -1,4 +1,4 @@
-const ToolTipMenu = props => {
+const ToolTipMenu = (props) => {
   return props.children;
 };
 

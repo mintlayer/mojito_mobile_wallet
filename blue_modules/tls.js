@@ -32,7 +32,7 @@ function connect(config, callback) {
 
   // we will save `noDelay` and proxy it to socket object when its actually created and connected:
   const realSetNoDelay = client.setNoDelay; // reference to real setter
-  client.setNoDelay = noDelay => {
+  client.setNoDelay = (noDelay) => {
     this._noDelay = noDelay;
   };
 

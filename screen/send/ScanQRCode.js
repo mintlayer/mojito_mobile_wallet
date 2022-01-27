@@ -113,7 +113,7 @@ const ScanQRCode = () => {
     return createHash('sha256').update(s).digest().toString('hex');
   };
 
-  const _onReadUniformResourceV2 = part => {
+  const _onReadUniformResourceV2 = (part) => {
     if (!decoder) decoder = new BlueURDecoder();
     try {
       decoder.receivePart(part);
@@ -148,7 +148,7 @@ const ScanQRCode = () => {
    *
    * @deprecated remove when we get rid of URv1 support
    */
-  const _onReadUniformResource = ur => {
+  const _onReadUniformResource = (ur) => {
     try {
       const [index, total] = extractSingleWorkload(ur);
       animatedQRCodeData[index + 'of' + total] = ur;
@@ -188,7 +188,7 @@ const ScanQRCode = () => {
     }
   };
 
-  const onBarCodeRead = ret => {
+  const onBarCodeRead = (ret) => {
     const h = HashIt(ret.data);
     if (scannedCache[h]) {
       // this QR was already scanned by this ScanQRCode, lets prevent firing duplicate callbacks
@@ -260,7 +260,7 @@ const ScanQRCode = () => {
           maxWidth: 600,
           selectionLimit: 1,
         },
-        response => {
+        (response) => {
           if (response.didCancel) {
             setIsLoading(false);
           } else {
@@ -294,7 +294,7 @@ const ScanQRCode = () => {
     if (onDismiss) onDismiss();
   };
 
-  const handleCameraStatusChange = event => {
+  const handleCameraStatusChange = (event) => {
     setCameraStatus(event.cameraStatus);
   };
 
@@ -350,19 +350,7 @@ const ScanQRCode = () => {
       {backdoorVisible && (
         <View style={styles.backdoorInputWrapper}>
           <BlueText>Provide QR code contents manually:</BlueText>
-          <TextInput
-            testID="scanQrBackdoorInput"
-            multiline
-            underlineColorAndroid="transparent"
-            style={styles.backdoorInput}
-            autoCorrect={false}
-            autoCapitalize="none"
-            spellCheck={false}
-            selectTextOnFocus={false}
-            keyboardType={Platform.OS === 'android' ? 'visible-password' : 'default'}
-            value={backdoorText}
-            onChangeText={setBackdoorText}
-          />
+          <TextInput testID="scanQrBackdoorInput" multiline underlineColorAndroid="transparent" style={styles.backdoorInput} autoCorrect={false} autoCapitalize="none" spellCheck={false} selectTextOnFocus={false} keyboardType={Platform.OS === 'android' ? 'visible-password' : 'default'} value={backdoorText} onChangeText={setBackdoorText} />
           <BlueButton
             title="OK"
             testID="scanQrBackdoorOkButton"

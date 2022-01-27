@@ -12,7 +12,7 @@ const PleaseBackup = () => {
   const { wallets } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(true);
   const { walletID } = useRoute().params;
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const navigation = useNavigation();
   const { colors } = useTheme();
   const stylesHook = StyleSheet.create({
@@ -92,7 +92,7 @@ PleaseBackup.navigationOptions = navigationStyle(
     swipeEnabled: false,
     headerHideBackButton: true,
   },
-  opts => ({ ...opts, title: loc.pleasebackup.title }),
+  (opts) => ({ ...opts, title: loc.pleasebackup.title }),
 );
 
 const styles = StyleSheet.create({

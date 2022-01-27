@@ -38,9 +38,7 @@ describe('AOPP', () => {
     hd.setSecret(mnemonic);
     const address = hd._getExternalAddressByIndex(0);
 
-    const a = new AOPP(
-      'aopp:?v=0&msg=I+confirm+that+this+Bitcoin+%28BTC%29+address+is+controlled+by+Thomas+Turner%2C+Poststrasse+22%2C+Zug%2C+Switzerland.+Unique+Identifier%3A+24a37b6a555311c&asset=btc&format=any&callback=https%3A%2F%2Ftesting.21analytics.ch%2Fproofs%2F31e05ce3-bd03-47cb-aa0e-be37505bec5f',
-    );
+    const a = new AOPP('aopp:?v=0&msg=I+confirm+that+this+Bitcoin+%28BTC%29+address+is+controlled+by+Thomas+Turner%2C+Poststrasse+22%2C+Zug%2C+Switzerland.+Unique+Identifier%3A+24a37b6a555311c&asset=btc&format=any&callback=https%3A%2F%2Ftesting.21analytics.ch%2Fproofs%2F31e05ce3-bd03-47cb-aa0e-be37505bec5f');
     const signature = hd.signMessage(a.msg, address);
 
     await a.send({ address, signature });
@@ -52,9 +50,7 @@ describe('AOPP', () => {
     hd.setSecret(mnemonic);
     const address = hd._getExternalAddressByIndex(0);
 
-    const a = new AOPP(
-      'aopp:?v=0&msg=I+confirm+that+this+Bitcoin+%28BTC%29+address+is+controlled+by+Thomas+Turner%2C+Poststrasse+22%2C+Zug%2C+Switzerland.+Unique+Identifier%3A+24a37b6a555311c&asset=btc&format=any&callback=https%3A%2F%2Ftesting.21analytics.ch%2Fproofs%2F31e05ce3-bd03-47cb-aa0e-be37505bec5f',
-    );
+    const a = new AOPP('aopp:?v=0&msg=I+confirm+that+this+Bitcoin+%28BTC%29+address+is+controlled+by+Thomas+Turner%2C+Poststrasse+22%2C+Zug%2C+Switzerland.+Unique+Identifier%3A+24a37b6a555311c&asset=btc&format=any&callback=https%3A%2F%2Ftesting.21analytics.ch%2Fproofs%2F31e05ce3-bd03-47cb-aa0e-be37505bec5f');
     const signature = hd.signMessage(a.msg, address);
 
     await a.send({ address, signature });

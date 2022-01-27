@@ -28,10 +28,10 @@ const AOPP = () => {
         return navigation.pop();
       }
 
-      let availableWallets = wallets.filter(w => w.allowSignVerifyMessage());
+      let availableWallets = wallets.filter((w) => w.allowSignVerifyMessage());
       if (aopp.format !== AOPPClient.typeAny) {
         const segwitType = AOPPClient.getSegwitByAddressFormat(aopp.format);
-        availableWallets = availableWallets.filter(w => w.segwitType === segwitType);
+        availableWallets = availableWallets.filter((w) => w.segwitType === segwitType);
       }
 
       const wallet = await selectWallet(navigation.navigate, name, false, availableWallets, 'Onchain wallet is required to sign a message');
@@ -61,6 +61,6 @@ const styles = StyleSheet.create({
   },
 });
 
-AOPP.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.aopp.title }));
+AOPP.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.aopp.title }));
 
 export default AOPP;

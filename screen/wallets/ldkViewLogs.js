@@ -15,7 +15,7 @@ const LdkViewLogs = () => {
   const { wallets } = useContext(BlueStorageContext);
   const { walletID } = useRoute().params;
   /** @type {LightningLdkWallet} */
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const [isLoading, setIsLoading] = useState(false);
   const [logs, setLogs] = useState('');
   const [info, setInfo] = useState('');
@@ -82,7 +82,7 @@ const LdkViewLogs = () => {
     getLogs();
     await wallet
       .getInfo()
-      .then(async info => {
+      .then(async (info) => {
         setGetInfo(info);
         const peers = await wallet.listPeers();
         const listChannels = await wallet.listChannels();
@@ -130,7 +130,7 @@ const LdkViewLogs = () => {
   );
 };
 
-LdkViewLogs.navigationOptions = navigationStyle({}, opts => ({
+LdkViewLogs.navigationOptions = navigationStyle({}, (opts) => ({
   ...opts,
   title: loc.lnd.view_logs,
 }));

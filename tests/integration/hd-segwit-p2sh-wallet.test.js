@@ -66,12 +66,7 @@ it('HD (BIP49) can create TX', async () => {
   assert.ok(hd.utxo[0].address);
   assert.ok(hd.utxo[0].wif);
 
-  let txNew = hd.createTransaction(
-    hd.getUtxo(),
-    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 500 }],
-    1,
-    hd._getInternalAddressByIndex(hd.next_free_change_address_index),
-  );
+  let txNew = hd.createTransaction(hd.getUtxo(), [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 500 }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
   let tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
   assert.strictEqual(
     txNew.tx.toHex(),
@@ -88,12 +83,7 @@ it('HD (BIP49) can create TX', async () => {
 
   //
 
-  txNew = hd.createTransaction(
-    hd.getUtxo(),
-    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 25000 }],
-    5,
-    hd._getInternalAddressByIndex(hd.next_free_change_address_index),
-  );
+  txNew = hd.createTransaction(hd.getUtxo(), [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 25000 }], 5, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
   const satPerVbyte = txNew.fee / tx.virtualSize();
 
   assert.strictEqual(Math.round(satPerVbyte), 6); // so_close.jpg
@@ -138,23 +128,13 @@ it('HD (BIP49) can create TX', async () => {
   ];
 
   // one MAX output
-  txNew = hd.createTransaction(
-    utxo,
-    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }],
-    1,
-    hd._getInternalAddressByIndex(hd.next_free_change_address_index),
-  );
+  txNew = hd.createTransaction(utxo, [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
   tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
   assert.strictEqual(tx.outs.length, 1);
   assert.ok(tx.outs[0].value > 77000);
 
   // MAX with regular output
-  txNew = hd.createTransaction(
-    utxo,
-    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }, { address: 'bc1qvd6w54sydc08z3802svkxr7297ez7cusd6266p', value: 25000 }],
-    1,
-    hd._getInternalAddressByIndex(hd.next_free_change_address_index),
-  );
+  txNew = hd.createTransaction(utxo, [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }, { address: 'bc1qvd6w54sydc08z3802svkxr7297ez7cusd6266p', value: 25000 }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
   tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
   assert.strictEqual(tx.outs.length, 2);
   assert.ok(tx.outs[0].value > 50000);

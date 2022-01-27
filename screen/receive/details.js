@@ -1,32 +1,11 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import {
-  BackHandler,
-  InteractionManager,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
+import { BackHandler, InteractionManager, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TextInput, View } from 'react-native';
 import LottieView from 'lottie-react-native';
 import QRCodeComponent from '../../components/QRCodeComponent';
 import { useNavigation, useRoute, useTheme, useFocusEffect } from '@react-navigation/native';
 import Share from 'react-native-share';
 
-import {
-  BlueLoading,
-  BlueCopyTextToClipboard,
-  BlueButton,
-  BlueButtonLink,
-  BlueText,
-  BlueSpacing20,
-  BlueAlertWalletExportReminder,
-  BlueCard,
-  BlueSpacing40,
-} from '../../BlueComponents';
+import { BlueLoading, BlueCopyTextToClipboard, BlueButton, BlueButtonLink, BlueText, BlueSpacing20, BlueAlertWalletExportReminder, BlueCard, BlueSpacing40 } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import BottomModal from '../../components/BottomModal';
 import { Chain, BitcoinUnit } from '../../models/bitcoinUnits';
@@ -44,7 +23,7 @@ const currency = require('../../blue_modules/currency');
 const ReceiveDetails = () => {
   const { walletID, address } = useRoute().params;
   const { wallets, saveToDisk, sleep, isElectrumDisabled, fetchAndSaveWalletTransactions } = useContext(BlueStorageContext);
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const [customLabel, setCustomLabel] = useState();
   const [customAmount, setCustomAmount] = useState();
   const [customUnit, setCustomUnit] = useState(BitcoinUnit.BTC);
@@ -329,12 +308,7 @@ const ReceiveDetails = () => {
         </View>
         <View style={stylesHook.share}>
           <BlueCard>
-            <BlueButtonLink
-              style={stylesHook.link}
-              testID="SetCustomAmountButton"
-              title={loc.receive.details_setAmount}
-              onPress={showCustomAmountModal}
-            />
+            <BlueButtonLink style={stylesHook.link} testID="SetCustomAmountButton" title={loc.receive.details_setAmount} onPress={showCustomAmountModal} />
             <BlueButton onPress={handleShareButtonPressed} title={loc.receive.details_share} />
           </BlueCard>
         </View>
@@ -384,7 +358,7 @@ const ReceiveDetails = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setAddressBIP21Encoded = address => {
+  const setAddressBIP21Encoded = (address) => {
     const bip21encoded = DeeplinkSchemaMatch.bip21encode(address);
     setParams({ address });
     setBip21encoded(bip21encoded);
@@ -462,24 +436,11 @@ const ReceiveDetails = () => {
           <View style={stylesHook.modalContent}>
             <AmountInput unit={customUnit} amount={customAmount || ''} onChangeText={setCustomAmount} onAmountUnitChange={setCustomUnit} />
             <View style={stylesHook.customAmount}>
-              <TextInput
-                onChangeText={setCustomLabel}
-                placeholderTextColor="#81868e"
-                placeholder={loc.receive.details_label}
-                value={customLabel || ''}
-                numberOfLines={1}
-                style={stylesHook.customAmountText}
-                testID="CustomAmountDescription"
-              />
+              <TextInput onChangeText={setCustomLabel} placeholderTextColor="#81868e" placeholder={loc.receive.details_label} value={customLabel || ''} numberOfLines={1} style={stylesHook.customAmountText} testID="CustomAmountDescription" />
             </View>
             <BlueSpacing20 />
             <View>
-              <BlueButton
-                testID="CustomAmountSaveButton"
-                style={stylesHook.modalButton}
-                title={loc.receive.details_create}
-                onPress={createCustomAmountAddress}
-              />
+              <BlueButton testID="CustomAmountSaveButton" style={stylesHook.modalButton} title={loc.receive.details_create} onPress={createCustomAmountAddress} />
               <BlueSpacing20 />
             </View>
             <BlueSpacing20 />
@@ -490,7 +451,7 @@ const ReceiveDetails = () => {
   };
 
   const handleShareButtonPressed = () => {
-    Share.open({ message: bip21encoded }).catch(error => console.log(error));
+    Share.open({ message: bip21encoded }).catch((error) => console.log(error));
   };
 
   /**
@@ -515,13 +476,7 @@ const ReceiveDetails = () => {
   return (
     <View style={stylesHook.root}>
       <StatusBar barStyle="light-content" />
-      {address !== undefined && showAddress && (
-        <HandoffComponent
-          title={loc.send.details_address}
-          type={HandoffComponent.activityTypes.ReceiveOnchain}
-          userInfo={{ address: address }}
-        />
-      )}
+      {address !== undefined && showAddress && <HandoffComponent title={loc.send.details_address} type={HandoffComponent.activityTypes.ReceiveOnchain} userInfo={{ address: address }} />}
       {showConfirmedBalance ? renderConfirmedBalance() : null}
       {showPendingBalance ? renderPendingBalance() : null}
       {showAddress ? renderReceiveDetails() : null}
@@ -542,7 +497,7 @@ ReceiveDetails.navigationOptions = navigationStyle(
     closeButton: true,
     headerHideBackButton: true,
   },
-  opts => ({ ...opts, title: loc.receive.header }),
+  (opts) => ({ ...opts, title: loc.receive.header }),
 );
 
 export default ReceiveDetails;

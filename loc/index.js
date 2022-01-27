@@ -145,7 +145,7 @@ const setDateTimeLocale = async () => {
   }
   if (localeForDayJSAvailable) {
     dayjs.locale(lang.split('_')[0]);
-    const language = AvailableLanguages.find(language => language.value === lang.replace('_', '-'));
+    const language = AvailableLanguages.find((language) => language.value === lang.replace('_', '-'));
     /* I18n Manager breaks testing. Mocking built-in RN modules is not so straightforward.
         Only run this conditional if its outside a testing environment.
     */
@@ -180,7 +180,7 @@ const setLanguageLocale = async () => {
     await setDateTimeLocale();
   } else {
     const locales = RNLocalize.getLocales();
-    if (Object.values(AvailableLanguages).some(language => language.value === locales[0].languageCode)) {
+    if (Object.values(AvailableLanguages).some((language) => language.value === locales[0].languageCode)) {
       await strings.saveLanguage(locales[0].languageCode);
       await strings.setLanguage(locales[0].languageCode);
       if (process.env.JEST_WORKER_ID === undefined) {
@@ -249,13 +249,13 @@ const strings = new Localization({
   zh_tw: require('./zh_tw.json'),
 });
 
-strings.saveLanguage = async lang => {
+strings.saveLanguage = async (lang) => {
   await AsyncStorage.setItem(LANG, lang);
   strings.setLanguage(lang);
   await setDateTimeLocale();
 };
 
-export const transactionTimeToReadable = time => {
+export const transactionTimeToReadable = (time) => {
   if (time === -1) {
     return 'unknown';
   }
@@ -272,7 +272,7 @@ export const transactionTimeToReadable = time => {
   return ret;
 };
 
-export const removeTrailingZeros = value => {
+export const removeTrailingZeros = (value) => {
   value = value.toString();
 
   if (value.indexOf('.') === -1) {

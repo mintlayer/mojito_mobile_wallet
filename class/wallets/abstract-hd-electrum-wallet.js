@@ -276,10 +276,10 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     // now purge all unconfirmed txs from internal hashmaps, since some may be evicted from mempool because they became invalid
     // or replaced. hashmaps are going to be re-populated anyways, since we fetched TXs for addresses with unconfirmed TXs
     for (let c = 0; c < this.next_free_address_index + this.gap_limit; c++) {
-      this._txs_by_external_index[c] = this._txs_by_external_index[c].filter(tx => !!tx.confirmations);
+      this._txs_by_external_index[c] = this._txs_by_external_index[c].filter((tx) => !!tx.confirmations);
     }
     for (let c = 0; c < this.next_free_change_address_index + this.gap_limit; c++) {
-      this._txs_by_internal_index[c] = this._txs_by_internal_index[c].filter(tx => !!tx.confirmations);
+      this._txs_by_internal_index[c] = this._txs_by_internal_index[c].filter((tx) => !!tx.confirmations);
     }
 
     // now, we need to put transactions in all relevant `cells` of internal hashmaps: this._txs_by_internal_index && this._txs_by_external_index
@@ -415,10 +415,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
 
       for (const vin of tx.inputs) {
         // if input (spending) goes from our address - we are loosing!
-        if (
-          (vin.address && ownedAddressesHashmap[vin.address]) ||
-          (vin.addresses && vin.addresses[0] && ownedAddressesHashmap[vin.addresses[0]])
-        ) {
+        if ((vin.address && ownedAddressesHashmap[vin.address]) || (vin.addresses && vin.addresses[0] && ownedAddressesHashmap[vin.addresses[0]])) {
           tx.value -= new BigNumber(vin.value).multipliedBy(100000000).toNumber();
         }
       }
@@ -446,7 +443,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
   }
 
   async _binarySearchIterationForInternalAddress(index) {
-    const gerenateChunkAddresses = chunkNum => {
+    const gerenateChunkAddresses = (chunkNum) => {
       const ret = [];
       for (let c = this.gap_limit * chunkNum; c < this.gap_limit * (chunkNum + 1); c++) {
         ret.push(this._getInternalAddressByIndex(c));
@@ -472,11 +469,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
 
     if (lastHistoriesWithUsedAddresses) {
       // now searching for last used address in batch lastChunkWithUsedAddressesNum
-      for (
-        let c = lastChunkWithUsedAddressesNum * this.gap_limit;
-        c < lastChunkWithUsedAddressesNum * this.gap_limit + this.gap_limit;
-        c++
-      ) {
+      for (let c = lastChunkWithUsedAddressesNum * this.gap_limit; c < lastChunkWithUsedAddressesNum * this.gap_limit + this.gap_limit; c++) {
         const address = this._getInternalAddressByIndex(c);
         if (lastHistoriesWithUsedAddresses[address] && lastHistoriesWithUsedAddresses[address].length > 0) {
           lastUsedIndex = Math.max(c, lastUsedIndex) + 1; // point to next, which is supposed to be unsued
@@ -488,7 +481,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
   }
 
   async _binarySearchIterationForExternalAddress(index) {
-    const gerenateChunkAddresses = chunkNum => {
+    const gerenateChunkAddresses = (chunkNum) => {
       const ret = [];
       for (let c = this.gap_limit * chunkNum; c < this.gap_limit * (chunkNum + 1); c++) {
         ret.push(this._getExternalAddressByIndex(c));
@@ -514,11 +507,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
 
     if (lastHistoriesWithUsedAddresses) {
       // now searching for last used address in batch lastChunkWithUsedAddressesNum
-      for (
-        let c = lastChunkWithUsedAddressesNum * this.gap_limit;
-        c < lastChunkWithUsedAddressesNum * this.gap_limit + this.gap_limit;
-        c++
-      ) {
+      for (let c = lastChunkWithUsedAddressesNum * this.gap_limit; c < lastChunkWithUsedAddressesNum * this.gap_limit + this.gap_limit; c++) {
         const address = this._getExternalAddressByIndex(c);
         if (lastHistoriesWithUsedAddresses[address] && lastHistoriesWithUsedAddresses[address].length > 0) {
           lastUsedIndex = Math.max(c, lastUsedIndex) + 1; // point to next, which is supposed to be unsued
@@ -602,10 +591,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
         // first, if balances differ from what we store - we delete transactions for that
         // address so next fetchTransactions() will refetch everything
         if (this._balances_by_external_index[c]) {
-          if (
-            this._balances_by_external_index[c].c !== balances.addresses[addr].confirmed ||
-            this._balances_by_external_index[c].u !== balances.addresses[addr].unconfirmed
-          ) {
+          if (this._balances_by_external_index[c].c !== balances.addresses[addr].confirmed || this._balances_by_external_index[c].u !== balances.addresses[addr].unconfirmed) {
             delete this._txs_by_external_index[c];
           }
         }
@@ -622,10 +608,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
         // first, if balances differ from what we store - we delete transactions for that
         // address so next fetchTransactions() will refetch everything
         if (this._balances_by_internal_index[c]) {
-          if (
-            this._balances_by_internal_index[c].c !== balances.addresses[addr].confirmed ||
-            this._balances_by_internal_index[c].u !== balances.addresses[addr].unconfirmed
-          ) {
+          if (this._balances_by_internal_index[c].c !== balances.addresses[addr].confirmed || this._balances_by_internal_index[c].u !== balances.addresses[addr].unconfirmed) {
             delete this._txs_by_internal_index[c];
           }
         }
@@ -874,7 +857,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     const keypairs = {};
     const values = {};
 
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       let keyPair;
       if (!skipSigning) {
         // skiping signing related stuff
@@ -903,7 +886,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
       psbt = this._addPsbtInput(psbt, input, sequence, masterFingerprintBuffer);
     });
 
-    outputs.forEach(output => {
+    outputs.forEach((output) => {
       // if output has no address - this is change output
       let change = false;
       if (!output.address) {

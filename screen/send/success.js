@@ -35,13 +35,7 @@ const Success = () => {
 
   return (
     <SafeAreaView style={[styles.root, stylesHook.root]}>
-      <SuccessView
-        amount={amount}
-        amountUnit={amountUnit}
-        fee={fee}
-        invoiceDescription={invoiceDescription}
-        onDonePressed={onDonePressed}
-      />
+      <SuccessView amount={amount} amountUnit={amountUnit} fee={fee} invoiceDescription={invoiceDescription} onDonePressed={onDonePressed} />
       <View style={styles.buttonContainer}>
         <BlueButton onPress={onDonePressed} title={loc.send.success_done} />
       </View>

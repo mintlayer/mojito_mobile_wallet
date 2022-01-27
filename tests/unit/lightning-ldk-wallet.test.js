@@ -38,10 +38,7 @@ describe('', () => {
   });
 
   it('can convert preimage to hash', () => {
-    assert.strictEqual(
-      LightningLdkWallet.preimage2hash('7ec674e1edfc6f5cf32b445e12aa1a1fe0c91b97dd61f98bb41214f31f3642d0'),
-      '294c32ef715c92ac72af888b735950e8a8ea51c00bd4a01572a8da772956dde5',
-    );
+    assert.strictEqual(LightningLdkWallet.preimage2hash('7ec674e1edfc6f5cf32b445e12aa1a1fe0c91b97dd61f98bb41214f31f3642d0'), '294c32ef715c92ac72af888b735950e8a8ea51c00bd4a01572a8da772956dde5');
   });
 
   it('can work with 12 words mnemonics instead of 24', () => {

@@ -1,19 +1,6 @@
 import React, { useRef, useCallback, useImperativeHandle, forwardRef, useContext } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Animated,
-  Image,
-  I18nManager,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  useWindowDimensions,
-  View,
-  Dimensions,
-  FlatList,
-} from 'react-native';
+import { Animated, Image, I18nManager, Platform, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, useWindowDimensions, View, Dimensions, FlatList } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import loc, { formatBalance, transactionTimeToReadable } from '../loc';
@@ -66,20 +53,8 @@ const NewWalletPanel = ({ onPress }) => {
   });
 
   return (
-    <TouchableOpacity
-      accessibilityRole="button"
-      testID="CreateAWallet"
-      onPress={onPress}
-      style={isLargeScreen ? {} : { width: itemWidth * 1.2 }}
-    >
-      <View
-        style={[
-          nStyles.container,
-          nStylesHooks.container,
-          { backgroundColor: WalletGradient.createWallet() },
-          isLargeScreen ? {} : { width: itemWidth },
-        ]}
-      >
+    <TouchableOpacity accessibilityRole="button" testID="CreateAWallet" onPress={onPress} style={isLargeScreen ? {} : { width: itemWidth * 1.2 }}>
+      <View style={[nStyles.container, nStylesHooks.container, { backgroundColor: WalletGradient.createWallet() }, isLargeScreen ? {} : { width: itemWidth }]}>
         <Text style={[nStyles.addAWAllet, { color: colors.foregroundColor }]}>{loc.wallets.list_create_a_wallet}</Text>
         <Text style={[nStyles.addLine, { color: colors.alternativeTextColor }]}>{loc.wallets.list_create_a_wallet_text}</Text>
         <View style={nStyles.button}>
@@ -185,27 +160,12 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
       image = I18nManager.isRTL ? require('../img/btc-shape-rtl.png') : require('../img/btc-shape.png');
   }
 
-  const latestTransactionText =
-    walletTransactionUpdateStatus === true || walletTransactionUpdateStatus === item.getID()
-      ? loc.transactions.updating
-      : item.getBalance() !== 0 && item.getLatestTransactionTime() === 0
-      ? loc.wallets.pull_to_refresh
-      : item.getTransactions().find(tx => tx.confirmations === 0)
-      ? loc.transactions.pending
-      : transactionTimeToReadable(item.getLatestTransactionTime());
+  const latestTransactionText = walletTransactionUpdateStatus === true || walletTransactionUpdateStatus === item.getID() ? loc.transactions.updating : item.getBalance() !== 0 && item.getLatestTransactionTime() === 0 ? loc.wallets.pull_to_refresh : item.getTransactions().find((tx) => tx.confirmations === 0) ? loc.transactions.pending : transactionTimeToReadable(item.getLatestTransactionTime());
 
   const balance = !item.hideBalance && formatBalance(Number(item.getBalance()), item.getPreferredBalanceUnit(), true);
 
   return (
-    <Animated.View
-      style={[
-        isLargeScreen ? iStyles.rootLargeDevice : { ...iStyles.root, width: itemWidth },
-        { opacity, transform: [{ scale: scaleValue }] },
-      ]}
-      shadowOpacity={25 / 100}
-      shadowOffset={{ width: 0, height: 3 }}
-      shadowRadius={8}
-    >
+    <Animated.View style={[isLargeScreen ? iStyles.rootLargeDevice : { ...iStyles.root, width: itemWidth }, { opacity, transform: [{ scale: scaleValue }] }]} shadowOpacity={25 / 100} shadowOffset={{ width: 0, height: 3 }} shadowRadius={8}>
       <TouchableWithoutFeedback
         testID={item.getLabel()}
         onPressIn={onPressedIn}
@@ -274,15 +234,7 @@ const cStyles = StyleSheet.create({
 const WalletsCarousel = forwardRef((props, ref) => {
   const { preferredFiatCurrency, language } = useContext(BlueStorageContext);
   const renderItem = useCallback(
-    ({ item, index }) => (
-      <WalletCarouselItem
-        isSelectedWallet={!props.horizontal && props.selectedWallet && item ? props.selectedWallet === item.getID() : undefined}
-        item={item}
-        index={index}
-        handleLongPress={props.handleLongPress}
-        onPress={props.onPress}
-      />
-    ),
+    ({ item, index }) => <WalletCarouselItem isSelectedWallet={!props.horizontal && props.selectedWallet && item ? props.selectedWallet === item.getID() : undefined} item={item} index={index} handleLongPress={props.handleLongPress} onPress={props.onPress} />,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [props.horizontal, props.selectedWallet, props.handleLongPress, props.onPress, preferredFiatCurrency, language],
   );
@@ -302,7 +254,7 @@ const WalletsCarousel = forwardRef((props, ref) => {
     },
   }));
 
-  const onScrollToIndexFailed = error => {
+  const onScrollToIndexFailed = (error) => {
     console.log('onScrollToIndexFailed');
     console.log(error);
     flatListRef.current.scrollToOffset({ offset: error.averageItemLength * error.index, animated: true });

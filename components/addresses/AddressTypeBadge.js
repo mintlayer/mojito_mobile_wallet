@@ -30,25 +30,13 @@ const AddressTypeBadge = ({ isInternal, hasTransactions }) => {
   });
 
   // eslint-disable-next-line prettier/prettier
-  const badgeLabel = hasTransactions
-    ? loc.addresses.type_used
-    : isInternal
-    ? formatStringAddTwoWhiteSpaces(loc.addresses.type_change)
-    : formatStringAddTwoWhiteSpaces(loc.addresses.type_receive);
+  const badgeLabel = hasTransactions ? loc.addresses.type_used : isInternal ? formatStringAddTwoWhiteSpaces(loc.addresses.type_change) : formatStringAddTwoWhiteSpaces(loc.addresses.type_receive);
 
   // eslint-disable-next-line prettier/prettier
-  const badgeStyle = hasTransactions
-   ? stylesHook.usedBadge
-   : isInternal
-    ? stylesHook.changeBadge
-    : stylesHook.receiveBadge;
+  const badgeStyle = hasTransactions ? stylesHook.usedBadge : isInternal ? stylesHook.changeBadge : stylesHook.receiveBadge;
 
   // eslint-disable-next-line prettier/prettier
-  const textStyle = hasTransactions
-    ? stylesHook.usedText
-    : isInternal
-      ? stylesHook.changeText
-      : stylesHook.receiveText;
+  const textStyle = hasTransactions ? stylesHook.usedText : isInternal ? stylesHook.changeText : stylesHook.receiveText;
 
   return (
     <View style={[styles.container, badgeStyle]}>

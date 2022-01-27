@@ -13,7 +13,7 @@ const bitcoin = require('bitcoinjs-lib');
 const BigNumber = require('bignumber.js');
 const currency = require('../../blue_modules/currency');
 
-const shortenAddress = addr => {
+const shortenAddress = (addr) => {
   return addr.substr(0, Math.floor(addr.length / 2) - 1) + '\n' + addr.substr(Math.floor(addr.length / 2) - 1, addr.length);
 };
 
@@ -24,7 +24,7 @@ const PsbtMultisig = () => {
   const [flatListHeight, setFlatListHeight] = useState(0);
   const { walletID, psbtBase64, memo, receivedPSBTBase64, launchedBy } = useRoute().params;
   /** @type MultisigHDWallet */
-  const wallet = wallets.find(w => w.getID() === walletID);
+  const wallet = wallets.find((w) => w.getID() === walletID);
   const [psbt, setPsbt] = useState(bitcoin.Psbt.fromBase64(psbtBase64));
   const data = new Array(wallet.getM());
   const stylesHook = StyleSheet.create({
@@ -90,7 +90,7 @@ const PsbtMultisig = () => {
     return wallet.calculateFeeFromPsbt(psbt);
   };
 
-  const _renderItem = el => {
+  const _renderItem = (el) => {
     if (el.index >= howManySignaturesWeHave) return _renderItemUnsigned(el);
     else return _renderItemSigned(el);
   };
@@ -99,7 +99,7 @@ const PsbtMultisig = () => {
     navigate('PsbtMultisigQRCode', { walletID, psbtBase64: psbt.toBase64(), isShowOpenScanner: isConfirmEnabled() });
   };
 
-  const _renderItemUnsigned = el => {
+  const _renderItemUnsigned = (el) => {
     const renderProvideSignature = el.index === howManySignaturesWeHave;
     return (
       <View testID="ItemUnsigned">
@@ -108,23 +108,14 @@ const PsbtMultisig = () => {
             <Text style={[styles.vaultKeyText, stylesHook.vaultKeyText]}>{el.index + 1}</Text>
           </View>
           <View style={styles.vaultKeyTextWrapper}>
-            <Text style={[styles.vaultKeyText, stylesHook.vaultKeyText]}>
-              {loc.formatString(loc.multisig.vault_key, { number: el.index + 1 })}
-            </Text>
+            <Text style={[styles.vaultKeyText, stylesHook.vaultKeyText]}>{loc.formatString(loc.multisig.vault_key, { number: el.index + 1 })}</Text>
           </View>
         </View>
 
         {renderProvideSignature && (
           <View>
-            <TouchableOpacity
-              accessibilityRole="button"
-              testID="ProvideSignature"
-              style={[styles.provideSignatureButton, stylesHook.provideSignatureButton]}
-              onPress={navigateToPSBTMultisigQRCode}
-            >
-              <Text style={[styles.provideSignatureButtonText, stylesHook.provideSignatureButtonText]}>
-                {loc.multisig.provide_signature}
-              </Text>
+            <TouchableOpacity accessibilityRole="button" testID="ProvideSignature" style={[styles.provideSignatureButton, stylesHook.provideSignatureButton]} onPress={navigateToPSBTMultisigQRCode}>
+              <Text style={[styles.provideSignatureButtonText, stylesHook.provideSignatureButtonText]}>{loc.multisig.provide_signature}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -132,16 +123,14 @@ const PsbtMultisig = () => {
     );
   };
 
-  const _renderItemSigned = el => {
+  const _renderItemSigned = (el) => {
     return (
       <View style={styles.flexDirectionRow} testID="ItemSigned">
         <View style={[styles.vaultKeyCircleSuccess, stylesHook.vaultKeyCircleSuccess]}>
           <Icon size={24} name="check" type="ionicons" color={colors.msSuccessCheck} />
         </View>
         <View style={styles.vaultKeyTextSignedWrapper}>
-          <Text style={[styles.vaultKeyTextSigned, stylesHook.vaultKeyTextSigned]}>
-            {loc.formatString(loc.multisig.vault_key, { number: el.index + 1 })}
-          </Text>
+          <Text style={[styles.vaultKeyTextSigned, stylesHook.vaultKeyTextSigned]}>{loc.formatString(loc.multisig.vault_key, { number: el.index + 1 })}</Text>
         </View>
       </View>
     );
@@ -255,9 +244,7 @@ const PsbtMultisig = () => {
     <>
       <View style={styles.bottomWrapper}>
         <View style={styles.bottomFeesWrapper}>
-          <BlueText style={[styles.feeFiatText, stylesHook.feeFiatText]}>
-            {loc.formatString(loc.multisig.fee, { number: currency.satoshiToLocalCurrency(getFee()) })} -{' '}
-          </BlueText>
+          <BlueText style={[styles.feeFiatText, stylesHook.feeFiatText]}>{loc.formatString(loc.multisig.fee, { number: currency.satoshiToLocalCurrency(getFee()) })} - </BlueText>
           <BlueText>{loc.formatString(loc.multisig.fee_btc, { number: currency.satoshiToBTC(getFee()) })}</BlueText>
         </View>
       </View>
@@ -267,7 +254,7 @@ const PsbtMultisig = () => {
     </>
   );
 
-  const onLayout = e => {
+  const onLayout = (e) => {
     setFlatListHeight(e.nativeEvent.layout.height);
   };
 
@@ -280,25 +267,11 @@ const PsbtMultisig = () => {
           </View>
           <View style={styles.msright}>
             <BlueCard>
-              <FlatList
-                data={data}
-                onLayout={onLayout}
-                renderItem={_renderItem}
-                keyExtractor={(_item, index) => `${index}`}
-                ListHeaderComponent={header}
-                ListFooterComponent={footer}
-              />
+              <FlatList data={data} onLayout={onLayout} renderItem={_renderItem} keyExtractor={(_item, index) => `${index}`} ListHeaderComponent={header} ListFooterComponent={footer} />
               {isConfirmEnabled() && (
                 <View style={styles.height80}>
-                  <TouchableOpacity
-                    accessibilityRole="button"
-                    testID="ExportSignedPsbt"
-                    style={[styles.provideSignatureButton, stylesHook.provideSignatureButton]}
-                    onPress={navigateToPSBTMultisigQRCode}
-                  >
-                    <Text style={[styles.provideSignatureButtonText, stylesHook.provideSignatureButtonText]}>
-                      {loc.multisig.export_signed_psbt}
-                    </Text>
+                  <TouchableOpacity accessibilityRole="button" testID="ExportSignedPsbt" style={[styles.provideSignatureButton, stylesHook.provideSignatureButton]} onPress={navigateToPSBTMultisigQRCode}>
+                    <Text style={[styles.provideSignatureButtonText, stylesHook.provideSignatureButtonText]}>{loc.multisig.export_signed_psbt}</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -413,6 +386,6 @@ const styles = StyleSheet.create({
   },
 });
 
-PsbtMultisig.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.multisig.header }));
+PsbtMultisig.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.multisig.header }));
 
 export default PsbtMultisig;
