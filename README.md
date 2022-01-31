@@ -101,7 +101,7 @@ MIT
 
 ## WANT TO CONTRIBUTE?
 
-Grab an issue from [the backlog](https://github.com/mintlayer/mobile_wallet/issues), try to start or submit a PR, any doubts we will try to guide you. Contributors have a private telegram group, request access by email hello@mintlayer.org
+Grab an issue from [the backlog](https://github.com/mintlayer/mobile_wallet/issues), try to start or submit a PR, any doubts we will try to guide you. Contributors have a private telegram group, request access by email opensource@mintlayer.org
 
 ## Q&A
 
@@ -115,5 +115,5 @@ Bugs reported via BugSnag
 
 ## RESPONSIBLE DISCLOSURE
 
-Found critical bugs/vulnerabilities? Please email them hello@mintlayer.org
+Found critical bugs/vulnerabilities? Please email them opensource@mintlayer.org
 Thanks!
