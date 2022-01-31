@@ -103,21 +103,6 @@ MIT
 
 Grab an issue from [the backlog](https://github.com/mintlayer/mobile_wallet/issues), try to start or submit a PR, any doubts we will try to guide you. Contributors have a private telegram group, request access by email hello@mintlayer.org
 
-## Translations
-
-We accepts translations via [Transifex](https://www.transifex.com/bluewallet/bluewallet/)
-
-To participate you need to:
-
-1. Sign up to Transifex
-2. Find BlueWallet project
-3. Send join request
-4. After we accept your request you will be able to start translating! That's it!
-
-Please note the values in curly braces should not be translated. These are the names of the variables that will be inserted into the translated string. For example, the original string `"{number} of {total}"` in Russian will be `"{number} из {total}"`.
-
-Transifex automatically creates Pull Request when language reaches 100% translation. We also trigger this by hand before each release, so don't worry if you can't translate everything, every word counts.
-
 ## Q&A
 
 Builds automated and tested with BrowserStack
