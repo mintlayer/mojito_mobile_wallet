@@ -355,7 +355,7 @@ export function _leaveNumbersAndDots(newInputValue) {
   return newInputValue;
 }
 
-// https://github.com/BlueWallet/BlueWallet/issues/3466
+// https://github.com/mintlayer/mobile_wallet/issues
 export function formatStringAddTwoWhiteSpaces(text) {
   return `${text}  `;
 }

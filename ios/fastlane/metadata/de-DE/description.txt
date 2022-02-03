@@ -1,6 +1,6 @@
 Eine Funktionsreiche aber einfache Bitcoin-Wallet mit Fokus auf Sicherheit zum Empfangen, Halten, Senden und Kaufen von bitcoin.
 
-Bei BlueWallet bist Du im Besitz der privaten Schlüssel. Eine Wallet gemacht von Nutzern für die Bitcoin Gemeinschaft.
+Bei Mintlayer bist Du im Besitz der privaten Schlüssel. Eine Wallet gemacht von Nutzern für die Bitcoin Gemeinschaft.
 
 Mache mit beliebigen Personen sofort weltweit Geschäfte und transformiere das Finanzsystem direkt aus deiner Tasche.
 
@@ -14,7 +14,7 @@ Das bekommst Du:
 1 - Sicherheit by Design
 
 Quelloffene Software
-Eine MIT-Lizenzierung die erlaubt BlueWallet zu kompilieren und zu betreiben! Erstellt mit ReactNative.
+Eine MIT-Lizenzierung die erlaubt Mintlayer zu kompilieren und zu betreiben! Erstellt mit ReactNative.
 
 Glaubhafte Täuschung
 Ein Mechanismus, der falsche Bitcoin-Wallet entschlüsselt, falls Du gezwungen wirst Deinen Zugang preiszugeben.

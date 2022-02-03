@@ -1,10 +1,10 @@
 Uma carteira de Bitcoin que permite guardar, enviar Bitcoin, receber Bitcoin e comprar Bitcoin, focada na segurança e simplicidade.
 
-Com a BlueWallet, uma Carteira de Bitcoin em que controlas as chaves privadas. Uma Carteira de Bitcoin criada por utilizadores de Bitcoin para a comunidade.
+Com a Mintlayer, uma Carteira de Bitcoin em que controlas as chaves privadas. Uma Carteira de Bitcoin criada por utilizadores de Bitcoin para a comunidade.
 
 Podes fazer transações com qualquer pessoa no mundo e transformar o sistema financeiro directamente do teu bolso.
 
-Podes criar gratuitamente uma quantidade ilimitada de carteiras de Bitcoin ou importar as carteiras que já tens para a tua app BlueWallet. É fácil e rápido!
+Podes criar gratuitamente uma quantidade ilimitada de carteiras de Bitcoin ou importar as carteiras que já tens para a tua app Mintlayer. É fácil e rápido!
 
 ---
 
@@ -19,7 +19,7 @@ Negação plausível
 Password que decripta carteiras falsas. Para casos especias onde possas ser obrigado a revelar a sua password, podes revelar a password falsa. Matem as tuas bitcoin protegidas.
 
 Encriptação completa
-Construída em cima da multi-camada criptografica do iOS, A BlueWallet encripta tudo com uma password adicional.
+Construída em cima da multi-camada criptografica do iOS, A Mintlayer encripta tudo com uma password adicional.
 
 Carteiras SegWit e HD
 SegWit suportado (Ajuda a diminuir as fees ainda mais) e carteiras HD activadas.

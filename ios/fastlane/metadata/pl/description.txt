@@ -1,6 +1,6 @@
 Portfel Bitcoin umożliwiający trzymanie, wysyłanie, otrzymywanie i kupowanie, ze szczególną uwagą na bezpieczeństwo i prostotę.
 
-W BlueWallet, Ty jesteś właścicielem Twojego własnego portfela Bitcoin. To portfel stworzony przez użytkowników Bitcoina dla społeczności.
+W Mintlayer, Ty jesteś właścicielem Twojego własnego portfela Bitcoin. To portfel stworzony przez użytkowników Bitcoina dla społeczności.
 
 Możesz przeprowadzać transakcje natychmiast z kimkolwiek na świecie i przekształcić system finansowy prosto z Twojej kieszeni.
 

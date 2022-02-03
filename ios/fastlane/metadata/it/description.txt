@@ -1,6 +1,6 @@
 Un wallet per Bitcoin che ti consente di conservare, inviare, ricevere ed acquistare Bitcoin in modo sicuro e semplice.
 
-Su BlueWallet, un wallet Bitcoin, tu solo sei in controllo delle tue chiavi private. Un wallet Bitcoin fatto da utilizzatori per la comunità Bitcoin.
+Su Mintlayer, un wallet Bitcoin, tu solo sei in controllo delle tue chiavi private. Un wallet Bitcoin fatto da utilizzatori per la comunità Bitcoin.
 
 Puoi scambiare valore instantaneamente con chiunque nel mondo e trasformare il sistema finanziario direttamente dalla tua tasca.
 

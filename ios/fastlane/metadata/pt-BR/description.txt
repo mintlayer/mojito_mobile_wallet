@@ -1,6 +1,6 @@
 Uma carteira Bitcoin que permite armazenar, enviar bitcoin, receber bitcoin e comprar bitcoin com foco em segurança e simplicidade.
 
-BlueWallet é uma carteira de bitcoin onde você tem posse das chaves privadas. Uma carteira Bitcoin criada para a comunidade por usuários do Bitcoin.
+Mintlayer é uma carteira de bitcoin onde você tem posse das chaves privadas. Uma carteira Bitcoin criada para a comunidade por usuários do Bitcoin.
 
 Você pode fazer transações com qualquer pessoa no mundo e transformar o sistema financeiro direto do seu bolso.
 

@@ -91,18 +91,18 @@ const About = () => {
   };
 
   const handleOnTwitterPress = () => {
-    Linking.openURL('https://twitter.com/bluewalletio');
+    Linking.openURL('https://twitter.com/mintlayer');
   };
 
   const handleOnDiscordPress = () => {
-    Linking.openURL('https://discord.gg/btWq2Aby2z');
+    Linking.openURL('https://discord.com/invite/2bznJ5tnKg');
   };
 
   const handleOnTelegramPress = () => {
-    Linking.openURL('https://t.me/bluewallethat');
+    Linking.openURL('https://t.me/mintlayer');
   };
   const handleOnGithubPress = () => {
-    Linking.openURL('https://github.com/BlueWallet/BlueWallet');
+    Linking.openURL('https://github.com/mintlayer/mobile_wallet');
   };
   const handleOnRatePress = () => {
     const options = {

@@ -1,6 +1,6 @@
 Sebuah dompet Bitcoin yang membolehkan anda menyimpan, menghantar, menerima, dan membeli Bitcoin dengan tumpuan pada keselamatan dan kemudahan. 
 
-Di BlueWallet, dompet Bitcoin yang anda sendiri pegang kunci persendiriannya. Sebuah dompet Bitcoin yang dibuat oleh pengguna Bitcoin untuk komuniti. 
+Di Mintlayer, dompet Bitcoin yang anda sendiri pegang kunci persendiriannya. Sebuah dompet Bitcoin yang dibuat oleh pengguna Bitcoin untuk komuniti. 
 
 Anda dapat berurus niaga serta-merta dengan sesiapa pun di seluruh dunia dan mengubah sistem kewangan terus dari poket anda.
 

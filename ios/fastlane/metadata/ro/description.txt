@@ -1,6 +1,6 @@
 Un portofel Bitcoin ce îți permite să stochezi, să trimiți, să primești, și să cumperi Bitcoin, centrat pe securitate și simplitate.
 
-În BlueWallet, un portofel bitcoin, deții cheile tale private. Un portofel Bitcoin făcut de utilizatori Bitcoin pentru comunitate.
+În Mintlayer, un portofel bitcoin, deții cheile tale private. Un portofel Bitcoin făcut de utilizatori Bitcoin pentru comunitate.
 
 Poți tranzacționa instant cu oricine din lume și să transformi sistemul financiar chiar în buzunarul tău.
 

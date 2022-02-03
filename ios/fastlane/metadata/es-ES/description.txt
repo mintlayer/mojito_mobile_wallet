@@ -1,6 +1,6 @@
 Una cartera de Bitcoin que te permite guardar, mandar, recibir y comprar bitcoin centrada en la seguridad y la simplicidad.
 
-En BlueWallet tú controlas las llaves privadas. Una cartera de Bitcoin hecha por usuarios de Bitcoin para la comunidad.
+En Mintlayer tú controlas las llaves privadas. Una cartera de Bitcoin hecha por usuarios de Bitcoin para la comunidad.
 
 Realiza trámites al instante con cualquiera, sin importar dónde esté. Transforma el sistema financiero desde tu bolsillo.
 

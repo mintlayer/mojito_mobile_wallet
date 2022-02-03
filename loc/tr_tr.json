@@ -73,7 +73,7 @@
     "create_fake_storage": "Sahte şifreli depolama oluşturun",
     "create_password": "Şifre oluştur",
     "create_password_explanation": "Sahte depolama şifreniz, ana depolama şifrenizle aynı olmamalıdır.",
-    "help": "Bazı koşullar altında, şifrenizi açıklamanız gerekebilir. Paralarınızı güvende tutmak için, BlueWallet başka bir şifre ile şifreli depolama alanı yaratabilir. Baskı altında, Bu şifreyi 3. bir tarafa söyleyebilirsiniz. Girilirse BlueWallet, yeni 'sahte' bir depolamanın kilidini açacaktır. Bu 3. şahıslara normal görünecektir, ancak paraların olduğu ana depolama alanınızı gizlice saklamaya devam edecektir.",
+    "help": "Bazı koşullar altında, şifrenizi açıklamanız gerekebilir. Paralarınızı güvende tutmak için, Mintlayer başka bir şifre ile şifreli depolama alanı yaratabilir. Baskı altında, Bu şifreyi 3. bir tarafa söyleyebilirsiniz. Girilirse Mintlayer, yeni 'sahte' bir depolamanın kilidini açacaktır. Bu 3. şahıslara normal görünecektir, ancak paraların olduğu ana depolama alanınızı gizlice saklamaya devam edecektir.",
     "help2": "Yeni depolama alanı tamamen işlevsel olacak ve ufak bir miktar tutarsanız daha inanılır görünecektir.",
     "password_should_not_match": "Sahte depolama şifreniz, ana depolama şifrenizle aynı olmamalıdır",
     "retype_password": "Şifrenizi yeniden yazın",
@@ -84,7 +84,7 @@
     "ask_no": "Hayır, kaydetmedim.",
     "ask_yes": "Evet, kaydettim.",
     "text_lnd": "Lütfen kurtarma kodunuzu kaydedin. Cüzdanınızı kayıp etmeniz durumunda onu geri oluşturabilmenizi sağlar.",
-    "text_lnd2": "Bu cüzdan BlueWallet tarafından sağlanmaktadır."
+    "text_lnd2": "Bu cüzdan Mintlayer tarafından sağlanmaktadır."
   },
   "receive": {
     "details_create": "Oluştur",

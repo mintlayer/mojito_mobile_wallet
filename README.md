@@ -69,7 +69,7 @@ npx pod-install
 npm start
 ```
 
-In another terminal window within the BlueWallet folder:
+In another terminal window within the mobile_wallet folder:
 
 ```
 npx react-native run-ios
