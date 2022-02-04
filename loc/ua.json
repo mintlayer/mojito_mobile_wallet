@@ -88,7 +88,7 @@
     "export_title": "Експорт Гаманця",
     "import_do_import": "імпорт",
     "import_error": "Невдача. Це взашалі валідно?",
-    "import_explanation": "Мнемоніка, приватний ключ, чи будь що. BlueWallet спробуе вгадати вірний формат",
+    "import_explanation": "Мнемоніка, приватний ключ, чи будь що. Mintlayer спробуе вгадати вірний формат",
     "import_imported": "імпортовано",
     "import_scan_qr": "чи сканувати QR?",
     "import_success": "Успіх",

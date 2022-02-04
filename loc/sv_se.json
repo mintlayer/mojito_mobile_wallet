@@ -110,7 +110,7 @@
     "create_fake_storage": "Skapa fejkad lagringsyta",
     "create_password": "Skapa ett lösenord",
     "create_password_explanation": "Lösenordet för den fejkade lagringsytan får inte vara samma som ditt huvudlösenord",
-    "help": "Under vissa omständigheter kan du bli tvingad att uppge ditt lösenord. För att se till att dina pengar är säkra kan BlueWallet skapa ytterligare en krypterad lagringsyta, med ett annat lösenord. Vid tvång kan du uppge detta alternativa lösenord. När det matas in i BlueWallet så kommer det att låsa upp din 'fejkade' lagringsyta. Det kommer att se ut precis som vanligt men i själva verket är dina pengar i säkert förvar på din primära lagringsyta.",
+    "help": "Under vissa omständigheter kan du bli tvingad att uppge ditt lösenord. För att se till att dina pengar är säkra kan Mintlayer skapa ytterligare en krypterad lagringsyta, med ett annat lösenord. Vid tvång kan du uppge detta alternativa lösenord. När det matas in i Mintlayer så kommer det att låsa upp din 'fejkade' lagringsyta. Det kommer att se ut precis som vanligt men i själva verket är dina pengar i säkert förvar på din primära lagringsyta.",
     "help2": "Den alternativa lagringsytan kommer att vara fullt fungerade och du kan eventuellt spara en mindre summa där för att den ska verka mer trovärdig.",
     "password_should_not_match": "Lösenordet för den fejkade lagringsytan får inte vara samma som ditt huvudlösenord",
     "passwords_do_not_match": "Lösenorden du angav matchar inte. Försök igen.",
@@ -182,7 +182,7 @@
   },
   "settings": {
     "about": "Om",
-    "about_free": "BlueWallet är ett fritt och öppen källkods projekt. Skapad av Bitcoin användare.",
+    "about_free": "Mintlayer är ett fritt och öppen källkods projekt. Skapad av Bitcoin användare.",
     "about_sm_github": "GitHub",
     "about_sm_telegram": "Telegram chatt",
     "about_sm_twitter": "Följ oss på Twitter",

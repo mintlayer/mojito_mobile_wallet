@@ -1,6 +1,6 @@
 Een Bitcoin portomonnee die u de mogelijkheid geeft om Bitcoin te bewaren, versturen, ontvangen en kopen met focus op beveiliging en eenvoud.
 
-Op BlueWallet, een bitcoin wallet, bezit u uw eigen privésleutels. Een Bitcoin wallet gemaakt door Bitcoin-gebruikers voor de gemeenschap.
+Op Mintlayer, een bitcoin wallet, bezit u uw eigen privésleutels. Een Bitcoin wallet gemaakt door Bitcoin-gebruikers voor de gemeenschap.
 
 U kan naar iedereen in de wereld direct transacties versturen en het financiële systeem veranderen vanuit uw broekzak.
 

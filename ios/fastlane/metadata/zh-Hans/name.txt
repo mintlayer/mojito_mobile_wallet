@@ -1,1 +1,1 @@
-BlueWallet-比特幣錢包
+Mintlayer-比特幣錢包

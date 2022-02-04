@@ -1,6 +1,6 @@
 Egy Bitcoin tárca, amiben biztonságosan és egyszerűen tárolhatod-, utalhatod a Bitcoinodat, fogadhatsz Bitcoin utalást és vásárolhatsz Bitcoint.
 
-A BlueWallet egy Bitcoin tárca, ahol te irányítod a privát kulcsokat. Egy Bitcoin tárca, amit Bitcoin felhasználok készítettek a közösségnek. 
+A Mintlayer egy Bitcoin tárca, ahol te irányítod a privát kulcsokat. Egy Bitcoin tárca, amit Bitcoin felhasználok készítettek a közösségnek. 
 
 Azonnal indíthatsz közvetlen tranzakciókat bárkinek a világon, egy gombnyomással megváltoztatva a pénzügyi rendszert. 
 

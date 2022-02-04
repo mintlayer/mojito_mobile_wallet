@@ -1,6 +1,6 @@
 Un portefeuille Bitcoin vous permettant de stocker, envoyer, recevoir et acheter du Bitcoin avec un focus sur la sécurité et la simplicité.
 
-Sur BlueWallet, un portefeuille Bitcoin où vous possédez vos clés privés. Un portefeuille Bitcoin fait par des utilisateurs de Bitcoin, pour la communauté.
+Sur Mintlayer, un portefeuille Bitcoin où vous possédez vos clés privés. Un portefeuille Bitcoin fait par des utilisateurs de Bitcoin, pour la communauté.
 
 Vous pouvez faire une transaction instanément, vers n'importe où dans le monde, et transformer le système financier du bout de vos doigts.
 
