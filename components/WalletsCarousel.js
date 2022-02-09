@@ -9,6 +9,7 @@ import WalletGradient from '../class/wallet-gradient';
 import { BluePrivateBalance } from '../BlueComponents';
 import { BlueStorageContext } from '../blue_modules/storage-context';
 import { isHandset, isTablet, isDesktop } from '../blue_modules/environment';
+import { COLORS } from '../theme/Colors';
 
 const nStyles = StyleSheet.create({
   root: {},
@@ -28,7 +29,7 @@ const nStyles = StyleSheet.create({
   },
   button: {
     marginTop: 12,
-    backgroundColor: '#007AFF',
+    backgroundColor: COLORS.green,
     paddingHorizontal: 32,
     paddingVertical: 12,
     borderRadius: 8,
@@ -163,7 +164,6 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
   const latestTransactionText = walletTransactionUpdateStatus === true || walletTransactionUpdateStatus === item.getID() ? loc.transactions.updating : item.getBalance() !== 0 && item.getLatestTransactionTime() === 0 ? loc.wallets.pull_to_refresh : item.getTransactions().find((tx) => tx.confirmations === 0) ? loc.transactions.pending : transactionTimeToReadable(item.getLatestTransactionTime());
 
   const balance = !item.hideBalance && formatBalance(Number(item.getBalance()), item.getPreferredBalanceUnit(), true);
-
   return (
     <Animated.View style={[isLargeScreen ? iStyles.rootLargeDevice : { ...iStyles.root, width: itemWidth }, { opacity, transform: [{ scale: scaleValue }] }]} shadowOpacity={25 / 100} shadowOffset={{ width: 0, height: 3 }} shadowRadius={8}>
       <TouchableWithoutFeedback
