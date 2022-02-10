@@ -1,3 +1,14 @@
+* name changes 
+* change email 
+* Translations remove 
+* read me file changes 
+* fix prettier 
+* fix 2 
+* fix1 
+* lint issues 
+* lint fixes 
+* lint and rules issue fixed 
+* bluewallet lint issue fixed 
 * lint and jest working 
 * change yml file 2 
 * change yml file 1 

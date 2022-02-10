@@ -25,7 +25,7 @@ export const BlueButton = (props) => {
   const { colors } = useTheme();
 
   let backgroundColor = props.backgroundColor ? props.backgroundColor : colors.mainColor || BlueCurrentTheme.colors.mainColor;
-  let fontColor = props.buttonTextColor || colors.buttonTextColor;
+  let fontColor = props.buttonTextColor || BlueCurrentTheme.colors.brandingColor;
   if (props.disabled === true) {
     backgroundColor = colors.buttonDisabledBackgroundColor;
     fontColor = colors.buttonDisabledTextColor;
@@ -720,7 +720,7 @@ export const BluePlusIcon = (props) => {
       backgroundColor: colors.buttonBackgroundColor,
     },
   });
-  return <Avatar rounded containerStyle={[stylesBlueIcon.ball, stylesBlueIconHooks.ball]} icon={{ name: 'add', size: 22, type: 'ionicons', color: colors.foregroundColor }} {...props} />;
+  return <Avatar rounded containerStyle={[stylesBlueIcon.ball, stylesBlueIconHooks.ball]} icon={{ name: 'add', size: 22, type: 'ionicons', color: colors.brandingColor }} {...props} />;
 };
 
 export const BlueTransactionIncomingIcon = (props) => {
