@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '@react-navigation/native';
 import { BlueCurrentTheme } from './components/themes';
 import loc, { formatStringAddTwoWhiteSpaces } from './loc';
+import { type } from './theme/Fonts';
 
 const { height, width } = Dimensions.get('window');
 const aspectRatio = height / width;
@@ -37,10 +38,10 @@ export const BlueButton = (props) => {
         borderWidth: 0.7,
         borderColor: 'transparent',
         backgroundColor: backgroundColor,
-        minHeight: 45,
-        height: 45,
-        maxHeight: 45,
-        borderRadius: 25,
+        minHeight: 50,
+        height: 50,
+        maxHeight: 50,
+        borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 16,
@@ -51,7 +52,7 @@ export const BlueButton = (props) => {
     >
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         {props.icon && <Icon name={props.icon.name} type={props.icon.type} color={props.icon.color} />}
-        {props.title && <Text style={{ marginHorizontal: 8, fontSize: 16, color: fontColor, fontWeight: '500' }}>{props.title}</Text>}
+        {props.title && <Text style={{ marginHorizontal: 8, fontSize: 14, color: fontColor, fontWeight: '500', fontFamily: type.light }}>{props.title}</Text>}
       </View>
     </TouchableOpacity>
   );
@@ -99,7 +100,7 @@ export const BitcoinButton = (props) => {
     <TouchableOpacity accessibilityRole="button" testID={props.testID} onPress={props.onPress}>
       <View
         style={{
-          borderColor: (props.active && colors.newBlue) || colors.buttonDisabledBackgroundColor,
+          borderColor: (props.active && colors.receiveText) || colors.buttonDisabledBackgroundColor,
           borderWidth: 1.5,
           borderRadius: 8,
           backgroundColor: colors.buttonDisabledBackgroundColor,
@@ -115,7 +116,7 @@ export const BitcoinButton = (props) => {
             <Image style={{ width: 34, height: 34, marginRight: 8 }} source={require('./img/addWallet/bitcoin.png')} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ color: colors.newBlue, fontWeight: 'bold', fontSize: 18, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>{loc.wallets.add_bitcoin}</Text>
+            <Text style={{ color: colors.receiveText, fontWeight: 'bold', fontSize: 18, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>{loc.wallets.add_bitcoin}</Text>
             <Text
               style={{
                 color: colors.alternativeTextColor,
@@ -239,7 +240,7 @@ export const BlueButtonLink = forwardRef((props, ref) => {
       {...props}
       ref={ref}
     >
-      <Text style={{ color: colors.foregroundColor, textAlign: 'center', fontSize: 16 }}>{props.title}</Text>
+      <Text style={[{ color: colors.foregroundColor, textAlign: 'center', fontSize: 14 }, props.textStyle]}>{props.title}</Text>
     </TouchableOpacity>
   );
 });
