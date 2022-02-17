@@ -11,6 +11,8 @@ import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import { LdkButton } from '../../components/LdkButton';
 import alert from '../../components/Alert';
+import { type } from '../../theme/Fonts';
+import { COLORS } from '../../theme/Colors';
 const A = require('../../blue_modules/analytics');
 
 const ButtonSelected = Object.freeze({
@@ -233,16 +235,17 @@ const WalletsAdd = () => {
       <StatusBar barStyle={Platform.select({ ios: 'light-content', default: useColorScheme() === 'dark' ? 'light-content' : 'dark-content' })} />
       <BlueSpacing20 />
       <KeyboardAvoidingView enabled behavior={Platform.OS === 'ios' ? 'padding' : null} keyboardVerticalOffset={62}>
-        <BlueFormLabel>{loc.wallets.add_wallet_name}</BlueFormLabel>
+        <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc}</Text>
+        {/* <BlueFormLabel>{loc.wallets.add_wallet_name}</BlueFormLabel> */}
         <View style={[styles.label, stylesHook.label]}>
           <TextInput testID="WalletNameInput" value={label} placeholderTextColor="#81868e" placeholder={loc.wallets.add_placeholder} onChangeText={setLabel} style={styles.textInputCommon} editable={!isLoading} underlineColorAndroid="transparent" />
         </View>
-        <BlueFormLabel>{loc.wallets.add_wallet_type}</BlueFormLabel>
+        {/* <BlueFormLabel>{loc.wallets.add_wallet_type}</BlueFormLabel> */}
         <View style={styles.buttons}>
           <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} />
-          <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} />
+          {/* <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} />
           {backdoorPressed > 10 ? <LdkButton active={selectedWalletType === ButtonSelected.LDK} onPress={handleOnLdkButtonPressed} style={styles.button} subtext={LightningLdkWallet.getPackageVersion()} text="LDK" /> : null}
-          <VaultButton active={selectedWalletType === ButtonSelected.VAULT} onPress={handleOnVaultButtonPressed} style={styles.button} />
+          <VaultButton active={selectedWalletType === ButtonSelected.VAULT} onPress={handleOnVaultButtonPressed} style={styles.button} /> */}
         </View>
 
         <View style={styles.advanced}>
@@ -274,7 +277,15 @@ const WalletsAdd = () => {
           {isAdvancedOptionsEnabled && selectedWalletType === ButtonSelected.ONCHAIN && !isLoading && <BlueButtonLink style={styles.import} title={entropyButtonText} onPress={navigateToEntropy} />}
           <BlueSpacing20 />
           <View style={styles.createButton}>{!isLoading ? <BlueButton testID="Create" title={loc.wallets.add_create} disabled={!selectedWalletType || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)} onPress={createWallet} /> : <ActivityIndicator />}</View>
-          {!isLoading && <BlueButtonLink testID="ImportWallet" style={styles.import} title={loc.wallets.add_import_wallet} onPress={navigateToImportWallet} />}
+          {/* !isLoading && <BlueButtonLink testID="ImportWallet" style={styles.import} title={loc.wallets.add_import_wallet} onPress={navigateToImportWallet} /> */}
+          <View style={styles.importContainer}>
+            {!isLoading && (
+              <Text style={[styles.importText]}>
+                {loc.wallets.add_import_wallet}
+                {!isLoading && <BlueButtonLink testID="ImportWallet" style={styles.clickImportContainer} textStyle={styles.clickImport} title={loc.wallets.click_here} onPress={navigateToImportWallet} />}
+              </Text>
+            )}
+          </View>
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
@@ -340,9 +351,38 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     borderRadius: 4,
   },
+  descText: {
+    marginHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: type.light,
+    fontSize: 14,
+  },
+  importContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    marginHorizontal: 25,
+  },
   import: {
     marginBottom: 0,
     marginTop: 24,
+  },
+  importText: {
+    color: COLORS.black,
+    fontFamily: type.light,
+    fontSize: 14,
+  },
+  clickImportContainer: {
+    margin: 0,
+  },
+  clickImport: {
+    paddingHorizontal: 10,
+    color: COLORS.green_shade,
+    fontFamily: type.semiBold,
+    fontSize: 14,
+    marginBottom: -5,
   },
   noPadding: {
     paddingHorizontal: 0,

@@ -14,6 +14,7 @@
     "plugin:prettier/recommended" // removes all eslint rules that can mess up with prettier
   ],
   "rules": {
+    "@typescript-eslint/no-unused-vars": "off",
     "react/prop-types": "off",
     "react/jsx-handler-names": "off", // activated by standard-react config
     "react/display-name": "off",
@@ -44,7 +45,7 @@
         "ts-check": false
       }
     ],
-    "@typescript-eslint/no-unused-vars": ["error", { "args": "none" }],
+    // "@typescript-eslint/no-unused-vars": ["error", { "args": "none" }],
 
     // disable rules that are superseded by @typescript-eslint rules
     "no-unused-vars": "off",

@@ -1,3 +1,11 @@
+* remove yarn lock 
+* lint npm added 
+* remove npm command 
+* lint fix again 
+* ci cd changes 
+* igonre changes 
+* add wallet screen 
+* theme color for app 
 * name changes 
 * change email 
 * Translations remove 
