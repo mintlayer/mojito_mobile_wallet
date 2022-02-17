@@ -1,3 +1,5 @@
+* igonre changes 
+* add wallet screen 
 * working fine lint 
 * working 2 
 * wokring 1 
