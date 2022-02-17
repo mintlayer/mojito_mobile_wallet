@@ -25,8 +25,8 @@ jobs:
           node-version: 16.0.0
 
       # ESLint and Prettier must be in `package.json`
-      # - name: Install Node.js dependencies
-      #   run: npm install
+      - name: Install Node.js dependencies
+        run: npm install
 
       - name: Run Tests
         run: npm run unit
