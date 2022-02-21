@@ -8,6 +8,7 @@ import Privacy from '../../blue_modules/Privacy';
 import loc from '../../loc';
 import { isMacCatalina } from '../../blue_modules/environment';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
+import { type } from '../../theme/Fonts';
 const fs = require('../../blue_modules/fs');
 
 const WalletsImport = () => {
@@ -32,6 +33,7 @@ const WalletsImport = () => {
     center: {
       flex: 1,
       marginHorizontal: 16,
+      justifyContent: 'center',
       backgroundColor: colors.elevated,
     },
     row: {
@@ -40,6 +42,34 @@ const WalletsImport = () => {
       marginHorizontal: 16,
       marginTop: 10,
       justifyContent: 'space-between',
+    },
+    containerRow: {
+      flexDirection: 'row',
+      marginHorizontal: 15,
+      justifyContent: 'space-between',
+    },
+    smallButton: {
+      borderWidth: 0.7,
+      borderColor: 'transparent',
+      minHeight: 60,
+      height: 60,
+      maxHeight: 60,
+      borderRadius: 15,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      width: '48%',
+    },
+    paragraph: {
+      fontSize: 14,
+      fontFamily: type.light,
+      color: colors.lightGray,
+      lineHeight: 20,
+    },
+    scanContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingVertical: 35,
     },
   });
 
@@ -127,8 +157,6 @@ const WalletsImport = () => {
       <View style={styles.center}>
         <>
           <BlueButton disabled={importText.trim().length === 0} title={loc.wallets.import_do_import} testID="DoImport" onPress={importButtonPressed} />
-          <BlueSpacing20 />
-          <BlueButtonLink title={loc.wallets.import_scan_qr} onPress={importScan} testID="ScanImport" />
         </>
       </View>
     </>
@@ -138,10 +166,17 @@ const WalletsImport = () => {
     <SafeBlueArea style={styles.root}>
       <BlueSpacing20 />
       <TouchableWithoutFeedback onPress={speedBackdoorTap} testID="SpeedBackdoor">
-        <BlueFormLabel>{loc.wallets.import_explanation}</BlueFormLabel>
+        <BlueFormLabel style={styles.paragraph}>{loc.wallets.import_explanation}</BlueFormLabel>
       </TouchableWithoutFeedback>
       <BlueSpacing20 />
       <BlueFormMultiInput value={importText} onBlur={onBlur} onChangeText={setImportText} testID="MnemonicInput" inputAccessoryViewID={BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID} />
+      <View style={styles.scanContainer}>
+        <BlueFormLabel style={styles.paragraph}>{loc.multisig.scan_or_import_file}</BlueFormLabel>
+      </View>
+      <View style={styles.containerRow}>
+        <BlueButton title={loc.send.details_scan} testID="Scan" onPress={importScan} style={[styles.smallButton, { backgroundColor: colors.buttonBackgroundColor }]} textStyle={{ color: colors.buttonTextColor }} />
+        <BlueButton title={loc.send.upload} testID="Upload" onPress={() => {}} style={[styles.smallButton, { backgroundColor: colors.buttonBackgroundColor }]} textStyle={{ color: colors.buttonTextColor }} />
+      </View>
 
       {Platform.select({ android: !isToolbarVisibleForAndroid && renderOptionsAndImportButton, default: renderOptionsAndImportButton })}
       {Platform.select({

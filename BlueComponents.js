@@ -34,25 +34,28 @@ export const BlueButton = (props) => {
 
   return (
     <TouchableOpacity
-      style={{
-        borderWidth: 0.7,
-        borderColor: 'transparent',
-        backgroundColor: backgroundColor,
-        minHeight: 50,
-        height: 50,
-        maxHeight: 50,
-        borderRadius: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 16,
-        flexGrow: 1,
-      }}
+      style={[
+        {
+          borderWidth: 0.7,
+          borderColor: 'transparent',
+          backgroundColor: backgroundColor,
+          minHeight: 50,
+          height: 50,
+          maxHeight: 50,
+          borderRadius: 15,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingHorizontal: 16,
+          flexGrow: 1,
+        },
+        props.style,
+      ]}
       accessibilityRole="button"
       {...props}
     >
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         {props.icon && <Icon name={props.icon.name} type={props.icon.type} color={props.icon.color} />}
-        {props.title && <Text style={{ marginHorizontal: 8, fontSize: 14, color: fontColor, fontWeight: '500', fontFamily: type.light }}>{props.title}</Text>}
+        {props.title && <Text style={[{ marginHorizontal: 8, fontSize: 14, color: fontColor, fontWeight: '500', fontFamily: type.light }, props.textStyle]}>{props.title}</Text>}
       </View>
     </TouchableOpacity>
   );
@@ -415,12 +418,14 @@ export const BlueFormLabel = (props) => {
   return (
     <Text
       {...props}
-      style={{
-        color: colors.foregroundColor,
-        fontWeight: '400',
-        marginHorizontal: 20,
-        writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-      }}
+      style={[
+        {
+          color: colors.foregroundColor,
+          marginHorizontal: 20,
+          writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+        },
+        props.style,
+      ]}
     />
   );
 };
