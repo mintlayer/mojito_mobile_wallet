@@ -208,6 +208,15 @@ const WalletsImport = () => {
   );
 };
 
-WalletsImport.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.wallets.import_title }));
+// WalletsImport.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.wallets.import_title }));
+WalletsImport.navigationOptions = navigationStyle(
+  {
+    closeButton: true,
+    headerHideBackButton: true,
+    headerTitleWithImage: true,
+    headerLeftTitle: loc.wallets.import_title,
+  },
+  (opts) => ({ ...opts, title: '' }),
+);
 
 export default WalletsImport;

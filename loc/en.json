@@ -492,7 +492,7 @@
     "import_scan_qr": "Scan or import a file",
     "import_success": "Your wallet has been successfully imported.",
     "import_search_accounts": "Search accounts",
-    "import_title": "Import",
+    "import_title": "Import Wallet",
     "import_discovery_title": "Discovery",
     "import_discovery_subtitle": "Choose a discovered wallet",
     "import_discovery_derivation": "Use custom derivation path",

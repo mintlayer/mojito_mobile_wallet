@@ -296,8 +296,10 @@ WalletsAdd.navigationOptions = navigationStyle(
   {
     closeButton: true,
     headerHideBackButton: true,
+    headerTitleWithImage: true,
+    headerLeftTitle: loc.wallets.add_title,
   },
-  (opts) => ({ ...opts, title: loc.wallets.add_title }),
+  (opts) => ({ ...opts, title: '' }),
 );
 
 const styles = StyleSheet.create({

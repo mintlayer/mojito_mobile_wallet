@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { Image, Keyboard, TouchableOpacity, StyleSheet } from 'react-native';
+import { Image, Keyboard, TouchableOpacity, StyleSheet, View, Text } from 'react-native';
 import { Theme } from './themes';
+import { create_wallet } from '../theme/Images';
+import { type } from '../theme/Fonts';
 
 const styles = StyleSheet.create({
   button: {
@@ -9,6 +11,18 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  headerLeftContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerLeftContainerImage: {
+    marginLeft: 5,
+    marginRight: 10,
+  },
+  headerLeftContainerText: {
+    fontSize: 20,
+    fontFamily: type.bold,
   },
 });
 
@@ -38,16 +52,21 @@ const navigationStyle = (
   {
     closeButton = false,
     closeButtonFunc,
+    headerTitleWithImage = false,
+    headerLeftTitle = '',
     ...opts
   }: NavigationOptions & {
     closeButton?: boolean;
     closeButtonFunc?: (deps: { navigation: any; route: any }) => React.ReactElement;
+    headerTitleWithImage?: boolean;
+    headerLeftTitle?: string;
   },
   formatter: OptionsFormatter,
 ): NavigationOptionsGetter => {
   return (theme) =>
     ({ navigation, route }) => {
       let headerRight;
+      let headerLeft;
       if (closeButton) {
         const handleClose = closeButtonFunc
           ? () => closeButtonFunc({ navigation, route })
@@ -59,6 +78,14 @@ const navigationStyle = (
           <TouchableOpacity accessibilityRole="button" style={styles.button} onPress={handleClose} testID="NavigationCloseButton">
             <Image source={theme.closeImage} />
           </TouchableOpacity>
+        );
+      }
+      if (headerTitleWithImage) {
+        headerLeft = () => (
+          <View style={styles.headerLeftContainer}>
+            <Image source={create_wallet} style={styles.headerLeftContainerImage} />
+            <Text style={[styles.headerLeftContainerText, { color: theme.colors.foregroundColor }]}>{headerLeftTitle}</Text>
+          </View>
         );
       }
 
@@ -74,6 +101,7 @@ const navigationStyle = (
           color: theme.colors.foregroundColor,
         },
         headerRight: headerRight,
+        headerLeft: headerLeft,
         headerBackTitleVisible: false,
         headerTintColor: theme.colors.foregroundColor,
         ...opts,
