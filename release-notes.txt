@@ -1,3 +1,4 @@
+* vulnerabilities issue fixed 
 * header component 
 * import wallet UI 
 * Merge branch 'add_wallet_ui' of https://github.com/mintlayer/mobile_wallet into add_wallet_ui 
