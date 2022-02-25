@@ -1,3 +1,10 @@
+* vulnerabilities issue fixed 
+* header component 
+* import wallet UI 
+* Merge branch 'add_wallet_ui' of https://github.com/mintlayer/mobile_wallet into add_wallet_ui 
+* wf 
+* add deps 
+* remove yarn lock from ignore 
 * remove yarn lock 
 * lint npm added 
 * remove npm command 
@@ -5,25 +12,6 @@
 * ci cd changes 
 * igonre changes 
 * add wallet screen 
-* theme color for app 
-* name changes 
-* change email 
-* Translations remove 
-* read me file changes 
-* fix prettier 
-* fix 2 
-* fix1 
-* lint issues 
-* lint fixes 
-* lint and rules issue fixed 
-* bluewallet lint issue fixed 
-* lint and jest working 
-* change yml file 2 
-* change yml file 1 
-* git auth error fix 
-* jest fix 
-* work on ci cd for jest 
-* jest error fix 
 * working fine lint 
 * working 2 
 * wokring 1 
