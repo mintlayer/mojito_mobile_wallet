@@ -10,6 +10,7 @@ import { useTheme } from '@react-navigation/native';
 import { BlueCurrentTheme } from './components/themes';
 import loc, { formatStringAddTwoWhiteSpaces } from './loc';
 import { type } from './theme/Fonts';
+import { create_wallet, add_wallet } from './theme/Images';
 
 const { height, width } = Dimensions.get('window');
 const aspectRatio = height / width;
@@ -529,18 +530,16 @@ export const BlueHeaderDefaultMain = (props) => {
   const { isDrawerList } = props;
   return (
     <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: isDrawerList ? colors.elevated : colors.background,
-        paddingHorizontal: 16,
-        borderTopColor: isDrawerList ? colors.elevated : colors.background,
-        borderBottomColor: isDrawerList ? colors.elevated : colors.background,
-        marginBottom: 8,
-      }}
+      style={[
+        blueHeaderMain.container,
+        {
+          backgroundColor: isDrawerList ? colors.elevated : colors.background,
+          borderTopColor: isDrawerList ? colors.elevated : colors.background,
+          borderBottomColor: isDrawerList ? colors.elevated : colors.background,
+        },
+      ]}
     >
-      <Text
+      {/* <Text
         style={{
           textAlign: 'left',
           fontWeight: 'bold',
@@ -550,10 +549,32 @@ export const BlueHeaderDefaultMain = (props) => {
       >
         {props.leftText}
       </Text>
-      <BluePlusIcon onPress={props.onNewWalletPress} Component={TouchableOpacity} />
+      <BluePlusIcon onPress={props.onNewWalletPress} Component={TouchableOpacity} /> */}
+      <Image source={create_wallet} style={blueHeaderMain.leftImage} />
+      <Text style={[blueHeaderMain.title, { color: colors.foregroundColor }]}>{props.leftText}</Text>
+      <TouchableOpacity onPress={props.onNewWalletPress}>
+        <Image source={add_wallet} />
+      </TouchableOpacity>
     </View>
   );
 };
+const blueHeaderMain = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+    marginBottom: 18,
+  },
+  leftImage: {
+    marginRight: 15,
+  },
+  title: {
+    textAlign: 'left',
+    fontWeight: 'bold',
+    fontSize: 28,
+    flex: 1,
+  },
+});
 
 export const BlueSpacing = (props) => {
   return <View {...props} style={{ height: 60 }} />;

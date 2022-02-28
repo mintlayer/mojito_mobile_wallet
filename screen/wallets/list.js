@@ -220,7 +220,7 @@ const WalletsList = () => {
   const renderSectionHeader = (section) => {
     switch (section.section.key) {
       case WalletsListSections.CAROUSEL:
-        return isLargeScreen ? null : <BlueHeaderDefaultMain leftText={loc.wallets.list_title} onNewWalletPress={() => navigate('AddWalletRoot')} />;
+        return isLargeScreen ? null : <BlueHeaderDefaultMain leftText={loc.wallets.bitcoin_ledger} onNewWalletPress={() => navigate('AddWalletRoot')} />;
       case WalletsListSections.TRANSACTIONS:
         return renderListHeaderComponent();
       default:
