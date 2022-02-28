@@ -10,6 +10,8 @@ import { BluePrivateBalance } from '../BlueComponents';
 import { BlueStorageContext } from '../blue_modules/storage-context';
 import { isHandset, isTablet, isDesktop } from '../blue_modules/environment';
 import { COLORS } from '../theme/Colors';
+import { bitcoin } from '../theme/Images';
+import { type } from '../theme/Fonts';
 
 const nStyles = StyleSheet.create({
   root: {},
@@ -103,16 +105,46 @@ const iStyles = StyleSheet.create({
     fontSize: 36,
     writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
   },
-  latestTx: {
+  balanceInDollar: {
     backgroundColor: 'transparent',
-    fontSize: 13,
+    fontFamily: type.semiBold,
+    fontSize: 30,
     writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
   },
-  latestTxTime: {
+  BalanceInBtc: {
     backgroundColor: 'transparent',
-    fontWeight: 'bold',
+    fontSize: 18,
     writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-    fontSize: 16,
+    fontFamily: type.semiBold,
+  },
+  btcInfo: {
+    backgroundColor: 'transparent',
+    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+    fontSize: 14,
+    fontFamily: type.light,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  btcImg: {
+    top: 0,
+  },
+  balanceLeftCont: {
+    flex: 1,
+  },
+  BalanceInBtc2: {
+    backgroundColor: 'transparent',
+    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+    fontFamily: type.light,
+    fontSize: 15,
+  },
+  btcInfoMain: {
+    backgroundColor: 'transparent',
+    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+    fontSize: 14,
+    fontFamily: type.light,
+    marginTop: 5,
   },
 });
 
@@ -177,33 +209,49 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
           onPressedOut();
         }}
       >
-        <LinearGradient shadowColor={colors.shadowColor} colors={WalletGradient.gradientsFor(item.type)} style={iStyles.grad}>
-          <Image source={image} style={iStyles.image} />
+        {/* <LinearGradient shadowColor={colors.shadowColor} colors={WalletGradient.gradientsFor(item.type)} style={iStyles.grad}>
+      <Image source={image} style={iStyles.image} /> */}
+        <View style={[iStyles.grad, { backgroundColor: colors.walletBalanceBgColor }]}>
           <Text style={iStyles.br} />
-          <Text numberOfLines={1} style={[iStyles.label, { color: colors.inverseForegroundColor }]}>
-            {item.getLabel()}
-          </Text>
-          {item.hideBalance ? (
-            <BluePrivateBalance />
-          ) : (
-            <Text
-              numberOfLines={1}
-              key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
-              adjustsFontSizeToFit
-              style={[iStyles.balance, { color: colors.inverseForegroundColor }]}
-            >
-              {balance}
-            </Text>
-          )}
-          <Text style={iStyles.br} />
-          <Text numberOfLines={1} style={[iStyles.latestTx, { color: colors.inverseForegroundColor }]}>
-            {loc.wallets.list_latest_transaction}
-          </Text>
 
-          <Text numberOfLines={1} style={[iStyles.latestTxTime, { color: colors.inverseForegroundColor }]}>
-            {latestTransactionText}
+          {/* <Text numberOfLines={1} style={[iStyles.label, { color: colors.inverseForegroundColor }]}>
+            {item.getLabel()}
+          </Text> */}
+
+          <View style={iStyles.row}>
+            <View style={iStyles.balanceLeftCont}>
+              {item.hideBalance ? (
+                <BluePrivateBalance />
+              ) : (
+                <Text
+                  numberOfLines={1}
+                  key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
+                  adjustsFontSizeToFit
+                  style={[iStyles.balanceInDollar, { color: colors.inverseForegroundColor }]}
+                >
+                  {/* {balance} */}$ 6846.62
+                </Text>
+              )}
+              <Text style={iStyles.br} />
+              <Text numberOfLines={1} style={[iStyles.BalanceInBtc, { color: colors.inverseForegroundColor }]}>
+                {/* {loc.wallets.list_latest_transaction} */}
+                0.01244123
+                <Text style={[iStyles.BalanceInBtc2, { color: colors.inverseForegroundColor }]}>{' BTC'}</Text>
+              </Text>
+            </View>
+            <Image source={bitcoin} style={iStyles.btcImg} />
+          </View>
+
+          <Text style={iStyles.br} />
+
+          <Text numberOfLines={1} style={[iStyles.btcInfoMain, { color: colors.inverseForegroundColor }]}>
+            {/* {latestTransactionText} */}
+            {'1 BTC = $ '}
+            <Text style={[iStyles.btcInfo, { color: colors.inverseForegroundColor, fontFamily: type.semiBold }]}>{'571915' + '    '}</Text>
+            <Text style={[iStyles.btcInfo, { color: colors.btcPercentColor, fontFamily: type.semiBold }]}>+0.3339%</Text>
           </Text>
-        </LinearGradient>
+        </View>
+        {/* </LinearGradient> */}
       </TouchableWithoutFeedback>
     </Animated.View>
   );
