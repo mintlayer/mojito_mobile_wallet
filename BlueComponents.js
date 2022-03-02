@@ -11,6 +11,7 @@ import { BlueCurrentTheme } from './components/themes';
 import loc, { formatStringAddTwoWhiteSpaces } from './loc';
 import { type } from './theme/Fonts';
 import { create_wallet, add_wallet } from './theme/Images';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const { height, width } = Dimensions.get('window');
 const aspectRatio = height / width;
@@ -524,6 +525,35 @@ export const BlueHeaderDefaultSub = (props) => {
     </SafeAreaView>
   );
 };
+export const BlueSendReceiveButton = (props) => {
+  const { colors } = useTheme();
+
+  return (
+    <View>
+      <TouchableOpacity accessibilityRole="button" onPress={props.onPress} style={[stylesSendReceiveBtn.container, { backgroundColor: colors.buttonBackgroundColor }]}>
+        <AntDesign name={props.text == loc.send.header ? 'arrowup' : 'arrowdown'} size={25} color={colors.buttonTextColor} />
+      </TouchableOpacity>
+
+      <Text style={[stylesSendReceiveBtn.btnTitle, { color: colors.lightGray }]}>{props.text}</Text>
+    </View>
+  );
+};
+
+const stylesSendReceiveBtn = StyleSheet.create({
+  container: {
+    borderRadius: 17,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: width / 7.25,
+    height: width / 7.25,
+    marginHorizontal: 18,
+  },
+  btnTitle: {
+    textAlign: 'center',
+    marginTop: 10,
+    fontFamily: type.semiBold,
+  },
+});
 
 export const BlueHeaderDefaultMain = (props) => {
   const { colors } = useTheme();
@@ -531,7 +561,7 @@ export const BlueHeaderDefaultMain = (props) => {
   return (
     <View
       style={[
-        blueHeaderMain.container,
+        stylesBlueHeaderMain.container,
         {
           backgroundColor: isDrawerList ? colors.elevated : colors.background,
           borderTopColor: isDrawerList ? colors.elevated : colors.background,
@@ -550,15 +580,15 @@ export const BlueHeaderDefaultMain = (props) => {
         {props.leftText}
       </Text>
       <BluePlusIcon onPress={props.onNewWalletPress} Component={TouchableOpacity} /> */}
-      <Image source={create_wallet} style={blueHeaderMain.leftImage} />
-      <Text style={[blueHeaderMain.title, { color: colors.foregroundColor }]}>{props.leftText}</Text>
+      <Image source={create_wallet} style={stylesBlueHeaderMain.leftImage} />
+      <Text style={[stylesBlueHeaderMain.title, { color: colors.foregroundColor }]}>{props.leftText}</Text>
       <TouchableOpacity onPress={props.onNewWalletPress}>
         <Image source={add_wallet} />
       </TouchableOpacity>
     </View>
   );
 };
-const blueHeaderMain = StyleSheet.create({
+const stylesBlueHeaderMain = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',

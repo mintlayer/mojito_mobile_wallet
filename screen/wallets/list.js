@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { StatusBar, View, TouchableOpacity, Text, StyleSheet, SectionList, Platform, Image, Dimensions, useWindowDimensions, findNodeHandle, I18nManager } from 'react-native';
-import { BlueHeaderDefaultMain } from '../../BlueComponents';
+import { BlueFormInput, BlueHeaderDefaultMain, BlueSendReceiveButton } from '../../BlueComponents';
 import WalletsCarousel from '../../components/WalletsCarousel';
 import { Icon } from 'react-native-elements';
 import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
@@ -172,14 +172,16 @@ const WalletsList = () => {
     const style = { opacity: isLoading ? 1.0 : 0.5 };
     return (
       <View style={[styles.listHeaderBack, stylesHook.listHeaderBack]}>
-        <Text textBreakStrategy="simple" style={[styles.listHeaderText, stylesHook.listHeaderText]}>
+        {/* <Text textBreakStrategy="simple" style={[styles.listHeaderText, stylesHook.listHeaderText]}>
           {`${loc.transactions.list_title}${'  '}`}
-        </Text>
-        {isDesktop && (
+    </Text> */}
+        {/* isDesktop && (
           <TouchableOpacity accessibilityRole="button" style={style} onPress={() => refreshTransactions(true)} disabled={isLoading}>
             <Icon name="refresh" type="font-awesome" color={colors.feeText} />
           </TouchableOpacity>
-        )}
+        ) */}
+        <BlueSendReceiveButton text={loc.send.header} onPress={() => {}} />
+        <BlueSendReceiveButton text={loc.receive.header} onPress={() => {}} />
       </View>
     );
   };
@@ -367,7 +369,7 @@ const WalletsList = () => {
           renderSectionHeader={renderSectionHeader}
           initialNumToRender={20}
           contentInset={styles.scrollContent}
-          renderSectionFooter={renderSectionFooter}
+          // renderSectionFooter={renderSectionFooter}
           sections={[
             {
               key: WalletsListSections.CAROUSEL,
@@ -427,9 +429,10 @@ const styles = StyleSheet.create({
   },
   listHeaderBack: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 16,
+    marginVertical: 16,
   },
   listHeaderText: {
     fontWeight: 'bold',
