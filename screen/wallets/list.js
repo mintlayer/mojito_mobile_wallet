@@ -14,6 +14,7 @@ import { isDesktop, isMacCatalina, isTablet } from '../../blue_modules/environme
 import BlueClipboard from '../../blue_modules/clipboard';
 import navigationStyle from '../../components/navigationStyle';
 import { TransactionListItem } from '../../components/TransactionListItem';
+import { SendReceiveCard } from '../../components/SendReceiveCard';
 
 const scanqrHelper = require('../../helpers/scan-qr');
 const A = require('../../blue_modules/analytics');
@@ -233,7 +234,8 @@ const WalletsList = () => {
   const renderSectionFooter = (section) => {
     switch (section.section.key) {
       case WalletsListSections.TRANSACTIONS:
-        if (dataSource.length === 0 && !isLoading) {
+        // if (dataSource.length === 0 && !isLoading) {
+        if (dataSource.length === 1 && !isLoading) {
           return (
             <View style={styles.footerRoot} testID="NoTransactionsMessage">
               <Text style={styles.footerEmpty}>{loc.wallets.list_empty_txs1}</Text>
@@ -241,7 +243,12 @@ const WalletsList = () => {
             </View>
           );
         } else {
-          return null;
+          return (
+            <>
+              <SendReceiveCard arrowSign={loc.send.type_receive} title="Receive" amount="+ $385.00" date="15 Oct 2021 13:00" />
+              <SendReceiveCard arrowSign={loc.send.header} title="Send" amount="- $385.00" date="15 Oct 2021 13:00" />
+            </>
+          );
         }
       default:
         return null;
@@ -369,7 +376,7 @@ const WalletsList = () => {
           renderSectionHeader={renderSectionHeader}
           initialNumToRender={20}
           contentInset={styles.scrollContent}
-          // renderSectionFooter={renderSectionFooter}
+          renderSectionFooter={renderSectionFooter}
           sections={[
             {
               key: WalletsListSections.CAROUSEL,
