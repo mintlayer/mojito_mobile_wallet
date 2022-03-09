@@ -37,7 +37,8 @@ const Introduction = () => {
     </View>
   );
 };
-const navigateScreen = (navigate) => navigate('WalletsList');
+// const navigateScreen = (navigate) => navigate('WalletsList');
+const navigateScreen = (navigate) => navigate('BottomTab');
 
 const Skip = () => {
   const { navigate } = useNavigation();

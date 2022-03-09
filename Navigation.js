@@ -1,8 +1,9 @@
 import React from 'react';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Platform, useWindowDimensions, Dimensions, I18nManager } from 'react-native';
+import { Platform, useWindowDimensions, Dimensions, I18nManager, Image, StyleSheet } from 'react-native';
 import { useTheme } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Settings from './screen/settings/settings';
 import About from './screen/settings/about';
@@ -92,6 +93,9 @@ import LNDViewAdditionalInvoicePreImage from './screen/lnd/lndViewAdditionalInvo
 import LdkViewLogs from './screen/wallets/ldkViewLogs';
 
 import Introduction from './screen/introduction';
+import NativeAssets from './screen/NativeAssets';
+
+import { sendBottom, settingBottom, walletBottom } from './theme/Images';
 
 const WalletsStack = createNativeStackNavigator();
 
@@ -101,6 +105,7 @@ const WalletsRoot = () => {
   return (
     <WalletsStack.Navigator screenOptions={{ headerHideShadow: true }}>
       <WalletsStack.Screen name="Introduction" component={Introduction} options={Introduction.navigationOptions(theme)} />
+      <WalletsStack.Screen name="NativeAssets" component={NativeAssets} options={NativeAssets.navigationOptions(theme)} />
       <WalletsStack.Screen name="WalletsList" component={WalletsList} options={WalletsList.navigationOptions(theme)} />
       <WalletsStack.Screen name="WalletTransactions" component={WalletTransactions} options={WalletTransactions.navigationOptions(theme)} />
       <WalletsStack.Screen name="LdkOpenChannel" component={LdkOpenChannel} options={LdkOpenChannel.navigationOptions(theme)} />
@@ -424,13 +429,61 @@ const NavigationDefaultOptions = {
   headerShown: false,
   stackPresentation: isDesktop ? 'containedModal' : 'modal',
 };
+
+const Tab = createBottomTabNavigator();
+const BottomTab = () => {
+  const { theme, colors } = useTheme();
+
+  return (
+    <Tab.Navigator initialRouteName="NativeAssets" showLabel={false}>
+      <WalletsStack.Screen
+        name="NativeAssets"
+        component={NativeAssets}
+        options={{
+          title: '',
+          showLabel: false,
+          tabBarIcon: ({ focused, color }) => {
+            return <Image source={walletBottom} style={[{ tintColor: focused ? colors.walletBalanceBgColor : colors.borderColor }, styles.marginTopTab]} />;
+          },
+        }}
+      />
+      <WalletsStack.Screen
+        name="WalletsList"
+        component={WalletsList}
+        options={{
+          title: '',
+          showLabel: false,
+          tabBarIcon: ({ focused, color }) => {
+            return <Image source={sendBottom} style={[{ tintColor: focused ? colors.walletBalanceBgColor : colors.borderColor }, styles.marginTopTab]} />;
+          },
+        }}
+      />
+      <WalletsStack.Screen
+        name="settingsBottom"
+        component={WalletsList}
+        options={{
+          title: '',
+          showLabel: false,
+          tabBarIcon: ({ focused, color }) => {
+            return <Image source={settingBottom} style={[{ tintColor: focused ? colors.walletBalanceBgColor : colors.borderColor }, styles.marginTopTab]} />;
+          },
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
 const Navigation = () => {
   const theme = useTheme();
 
   return (
     <RootStack.Navigator initialRouteName="UnlockWithScreenRoot" screenOptions={{ headerHideShadow: true }}>
       {/* stacks */}
-      <RootStack.Screen name="WalletsRoot" component={WalletsRoot} options={{ headerShown: false, translucent: false }} />
+      {/* add bottom here */}
+      <WalletsStack.Screen name="Introduction" component={Introduction} options={Introduction.navigationOptions(theme)} />
+      {/* <RootStack.Screen name="WalletsRoot" component={WalletsRoot} options={{ headerShown: false, translucent: false }} /> */}
+      <RootStack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false, translucent: false }} />
+
       <RootStack.Screen name="AddWalletRoot" component={AddWalletRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="SendDetailsRoot" component={SendDetailsRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="LNDCreateInvoiceRoot" component={LNDCreateInvoiceRoot} options={NavigationDefaultOptions} />
@@ -465,5 +518,11 @@ const Navigation = () => {
     </RootStack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  marginTopTab: {
+    marginTop: 20,
+  },
+});
 
 export default InitRoot;
