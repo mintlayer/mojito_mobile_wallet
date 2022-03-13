@@ -430,6 +430,45 @@ const NavigationDefaultOptions = {
   stackPresentation: isDesktop ? 'containedModal' : 'modal',
 };
 
+const SettingsStack = createNativeStackNavigator();
+const SettingsRoot = () => {
+  const theme = useTheme();
+
+  return (
+    <SettingsStack.Navigator name="Settings" screenOptions={{ headerHideShadow: true }} initialRouteName="Settings">
+      <SettingsStack.Screen name="Settings" component={Settings} options={Settings.navigationOptions(theme)} />
+      <SettingsStack.Screen name="About" component={About} options={About.navigationOptions(theme)} />
+      <SettingsStack.Screen name="Currency" component={Currency} options={Currency.navigationOptions(theme)} />
+      <SettingsStack.Screen name="ReleaseNotes" component={ReleaseNotes} options={ReleaseNotes.navigationOptions(theme)} />
+      <SettingsStack.Screen name="Selftest" component={Selftest} options={Selftest.navigationOptions(theme)} />
+      <SettingsStack.Screen name="Licensing" component={Licensing} options={Licensing.navigationOptions(theme)} />
+      <SettingsStack.Screen name="DefaultView" component={DefaultView} options={DefaultView.navigationOptions(theme)} />
+      <SettingsStack.Screen name="Language" component={Language} options={Language.navigationOptions(theme)} />
+      <SettingsStack.Screen name="EncryptStorage" component={EncryptStorage} options={EncryptStorage.navigationOptions(theme)} />
+      <SettingsStack.Screen name="GeneralSettings" component={GeneralSettings} options={GeneralSettings.navigationOptions(theme)} />
+      <SettingsStack.Screen name="NetworkSettings" component={NetworkSettings} options={NetworkSettings.navigationOptions(theme)} />
+      <SettingsStack.Screen name="NotificationSettings" component={NotificationSettings} options={NotificationSettings.navigationOptions(theme)} />
+      <SettingsStack.Screen name="PlausibleDeniability" component={PlausibleDeniability} options={PlausibleDeniability.navigationOptions(theme)} />
+      <SettingsStack.Screen name="LightningSettings" component={LightningSettings} options={LightningSettings.navigationOptions(theme)} />
+      <SettingsStack.Screen name="ElectrumSettings" component={ElectrumSettings} options={ElectrumSettings.navigationOptions(theme)} />
+      <SettingsStack.Screen name="TorSettings" component={TorSettings} options={TorSettings.navigationOptions(theme)} />
+      <SettingsStack.Screen name="SettingsPrivacy" component={SettingsPrivacy} options={SettingsPrivacy.navigationOptions(theme)} />
+      <SettingsStack.Screen name="Tools" component={Tools} options={Tools.navigationOptions(theme)} />
+      <SettingsStack.Screen name="LNDViewInvoice" component={LNDViewInvoice} options={LNDViewInvoice.navigationOptions(theme)} />
+      <SettingsStack.Screen name="LNDViewAdditionalInvoiceInformation" component={LNDViewAdditionalInvoiceInformation} options={LNDViewAdditionalInvoiceInformation.navigationOptions(theme)} />
+      <SettingsStack.Screen name="LNDViewAdditionalInvoicePreImage" component={LNDViewAdditionalInvoicePreImage} options={LNDViewAdditionalInvoicePreImage.navigationOptions(theme)} />
+      <SettingsStack.Screen name="Broadcast" component={Broadcast} options={Broadcast.navigationOptions(theme)} />
+      <SettingsStack.Screen name="IsItMyAddress" component={IsItMyAddress} options={IsItMyAddress.navigationOptions(theme)} />
+      <SettingsStack.Screen name="LnurlPay" component={LnurlPay} options={LnurlPay.navigationOptions(theme)} />
+      <SettingsStack.Screen name="LnurlPaySuccess" component={LnurlPaySuccess} options={LnurlPaySuccess.navigationOptions(theme)} />
+      <SettingsStack.Screen name="HodlHodl" component={HodlHodl} options={HodlHodl.navigationOptions(theme)} />
+      <SettingsStack.Screen name="HodlHodlLoginRoot" component={HodlHodlLoginRoot} options={NavigationDefaultOptions} />
+      <SettingsStack.Screen name="HodlHodlMyContracts" component={HodlHodlMyContracts} options={HodlHodlMyContracts.navigationOptions(theme)} />
+      <SettingsStack.Screen name="HodlHodlWebview" component={HodlHodlWebview} options={HodlHodlWebview.navigationOptions(theme)} />
+    </SettingsStack.Navigator>
+  );
+};
+
 const Tab = createBottomTabNavigator();
 const BottomTab = () => {
   const { theme, colors } = useTheme();
@@ -460,7 +499,7 @@ const BottomTab = () => {
       />
       <WalletsStack.Screen
         name="settingsBottom"
-        component={WalletsList}
+        component={SettingsRoot}
         options={{
           title: '',
           showLabel: false,
@@ -481,8 +520,9 @@ const Navigation = () => {
       {/* stacks */}
       {/* add bottom here */}
       <WalletsStack.Screen name="Introduction" component={Introduction} options={Introduction.navigationOptions(theme)} />
-      {/* <RootStack.Screen name="WalletsRoot" component={WalletsRoot} options={{ headerShown: false, translucent: false }} /> */}
+
       <RootStack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false, translucent: false }} />
+      {/* <RootStack.Screen name="WalletsRoot" component={WalletsRoot} options={{ headerShown: false, translucent: false }} /> */}
 
       <RootStack.Screen name="AddWalletRoot" component={AddWalletRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="SendDetailsRoot" component={SendDetailsRoot} options={NavigationDefaultOptions} />

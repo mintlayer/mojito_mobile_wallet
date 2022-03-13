@@ -71,6 +71,7 @@ export const BlueDefaultTheme = {
     walletBalanceBgColor: '#0C2722',
     btcPercentColor: '#14BEA0',
     aquaHaze: '#F7FAFA',
+    backNative: '#e6f0f0',
   },
 };
 
@@ -132,6 +133,7 @@ export const BlueDarkTheme: Theme = {
     walletBalanceBgColor: '#0C2722',
     btcPercentColor: '#14BEA0',
     aquaHaze: '#F7FAFA',
+    backNative: '#e6f0f0',
   },
 };
 

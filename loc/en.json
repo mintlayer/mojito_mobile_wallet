@@ -658,11 +658,20 @@
     "type_change": "Change",
     "type_receive": "Receive",
     "type_used": "Used",
-    "transactions": "Transactions"
+    "transactions": "Transactions",
+    "mls_asset": "MLS - 01 Assets",
+    "comming_soon": "Coming Soon"
   },
   "aopp": {
     "title": "Select Address",
     "send_success": "Signature sent successfully",
     "send_error": "Signature sending error"
+  },
+  "native_assets": {
+    "title_logo": "Wallet",
+    "wallet_balance": "Your Wallet Balance",
+    "amount_balance": "$ 14326.34",
+    "last_hours": "Last 24 Hours:",
+    "amount_hours": " + $ 1191.1(7.12%)"
   }
 }

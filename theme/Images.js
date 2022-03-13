@@ -8,5 +8,6 @@ import bitcoin_large from '../img/addWallet/btcBig/bitcoin_large.png';
 import sendBottom from '../img/bottomTab/sendBottom.png';
 import settingBottom from '../img/bottomTab/settingBottom.png';
 import walletBottom from '../img/bottomTab/walletBottom.png';
+import bitcoin_small from '../img/addWallet/bitcoin.png';
 
-export { page1, page2, page3, page4, create_wallet, add_wallet, bitcoin_large, sendBottom, settingBottom, walletBottom };
+export { page1, page2, page3, page4, create_wallet, add_wallet, bitcoin_large, sendBottom, settingBottom, walletBottom, bitcoin_small };
