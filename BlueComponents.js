@@ -593,7 +593,8 @@ const stylesBlueHeaderMain = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 18,
-    marginBottom: 18,
+    padding: 40,
+    marginBottom: 0,
   },
   leftImage: {
     marginRight: 15,
