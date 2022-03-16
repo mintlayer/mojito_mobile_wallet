@@ -89,12 +89,6 @@ Once the patches are applied, open Xcode and select "My Mac" as destination. If 
 npm run test
 ```
 
-## MOTIVATION TO BUILD IT
-
-I was not satisfied with existing iOS Bitcoin apps, especially with BreadWallet (the one I mainly used) where development stalled and they could not even deliver such features as SegWit, RBF and custom fees (at the times where custom fees were especially needed).
-So I knew I could create one to use myself and let others use it.
-I had experience with awesome bitcoin-js lib (javascript), and since I don't own any Macs, I don't plan to, and not going to learn ObjC/Swift - ReactNative (where you also write in javascript) was an obvious choice.
-
 ## LICENSE
 
 MIT
@@ -103,15 +97,6 @@ MIT
 
 Grab an issue from [the backlog](https://github.com/mintlayer/mobile_wallet/issues), try to start or submit a PR, any doubts we will try to guide you. Contributors have a private telegram group, request access by email opensource@mintlayer.org
 
-## Q&A
-
-Builds automated and tested with BrowserStack
-
-<a href="https://www.browserstack.com/"><img src="https://i.imgur.com/syscHCN.png" width="160px"></a>
-
-Bugs reported via BugSnag
-
-<a href="https://www.bugsnag.com"><img src="https://images.typeform.com/images/QKuaAssrFCq7/image/default" width="160px"></a>
 
 ## RESPONSIBLE DISCLOSURE
 
