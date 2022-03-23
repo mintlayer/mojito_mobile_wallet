@@ -437,7 +437,7 @@
     "add_entropy_generated": "{gen} bytes of generated entropy",
     "add_entropy_provide": "Provide entropy via dice rolls",
     "add_entropy_remain": "{gen} bytes of generated entropy. Remaining {rem} bytes will be obtained from the System random number generator.",
-    "add_desc": "Creating a new wallet you are generating a single BIP39 seed for BTC and all your Mintlayer tokens. Each asset has a separate ledger accessible from your home screen. Keys are derived using BIP32 Hierarchical Deterministic Wallets.",
+    "add_desc": "Creating a new wallet you are generating a single BIP39 seed for BTC and all your Mintlayer tokens. Each asset has a separate chain accessible from your home screen. Keys are derived using BIP32 Hierarchical Deterministic Wallets.",
     "add_import_wallet": "Want to import your already existent bitcoin wallet?",
     "click_here": "Click here",
     "add_lightning": "Lightning",
@@ -537,7 +537,7 @@
     "add_ln_wallet_first": "You must first add a Lightning wallet.",
     "identity_pubkey": "Identity Pubkey",
     "xpub_title": "Wallet XPUB",
-    "bitcoin_ledger": "Bitcoin Ledger"
+    "bitcoin_ledger": "Bitcoin Mainnet"
   },
   "multisig": {
     "multisig_vault": "Vault",
