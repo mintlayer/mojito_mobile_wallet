@@ -181,8 +181,9 @@ const WalletsList = () => {
             <Icon name="refresh" type="font-awesome" color={colors.feeText} />
           </TouchableOpacity>
         ) */}
-        <BlueSendReceiveButton text={loc.send.header} onPress={() => {}} />
-        <BlueSendReceiveButton text={loc.receive.header} onPress={() => {}} />
+
+        {/* <BlueSendReceiveButton text={loc.send.header} onPress={() => {}} />
+      <BlueSendReceiveButton text={loc.receive.header} onPress={() => {}} /> */}
       </View>
     );
   };
@@ -243,12 +244,13 @@ const WalletsList = () => {
             </View>
           );
         } else {
-          return (
-            <>
-              <SendReceiveCard arrowSign={loc.send.type_receive} title="Receive" amount="+ $385.00" date="15 Oct 2021 13:00" />
-              <SendReceiveCard arrowSign={loc.send.header} title="Send" amount="- $385.00" date="15 Oct 2021 13:00" />
-            </>
-          );
+          return;
+          // return (
+          //   <>
+          //     <SendReceiveCard arrowSign={loc.send.type_receive} title="Receive" amount="+ $385.00" date="15 Oct 2021 13:00" />
+          //     <SendReceiveCard arrowSign={loc.send.header} title="Send" amount="- $385.00" date="15 Oct 2021 13:00" />
+          //   </>
+          // );
         }
       default:
         return null;

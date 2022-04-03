@@ -289,6 +289,8 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
+  - react-native-splash-screen (3.3.0):
+    - React-Core
   - react-native-tcp-socket (5.5.0):
     - CocoaAsyncSocket
     - React-Core
@@ -496,6 +498,7 @@ DEPENDENCIES:
   - react-native-ios-context-menu (from `../node_modules/react-native-ios-context-menu`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
   - react-native-tor (from `../node_modules/react-native-tor`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -614,6 +617,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-randombytes"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-splash-screen:
+    :path: "../node_modules/react-native-splash-screen"
   react-native-tcp-socket:
     :path: "../node_modules/react-native-tcp-socket"
   react-native-tor:
@@ -747,6 +752,7 @@ SPEC CHECKSUMS:
   react-native-ios-context-menu: c787c9a764525d07dff9bd75a191f67de7176e9f
   react-native-randombytes: 5fc412efe7b5c55b9002c0004d75fe5fabcaa507
   react-native-safe-area-context: 5cf05f49df9d17261e40e518481f2e334c6cd4b5
+  react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-tcp-socket: 199889cd48b07a0238e0feb53549607de5207116
   react-native-tor: 4f389f5719dad633542b57ea32744e954730e7ef
   react-native-webview: 77ee909f73e1fcab76380f7dcc3344771fe61bd8

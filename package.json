@@ -209,6 +209,7 @@
     "react-native-share": "7.3.2",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-sortable-list": "https://github.com/BlueWallet/react-native-sortable-list.git#e4e44a01a90ee2dcb9c57182262595abf36bfdf7",
+    "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "12.1.1",
     "react-native-tcp-socket": "5.5.0",
     "react-native-tor": "0.1.7",

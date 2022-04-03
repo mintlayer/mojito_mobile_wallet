@@ -13,6 +13,8 @@ import { LdkButton } from '../../components/LdkButton';
 import alert from '../../components/Alert';
 import { type } from '../../theme/Fonts';
 import { COLORS } from '../../theme/Colors';
+import { create_wallet } from '../../theme/Images';
+import { BtcMlcComponent } from '../../components/BtcMltComponent';
 const A = require('../../blue_modules/analytics');
 
 const ButtonSelected = Object.freeze({
@@ -243,10 +245,13 @@ const WalletsAdd = () => {
         {/* <BlueFormLabel>{loc.wallets.add_wallet_type}</BlueFormLabel> */}
         <View style={styles.buttons}>
           <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} />
+          {/* <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} /> */}
+
           {/* <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} />
           {backdoorPressed > 10 ? <LdkButton active={selectedWalletType === ButtonSelected.LDK} onPress={handleOnLdkButtonPressed} style={styles.button} subtext={LightningLdkWallet.getPackageVersion()} text="LDK" /> : null}
           <VaultButton active={selectedWalletType === ButtonSelected.VAULT} onPress={handleOnVaultButtonPressed} style={styles.button} /> */}
         </View>
+        <BtcMlcComponent source={create_wallet} title="MLT" detail="Mintlayer" amount="385.00" date="15 Oct 2021 13:00" />
 
         <View style={styles.advanced}>
           {(() => {
