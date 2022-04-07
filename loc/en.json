@@ -537,7 +537,7 @@
     "add_ln_wallet_first": "You must first add a Lightning wallet.",
     "identity_pubkey": "Identity Pubkey",
     "xpub_title": "Wallet XPUB",
-    "bitcoin_ledger": "Bitcoin Mainnet"
+    "bitcoin_ledger": "Mojito"
   },
   "multisig": {
     "multisig_vault": "Vault",

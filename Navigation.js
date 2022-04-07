@@ -482,7 +482,7 @@ const BottomTab = () => {
           title: '',
           showLabel: false,
           tabBarIcon: ({ focused, color }) => {
-            return <Image source={walletBottom} style={[{ tintColor: focused ? colors.walletBalanceBgColor : colors.borderColor }, styles.marginTopTab]} />;
+            return <Image source={sendBottom} style={[{ tintColor: focused ? colors.walletBalanceBgColor : colors.borderColor }, styles.marginTopTab]} />;
           },
         }}
       />
@@ -493,7 +493,7 @@ const BottomTab = () => {
           title: '',
           showLabel: false,
           tabBarIcon: ({ focused, color }) => {
-            return <Image source={sendBottom} style={[{ tintColor: focused ? colors.walletBalanceBgColor : colors.borderColor }, styles.marginTopTab]} />;
+            return <Image source={walletBottom} style={[{ tintColor: focused ? colors.walletBalanceBgColor : colors.borderColor }, styles.marginTopTab]} />;
           },
         }}
       />
