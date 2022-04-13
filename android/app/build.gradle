@@ -134,9 +134,9 @@ android {
     lintOptions {
         abortOnError false
     }
-
     defaultConfig {
-        applicationId "io.bluewallet.bluewallet"
+        // applicationId "io.bluewallet.bluewallet"
+        applicationId "com.mojitowallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -1,4 +1,4 @@
-package io.bluewallet.bluewallet;
+package com.mojitowallet;
 
 import android.content.Intent;
 import android.os.Bundle;
