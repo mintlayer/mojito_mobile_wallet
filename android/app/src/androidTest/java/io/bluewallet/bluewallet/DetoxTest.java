@@ -1,4 +1,4 @@
-package io.bluewallet.bluewallet;
+package com.mojitowallet;
 
 import com.wix.detox.Detox;
 
