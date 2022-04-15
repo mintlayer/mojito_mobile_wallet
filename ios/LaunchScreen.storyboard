@@ -17,17 +17,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="X7L-aM-YHP">
-                                <rect key="frame" x="50" y="317" width="328" height="256"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="X7L-aM-YHP">
+                                <rect key="frame" x="50" y="335" width="328" height="256"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
-                        <color key="backgroundColor" red="0.34901960784313724" green="0.68235294117647061" blue="0.60392156862745094" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" red="0.047058823529411764" green="0.15294117647058825" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <color key="tintColor" name="ContainerGreen"/>
                         <constraints>
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="X7L-aM-YHP" secondAttribute="trailing" constant="74" id="4FY-Kb-3ks"/>
+                            <constraint firstItem="X7L-aM-YHP" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="D0F-s8-OwU"/>
                             <constraint firstItem="X7L-aM-YHP" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="50" id="SG6-hS-Vs0"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="X7L-aM-YHP" secondAttribute="bottom" constant="301" id="SOY-YD-dSW"/>
+                            <constraint firstItem="X7L-aM-YHP" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="50" id="SSm-eE-p0h"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="X7L-aM-YHP" secondAttribute="trailing" constant="50" id="igl-Sf-BVK"/>
+                            <constraint firstItem="X7L-aM-YHP" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="l6V-Ic-Unt"/>
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="X7L-aM-YHP" secondAttribute="trailing" constant="50" id="mSd-sr-7Gz"/>
+                            <constraint firstItem="X7L-aM-YHP" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="291" id="uVN-Cu-4h0"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -37,7 +43,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="splash" width="375" height="213"/>
+        <image name="splash" width="341.33334350585938" height="341.33334350585938"/>
         <namedColor name="ContainerGreen">
             <color red="0.28999999165534973" green="0.86000001430511475" blue="0.73000001907348633" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
