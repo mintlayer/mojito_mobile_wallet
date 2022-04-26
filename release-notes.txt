@@ -1,17 +1,3 @@
-* vulnerabilities issue fixed 
-* header component 
-* import wallet UI 
-* Merge branch 'add_wallet_ui' of https://github.com/mintlayer/mobile_wallet into add_wallet_ui 
-* wf 
-* add deps 
-* remove yarn lock from ignore 
-* remove yarn lock 
-* lint npm added 
-* remove npm command 
-* lint fix again 
-* ci cd changes 
-* igonre changes 
-* add wallet screen 
 * working fine lint 
 * working 2 
 * wokring 1 
