@@ -1,3 +1,4 @@
+* ios build release 
 * android release version 
 * working fine lint 
 * working 2 
