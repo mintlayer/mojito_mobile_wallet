@@ -135,12 +135,11 @@ android {
         abortOnError false
     }
     defaultConfig {
-        // applicationId "io.bluewallet.bluewallet"
         applicationId "com.mojitowallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
-        versionName "1.0.0"
+        versionName "0.1.0"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
