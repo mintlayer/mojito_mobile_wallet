@@ -1,4 +1,8 @@
-* android release version 
+* deps update 
+* remove commmented line 
+* android first release working 
+* change version number 
+* Android first release changes 
 * working fine lint 
 * working 2 
 * wokring 1 
