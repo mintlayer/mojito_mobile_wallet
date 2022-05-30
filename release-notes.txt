@@ -1,9 +1,11 @@
-* deps update 
-* remove commmented line 
-* android first release working 
-* change version number 
-* Android first release changes 
-* working fine lint 
-* working 2 
-* wokring 1 
-* wokring 1 
+* deps update
+* remove commmented line
+* android first release working
+* change version number
+* Android first release changes
+* ios build release
+* android release version
+* working fine lint
+* working 2
+* wokring 1
+* wokring 1
