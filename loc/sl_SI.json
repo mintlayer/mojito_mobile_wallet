@@ -322,7 +322,7 @@
     "encrypt_use_expl": "{type} bo uporabljen za potrditev vaše identitete pred izvedbo transakcije, odklepanjem, izvozom ali brisanjem denarnice. {type} ne bo uporabljen za odklepanje šifrirane shrambe.",
     "general": "Splošno",
     "general_adv_mode": "Napredni način",
-    "general_adv_mode_e": "Ko je omogočen, boste videli napredne možnosti, kot so različni tipi denarnic, možnost določitve LNDHub strežnika, s katerim se želite povezati in entropija po meri pri ustvarjanju denarnice.",
+    "general_adv_mode_e": "Ko je omogočen, boste videli napredne možnosti, kot so različni tipi denarnic in entropija po meri pri ustvarjanju denarnice.",
     "general_continuity": "Neprekinjenost",
     "general_continuity_e": "Ko je omogočeno, si boste lahko ogledali izbrane denarnice in transakcije z uporabo vaših drugih naprav povezanih z Apple iCloud.",
     "groundcontrol_explanation": "GroundControl je brezplačen odprtokoden strežnik potisnih obvestil za bitcoin denarnice. Da se ne zanašate na Mintlayer infrastrukturo, lahko namestite svoj strežnik GroundControl in tukaj dodate njegov URL. Pustite prazno, za uporabo privzetega.",

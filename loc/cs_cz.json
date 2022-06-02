@@ -334,7 +334,7 @@
     "encrypt_use_expl": "{type} bude použit k potvrzení vaší identity před provedením transakce, odemknutím, exportem nebo smazáním peněženky. {type} nebude použit k odemknutí zašifrovaného úložiště.",
     "general": "Obecné",
     "general_adv_mode": "Pokročilý mód",
-    "general_adv_mode_e": "Pokud je povoleno, uvidíte rozšířené možnosti, například různé typy peněženek, možnost určit instanci LNDHub, ke které se chcete připojit, a vlastní entropii během vytváření peněženky.",
+    "general_adv_mode_e": "Pokud je povoleno, uvidíte rozšířené možnosti, například různé typy peněženek, a vlastní entropii během vytváření peněženky.",
     "general_continuity": "Kontinuita",
     "general_continuity_e": "Pokud je povoleno, budete moci prohlížet vybrané peněženky a transakce pomocí ostatních zařízení připojených k Apple iCloud.",
     "groundcontrol_explanation": "GroundControl je bezplatný opensource server push notifikací  pro bitcoinové peněženky. Můžete si nainstalovat svůj vlastní server GroundControl a sem vložit jeho URL, abyste se nespoléhali na infrastrukturu Mintlayer. Chcete-li použít výchozí, ponechte pole prázdné",

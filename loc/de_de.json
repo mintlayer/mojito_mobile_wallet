@@ -334,7 +334,7 @@
     "encrypt_use_expl": "{type} wird zur Transaktionsdurchführung, zum Entsperren, dem Export oder der Löschung einer Wallet benötigt. {type} ersetzt nicht die Passworteingabe bei verschlüsseltem Speicher.",
     "general": "Allgemein",
     "general_adv_mode": "Erweiterter Modus",
-    "general_adv_mode_e": "Erlaubt, wenn aktiviert, verschiedene Wallet-Typen anzulegen, dabei eine benutzerdefinierte Entropie zu verwenden und die LNDHub-Instanz der Lightning Wallet frei zu definieren.",
+    "general_adv_mode_e": "Erlaubt, wenn aktiviert, verschiedene Wallet-Typen anzulegen.",
     "general_continuity": "Kontinuität",
     "general_continuity_e": "Wenn aktiviert werden ausgewählte Wallets und deren Transaktionen auf deinen anderen Apple iCloud Geräten angezeigt.",
     "groundcontrol_explanation": "GroundControl ist ein kostenloser Open-Source Push-Benachrichtigungsdienst für Bitcoin-Wallets. Trage hier die URL eines selbst aufgesetzten GroundControl-Servers ein, um von Mintlayer unabhängig zu bleiben. Leer lassen, um die Standardeinstellung zu verwenden.",
