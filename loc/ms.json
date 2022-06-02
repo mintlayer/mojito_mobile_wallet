@@ -327,7 +327,7 @@
     "encrypt_use_expl": "{type} akan digunakan untuk memperakukan keperibadian anda sebelum melakukan urus niaga, penyahkuncian, pemindahan keluar, atau pemadaman sesuatu dompet.  {type} tidak akan digunakan untuk menyahkunci simpanan sulit.",
     "general": "Umum",
     "general_adv_mode": "Mod Lanjut",
-    "general_adv_mode_e": "Apabila dibolehkan, anda akan nampak pilihan lanjut seperti jenis dompet yang lain, kebolehan untuk memperincikan LNDHub yang anda mahu hubungkan, dan entropi tersendiri ketika penciptaan dompet.",
+    "general_adv_mode_e": "Apabila dibolehkan, anda akan nampak pilihan lanjut seperti jenis dompet yang lain, dan entropi tersendiri ketika penciptaan dompet.",
     "general_continuity": "Kesinambungan",
     "general_continuity_e": "Apabila dibolehkan, anda akan dapat melihat dompet terpilih dan urus niaga, menggunakan peranti lain yang terhubung dengan iCloud Apple.",
     "groundcontrol_explanation": "GroundControl ialah satu pelayan pemberitahuan percuma dan sumber terbuka untuk dompet Bitcoin. Anda boleh memasang pelayan GroundControl anda sendiri dan letakkan URL GrounControl di sini untuk tidak bergantung pada prasarana Mintlayer. Kosongkan untuk menggunakan pelayan lalai GroundControl.",

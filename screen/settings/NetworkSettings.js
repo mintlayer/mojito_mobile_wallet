@@ -7,6 +7,8 @@ import { SafeBlueArea, BlueListItem } from '../../BlueComponents';
 import loc from '../../loc';
 import { isTorCapable } from '../../blue_modules/environment';
 
+const ENABLE_LIGHTNING = false;
+
 const NetworkSettings = () => {
   const { navigate } = useNavigation();
 
@@ -26,7 +28,7 @@ const NetworkSettings = () => {
     <SafeBlueArea>
       <ScrollView>
         <BlueListItem title={loc.settings.network_electrum} onPress={navigateToElectrumSettings} testID="ElectrumSettings" chevron />
-        <BlueListItem title={loc.settings.lightning_settings} onPress={navigateToLightningSettings} testID="LightningSettings" chevron />
+        {ENABLE_LIGHTNING && <BlueListItem title={loc.settings.lightning_settings} onPress={navigateToLightningSettings} testID="LightningSettings" chevron />}
         {Notifications.isNotificationsCapable && <BlueListItem title={loc.settings.notifications} onPress={() => navigate('NotificationSettings')} testID="NotificationSettings" chevron />}
         {isTorCapable && <BlueListItem title={loc.settings.tor_settings} onPress={navigateToTorSettings} testID="TorSettings" chevron />}
       </ScrollView>

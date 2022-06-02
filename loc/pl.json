@@ -334,7 +334,7 @@
     "encrypt_use_expl": "{type} będzie użyty w celu potwierdzenia Twojej tożsamości przed wykonaniem transakcji, odblokowaniem, eksportem lub usunięciem portfela. {type} nie będzie użyty do odblokowanie danych zaszyfrowanych.",
     "general": "Ogólne",
     "general_adv_mode": "Tryb zaawansowany",
-    "general_adv_mode_e": "Gdy włączone, zobaczysz zaawansowane ustawienia takie jak np. różne typy portfeli, zdolność do określenia instancji LNDHub, z którą chcesz się połączyć oraz niestandardowej entropii w trakcie tworzenia portfela.",
+    "general_adv_mode_e": "Gdy włączone, zobaczysz zaawansowane ustawienia takie jak np. różne typy portfeli, oraz niestandardowej entropii w trakcie tworzenia portfela.",
     "general_continuity": "Funkcja Continuity",
     "general_continuity_e": "Gdy włączone, będziesz miał podgląd do wybranych portfeli i transakcji przy użyciu swoich urządzeń zalogowanych do Apple iCloud. ",
     "groundcontrol_explanation": "GroundControl jest darmową opcją serwera powiadamień push dla portfeli bitcoin. Możesz zainstalować swój własny serwer GroundControl i podać jego URL tutaj, tak aby nie polegać na infrastrukturze Mintlayer. Zostaw puste by użyć domyślnej wartości.",

@@ -322,7 +322,7 @@
     "encrypt_use_expl": "Igazolja személyazonosságát a {type} a tranzakció végrehajtása, a pénztárca feloldása, exportálása vagy törlése előtt. A {type} nem használható a titkosított tárolás feloldására.",
     "general": "Általános",
     "general_adv_mode": "Halandó mód bekapcsolása",
-    "general_adv_mode_e": "Ha engedélyezve van, további opciók is elérhetőek, mint különböző tárca típusok, Lightning LNDHub beállítások és entrópia beállítások tárca készítésénél. ",
+    "general_adv_mode_e": "Ha engedélyezve van, további opciók is elérhetőek, mint különböző tárca típusok, és entrópia beállítások tárca készítésénél. ",
     "general_continuity": "Folytonosság",
     "general_continuity_e": "Ha engedélyezve van, láthatod a kiválasztott tárcákat és tranzakciókat más, csatlakoztatott Apple iCloud eszközökön.",
     "groundcontrol_explanation": "A GroundControl egy ingyenes, nyílt forráskodú, push üzenetküldő szerver Bitcoin tárcákhoz. Telepítheted a saját GroundControl szerveredet webcímed megadásával, ami függetlet lesz a Mintlayer infrastuktúrától. Hagyd üresen  alapértelmezésben.",

@@ -334,7 +334,7 @@
     "encrypt_use_expl": "{type} será usado para confirmar sua identidade antes de fazer uma transação, desbloquear, exportar ou deletar uma carteira. {type} não será usado para desbloquear armazenamento encriptado.",
     "general": "Geral",
     "general_adv_mode": "Modo Avançado",
-    "general_adv_mode_e": "Quando ativado, você verá opções avançadas, como diferentes tipos de carteira, a capacidade de especificar a instância do LNDHub à qual deseja se conectar e a entropia personalizada durante a criação da carteira.",
+    "general_adv_mode_e": "Quando ativado, você verá opções avançadas, como diferentes tipos de carteira, e a entropia personalizada durante a criação da carteira.",
     "general_continuity": "Continuidade",
     "general_continuity_e": "Quando ativado, você poderá visualizar carteiras selecionadas e transações, usando seus outros dispositivos conectados ao Apple iCloud.",
     "groundcontrol_explanation": "GroundControl é um servidor de notificações push de código aberto gratuito para carteiras bitcoin. Você pode instalar seu próprio servidor GroundControl e colocar sua URL aqui para não depender da infraestrutura da Mintlayer. Deixe em branco para usar o padrão",

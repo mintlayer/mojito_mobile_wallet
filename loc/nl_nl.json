@@ -318,7 +318,7 @@
     "encrypt_use_expl": "{type} wordt gebruikt om jouw identiteit te bevestigen voordat je een transactie uitvoert, een wallet ontgrendelt, exporteert of verwijdert. {type} wordt niet gebruikt om versleutelde opslag te ontgrendelen.",
     "general": "Algemeen",
     "general_adv_mode": "Geavanceerde modus",
-    "general_adv_mode_e": "Indien ingeschakeld ziet u geavanceerde opties zoals verschillende wallettypes, de mogelijkheid om de LNDHub-instantie te specificeren waarmee u verbinding wilt maken en aangepaste entropie tijdens het aanmaken van een wallet.",
+    "general_adv_mode_e": "Indien ingeschakeld ziet u geavanceerde opties zoals verschillende wallettypes, en aangepaste entropie tijdens het aanmaken van een wallet.",
     "general_continuity": "Continuïteit",
     "general_continuity_e": "Indien ingeschakeld, kunt u geselecteerde wallets en transacties bekijken met uw andere Apple iCloud-apparaten.",
     "groundcontrol_explanation": "GroundControl is een gratis opensource-server voor pushmeldingen voor bitcoin-wallets. U kunt uw eigen GroundControl-server installeren en de URL hier plaatsen om niet te vertrouwen op de infrastructuur van Mintlayer. Laat leeg om standaard te gebruiken",

@@ -274,7 +274,7 @@
     "encrypt_use_expl": "{type} käytetään henkilöllisyytesi vahvistamiseen ennen siirtotapahtuman tekemistä, lompakon lukituksen avaamista, vientiä tai poistamista. {type} ei käytetä salatun tallennustilan lukituksen avaamiseen.",
     "general": "Yleinen",
     "general_adv_mode": "Lisäasetukset",
-    "general_adv_mode_e": "Kun tämä asetus on käytössä, näet lisäasetukset, kuten erilaiset lompakkotyypit, kyvyn määrittää LNDHub-instanssi, johon haluat muodostaa yhteyden ja mukautetun entropian lompakon luomisen aikana.",
+    "general_adv_mode_e": "Kun tämä asetus on käytössä, näet lisäasetukset, kuten erilaiset lompakkotyypit, ja mukautetun entropian lompakon luomisen aikana.",
     "general_continuity": "Jatkuvuus",
     "general_continuity_e": "Kun tämä asetus on käytössä, voit tarkastella valittuja lompakoita ja siirtotapahtumia muilla Apple iCloud -laitteilla.",
     "groundcontrol_explanation": "GroundControl on ilmainen avoimen lähdekoodin push-ilmoituspalvelin bitcoin-lompakoille. Voit asentaa oman GroundControl-palvelimen ja laittaa sen URL-osoitteen tähän, jotta et luota Mintlayer-infrastruktuuriin. Jätä tyhjäksi käyttääksesi oletusasetusta",

@@ -325,7 +325,7 @@
     "encrypt_use_expl": "{type} verrà usato per confermare la tua identità prima di effettuare una transazione, sbloccare, esportare, o eliminare un wallet. {type} non sarà usato per sbloccare archivi cifrati.",
     "general": "Generali",
     "general_adv_mode": "Enable advanced mode",
-    "general_adv_mode_e": "Una volta abilitato, vedrai opzioni avanzate come diversi tipi di portafoglio, la possibilità di specificare l'istanza di LNDHub a cui vuoi connetterti, e l'entropia personalizzata durante la creazione del portafoglio.",
+    "general_adv_mode_e": "Una volta abilitato, vedrai opzioni avanzate come diversi tipi di portafoglio, e l'entropia personalizzata durante la creazione del portafoglio.",
     "general_continuity": "Continuity",
     "general_continuity_e": "Una volta abilitato, sarai in grado di visualizzare i portafogli selezionati e le transazioni, utilizzando i tuoi altri dispositivi collegati ad Apple iCloud.",
     "groundcontrol_explanation": "GroundControl è un server di notifiche push gratuito e open-source per i portafogli Bitcoin. Puoi installare il tuo server GroundControl e mettere il suo URL qui per non contare sull'infrastruttura di Mintlayer. Lascia il campo vuoto per usare il server predefinito di GroundControl.",
