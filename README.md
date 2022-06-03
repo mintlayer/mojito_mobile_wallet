@@ -1,26 +1,17 @@
-# Mintlayer - A Bitcoin & Lightning Wallet
+# Mojito - A Bitcoin & Mintlayer Wallet
 
-[![GitHub tag](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/BlueWallet/BlueWallet/master/package.json&query=$.version&label=Version)]()
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-![](https://img.shields.io/github/license/BlueWallet/BlueWallet.svg)
-
-Thin Bitcoin Wallet.
 Built with React Native and Electrum.
-
-[![Appstore](https://bluewallet.io/uploads/app-store-badge-blue.svg)]()
-[![Playstore](https://bluewallet.io/uploads/play-store-badge-blue.svg)]()
 
 Website: [mintlayer.org](https://www.mintlayer.org/)
 
 Community: [telegram group](https://t.me/mintlayer)
 
 - Private keys never leave your device
-- Lightning Network supported
 - SegWit-first. Replace-By-Fee support
 - Encryption. Plausible deniability
-- And many more [features...](https://www.mintlayer.org/technology/)
 
-<!-- <img src="https://i.imgur.com/hHYJnMj.png" width="100%"> -->
+Learn more about Mintlayer [here.](https://www.mintlayer.org/technology/)
+
 
 ## BUILD & RUN IT
 
@@ -95,9 +86,8 @@ MIT
 
 ## WANT TO CONTRIBUTE?
 
-Grab an issue from [the backlog](https://github.com/mintlayer/mobile_wallet/issues), try to start or submit a PR, any doubts we will try to guide you. Contributors have a private telegram group, request access by email opensource@mintlayer.org
+Grab an issue from [the backlog](https://github.com/mintlayer/mobile_wallet/issues), try to start or submit a PR, any doubts we will try to guide you.
 
 ## RESPONSIBLE DISCLOSURE
 
-Found critical bugs/vulnerabilities? Please email them opensource@mintlayer.org
-Thanks!
+Found critical bugs/vulnerabilities? Please email them security@mintlayer.org
