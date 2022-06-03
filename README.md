@@ -90,4 +90,5 @@ Grab an issue from [the backlog](https://github.com/mintlayer/mobile_wallet/issu
 
 ## RESPONSIBLE DISCLOSURE
 
-Found critical bugs/vulnerabilities? Please email them security@mintlayer.org
+Found critical bugs/vulnerabilities? Please email them security@mintlayer.org 
+For more info check [here](https://github.com/mintlayer/mobile_wallet/security/policy)
