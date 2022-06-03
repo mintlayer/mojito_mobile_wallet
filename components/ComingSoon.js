@@ -14,6 +14,7 @@ const ComingSoon = (props) => {
 const styles = StyleSheet.create({
   touchOpacityElement: {
     borderRadius: 15,
+    marginRight: 10,
   },
   touchOpacityTextElement: {
     paddingHorizontal: 16,

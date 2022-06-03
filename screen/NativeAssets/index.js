@@ -31,7 +31,7 @@ const NativeAssets = () => {
             </View>
           </View>
 
-          <Text style={[styles.textNativeAssets, { color: colors.walletBalanceBgColor }]}>Native Asstes</Text>
+          <Text style={[styles.textNativeAssets, { color: colors.walletBalanceBgColor }]}>Native assets</Text>
           <BtcFlatItemFunc />
           <MLSFlatItemFunc />
         </View>

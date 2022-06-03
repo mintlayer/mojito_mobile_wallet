@@ -330,7 +330,7 @@ export class BlueCopyTextToClipboard extends Component {
 const styleCopyTextToClipboard = StyleSheet.create({
   address: {
     marginVertical: 32,
-    fontSize: 15,
+    fontSize: 17,
     color: '#9aa0aa',
     textAlign: 'center',
   },
