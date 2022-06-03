@@ -12,7 +12,6 @@ Community: [telegram group](https://t.me/mintlayer)
 
 Learn more about Mintlayer [here.](https://www.mintlayer.org/technology/)
 
-
 ## BUILD & RUN IT
 
 Please refer to the engines field in package.json file for the minimum required versions of Node and npm. It is preferred that you use an even-numbered version of Node as these are LTS versions.
@@ -90,6 +89,6 @@ Grab an issue from [the backlog](https://github.com/mintlayer/mobile_wallet/issu
 
 ## RESPONSIBLE DISCLOSURE
 
-Found critical bugs/vulnerabilities? Please email them security@mintlayer.org 
+Found critical bugs/vulnerabilities? Please email them security@mintlayer.org
 
 For more info check [here](https://github.com/mintlayer/mobile_wallet/security/policy)
