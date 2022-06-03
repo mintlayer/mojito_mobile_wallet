@@ -9,9 +9,11 @@ import navigationStyle from '../../components/navigationStyle';
 import { COLORS } from '../../theme/Colors';
 import { type } from '../../theme/Fonts';
 import { introductionContent } from '../../constants';
+import { setIntroSliderFlage } from '../../store/asyncStorage';
 
 const Introduction = () => {
   const [activePage, setActivePage] = useState(0);
+  const { navigate } = useNavigation();
   const _renderItem = ({ item }) => {
     const { image, title, subtitle } = item;
     return (
@@ -23,8 +25,11 @@ const Introduction = () => {
     );
   };
 
-  const { navigate } = useNavigation();
-  const navigateScreen = (navigate) => navigate('BottomTab');
+  const _navigateTo = () => {
+    setIntroSliderFlage('true');
+    const navigateScreen = (navigate) => navigate('BottomTab');
+    navigateScreen(navigate);
+  };
 
   return (
     <View style={styles.root}>
@@ -33,11 +38,11 @@ const Introduction = () => {
 
       <View style={styles.skipButtonPortion}>
         {activePage === 3 ? (
-          <TouchableOpacity style={styles.startButton} onPress={() => navigateScreen(navigate)}>
+          <TouchableOpacity style={styles.startButton} onPress={_navigateTo}>
             <Text style={styles.startButtonText}>Start</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.skipButton} onPress={() => navigateScreen(navigate)}>
+          <TouchableOpacity style={styles.skipButton} onPress={_navigateTo}>
             <Text style={styles.skipButtonText}>Skip</Text>
           </TouchableOpacity>
         )}
@@ -110,5 +115,6 @@ const styles = StyleSheet.create({
   },
   skipButtonPortion: {
     alignItems: 'center',
+    marginBottom: 20,
   },
 });

@@ -96,6 +96,7 @@ import Introduction from './screen/introduction';
 import NativeAssets from './screen/NativeAssets';
 
 import { sendBottom, settingBottom, walletBottom } from './theme/Images';
+import { getFlage } from './store/asyncStorage';
 
 const WalletsStack = createNativeStackNavigator();
 
@@ -374,9 +375,10 @@ const LappBrowserStackRoot = () => {
 
 const InitStack = createNativeStackNavigator();
 const InitRoot = () => (
-  <InitStack.Navigator initialRouteName="UnlockWithScreenRoot">
-    <InitStack.Screen name="UnlockWithScreenRoot" component={UnlockWithScreenRoot} options={{ headerShown: false }} />
-    <InitStack.Screen
+  <InitStack.Navigator>
+    {/* initialRouteName="UnlockWithScreenRoot" */}
+    {/* <InitStack.Screen name="UnlockWithScreenRoot" component={UnlockWithScreenRoot} options={{ headerShown: false }} /> */}
+    {/* <InitStack.Screen
       name="ReorderWallets"
       component={ReorderWalletsStackRoot}
       options={{
@@ -384,7 +386,7 @@ const InitRoot = () => (
         gestureEnabled: false,
         stackPresentation: isDesktop ? 'containedModal' : 'fullScreenModal',
       }}
-    />
+    /> */}
     <InitStack.Screen name={isHandset ? 'Navigation' : 'DrawerRoot'} component={isHandset ? Navigation : DrawerRoot} options={{ headerShown: false, replaceAnimation: 'push' }} />
   </InitStack.Navigator>
 );
@@ -474,8 +476,8 @@ const BottomTab = () => {
   const { theme, colors } = useTheme();
 
   return (
-    <Tab.Navigator initialRouteName="NativeAssets" showLabel={false}>
-      <WalletsStack.Screen
+    <Tab.Navigator initialRouteName="WalletsList" showLabel={false}>
+      {/* <WalletsStack.Screen
         name="NativeAssets"
         component={NativeAssets}
         options={{
@@ -485,7 +487,7 @@ const BottomTab = () => {
             return <Image source={sendBottom} style={[{ tintColor: focused ? colors.walletBalanceBgColor : colors.borderColor }, styles.marginTopTab]} />;
           },
         }}
-      />
+      /> */}
       <WalletsStack.Screen
         name="WalletsList"
         component={WalletsList}
@@ -516,10 +518,10 @@ const Navigation = () => {
   const theme = useTheme();
 
   return (
-    <RootStack.Navigator initialRouteName="UnlockWithScreenRoot" screenOptions={{ headerHideShadow: true }}>
-      {/* stacks */}
+    <RootStack.Navigator screenOptions={{ headerHideShadow: true }}>
+      {/* stacks initialRouteName="UnlockWithScreenRoot" */}
       {/* add bottom here */}
-      <WalletsStack.Screen name="Introduction" component={Introduction} options={Introduction.navigationOptions(theme)} />
+      {!getFlage() && <WalletsStack.Screen name="Introduction" component={Introduction} options={Introduction.navigationOptions(theme)} />}
 
       <RootStack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false, translucent: false }} />
       {/* <RootStack.Screen name="WalletsRoot" component={WalletsRoot} options={{ headerShown: false, translucent: false }} /> */}
@@ -532,7 +534,10 @@ const Navigation = () => {
       <RootStack.Screen name="HodlHodlLoginRoot" component={HodlHodlLoginRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="HodlHodlMyContracts" component={HodlHodlMyContracts} options={HodlHodlMyContracts.navigationOptions(theme)} />
       <RootStack.Screen name="HodlHodlWebview" component={HodlHodlWebview} options={HodlHodlWebview.navigationOptions(theme)} />
+
       <RootStack.Screen name="WalletTransactions" component={WalletTransactions} options={WalletTransactions.navigationOptions(theme)} />
+      <WalletsStack.Screen name="WalletDetails" component={WalletDetails} options={WalletDetails.navigationOptions(theme)} />
+      <WalletsStack.Screen name="WalletAddresses" component={WalletAddresses} options={WalletAddresses.navigationOptions(theme)} />
 
       {/* screens */}
       <RootStack.Screen name="WalletExportRoot" component={WalletExportStackRoot} options={NavigationDefaultOptions} />
