@@ -10,6 +10,7 @@ import loc, { formatStringAddTwoWhiteSpaces } from '../../loc';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import alert from '../../components/Alert';
+import { qr_code } from '../../theme/Images';
 
 const A = require('../../blue_modules/analytics');
 const branch = require('../../current-branch.json');
@@ -102,16 +103,16 @@ const About = () => {
     Linking.openURL('https://t.me/mintlayer');
   };
   const handleOnGithubPress = () => {
-    Linking.openURL('https://github.com/mintlayer/mobile_wallet');
+    Linking.openURL('https://github.com/mintlayer');
   };
   const handleOnRatePress = () => {
     const options = {
-      AppleAppID: '1376878040',
+      AppleAppID: '1620691992',
       GooglePackageName: 'com.mojitowallet',
       preferredAndroidMarket: AndroidMarket.Google,
       preferInApp: Platform.OS !== 'android',
       openAppStoreIfInAppFails: true,
-      fallbackPlatformURL: 'https://bluewallet.io',
+      fallbackPlatformURL: 'https://www.mintlayer.org/en/',
     };
     Rate.rate(options, (success) => {
       if (success) {
@@ -124,7 +125,7 @@ const About = () => {
     <ScrollView testID="AboutScrollView" contentInsetAdjustmentBehavior="automatic">
       <BlueCard>
         <View style={styles.center}>
-          <Image style={styles.logo} source={require('../../img/bluebeast.png')} />
+          <Image style={styles.logo} source={qr_code} />
           <Text style={styles.textFree}>{loc.settings.about_free}</Text>
           <Text style={styles.textBackup}>{formatStringAddTwoWhiteSpaces(loc.settings.about_backup)}</Text>
           {((Platform.OS === 'android' && hasGmsSync()) || Platform.OS !== 'android') && <BlueButton onPress={handleOnRatePress} title={loc.settings.about_review + ' ⭐🙏'} />}
