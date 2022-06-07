@@ -19,6 +19,7 @@ export class AppStorage {
   static HODL_HODL_SIGNATURE_KEY = 'HODL_HODL_SIGNATURE_KEY';
   static HODL_HODL_CONTRACTS = 'HODL_HODL_CONTRACTS';
   static HANDOFF_STORAGE_KEY = 'HandOff';
+  static TEST_MODE_ENABLED = 'TEST_MODE_ENABLED';
 
   static keys2migrate = [AppStorage.HANDOFF_STORAGE_KEY, AppStorage.DO_NOT_TRACK, AppStorage.ADVANCED_MODE_ENABLED];
 
@@ -866,4 +867,19 @@ export class AppStorage {
       path,
     });
   }
+
+  /**
+   * Get Test mode status
+   * @returns {Promise<boolean>}
+   */
+  isTestModeEnabled = async () => {
+    try {
+      return !!(await AsyncStorage.getItem(AppStorage.TEST_MODE_ENABLED));
+    } catch (_) {}
+    return false;
+  };
+
+  setIsTestModeEnabled = async (value) => {
+    await AsyncStorage.setItem(AppStorage.TEST_MODE_ENABLED, value ? '1' : '');
+  };
 }

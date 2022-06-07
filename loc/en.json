@@ -377,7 +377,9 @@
     "total_balance": "Total Balance",
     "total_balance_explanation": "Display the total balance of all your wallets on your home screen widgets.",
     "widgets": "Widgets",
-    "tools": "Tools"
+    "tools": "Tools",
+    "testmode": "Test Mode",
+    "testmode_e": "Use test mode to test application without spending real bitcoins"
   },
   "notifications": {
     "would_you_like_to_receive_notifications": "Would you like to receive notifications when you get incoming payments?",
