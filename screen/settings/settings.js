@@ -31,6 +31,7 @@ const Settings = () => {
         <BlueListItem title={loc.settings.network} onPress={() => navigate('NetworkSettings')} testID="NetworkSettings" chevron />
         <BlueListItem title={loc.settings.tools} onPress={() => navigate('Tools')} testID="Tools" chevron />
         <BlueListItem title={loc.settings.about} onPress={() => navigate('About')} testID="AboutButton" chevron />
+        <BlueListItem title={loc.settings.testmode} onPress={() => navigate('TestMode')} testID="TestModeButton" chevron />
       </ScrollView>
     </>
   );
