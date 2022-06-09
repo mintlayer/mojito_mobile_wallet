@@ -1,11 +1,16 @@
-* deps update
-* remove commmented line
-* android first release working
-* change version number
-* Android first release changes
-* ios build release
-* android release version
-* working fine lint
-* working 2
-* wokring 1
-* wokring 1
+* feedback from fabio 
+* slider issue fix (#40) 
+* slider issue fix 
+* A-1202341533788182: update icons (#39) 
+* android release 
+* fix test suites and deps (#37) 
+* + 
+* + 
+* change version number 
+* Android first release changes 
+* ios build release 
+* android release version 
+* working fine lint 
+* working 2 
+* wokring 1 
+* wokring 1 
