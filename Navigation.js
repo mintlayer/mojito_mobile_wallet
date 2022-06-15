@@ -377,7 +377,7 @@ const InitStack = createNativeStackNavigator();
 const InitRoot = () => (
   <InitStack.Navigator>
     {/* initialRouteName="UnlockWithScreenRoot" */}
-    {/* <InitStack.Screen name="UnlockWithScreenRoot" component={UnlockWithScreenRoot} options={{ headerShown: false }} /> */}
+    <InitStack.Screen name="UnlockWithScreenRoot" component={UnlockWithScreenRoot} options={{ headerShown: false }} />
     {/* <InitStack.Screen
       name="ReorderWallets"
       component={ReorderWalletsStackRoot}
