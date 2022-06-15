@@ -238,7 +238,7 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
               <Text style={iStyles.br} />
               <Text numberOfLines={1} style={[iStyles.BalanceInBtc, { color: colors.inverseForegroundColor }]}>
                 {loc.wallets.list_latest_transaction}
-                <Text style={[iStyles.BalanceInBtc2, { color: colors.inverseForegroundColor }]}>{' MLT'}</Text>
+                <Text style={[iStyles.BalanceInBtc2, { color: colors.inverseForegroundColor }]}>{' Transaction'}</Text>
               </Text>
             </View>
             <Image source={bitcoin} style={iStyles.btcImg} />

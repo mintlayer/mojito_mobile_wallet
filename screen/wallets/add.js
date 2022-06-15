@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Text, ScrollView, ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, View, StatusBar, TextInput, StyleSheet, useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BlueText, BlueListItem, LightningButton, BitcoinButton, VaultButton, BlueFormLabel, BlueButton, BlueButtonLink, BlueSpacing20 } from '../../BlueComponents';
+import { BlueText, BlueListItem, LightningButton, BitcoinButton, VaultButton, BlueFormLabel, BlueButton, BlueButtonLink, BlueSpacing20, MintLayerButton } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import { HDSegwitBech32Wallet, SegwitP2SHWallet, HDSegwitP2SHWallet, LightningCustodianWallet, AppStorage, LightningLdkWallet } from '../../class';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
@@ -252,7 +252,9 @@ const WalletsAdd = () => {
           {backdoorPressed > 10 ? <LdkButton active={selectedWalletType === ButtonSelected.LDK} onPress={handleOnLdkButtonPressed} style={styles.button} subtext={LightningLdkWallet.getPackageVersion()} text="LDK" /> : null}
           <VaultButton active={selectedWalletType === ButtonSelected.VAULT} onPress={handleOnVaultButtonPressed} style={styles.button} /> */}
         </View>
-        <BtcMlcComponent source={create_wallet} title="MLT" detail="Mintlayer" amount="385.00" date="15 Oct 2021 13:00" />
+        <View style={styles.buttons}>
+          <MintLayerButton testID="ActivateMintlayerButton" title="MLT" subtitle="Mintlayer" style={styles.button} />
+        </View>
 
         <View style={styles.advanced}>
           {(() => {
@@ -283,7 +285,7 @@ const WalletsAdd = () => {
           {isAdvancedOptionsEnabled && selectedWalletType === ButtonSelected.ONCHAIN && !isLoading && <BlueButtonLink style={styles.import} title={entropyButtonText} onPress={navigateToEntropy} />}
           <BlueSpacing20 />
           <View style={styles.createButton}>
-            {/* <Text>zaishsjhsj 
+            {/* <Text>
             disabled={!selectedWalletType || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)}
             </Text> */}
             {!isLoading ? <BlueButton testID="Create" title={loc.wallets.add_create} disabled={!selectedWalletType || label.length === 0 || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)} onPress={createWallet} /> : <ActivityIndicator />}
@@ -373,7 +375,7 @@ const styles = StyleSheet.create({
   },
   importContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
     marginHorizontal: 25,
