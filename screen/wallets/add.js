@@ -51,6 +51,7 @@ const WalletsAdd = () => {
     },
     root: {
       backgroundColor: colors.elevated,
+      marginBottom: 30,
     },
     lndUri: {
       borderColor: colors.formBorder,
@@ -231,7 +232,6 @@ const WalletsAdd = () => {
     Keyboard.dismiss();
     setSelectedWalletType(ButtonSelected.LDK);
   };
-  console.log('testing ********* : ', label.length);
 
   return (
     <ScrollView style={stylesHook.root}>
@@ -282,7 +282,7 @@ const WalletsAdd = () => {
               );
             }
           })()}
-          {isAdvancedOptionsEnabled && selectedWalletType === ButtonSelected.ONCHAIN && !isLoading && <BlueButtonLink style={styles.import} title={entropyButtonText} onPress={navigateToEntropy} />}
+          {/* isAdvancedOptionsEnabled && selectedWalletType === ButtonSelected.ONCHAIN && !isLoading && <BlueButtonLink style={styles.import} title={entropyButtonText} onPress={navigateToEntropy} /> */}
           <BlueSpacing20 />
           <View style={styles.createButton}>
             {/* <Text>
