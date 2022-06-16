@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
   },
   importContainer: {
     flexDirection: 'row',
-    // justifyContent: 'center',
+    justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
     marginHorizontal: 25,

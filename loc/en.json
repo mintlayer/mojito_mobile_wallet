@@ -513,7 +513,7 @@
     "list_empty_txs2_lightning": "\nTo start using it, tap on Manage Funds and topup your balance.",
     "list_header": "A wallet represents a pair of keys: one private and one you can share to receive coins.",
     "list_import_problem": "There was a problem importing this wallet.",
-    "list_latest_transaction": "Latest Mintlayer",
+    "list_latest_transaction": "Latest Transaction",
     "list_ln_browser": "LApp Browser",
     "list_long_choose": "Choose Photo",
     "list_long_clipboard": "Copy from Clipboard",
