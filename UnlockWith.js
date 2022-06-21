@@ -18,6 +18,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  animation: {
+    width: 100,
+    height: 100,
+    marginTop: 100,
+  },
   biometric: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -133,7 +138,7 @@ const UnlockWith = () => {
     <SafeAreaView style={styles.root}>
       <StatusBar barStyle="default" />
       <View style={styles.container}>
-        <LottieView source={require('./img/bluewalletsplash.json')} autoPlay loop={false} onAnimationFinish={onAnimationFinish} />
+        <LottieView style={styles.animation} source={require('./img/mojitosplash.json')} autoPlay loop={false} onAnimationFinish={onAnimationFinish} />
         <View style={styles.biometric}>{animationDidFinish && <View style={styles.biometricRow}>{renderUnlockOptions()}</View>}</View>
       </View>
     </SafeAreaView>
