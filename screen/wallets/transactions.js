@@ -18,6 +18,7 @@ import LNNodeBar from '../../components/LNNodeBar';
 import TransactionsNavigationHeader from '../../components/TransactionsNavigationHeader';
 import { TransactionListItem } from '../../components/TransactionListItem';
 import alert from '../../components/Alert';
+import { COLORS } from '../../theme/Colors';
 
 const fs = require('../../blue_modules/fs');
 const BlueElectrum = require('../../blue_modules/BlueElectrum');
@@ -615,7 +616,7 @@ const WalletTransactions = () => {
             }}
             icon={
               <View style={styles.receiveIcon}>
-                <Icon name="arrow-down" size={buttonFontSize} type="font-awesome" color={colors.buttonAlternativeTextColor} />
+                <Icon name="arrow-down" size={buttonFontSize} type="font-awesome" color={COLORS.white} />
               </View>
             }
           />
@@ -628,7 +629,7 @@ const WalletTransactions = () => {
             testID="SendButton"
             icon={
               <View style={styles.sendIcon}>
-                <Icon name="arrow-down" size={buttonFontSize} type="font-awesome" color={colors.buttonAlternativeTextColor} />
+                <Icon name="arrow-down" size={buttonFontSize} type="font-awesome" color={COLORS.white} />
               </View>
             }
           />
