@@ -1,11 +1,49 @@
+* fix placeholder theme buttom navigation issue (#54) 
+* fix placeholder theme buttom navigation issue 
+* A-1202413146169475: update mainnet server list (#52) 
+* feedback fixes (#50) * feedback fixes
+
+* feedback fixes from ben
+
+* padding issue
+
+* pr feedback
+* pr feedback 
+* padding issue 
+* feedback fixes from ben 
+* feedback fixes 
+* A-1201997882971262: testnet support - screen with switcher 
+* A-1202449691482610: fix initial storage loading (#49) * A-1202449691482610: fix initial storage loading
+
+* update icon
+* bug: chrome extention fix (#48) 
+* bug: chrome extention fix 
+* settings feedback (#45) 
+* settings feedback 
+* Ticket : Feedbacks From Fabio Fabbrucci (#42) * feedback from fabio
+
+* change package lock file
+* Fix the README (#43) * Update README.md
+
+* Update README.md
+
+* Update README.md
+
+* Create CODEOWNERS
+
+* Update LICENSE
+
+* fix prettier issues
+* change package lock file 
 * feedback from fabio 
+* A-1202341533788184: remove Lightning (#41) 
 * slider issue fix (#40) 
 * slider issue fix 
 * A-1202341533788182: update icons (#39) 
 * android release 
 * fix test suites and deps (#37) 
-* + 
-* + 
+* remove commmented line 
+* android first release working 
 * change version number 
 * Android first release changes 
 * ios build release 
