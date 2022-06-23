@@ -379,6 +379,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     marginHorizontal: 25,
+    paddingBottom: 5,
   },
   import: {
     marginBottom: 0,
