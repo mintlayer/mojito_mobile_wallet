@@ -1,3 +1,23 @@
+* ios app icons (#58) 
+* ios app icons 
+* New ios splash 2 (#57) * android splash and icon
+
+* splash issue
+
+* splash file update
+
+Co-authored-by: zainali.syed24 <zainali.syed24@hotmail.com>
+* splash file update 
+* splash issue 
+* android splash and icon 
+* language change screen option (#56) 
+* language change screen option 
+* android splash and icon (#55) * android splash and icon
+
+* qr code images change
+* qr code images change 
+* splash issue 
+* android splash and icon 
 * fix placeholder theme buttom navigation issue (#54) 
 * fix placeholder theme buttom navigation issue 
 * A-1202413146169475: update mainnet server list (#52) 
