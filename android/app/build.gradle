@@ -138,8 +138,8 @@ android {
         applicationId "com.mojitowallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "0.1.1"
+        versionCode 15
+        versionName "0.1.2"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
