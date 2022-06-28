@@ -1,3 +1,5 @@
+* android splash adjustment (#59) 
+* android splash adjustment 
 * ios app icons (#58) 
 * ios app icons 
 * New ios splash 2 (#57) * android splash and icon

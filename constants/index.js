@@ -8,7 +8,7 @@ export const introductionContent = [
   },
   {
     title: 'Your Mintlayer Wallet',
-    subtitle: 'You can create a new Bitcoin wallet or import an existing one. Your Mintlayer wallet will be automatically derived from your Bitcoin mnemonics (provided it is a BIP39 seed). Inside your wallet, you will find multiple ledgers corresponding to different coins in the Mintlayer ecosystem.',
+    subtitle: 'You can create a new Bitcoin wallet or import an existing one. Your Mintlayer wallet will be automatically derived from your Bitcoin mnemonics (provided it as a BIP39 seed). Inside your wallet, you will find multiple ledgers corresponding to different coins in the Mintlayer ecosystem.',
     image: page2,
     index: 1,
   },
