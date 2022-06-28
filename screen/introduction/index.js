@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Image, ScrollView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { windowWidth } from '../../blue_modules/environment';
@@ -19,8 +19,10 @@ const Introduction = () => {
     return (
       <View style={styles.slide1}>
         <Image source={image} />
-        <Text style={styles.text}>{title}</Text>
-        <Text style={styles.description}>{subtitle}</Text>
+        <ScrollView style={styles.scrollContainer}>
+          <Text style={styles.text}>{title}</Text>
+          <Text style={styles.description}>{subtitle}</Text>
+        </ScrollView>
       </View>
     );
   };
@@ -62,6 +64,9 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
   },
+  scrollContainer: {
+    paddingVertical: 10,
+  },
   slide1: {
     width: windowWidth,
     alignItems: 'center',
@@ -72,6 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginVertical: 20,
     fontFamily: type.bold,
+    textAlign: 'center',
   },
   description: {
     color: COLORS.lightGray,
