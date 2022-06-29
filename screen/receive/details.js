@@ -26,6 +26,7 @@ const ReceiveDetails = () => {
   const wallet = wallets.find((w) => w.getID() === walletID);
   const [customLabel, setCustomLabel] = useState();
   const [customAmount, setCustomAmount] = useState();
+  const [customAmountPreview, setCustomAmountPreview] = useState();
   const [customUnit, setCustomUnit] = useState(BitcoinUnit.BTC);
   const [bip21encoded, setBip21encoded] = useState();
   const [isCustom, setIsCustom] = useState(false);
@@ -398,6 +399,7 @@ const ReceiveDetails = () => {
 
   const dismissCustomAmountModal = () => {
     Keyboard.dismiss();
+    setCustomAmountPreview('');
     setIsCustomModalVisible(false);
   };
 
@@ -408,7 +410,7 @@ const ReceiveDetails = () => {
   const createCustomAmountAddress = () => {
     setIsCustom(true);
     setIsCustomModalVisible(false);
-    let amount = customAmount;
+    let amount = customAmountPreview;
     switch (customUnit) {
       case BitcoinUnit.BTC:
         // nop
@@ -425,6 +427,7 @@ const ReceiveDetails = () => {
         }
         break;
     }
+    setCustomAmount(amount);
     setBip21encoded(DeeplinkSchemaMatch.bip21encode(address, { amount, label: customLabel }));
     setShowAddress(true);
   };
@@ -434,7 +437,7 @@ const ReceiveDetails = () => {
       <BottomModal isVisible={isCustomModalVisible} onClose={dismissCustomAmountModal}>
         <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
           <View style={stylesHook.modalContent}>
-            <AmountInput unit={customUnit} amount={customAmount || ''} onChangeText={setCustomAmount} onAmountUnitChange={setCustomUnit} />
+            <AmountInput unit={customUnit} amount={customAmountPreview || customAmount || ''} onChangeText={setCustomAmountPreview} onAmountUnitChange={setCustomUnit} />
             <View style={stylesHook.customAmount}>
               <TextInput onChangeText={setCustomLabel} placeholderTextColor="#81868e" placeholder={loc.receive.details_label} value={customLabel || ''} numberOfLines={1} style={stylesHook.customAmountText} testID="CustomAmountDescription" />
             </View>
