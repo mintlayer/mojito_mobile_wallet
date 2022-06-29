@@ -43,11 +43,6 @@ const WalletsImport = () => {
       marginTop: 10,
       justifyContent: 'space-between',
     },
-    containerRow: {
-      flexDirection: 'row',
-      marginHorizontal: 15,
-      justifyContent: 'space-between',
-    },
     smallButton: {
       borderWidth: 0.7,
       borderColor: 'transparent',
@@ -70,6 +65,9 @@ const WalletsImport = () => {
       justifyContent: 'center',
       alignItems: 'center',
       paddingVertical: 35,
+    },
+    scanView: {
+      marginHorizontal: 16,
     },
   });
 
@@ -173,9 +171,8 @@ const WalletsImport = () => {
       <View style={styles.scanContainer}>
         <BlueFormLabel style={styles.paragraph}>{loc.multisig.scan_or_import_file}</BlueFormLabel>
       </View>
-      <View style={styles.containerRow}>
-        <BlueButton title={loc.send.details_scan} testID="Scan" onPress={importScan} style={[styles.smallButton, { backgroundColor: colors.buttonBackgroundColor }]} textStyle={{ color: colors.buttonTextColor }} />
-        <BlueButton title={loc.send.upload} testID="Upload" onPress={() => {}} style={[styles.smallButton, { backgroundColor: colors.buttonBackgroundColor }]} textStyle={{ color: colors.buttonTextColor }} />
+      <View style={styles.scanView}>
+        <BlueButton title={loc.send.details_scan} testID="Scan" onPress={importScan} textStyle={{ color: colors.buttonTextColor }} />
       </View>
 
       {Platform.select({ android: !isToolbarVisibleForAndroid && renderOptionsAndImportButton, default: renderOptionsAndImportButton })}
