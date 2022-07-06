@@ -1,3 +1,11 @@
+* A-1202501697330826: fix qr code (#62) 
+* remove upload button (#61) 
+* remove upload button 
+* feedback (#60) * feedback
+
+* fix feedback from ben
+* fix feedback from ben 
+* feedback 
 * android splash adjustment (#59) 
 * android splash adjustment 
 * ios app icons (#58) 
