@@ -138,7 +138,7 @@ android {
         applicationId "com.mojitowallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 15
+        versionCode 19
         versionName "0.1.2"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
