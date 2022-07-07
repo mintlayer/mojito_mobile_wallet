@@ -552,6 +552,8 @@ const Navigation = () => {
       <RootStack.Screen name="LappBrowserRoot" component={LappBrowserStackRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="AOPPRoot" component={AOPPRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="LDKOpenChannelRoot" component={LDKOpenChannelRoot} options={NavigationDefaultOptions} />
+      <RootStack.Screen name="TransactionStatus" component={TransactionStatus} options={TransactionStatus.navigationOptions(theme)} />
+      <RootStack.Screen name="TransactionDetails" component={TransactionDetails} options={TransactionDetails.navigationOptions(theme)} />
 
       <RootStack.Screen
         name="ScanQRCodeRoot"

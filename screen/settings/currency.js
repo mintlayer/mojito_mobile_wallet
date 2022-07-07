@@ -30,6 +30,9 @@ const Currency = () => {
       alignItems: 'center',
       backgroundColor: colors.background,
     },
+    rateFont: {
+      fontSize: 20,
+    },
   });
 
   const fetchCurrency = async () => {
@@ -91,7 +94,7 @@ const Currency = () => {
             {loc.settings.currency_source} {selectedCurrency.source ?? FiatUnitSource.CoinDesk}
           </BlueText>
           <BlueSpacing10 />
-          <BlueText>
+          <BlueText style={styles.rateFont}>
             {loc.settings.rate}: {currencyRate.Rate ?? loc._.never}
           </BlueText>
           <BlueSpacing10 />

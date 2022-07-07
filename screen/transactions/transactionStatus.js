@@ -47,7 +47,7 @@ const TransactionsStatus = () => {
       color: colors.buttonTextColor,
     },
     details: {
-      backgroundColor: colors.lightButton,
+      backgroundColor: colors.mainColor,
     },
   });
 

@@ -48,7 +48,7 @@ const TransactionsDetails = () => {
       backgroundColor: colors.inputBackgroundColor,
     },
     greyButton: {
-      backgroundColor: colors.lightButton,
+      backgroundColor: colors.mainColor,
     },
     Link: {
       color: colors.buttonTextColor,

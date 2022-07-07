@@ -66,7 +66,7 @@ export const BlueButton = (props) => {
 
 export const SecondButton = forwardRef((props, ref) => {
   const { colors } = useTheme();
-  let backgroundColor = props.backgroundColor ? props.backgroundColor : colors.buttonBlueBackgroundColor;
+  let backgroundColor = props.backgroundColor ? props.backgroundColor : colors.mainColor;
   let fontColor = colors.buttonTextColor;
   if (props.disabled === true) {
     backgroundColor = colors.buttonDisabledBackgroundColor;

@@ -110,9 +110,9 @@ const NotificationSettings = () => {
       />
 
       <BlueCard>
-        <View style={styles.uri}>
+        {/* <View style={styles.uri}>
           <TextInput placeholder={Notifications.getDefaultUri()} value={URI} onChangeText={setURI} numberOfLines={1} style={styles.uriText} placeholderTextColor="#81868e" editable={!isLoading} textContentType="URL" autoCapitalize="none" underlineColorAndroid="transparent" />
-        </View>
+      </View> */}
 
         <BlueSpacing20 />
         <BlueText style={styles.centered} onPress={() => setShowTokenInfo(isShowTokenInfo + 1)}>

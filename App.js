@@ -112,7 +112,8 @@ const App = () => {
       if (colorScheme === 'light') {
         changeNavigationBarColor(BlueDefaultTheme.colors.background, true, true);
       } else {
-        changeNavigationBarColor(BlueDarkTheme.colors.buttonBackgroundColor, false, true);
+        changeNavigationBarColor(BlueDefaultTheme.colors.background, true, true);
+        // changeNavigationBarColor(BlueDarkTheme.colors.buttonBackgroundColor, false, true);
       }
     }
   }, [colorScheme]);
@@ -356,7 +357,8 @@ const App = () => {
     <SafeAreaProvider>
       <View style={styles.root}>
         <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} backgroundColor="transparent" translucent />
-        <NavigationContainer ref={navigationRef} theme={colorScheme === 'dark' ? BlueDarkTheme : BlueDefaultTheme}>
+        {/* <NavigationContainer ref={navigationRef} theme={colorScheme === 'dark' ? BlueDarkTheme : BlueDefaultTheme}> */}
+        <NavigationContainer ref={navigationRef} theme={BlueDefaultTheme}>
           <InitRoot />
           <Notifications onProcessNotifications={processPushNotifications} />
         </NavigationContainer>
