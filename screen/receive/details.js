@@ -26,8 +26,9 @@ const ReceiveDetails = () => {
   const wallet = wallets.find((w) => w.getID() === walletID);
   const [customLabel, setCustomLabel] = useState();
   const [customAmount, setCustomAmount] = useState();
-  const [customAmountPreview, setCustomAmountPreview] = useState();
+  const [customAmountPreview, setCustomAmountPreview] = useState(0);
   const [customUnit, setCustomUnit] = useState(BitcoinUnit.BTC);
+  const [customUnitPreview, setCustomUnitPreview] = useState(BitcoinUnit.BTC);
   const [bip21encoded, setBip21encoded] = useState();
   const [isCustom, setIsCustom] = useState(false);
   const [isCustomModalVisible, setIsCustomModalVisible] = useState(false);
@@ -405,29 +406,48 @@ const ReceiveDetails = () => {
 
   const showCustomAmountModal = () => {
     setIsCustomModalVisible(true);
+    setCustomUnitPreview(customUnit);
+    let displayAmount = customAmount;
+    switch (customUnit) {
+      case BitcoinUnit.BTC:
+        displayAmount = customAmount;
+        break;
+      case BitcoinUnit.SATS:
+        displayAmount = currency.btcToSatoshi(customAmount);
+        break;
+      case BitcoinUnit.LOCAL_CURRENCY:
+        displayAmount = currency.BTCToLocalCurrency(customAmount);
+        displayAmount = parseFloat(displayAmount.replace(/[^0-9.-]+/g, ''));
+        break;
+    }
+
+    setCustomAmountPreview(displayAmount);
   };
 
   const createCustomAmountAddress = () => {
     setIsCustom(true);
     setIsCustomModalVisible(false);
     let amount = customAmountPreview;
-    switch (customUnit) {
+    switch (customUnitPreview) {
       case BitcoinUnit.BTC:
         // nop
         break;
       case BitcoinUnit.SATS:
-        amount = currency.satoshiToBTC(customAmount);
+        amount = currency.satoshiToBTC(customAmountPreview);
         break;
       case BitcoinUnit.LOCAL_CURRENCY:
         if (AmountInput.conversionCache[amount + BitcoinUnit.LOCAL_CURRENCY]) {
           // cache hit! we reuse old value that supposedly doesnt have rounding errors
           amount = currency.satoshiToBTC(AmountInput.conversionCache[amount + BitcoinUnit.LOCAL_CURRENCY]);
         } else {
-          amount = currency.fiatToBTC(customAmount);
+          amount = currency.fiatToBTC(customAmountPreview);
         }
         break;
     }
     setCustomAmount(amount);
+    setCustomUnit(customUnitPreview);
+    setCustomUnitPreview(null);
+    setCustomAmountPreview(null);
     setBip21encoded(DeeplinkSchemaMatch.bip21encode(address, { amount, label: customLabel }));
     setShowAddress(true);
   };
@@ -437,7 +457,7 @@ const ReceiveDetails = () => {
       <BottomModal isVisible={isCustomModalVisible} onClose={dismissCustomAmountModal}>
         <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
           <View style={stylesHook.modalContent}>
-            <AmountInput unit={customUnit} amount={customAmountPreview || customAmount || ''} onChangeText={setCustomAmountPreview} onAmountUnitChange={setCustomUnit} />
+            <AmountInput unit={customUnitPreview} amount={customAmountPreview} onChangeText={setCustomAmountPreview} onAmountUnitChange={setCustomUnitPreview} />
             <View style={stylesHook.customAmount}>
               <TextInput onChangeText={setCustomLabel} placeholderTextColor="#81868e" placeholder={loc.receive.details_label} value={customLabel || ''} numberOfLines={1} style={stylesHook.customAmountText} testID="CustomAmountDescription" />
             </View>
@@ -462,15 +482,7 @@ const ReceiveDetails = () => {
    */
   const getDisplayAmount = () => {
     if (Number(customAmount) > 0) {
-      switch (customUnit) {
-        case BitcoinUnit.BTC:
-          return customAmount + ' BTC';
-        case BitcoinUnit.SATS:
-          return currency.satoshiToBTC(customAmount) + ' BTC';
-        case BitcoinUnit.LOCAL_CURRENCY:
-          return currency.fiatToBTC(customAmount) + ' BTC';
-      }
-      return customAmount + ' ' + customUnit;
+      return customAmount + ' BTC';
     } else {
       return null;
     }
