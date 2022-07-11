@@ -234,6 +234,7 @@ const ScanQRCode = () => {
           navigation.navigate(launchedBy);
         }
         onBarScanned(ret.data);
+        return;
       } catch (e) {
         console.log(e);
       }
