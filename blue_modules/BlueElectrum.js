@@ -48,6 +48,7 @@ async function _getRealm() {
 
 const storageKey = 'ELECTRUM_PEERS';
 const defaultPeer = { host: 'vmd84592.contaboserver.net', ssl: '50002' };
+const defaultTestnetPeer = { host: 'testnet.qtornado.com', ssl: '51002' };
 const hardcodedPeers = [
   { host: 'electrum5.hodlister.co', ssl: '50002' },
   { host: 'node.degga.net', ssl: '50002' },
@@ -59,6 +60,12 @@ const hardcodedPeers = [
   { host: 'electrum.kendigisland.xyz', ssl: '50002' },
 ];
 
+const hardcodedTestnetPeers = [
+  { host: 'testnet.hsmiths.com', ssl: '53012' },
+  { host: 'testnet.aranguren.org', ssl: '51002' },
+  { host: 'electrum.blockstream.info', ssl: '60002' },
+];
+
 /** @type {ElectrumClient} */
 let mainClient;
 let mainConnected = false;
@@ -67,6 +74,7 @@ let serverName = false;
 let disableBatching = false;
 let connectionAttempt = 0;
 let currentPeerIndex = Math.floor(Math.random() * hardcodedPeers.length);
+let currentTestnetPeerIndex = Math.floor(Math.random() * hardcodedTestnetPeers.length);
 
 let latestBlockheight = false;
 let latestBlockheightTimestamp = false;
@@ -92,13 +100,14 @@ async function setDisabled(disabled = true) {
   return AsyncStorage.setItem(ELECTRUM_CONNECTION_DISABLED, disabled ? '1' : '');
 }
 
-async function connectMain() {
+async function connectMain(isTest) {
+  console.log('isTest:', JSON.stringify(isTest, null, 2));
   if (await isDisabled()) {
     console.log('Electrum connection disabled by user. Skipping connectMain call');
     return;
   }
-  let usingPeer = await getNextPeer();
-  const savedPeer = await getSavedPeer();
+  let usingPeer = isTest ? await getNextTestnetPeer() : await getNextPeer();
+  const savedPeer = isTest ? await getSavedTestnetPeer() : await getSavedPeer();
   if (savedPeer && savedPeer.host && (savedPeer.tcp || savedPeer.ssl)) {
     usingPeer = savedPeer;
   }
@@ -106,7 +115,7 @@ async function connectMain() {
   await DefaultPreference.setName('group.com.mojitowallet');
   try {
     if (usingPeer.host.endsWith('onion')) {
-      const randomPeer = await getCurrentPeer();
+      const randomPeer = isTest ? await getCurrentTestnetPeer() : await getCurrentPeer();
       await DefaultPreference.set(ELECTRUM_HOST, randomPeer.host);
       await DefaultPreference.set(ELECTRUM_TCP_PORT, randomPeer.tcp);
       await DefaultPreference.set(ELECTRUM_SSL_PORT, randomPeer.ssl);
@@ -266,6 +275,29 @@ async function getNextPeer() {
 }
 
 async function getSavedPeer() {
+  const host = await AsyncStorage.getItem(ELECTRUM_HOST);
+  const port = await AsyncStorage.getItem(ELECTRUM_TCP_PORT);
+  const sslPort = await AsyncStorage.getItem(ELECTRUM_SSL_PORT);
+  return { host, tcp: port, ssl: sslPort };
+}
+
+async function getCurrentTestnetPeer() {
+  return hardcodedTestnetPeers[currentTestnetPeerIndex];
+}
+
+/**
+ * Returns NEXT hardcoded electrum server (increments index after use)
+ *
+ * @returns {Promise<{tcp, host, ssl?}|*>}
+ */
+async function getNextTestnetPeer() {
+  const peer = getCurrentTestnetPeer();
+  currentTestnetPeerIndex++;
+  if (currentTestnetPeerIndex + 1 >= hardcodedTestnetPeers.length) currentTestnetPeerIndex = 0;
+  return peer;
+}
+
+async function getSavedTestnetPeer() {
   const host = await AsyncStorage.getItem(ELECTRUM_HOST);
   const port = await AsyncStorage.getItem(ELECTRUM_TCP_PORT);
   const sslPort = await AsyncStorage.getItem(ELECTRUM_SSL_PORT);
