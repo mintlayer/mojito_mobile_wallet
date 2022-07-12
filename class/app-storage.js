@@ -28,6 +28,13 @@ export class AppStorage {
     this.wallets = [];
     this.tx_metadata = {};
     this.cachedPassword = false;
+    this.prefix = '';
+  }
+
+  async setTestModePrefix() {
+    const prefix = (await this.isTestModeEnabled()) ? 'test_' : '';
+    console.log('prefix:', JSON.stringify(prefix, null, 2));
+    this.prefix = prefix;
   }
 
   async migrateKeys() {
@@ -52,10 +59,11 @@ export class AppStorage {
    * @returns {Promise<any>|Promise<any> | Promise<void> | * | Promise | void}
    */
   setItem = (key, value) => {
+    const prefix = this.prefix;
     if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
-      return RNSecureKeyStore.set(key, value, { accessible: ACCESSIBLE.WHEN_UNLOCKED });
+      return RNSecureKeyStore.set(prefix + key, value, { accessible: ACCESSIBLE.WHEN_UNLOCKED });
     } else {
-      return AsyncStorage.setItem(key, value);
+      return AsyncStorage.setItem(prefix + key, value);
     }
   };
 
@@ -67,10 +75,11 @@ export class AppStorage {
    * @returns {Promise<any>|*}
    */
   getItem = (key) => {
+    const prefix = this.prefix;
     if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
-      return RNSecureKeyStore.get(key);
+      return RNSecureKeyStore.get(prefix + key);
     } else {
-      return AsyncStorage.getItem(key);
+      return AsyncStorage.getItem(prefix + key);
     }
   };
 
@@ -80,18 +89,19 @@ export class AppStorage {
    * @returns {Promise<*>|null}
    */
   getItemWithFallbackToRealm = async (key) => {
+    const prefix = this.prefix;
     let value;
     try {
       return await this.getItem(key);
     } catch (error) {
-      console.warn('error reading', key, error.message);
+      console.warn('error reading', prefix + key, error.message);
       console.warn('fallback to realm');
       const realmKeyValue = await this.openRealmKeyValue();
-      const obj = realmKeyValue.objectForPrimaryKey('KeyValue', key); // search for a realm object with a primary key
+      const obj = realmKeyValue.objectForPrimaryKey('KeyValue', prefix + key); // search for a realm object with a primary key
       value = obj?.value;
       realmKeyValue.close();
       if (value) {
-        console.warn('successfully recovered', value.length, 'bytes from realm for key', key);
+        console.warn('successfully recovered', value.length, 'bytes from realm for key', prefix + key);
         return value;
       }
       return null;
