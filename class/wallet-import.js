@@ -19,6 +19,7 @@ export const validateBip32 = (path) => path.match(/^(m\/)?(\d+'?\/)*\d+'?$/) !==
  * @param onProgress {function} Callback to report scanning progress
  * @param onWallet {function} Callback to report wallet found
  * @param onPassword {function} Callback to ask for password if needed
+ * @param isTestMode {bool} Must be true if wallet is in testnet
  * @returns {{promise: Promise, stop: function}}
  */
 const startImport = (importTextOrig, askPassphrase = false, searchAccounts = false, onProgress, onWallet, onPassword, isTestMode) => {
@@ -201,7 +202,9 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
           wallet.setPassphrase(password);
           wallet.setDerivationPath(path);
           yield { progress: `bip39 ${i.script_type} ${path}` };
-          if (await wallet.wasEverUsed()) {
+          // TODO fix this hack
+          // Import and subsequent scan is work, but not work on this stage
+          if (false && await wallet.wasEverUsed() ) { // eslint-disable-line
             yield { wallet: wallet };
             walletFound = true;
           } else {

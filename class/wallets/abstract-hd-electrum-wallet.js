@@ -847,6 +847,8 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
       // those 2 wallet types
       if (this._getExternalAddressByIndex(0).startsWith('bc1')) {
         u.script = { length: 27 };
+      } else if (this._getExternalAddressByIndex(0).startsWith('tb1')) {
+        u.script = { length: 27 };
       } else if (this._getExternalAddressByIndex(0).startsWith('3')) {
         u.script = { length: 50 };
       }
@@ -854,7 +856,9 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     const { inputs, outputs, fee } = this.coinselect(utxos, targets, feeRate, changeAddress);
 
     sequence = sequence || AbstractHDElectrumWallet.defaultRBFSequence;
-    let psbt = new bitcoin.Psbt();
+    let psbt = new bitcoin.Psbt({
+      network: this.network,
+    });
     let c = 0;
     const keypairs = {};
     const values = {};
@@ -1034,6 +1038,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
    * @returns {Promise<boolean>}
    */
   async wasEverUsed() {
+    console.log('wasEverUsed', this.network);
     const txs = await BlueElectrum.getTransactionsByAddress(this._getExternalAddressByIndex(0), this.network);
     return txs.length > 0;
   }

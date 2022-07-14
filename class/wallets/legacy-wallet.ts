@@ -518,7 +518,7 @@ export class LegacyWallet extends AbstractWallet {
    */
   isAddressValid(address: string): boolean {
     try {
-      bitcoin.address.toOutputScript(address); // throws, no?
+      bitcoin.address.toOutputScript(address, this.network); // throws, no?
 
       if (!address.toLowerCase().startsWith('bc1')) return true;
       const decoded = bitcoin.address.fromBech32(address);
@@ -646,7 +646,7 @@ export class LegacyWallet extends AbstractWallet {
   async wasEverUsed(): Promise<boolean> {
     const address = this.getAddress();
     if (!address) return Promise.resolve(false);
-    const txs = await BlueElectrum.getTransactionsByAddress(address);
+    const txs = await BlueElectrum.getTransactionsByAddress(address, this.network);
     return txs.length > 0;
   }
 }
