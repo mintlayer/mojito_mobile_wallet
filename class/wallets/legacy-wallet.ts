@@ -34,7 +34,6 @@ export class LegacyWallet extends AbstractWallet {
   constructor(opts: { network: Network }) {
     super();
     this.network = (opts && opts.network) || bitcoin.networks.bitcoin;
-    console.log('this.network:', JSON.stringify(this.network, null, 2));
   }
 
   /**

@@ -34,7 +34,6 @@ export class AppStorage {
   async setTestModePrefix() {
     const is_test_mode_enabled = await this.isTestModeEnabled();
     const prefix = is_test_mode_enabled ? 'test_' : '';
-    console.log('prefix:', JSON.stringify(prefix, null, 2));
     this.prefix = prefix;
     return is_test_mode_enabled;
   }

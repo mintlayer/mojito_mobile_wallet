@@ -101,7 +101,6 @@ async function setDisabled(disabled = true) {
 }
 
 async function connectMain(isTest) {
-  console.log('isTest:', JSON.stringify(isTest, null, 2));
   if (await isDisabled()) {
     console.log('Electrum connection disabled by user. Skipping connectMain call');
     return;

@@ -1038,7 +1038,6 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
    * @returns {Promise<boolean>}
    */
   async wasEverUsed() {
-    console.log('wasEverUsed', this.network);
     const txs = await BlueElectrum.getTransactionsByAddress(this._getExternalAddressByIndex(0), this.network);
     return txs.length > 0;
   }
