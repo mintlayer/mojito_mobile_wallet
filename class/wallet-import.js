@@ -7,6 +7,9 @@ import bip39WalletFormats from './bip39_wallet_formats.json'; // https://github.
 import bip39WalletFormatsBlueWallet from './bip39_wallet_formats_bluewallet.json';
 const bitcoin = require('bitcoinjs-lib');
 
+// TODO Import and subsequent scan is work, in process in import it is not
+const CHECK_WAS_EVER_USED = false;
+
 // https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts#L43
 export const validateBip32 = (path) => path.match(/^(m\/)?(\d+'?\/)*\d+'?$/) !== null;
 
@@ -204,7 +207,7 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
           yield { progress: `bip39 ${i.script_type} ${path}` };
           // TODO fix this hack
           // Import and subsequent scan is work, but not work on this stage
-          if (false && await wallet.wasEverUsed() ) { // eslint-disable-line
+          if (CHECK_WAS_EVER_USED && (await wallet.wasEverUsed())) {
             yield { wallet: wallet };
             walletFound = true;
           } else {
