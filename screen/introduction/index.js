@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Image, ScrollView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { windowWidth } from '../../blue_modules/environment';
+import { windowWidth, isHandset } from '../../blue_modules/environment';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 import navigationStyle from '../../components/navigationStyle';
@@ -19,7 +19,7 @@ const Introduction = () => {
     return (
       <View style={styles.slide1}>
         <Image source={image} />
-        <ScrollView style={styles.scrollContainer}>
+        <ScrollView style={isHandset ? styles.scrollipadContainer : styles.scrollContainer}>
           <Text style={styles.text}>{title}</Text>
           <Text style={styles.description}>{subtitle}</Text>
         </ScrollView>
@@ -66,6 +66,9 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingVertical: 10,
+  },
+  scrollipadContainer: {
+    height: 150,
   },
   slide1: {
     width: windowWidth,
