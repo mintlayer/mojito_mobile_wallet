@@ -19,10 +19,11 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { TransactionPendingIconBig } from '../../components/TransactionPendingIconBig';
 import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 const currency = require('../../blue_modules/currency');
+const bitcoin = require('bitcoinjs-lib');
 
 const ReceiveDetails = () => {
   const { walletID, address } = useRoute().params;
-  const { wallets, saveToDisk, sleep, isElectrumDisabled, fetchAndSaveWalletTransactions } = useContext(BlueStorageContext);
+  const { wallets, saveToDisk, sleep, isElectrumDisabled, fetchAndSaveWalletTransactions, isTestModeEnabled } = useContext(BlueStorageContext);
   const wallet = wallets.find((w) => w.getID() === walletID);
   const [customLabel, setCustomLabel] = useState();
   const [customAmount, setCustomAmount] = useState();
@@ -42,6 +43,7 @@ const ReceiveDetails = () => {
   const [initialConfirmed, setInitialConfirmed] = useState(0);
   const [initialUnconfirmed, setInitialUnconfirmed] = useState(0);
   const [displayBalance, setDisplayBalance] = useState('');
+  const [isTestMode, setIsTestMode] = useState(false);
   const fetchAddressInterval = useRef();
   const stylesHook = StyleSheet.create({
     modalContent: {
@@ -129,6 +131,10 @@ const ReceiveDetails = () => {
   });
 
   useEffect(() => {
+    isTestModeEnabled().then(setIsTestMode);
+  }, [isTestModeEnabled]);
+
+  useEffect(() => {
     if (showConfirmedBalance) {
       ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
     }
@@ -144,6 +150,8 @@ const ReceiveDetails = () => {
       fetchAddressInterval.current = undefined;
     }
 
+    const network = isTestMode ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
+
     fetchAddressInterval.current = setInterval(async () => {
       try {
         const decoded = DeeplinkSchemaMatch.bip21decode(bip21encoded);
@@ -151,7 +159,7 @@ const ReceiveDetails = () => {
         if (!address2use) return;
 
         console.log('checking address', address2use, 'for balance...');
-        const balance = await BlueElectrum.getBalanceByAddress(address2use);
+        const balance = await BlueElectrum.getBalanceByAddress(address2use, network);
         console.log('...got', balance);
 
         if (balance.unconfirmed > 0) {
@@ -224,7 +232,7 @@ const ReceiveDetails = () => {
         console.log(error);
       }
     }, intervalMs);
-  }, [bip21encoded, address, initialConfirmed, initialUnconfirmed, intervalMs, fetchAndSaveWalletTransactions, walletID]);
+  }, [bip21encoded, address, initialConfirmed, initialUnconfirmed, intervalMs, fetchAndSaveWalletTransactions, walletID, isTestMode]);
 
   const renderConfirmedBalance = () => {
     return (

@@ -9,6 +9,7 @@ import coinSelect from 'coinselect';
 import coinSelectSplit from 'coinselect/split';
 import { CreateTransactionResult, CreateTransactionUtxo, Transaction, Utxo } from './types';
 import { Signer, ECPairFactory, ECPairAPI } from 'ecpair';
+import { Network } from 'bitcoinjs-lib/src/networks';
 const ecc = require('tiny-secp256k1');
 const ECPair: ECPairAPI = ECPairFactory(ecc);
 
@@ -28,6 +29,13 @@ export class LegacyWallet extends AbstractWallet {
 
   _txs_by_external_index: Transaction[] = []; // eslint-disable-line camelcase
   _txs_by_internal_index: Transaction[] = []; // eslint-disable-line camelcase
+  network: Network;
+
+  constructor(opts: { network: Network }) {
+    super();
+    this.network = (opts && opts.network) || bitcoin.networks.bitcoin;
+    console.log('this.network:', JSON.stringify(this.network, null, 2));
+  }
 
   /**
    * Simple function which says that we havent tried to fetch balance
@@ -116,7 +124,7 @@ export class LegacyWallet extends AbstractWallet {
     try {
       const address = this.getAddress();
       if (!address) throw new Error('LegacyWallet: Invalid address');
-      const balance = await BlueElectrum.getBalanceByAddress(address);
+      const balance = await BlueElectrum.getBalanceByAddress(address, this.network);
       this.balance = Number(balance.confirmed);
       this.unconfirmed_balance = Number(balance.unconfirmed);
       this._lastBalanceFetch = +new Date();
@@ -134,7 +142,7 @@ export class LegacyWallet extends AbstractWallet {
     try {
       const address = this.getAddress();
       if (!address) throw new Error('LegacyWallet: Invalid address');
-      const utxos = await BlueElectrum.multiGetUtxoByAddress([address]);
+      const utxos = await BlueElectrum.multiGetUtxoByAddress([address], null, this.network);
       this.utxo = [];
       for (const arr of Object.values(utxos)) {
         this.utxo = this.utxo.concat(arr);
