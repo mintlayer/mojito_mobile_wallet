@@ -7,6 +7,9 @@ import { BlueListItem, BlueHeaderDefaultSub } from '../../BlueComponents';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 
+// killswitch to show test mode option
+const SHOW_TEST_MODE_OPTION = true;
+
 const styles = StyleSheet.create({
   root: {
     flex: 1,
@@ -31,7 +34,7 @@ const Settings = () => {
         <BlueListItem title={loc.settings.network} onPress={() => navigate('NetworkSettings')} testID="NetworkSettings" chevron />
         <BlueListItem title={loc.settings.tools} onPress={() => navigate('Tools')} testID="Tools" chevron />
         <BlueListItem title={loc.settings.about} onPress={() => navigate('About')} testID="AboutButton" chevron />
-        <BlueListItem title={loc.settings.testmode} onPress={() => navigate('TestMode')} testID="TestModeButton" chevron />
+        {SHOW_TEST_MODE_OPTION && <BlueListItem title={loc.settings.testmode} onPress={() => navigate('TestMode')} testID="TestModeButton" chevron />}
       </ScrollView>
     </>
   );
