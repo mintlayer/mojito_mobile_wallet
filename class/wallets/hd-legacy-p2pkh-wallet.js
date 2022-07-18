@@ -70,11 +70,11 @@ export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
 
     let address;
     if (node === 0) {
-      address = this.constructor._nodeToLegacyAddress(this._node0.derive(index));
+      address = this.constructor._nodeToLegacyAddress(this._node0.derive(index), this.network);
     }
 
     if (node === 1) {
-      address = this.constructor._nodeToLegacyAddress(this._node1.derive(index));
+      address = this.constructor._nodeToLegacyAddress(this._node1.derive(index), this.network);
     }
 
     if (node === 0) {

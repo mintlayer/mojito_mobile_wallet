@@ -5,13 +5,14 @@ import loc from './loc';
 const prompt = require('./blue_modules/prompt');
 const currency = require('./blue_modules/currency');
 const BlueElectrum = require('./blue_modules/BlueElectrum'); // eslint-disable-line @typescript-eslint/no-unused-vars
-BlueElectrum.connectMain();
 const BlueApp = new AppStorage();
 // If attempt reaches 10, a wipe keychain option will be provided to the user.
 let unlockAttempt = 0;
 
 const startAndDecrypt = async (retry) => {
   console.log('startAndDecrypt');
+  const isTestMode = await BlueApp.setTestModePrefix();
+  await BlueElectrum.connectMain(isTestMode);
   if (BlueApp.getWallets().length > 0) {
     console.log('App already has some wallets, so we are in already started state, exiting startAndDecrypt');
     return true;

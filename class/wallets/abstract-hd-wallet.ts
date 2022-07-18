@@ -3,6 +3,7 @@ import * as bip39 from 'bip39';
 import { BIP32Interface } from 'bip32';
 import BlueElectrum from '../../blue_modules/BlueElectrum';
 import { Transaction } from './types';
+const bitcoin = require('bitcoinjs-lib');
 
 type AbstractHDWalletStatics = {
   derivationPath?: string;
@@ -27,8 +28,8 @@ export class AbstractHDWallet extends LegacyWallet {
   _node0?: BIP32Interface;
   _node1?: BIP32Interface;
 
-  constructor() {
-    super();
+  constructor(opts) {
+    super(opts);
     // eslint-disable-next-line prettier/prettier
     const Constructor = this.constructor as unknown as AbstractHDWalletStatics;
     this.next_free_address_index = 0;
@@ -40,6 +41,7 @@ export class AbstractHDWallet extends LegacyWallet {
     this._address_to_wif_cache = {};
     this.gap_limit = 20;
     this._derivationPath = Constructor.derivationPath;
+    this.network = (opts && opts.network) || bitcoin.networks.bitcoin;
   }
 
   getNextFreeAddressIndex(): number {
@@ -133,7 +135,7 @@ export class AbstractHDWallet extends LegacyWallet {
       this.external_addresses_cache[this.next_free_address_index + c] = address; // updating cache just for any case
       let txs = [];
       try {
-        txs = await BlueElectrum.getTransactionsByAddress(address);
+        txs = await BlueElectrum.getTransactionsByAddress(address, this.network);
       } catch (Err: any) {
         console.warn('BlueElectrum.getTransactionsByAddress()', Err.message);
       }
@@ -171,7 +173,7 @@ export class AbstractHDWallet extends LegacyWallet {
       this.internal_addresses_cache[this.next_free_change_address_index + c] = address; // updating cache just for any case
       let txs = [];
       try {
-        txs = await BlueElectrum.getTransactionsByAddress(address);
+        txs = await BlueElectrum.getTransactionsByAddress(address, this.network);
       } catch (Err: any) {
         console.warn('BlueElectrum.getTransactionsByAddress()', Err.message);
       }
