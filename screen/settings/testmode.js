@@ -10,16 +10,21 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
   },
+  warning: {
+    color: 'red',
+  },
 });
 
 const TestMode = () => {
   const { isTestModeEnabled, setIsTestModeEnabled } = useContext(BlueStorageContext);
+  const [modeChanged, setModeChanged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isTestModeSwitchEnabled, setIsTestModeSwitchEnabled] = useState(false);
   const { colors } = useTheme();
   const onTestModeSwitch = async (value) => {
     await setIsTestModeEnabled(value);
     setIsTestModeSwitchEnabled(value);
+    setModeChanged(!modeChanged);
   };
 
   useEffect(() => {
@@ -52,6 +57,11 @@ const TestMode = () => {
       <BlueCard>
         <BlueText>{loc.settings.testmode_e}</BlueText>
       </BlueCard>
+      {modeChanged && (
+        <BlueCard>
+          <BlueText style={styles.warning}>{loc.settings.testmode_e_warn}</BlueText>
+        </BlueCard>
+      )}
       <BlueSpacing20 />
     </ScrollView>
   );
