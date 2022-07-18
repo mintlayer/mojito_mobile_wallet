@@ -23,6 +23,7 @@ import WidgetCommunication from './blue_modules/WidgetCommunication';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import ActionSheet from './screen/ActionSheet';
 import HandoffComponent from './components/handoff';
+import TestnetModeBadge from './components/TestnetModeBadge';
 import Privacy from './blue_modules/Privacy';
 const A = require('./blue_modules/analytics');
 const currency = require('./blue_modules/currency');
@@ -357,6 +358,7 @@ const App = () => {
     <SafeAreaProvider>
       <View style={styles.root}>
         <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} backgroundColor="transparent" translucent />
+        <TestnetModeBadge />
         {/* <NavigationContainer ref={navigationRef} theme={colorScheme === 'dark' ? BlueDarkTheme : BlueDefaultTheme}> */}
         <NavigationContainer ref={navigationRef} theme={BlueDefaultTheme}>
           <InitRoot />
