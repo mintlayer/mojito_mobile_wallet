@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import prompt from 'react-native-prompt-android';
 import loc from '../loc';
 
-module.exports = (title, text, isCancelable = true, type = 'secure-text', isOKDestructive = false, continueButtonText = loc._.ok) => {
+module.exports = (title, text, isCancelable = true, type = 'secure-text', isOKDestructive = false, continueButtonText = loc._.ok, allowEmpty = true) => {
   const keyboardType = type === 'numeric' ? 'numeric' : 'default';
 
   if (Platform.OS === 'ios' && type === 'numeric') {
@@ -24,7 +24,11 @@ module.exports = (title, text, isCancelable = true, type = 'secure-text', isOKDe
             text: continueButtonText,
             onPress: (password) => {
               console.log('OK Pressed');
-              resolve(password);
+              if (password === '' && !allowEmpty) {
+                reject(Error('Empty ' + title));
+              } else {
+                resolve(password);
+              }
             },
             style: isOKDestructive ? 'destructive' : 'default',
           },
@@ -34,7 +38,11 @@ module.exports = (title, text, isCancelable = true, type = 'secure-text', isOKDe
             text: continueButtonText,
             onPress: (password) => {
               console.log('OK Pressed');
-              resolve(password);
+              if (password === '' && !allowEmpty) {
+                reject(Error('Empty field'));
+              } else {
+                resolve(password);
+              }
             },
           },
         ];

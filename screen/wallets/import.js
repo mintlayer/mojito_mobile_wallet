@@ -145,6 +145,9 @@ const WalletsImport = () => {
             <Switch testID="AskPassphrase" value={askPassphrase} onValueChange={setAskPassphrase} />
           </View>
           <View style={styles.row}>
+            <BlueText>{loc.wallets.import_passphrase_description}</BlueText>
+          </View>
+          <View style={styles.row}>
             <BlueText>{loc.wallets.import_search_accounts}</BlueText>
             <Switch testID="SearchAccounts" value={searchAccounts} onValueChange={setSearchAccounts} />
           </View>
