@@ -16,7 +16,7 @@ import { useTheme } from '@react-navigation/native';
 
 export default class WalletGradient {
   static hdSegwitP2SHWallet = ['#007AFF', '#0040FF'];
-  static hdSegwitBech32Wallet = ['#37E8C0', '#15BE98'];
+  static hdSegwitBech32Wallet = ['#267365', '#0C2722'];
   static segwitBech32Wallet = ['#6CD9FC', '#44BEE5'];
   static watchOnlyWallet = ['#474646', '#282828'];
   static legacyWallet = ['#37E8C0', '#15BE98'];

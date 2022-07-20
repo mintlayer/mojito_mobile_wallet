@@ -196,9 +196,6 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
   const latestTransactionText = walletTransactionUpdateStatus === true || walletTransactionUpdateStatus === item.getID() ? loc.transactions.updating : item.getBalance() !== 0 && item.getLatestTransactionTime() === 0 ? loc.wallets.pull_to_refresh : item.getTransactions().find((tx) => tx.confirmations === 0) ? loc.transactions.pending : transactionTimeToReadable(item.getLatestTransactionTime());
 
   const balance = !item.hideBalance && formatBalance(Number(item.getBalance()), item.getPreferredBalanceUnit(), true);
-  console.log('latestTransactionText : ', latestTransactionText);
-  console.log('balance : ', balance);
-  console.log('item : ', item);
   return (
     <Animated.View style={[isLargeScreen ? iStyles.rootLargeDevice : { ...iStyles.root, width: itemWidth }, { opacity, transform: [{ scale: scaleValue }] }]} shadowOpacity={25 / 100} shadowOffset={{ width: 0, height: 3 }} shadowRadius={8}>
       <TouchableWithoutFeedback
@@ -212,11 +209,11 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
           onPressedOut();
         }}
       >
-        {/* <LinearGradient shadowColor={colors.shadowColor} colors={WalletGradient.gradientsFor(item.type)} style={iStyles.grad}>
-      <Image source={image} style={iStyles.image} /> */}
-        <View style={[iStyles.grad, { backgroundColor: colors.walletBalanceBgColor }]}>
-          <Text style={iStyles.br} />
+        <LinearGradient shadowColor={colors.shadowColor} colors={WalletGradient.gradientsFor(item.type)} style={iStyles.grad}>
+          {/* <Image source={image} style={iStyles.image} /> */}
+          {/* <View style={[iStyles.grad, { backgroundColor: colors.walletBalanceBgColor }]}> */}
 
+          <Text style={iStyles.br} />
           <Text numberOfLines={1} style={[iStyles.label, { color: colors.inverseForegroundColor }]}>
             {item.getLabel()}
           </Text>
@@ -251,8 +248,9 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
             {/* <Text style={[iStyles.btcInfo, { color: colors.inverseForegroundColor, fontFamily: type.semiBold }]}>{'571915' + '    '}</Text>
               <Text style={[iStyles.btcInfo, { color: colors.btcPercentColor, fontFamily: type.semiBold }]}>+0.3339%</Text> */}
           </Text>
-        </View>
-        {/* </LinearGradient> */}
+
+          {/* </View> */}
+        </LinearGradient>
       </TouchableWithoutFeedback>
     </Animated.View>
   );

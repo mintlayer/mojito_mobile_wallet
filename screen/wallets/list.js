@@ -235,8 +235,8 @@ const WalletsList = () => {
   const renderSectionFooter = (section) => {
     switch (section.section.key) {
       case WalletsListSections.TRANSACTIONS:
-        // if (dataSource.length === 0 && !isLoading) {
-        if (dataSource.length === 1 && !isLoading) {
+        if (dataSource.length === 0 && !isLoading) {
+          // if (dataSource.length === 1 && !isLoading) {
           return (
             <View style={styles.footerRoot} testID="NoTransactionsMessage">
               <Text style={styles.footerEmpty}>{loc.wallets.list_empty_txs1}</Text>
