@@ -25,7 +25,7 @@ const ImportWalletDiscovery = () => {
   const [password, setPassword] = useState();
   const [selected, setSelected] = useState(0);
   const [progress, setProgress] = useState();
-  const [isTestMode, setIsTestMode] = useState(false);
+  const [isTestMode, setIsTestMode] = useState(null);
   const importing = useRef(false);
   const bip39 = useMemo(() => {
     const hd = new HDSegwitBech32Wallet({ network: isTestMode ? bitcoin.networks.testnet : bitcoin.networks.bitcoin });
@@ -54,6 +54,11 @@ const ImportWalletDiscovery = () => {
   };
 
   useEffect(() => {
+    if (isTestMode === null) {
+      // do nothing
+      return;
+    }
+
     const onProgress = (data) => setProgress(data);
 
     const onWallet = (wallet) => {
@@ -68,11 +73,14 @@ const ImportWalletDiscovery = () => {
 
     const onPassword = async (title, subtitle) => {
       try {
-        const pass = await prompt(title, subtitle);
+        const pass = await prompt(title, subtitle, true, 'secure-text', false, loc._.ok, false);
         setPassword(pass);
         return pass;
       } catch (e) {
         if (e.message === 'Cancel Pressed') {
+          navigation.goBack();
+        }
+        if (e.message.includes('Empty')) {
           navigation.goBack();
         }
         throw e;
