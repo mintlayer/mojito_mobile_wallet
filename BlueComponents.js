@@ -153,7 +153,6 @@ export const MintLayerButton = (props) => {
           minHeight: props.style.height,
           height: props.style.height,
           flex: 1,
-          marginBottom: 8,
         }}
       >
         <View style={{ marginHorizontal: 16, marginVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
