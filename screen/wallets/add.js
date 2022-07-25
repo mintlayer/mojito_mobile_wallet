@@ -63,8 +63,8 @@ const WalletsAdd = () => {
   };
 
   useEffect(() => {
-    AsyncStorage.getItem(AppStorage.LNDHUB)
-      .then((url) => setWalletBaseURI(url || 'https://lndhub.io'))
+    AsyncStorage.getItem(isTestMode ? AppStorage.TEST_LNDHUB : AppStorage.LNDHUB)
+      .then((url) => setWalletBaseURI(url || (isTestMode ? 'http://your_lnd_hub:3000' : 'https://lndhub.io')))
       .catch(() => setWalletBaseURI(''));
     isTestModeEnabled().then(setIsTestMode);
     isAdancedModeEnabled()
@@ -189,12 +189,12 @@ const WalletsAdd = () => {
           throw new Error('The provided node address is not valid LNDHub node.');
         }
       }
-      await wallet.createAccount();
+      await wallet.createAccount(isTestMode);
       await wallet.authorize();
     } catch (Err) {
       setIsLoading(false);
       console.warn('lnd create failure', Err);
-      return alert(Err);
+      return alert(Err.message || Err);
       // giving app, not adding anything
     }
     A(A.ENUM.CREATED_LIGHTNING_WALLET);
