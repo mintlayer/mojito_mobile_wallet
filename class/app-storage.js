@@ -13,6 +13,7 @@ let savingInProgress = 0; // its both a flag and a counter of attempts to write 
 export class AppStorage {
   static FLAG_ENCRYPTED = 'data_encrypted';
   static LNDHUB = 'lndhub';
+  static TEST_LNDHUB = 'test_lndhub';
   static ADVANCED_MODE_ENABLED = 'advancedmodeenabled';
   static DO_NOT_TRACK = 'donottrack';
   static HODL_HODL_API_KEY = 'HODL_HODL_API_KEY';

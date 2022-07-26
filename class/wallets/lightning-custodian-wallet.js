@@ -592,12 +592,16 @@ export class LightningCustodianWallet extends LegacyWallet {
         : new Frisbee({
             baseURI: address,
           });
-    const response = await apiCall.get('/getinfo', {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await apiCall
+      .get('/getinfo', {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+      })
+      .catch(() => {
+        throw new Error('connect failure');
+      });
     const json = response.body;
     if (typeof json === 'undefined') {
       throw new Error('API failure: ' + response.err + ' ' + JSON.stringify(response.body));
