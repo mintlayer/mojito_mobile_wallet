@@ -602,7 +602,6 @@ export class LightningCustodianWallet extends LegacyWallet {
       .catch(() => {
         throw new Error('connect failure');
       });
-    console.log('response:', JSON.stringify(response, null, 2));
     const json = response.body;
     if (typeof json === 'undefined') {
       throw new Error('API failure: ' + response.err + ' ' + JSON.stringify(response.body));
