@@ -27,6 +27,7 @@ const ImportWalletDiscovery = () => {
   const [progress, setProgress] = useState();
   const [isTestMode, setIsTestMode] = useState(null);
   const importing = useRef(false);
+
   const bip39 = useMemo(() => {
     const hd = new HDSegwitBech32Wallet({ network: isTestMode ? bitcoin.networks.testnet : bitcoin.networks.bitcoin });
     hd.setSecret(importText);

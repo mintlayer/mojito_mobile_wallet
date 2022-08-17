@@ -25,6 +25,7 @@ export const validateBip32 = (path) => path.match(/^(m\/)?(\d+'?\/)*\d+'?$/) !==
  * @param isTestMode {bool} Must be true if wallet is in testnet
  * @returns {{promise: Promise, stop: function}}
  */
+
 const startImport = (importTextOrig, askPassphrase = false, searchAccounts = false, onProgress, onWallet, onPassword, isTestMode) => {
   // state
   let promiseResolve;
@@ -207,7 +208,8 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
           yield { progress: `bip39 ${i.script_type} ${path}` };
           // TODO fix this hack
           // Import and subsequent scan is work, but not work on this stage
-          if (CHECK_WAS_EVER_USED && (await wallet.wasEverUsed())) {
+          // if (CHECK_WAS_EVER_USED && (await wallet.wasEverUsed())) {
+          if (await wallet.wasEverUsed()) {
             yield { wallet: wallet };
             walletFound = true;
           } else {
@@ -260,13 +262,14 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
     segwitWallet.setSecret(text);
     if (segwitWallet.getAddress()) {
       // ok its a valid WIF
-
+      let walletFound = false;
       yield { progress: 'wif p2wpkh' };
       const segwitBech32Wallet = new SegwitBech32Wallet();
       segwitBech32Wallet.setSecret(text);
       if (await segwitBech32Wallet.wasEverUsed()) {
         // yep, its single-address bech32 wallet
         await segwitBech32Wallet.fetchBalance();
+        walletFound = true;
         yield { wallet: segwitBech32Wallet };
       }
 
@@ -274,6 +277,7 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
       if (await segwitWallet.wasEverUsed()) {
         // yep, its single-address bech32 wallet
         await segwitWallet.fetchBalance();
+        walletFound = true;
         yield { wallet: segwitWallet };
       }
 
@@ -281,7 +285,20 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
       yield { progress: 'wif p2pkh' };
       const legacyWallet = new LegacyWallet();
       legacyWallet.setSecret(text);
-      yield { wallet: legacyWallet };
+      if (await legacyWallet.wasEverUsed()) {
+        // yep, its single-address legacy wallet
+        await legacyWallet.fetchBalance();
+        walletFound = true;
+        yield { wallet: legacyWallet };
+      }
+
+      // if no wallets was ever used, import all of them
+      if (!walletFound) {
+        yield { wallet: segwitBech32Wallet };
+        yield { wallet: segwitWallet };
+        yield { wallet: legacyWallet };
+      }
+      // yield { wallet: legacyWallet };
     }
 
     // case - WIF is valid, just has uncompressed pubkey
