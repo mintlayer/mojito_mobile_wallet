@@ -64,7 +64,7 @@ const WalletsAdd = () => {
 
   useEffect(() => {
     AsyncStorage.getItem(isTestMode ? AppStorage.TEST_LNDHUB : AppStorage.LNDHUB)
-      .then((url) => setWalletBaseURI(url || (isTestMode ? 'http://your_lnd_hub:3000' : 'https://lndhub.io')))
+      .then((url) => setWalletBaseURI(url || (isTestMode ? 'https://tnlndhub.mintlayer.org' : 'https://lndhub.io')))
       .catch(() => setWalletBaseURI(''));
     isTestModeEnabled().then(setIsTestMode);
     isAdancedModeEnabled()
