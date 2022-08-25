@@ -149,7 +149,7 @@ const About = () => {
         onPress={handleOnTelegramPress}
         title={loc.settings.about_sm_telegram}
       />
-      <BlueListItem
+      {/* <BlueListItem
         leftIcon={{
           name: 'discord',
           type: 'font-awesome-5',
@@ -157,7 +157,7 @@ const About = () => {
         }}
         onPress={handleOnDiscordPress}
         title={loc.settings.about_sm_discord}
-      />
+      /> */}
       <BlueCard>
         <View style={styles.buildWith}>
           <BlueSpacing20 />
