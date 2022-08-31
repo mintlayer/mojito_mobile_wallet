@@ -501,7 +501,8 @@ export const BlueFormMultiInput = (props) => {
       style={{
         paddingHorizontal: 8,
         paddingVertical: 16,
-        flex: 1,
+        // flex: 1,
+        height: 120,
         marginTop: 5,
         marginHorizontal: 20,
         borderColor: colors.formBorder,
