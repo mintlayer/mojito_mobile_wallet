@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Platform, View, Keyboard, StyleSheet, Switch, TouchableWithoutFeedback } from 'react-native';
+import { Platform, View, Keyboard, StyleSheet, Switch, TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 
 import { BlueButton, BlueButtonLink, BlueDoneAndDismissKeyboardInputAccessory, BlueFormLabel, BlueFormMultiInput, BlueSpacing20, BlueText, SafeBlueArea } from '../../BlueComponents';
@@ -35,6 +35,7 @@ const WalletsImport = () => {
       marginHorizontal: 16,
       justifyContent: 'center',
       backgroundColor: colors.elevated,
+      marginVertical: 25,
     },
     row: {
       flexDirection: 'row',
@@ -165,50 +166,51 @@ const WalletsImport = () => {
 
   return (
     <SafeBlueArea style={styles.root}>
-      <BlueSpacing20 />
-      <TouchableWithoutFeedback onPress={speedBackdoorTap} testID="SpeedBackdoor">
-        <BlueFormLabel style={styles.paragraph}>{loc.wallets.import_explanation}</BlueFormLabel>
-      </TouchableWithoutFeedback>
-      <BlueSpacing20 />
-      <BlueFormMultiInput value={importText} onBlur={onBlur} onChangeText={setImportText} testID="MnemonicInput" inputAccessoryViewID={BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID} />
-      <View style={styles.scanContainer}>
-        <BlueFormLabel style={styles.paragraph}>{loc.multisig.scan_or_import_file}</BlueFormLabel>
-      </View>
-      <View style={styles.scanView}>
-        <BlueButton title={loc.send.details_scan} testID="Scan" onPress={importScan} textStyle={{ color: colors.buttonTextColor }} />
-      </View>
+      <KeyboardAvoidingView behavior="padding">
+        <BlueSpacing20 />
+        <TouchableWithoutFeedback onPress={speedBackdoorTap} testID="SpeedBackdoor">
+          <BlueFormLabel style={styles.paragraph}>{loc.wallets.import_explanation}</BlueFormLabel>
+        </TouchableWithoutFeedback>
+        <BlueSpacing20 />
+        <BlueFormMultiInput value={importText} onBlur={onBlur} onChangeText={setImportText} testID="MnemonicInput" inputAccessoryViewID={BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID} />
+        <View style={styles.scanContainer}>
+          <BlueFormLabel style={styles.paragraph}>{loc.multisig.scan_or_import_file}</BlueFormLabel>
+        </View>
+        <View style={styles.scanView}>
+          <BlueButton title={loc.send.details_scan} testID="Scan" onPress={importScan} textStyle={{ color: colors.buttonTextColor }} />
+        </View>
 
-      {Platform.select({ android: !isToolbarVisibleForAndroid && renderOptionsAndImportButton, default: renderOptionsAndImportButton })}
-      {Platform.select({
-        ios: (
-          <BlueDoneAndDismissKeyboardInputAccessory
-            onClearTapped={() => {
-              setImportText('');
-            }}
-            onPasteTapped={(text) => {
-              setImportText(text);
-              Keyboard.dismiss();
-            }}
-          />
-        ),
-        android: isToolbarVisibleForAndroid && (
-          <BlueDoneAndDismissKeyboardInputAccessory
-            onClearTapped={() => {
-              setImportText('');
-              Keyboard.dismiss();
-            }}
-            onPasteTapped={(text) => {
-              setImportText(text);
-              Keyboard.dismiss();
-            }}
-          />
-        ),
-      })}
+        {Platform.select({ android: !isToolbarVisibleForAndroid && renderOptionsAndImportButton, default: renderOptionsAndImportButton })}
+        {Platform.select({
+          ios: (
+            <BlueDoneAndDismissKeyboardInputAccessory
+              onClearTapped={() => {
+                setImportText('');
+              }}
+              onPasteTapped={(text) => {
+                setImportText(text);
+                Keyboard.dismiss();
+              }}
+            />
+          ),
+          android: isToolbarVisibleForAndroid && (
+            <BlueDoneAndDismissKeyboardInputAccessory
+              onClearTapped={() => {
+                setImportText('');
+                Keyboard.dismiss();
+              }}
+              onPasteTapped={(text) => {
+                setImportText(text);
+                Keyboard.dismiss();
+              }}
+            />
+          ),
+        })}
+      </KeyboardAvoidingView>
     </SafeBlueArea>
   );
 };
 
-// WalletsImport.navigationOptions = navigationStyle({}, (opts) => ({ ...opts, title: loc.wallets.import_title }));
 WalletsImport.navigationOptions = navigationStyle(
   {
     closeButton: true,
