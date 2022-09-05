@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Platform, View, Keyboard, StyleSheet, Switch, TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
+import { Platform, View, Keyboard, StyleSheet, Switch, TouchableWithoutFeedback, KeyboardAvoidingView, TouchableOpacity, Text } from 'react-native';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 
 import { BlueButton, BlueButtonLink, BlueDoneAndDismissKeyboardInputAccessory, BlueFormLabel, BlueFormMultiInput, BlueSpacing20, BlueText, SafeBlueArea } from '../../BlueComponents';
@@ -35,7 +35,7 @@ const WalletsImport = () => {
       marginHorizontal: 16,
       justifyContent: 'center',
       backgroundColor: colors.elevated,
-      marginVertical: 25,
+      paddingVertical: 20,
     },
     row: {
       flexDirection: 'row',

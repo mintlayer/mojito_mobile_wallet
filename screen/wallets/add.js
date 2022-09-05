@@ -282,7 +282,7 @@ const WalletsAdd = () => {
                   <BlueSpacing20 />
                   <BlueText>{loc.wallets.add_lndhub}</BlueText>
                   <View style={[styles.lndUri, stylesHook.lndUri]}>
-                    <TextInput value={walletBaseURI} onChangeText={setWalletBaseURI} onSubmitEditing={Keyboard.dismiss} placeholder={loc.wallets.add_lndhub_placeholder} clearButtonMode="while-editing" autoCapitalize="none" textContentType="URL" autoCorrect={false} placeholderTextColor="#81868e" style={styles.textInputCommon} editable={!isLoading} underlineColorAndroid="transparent" />
+                    <TextInput value={walletBaseURI} onChangeText={setWalletBaseURI} onSubmitEditing={Keyboard.dismiss} placeholder={isTestMode ? 'https://tnlndhub.mintlayer.org' : loc.wallets.add_lndhub_placeholder} clearButtonMode="while-editing" autoCapitalize="none" textContentType="URL" autoCorrect={false} placeholderTextColor="#81868e" style={styles.textInputCommon} editable={!isLoading} underlineColorAndroid="transparent" />
                   </View>
                 </>
               );
