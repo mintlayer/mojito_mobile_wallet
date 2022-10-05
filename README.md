@@ -1,6 +1,6 @@
 # Mojito - A Bitcoin & Mintlayer Wallet
 
-Built with React Native and Electrum.
+Built with React Native and Electrum, based on [BlueWallet](https://github.com/BlueWallet/BlueWallet)
 
 Website: [mintlayer.org](https://www.mintlayer.org/)
 
