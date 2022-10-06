@@ -379,7 +379,7 @@ const InitRoot = () => (
   <InitStack.Navigator>
     {/* initialRouteName="UnlockWithScreenRoot" */}
     <InitStack.Screen name="UnlockWithScreenRoot" component={UnlockWithScreenRoot} options={{ headerShown: false }} />
-    {/* <InitStack.Screen
+    <InitStack.Screen
       name="ReorderWallets"
       component={ReorderWalletsStackRoot}
       options={{
@@ -387,7 +387,7 @@ const InitRoot = () => (
         gestureEnabled: false,
         stackPresentation: isDesktop ? 'containedModal' : 'fullScreenModal',
       }}
-    /> */}
+    />
     <InitStack.Screen name={isHandset ? 'Navigation' : 'DrawerRoot'} component={isHandset ? Navigation : DrawerRoot} options={{ headerShown: false, replaceAnimation: 'push' }} />
   </InitStack.Navigator>
 );
