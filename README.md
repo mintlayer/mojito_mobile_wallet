@@ -79,6 +79,10 @@ Once the patches are applied, open Xcode and select "My Mac" as destination. If 
 npm run test
 ```
 
+## BrowserStack
+
+“This project is tested with BrowserStack.”
+
 ## LICENSE
 
 MIT
