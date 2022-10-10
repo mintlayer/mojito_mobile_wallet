@@ -80,6 +80,7 @@ npm run test
 ```
 
 ## BrowserStack
+
 “This project is tested with BrowserStack.”
 
 ## LICENSE
