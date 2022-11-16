@@ -854,6 +854,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
       }
     }
     const { inputs, outputs, fee } = this.coinselect(utxos, targets, feeRate, changeAddress);
+    console.log('Inputs ****** ', inputs, 'outputs : ', outputs);
 
     sequence = sequence || AbstractHDElectrumWallet.defaultRBFSequence;
     let psbt = new bitcoin.Psbt({
@@ -868,7 +869,8 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
       if (!skipSigning) {
         // skiping signing related stuff
         keyPair = ECPair.fromWIF(this._getWifForAddress(input.address));
-        keypairs[c] = keyPair;
+        // keypairs[c] = keyPair;
+        keypairs[input.vout] = keyPair;
       }
       values[c] = input.value;
       c++;
@@ -891,6 +893,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
 
       psbt = this._addPsbtInput(psbt, input, sequence, masterFingerprintBuffer);
     });
+    console.log('PSBT ***** ', psbt.txInputs);
 
     outputs.forEach((output) => {
       // if output has no address - this is change output
@@ -937,8 +940,29 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     if (!skipSigning) {
       // skiping signing related stuff
       for (let cc = 0; cc < c; cc++) {
+        console.log('cckeypairs ********** ', keypairs[cc], ' c ********** ', c);
+        console.log('cc ********** ', cc);
         psbt.signInput(cc, keypairs[cc]);
       }
+      // let increament = 0;
+      // for (let cc = inputs.length - 1; cc > 0; cc--) {
+      //   // console.log('cckeypairs ********** ', keypairs[cc], ' c ********** ', c);
+      //   // console.log('cc ********** ', cc);
+      //   try {
+      //     console.log('cc finally ******', cc, 'increament : ', increament);
+      //     psbt.signInput(increament, keypairs[cc]);
+      //   } catch (e) {
+      //     cc++;
+      //   } finally {
+      //     increament++;
+      //     console.log('cc finally ******', cc, 'increament : ', increament);
+      //   }
+      // }
+      // console.log('PSBT.int ****** ', psbt.);
+      // inputs.forEach((item, index) => {
+      //   console.log('item ****** ', item);
+      //   psbt.signInput(index, keypairs[index + 1]);
+      // });
     }
 
     let tx;

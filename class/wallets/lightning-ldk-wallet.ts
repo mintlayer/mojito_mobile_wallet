@@ -558,6 +558,7 @@ export class LightningLdkWallet extends LightningCustodianWallet {
   async claimCoins(address: string) {
     console.log('unwrapping wif...');
     const wif = this.unwrapFirstExternalWIFFromMnemonics();
+    // @ts-ignore: ignore
     const wallet = new SegwitBech32Wallet();
     wallet.setSecret(String(wif));
     console.log('fetching balance...');

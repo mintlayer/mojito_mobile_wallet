@@ -28,7 +28,7 @@ export class AbstractHDWallet extends LegacyWallet {
   _node0?: BIP32Interface;
   _node1?: BIP32Interface;
 
-  constructor(opts) {
+  constructor(opts: any) {
     super(opts);
     // eslint-disable-next-line prettier/prettier
     const Constructor = this.constructor as unknown as AbstractHDWalletStatics;
@@ -244,6 +244,7 @@ export class AbstractHDWallet extends LegacyWallet {
    * @return {String} WIF if found
    */
   _getWifForAddress(address: string): string {
+    console.log('_getWifForAddress ******** ', address);
     if (this._address_to_wif_cache[address]) return this._address_to_wif_cache[address]; // cache hit
 
     // fast approach, first lets iterate over all addressess we have in cache
@@ -264,6 +265,7 @@ export class AbstractHDWallet extends LegacyWallet {
     // no luck - lets iterate over all addresses we have up to first unused address index
     for (let c = 0; c <= this.next_free_change_address_index + this.gap_limit; c++) {
       const possibleAddress = this._getInternalAddressByIndex(c);
+      console.log('possibleAddress 1 ******** ', possibleAddress);
       if (possibleAddress === address) {
         return (this._address_to_wif_cache[address] = this._getInternalWIFByIndex(c));
       }
@@ -271,6 +273,7 @@ export class AbstractHDWallet extends LegacyWallet {
 
     for (let c = 0; c <= this.next_free_address_index + this.gap_limit; c++) {
       const possibleAddress = this._getExternalAddressByIndex(c);
+      console.log('possibleAddress 2 ******** ', possibleAddress);
       if (possibleAddress === address) {
         return (this._address_to_wif_cache[address] = this._getExternalWIFByIndex(c));
       }

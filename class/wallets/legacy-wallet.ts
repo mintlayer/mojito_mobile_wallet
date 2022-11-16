@@ -30,7 +30,7 @@ export class LegacyWallet extends AbstractWallet {
   _txs_by_external_index: Transaction[] = []; // eslint-disable-line camelcase
   _txs_by_internal_index: Transaction[] = []; // eslint-disable-line camelcase
   network: Network;
-
+  // @ts-ignore: ignore
   constructor(opts: { network: Network }) {
     super();
     this.network = (opts && opts.network) || bitcoin.networks.bitcoin;
@@ -142,6 +142,7 @@ export class LegacyWallet extends AbstractWallet {
     try {
       const address = this.getAddress();
       if (!address) throw new Error('LegacyWallet: Invalid address');
+      // @ts-ignore: ignore
       const utxos = await BlueElectrum.multiGetUtxoByAddress([address], null, this.network);
       this.utxo = [];
       for (const arr of Object.values(utxos)) {
