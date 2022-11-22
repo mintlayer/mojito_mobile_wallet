@@ -244,7 +244,7 @@ export class AbstractHDWallet extends LegacyWallet {
    * @return {String} WIF if found
    */
   _getWifForAddress(address: string): string {
-    console.log('_getWifForAddress ******** ', address);
+    // console.log('_getWifForAddress ******** ', address);
     if (this._address_to_wif_cache[address]) return this._address_to_wif_cache[address]; // cache hit
 
     // fast approach, first lets iterate over all addressess we have in cache

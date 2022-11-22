@@ -56,83 +56,84 @@ describe('Legacy HD (BIP44)', () => {
     const utxo = [
       {
         height: 554830,
-        value: 10000,
-        address: '186FBQmCV5W1xY7ywaWtTZPAQNciVN8Por',
+        value: 700,
+        // address: '186FBQmCV5W1xY7ywaWtTZPAQNciVN8Por',
         // address: '1ANLgqoLWeti3WuATUtQEW9UXVWsjupUDb',
-        txId: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
-        vout: 0,
-        txid: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
-        amount: 10000,
-        wif: 'Kz6kLhdyDfSbKuVH25XVqBRztjmFe8X22Xe1hnFzEv79gJNMkTAH',
-        confirmations: 1,
-        txhex:
-          '01000000000101e8d98effbb4fba4f0a89bcf217eb5a7e2f8efcae44f32ecacbc5d8cc3ce683c301000000171600148ba6d02e74c0a6e000e8b174eb2ed44e5ea211a6ffffffff0510270000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac204e0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac30750000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac409c0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac204716000000000017a914e286d58e53f9247a4710e51232cce0686f16873c8702483045022100af3800cd8171f154785cf13f46c092f61c1668f97db432bb4e7ed7bc812a8c6d022051bddca1eaf1ad8b5f3bd0ccde7447e56fd3c8709e5906f02ec6326e9a5b2ff30121039a421d5eb7c9de6590ae2a471cb556b60de8c6b056beb907dbdc1f5e6092f58800000000',
-      },
-      {
-        height: 554830,
-        value: 20000,
-        // address: '1J9zoJz5LsAJ361SQHYnLTWg46Tc2AXUCj',
         address: '1FaY9nXsGCipfmXMBuXeJE9P5uo7GbiaZC',
-        txId: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
-        vout: 1,
-        txid: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
-        amount: 20000,
+        txId: '69519e72ac433e3c823e1273cce6f55221ec366a2a54e56e779edd4b8b850e2c',
+        vout: 0,
+        txid: '69519e72ac433e3c823e1273cce6f55221ec366a2a54e56e779edd4b8b850e2c',
+        amount: 700,
         wif: 'KyFLccDgxL8p5iYfJJjcybPie9MNKDoCguHokYUeSBV8ingxq3vj',
         confirmations: 1,
-        txhex:
-          '01000000000101e8d98effbb4fba4f0a89bcf217eb5a7e2f8efcae44f32ecacbc5d8cc3ce683c301000000171600148ba6d02e74c0a6e000e8b174eb2ed44e5ea211a6ffffffff0510270000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac204e0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac30750000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac409c0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac204716000000000017a914e286d58e53f9247a4710e51232cce0686f16873c8702483045022100af3800cd8171f154785cf13f46c092f61c1668f97db432bb4e7ed7bc812a8c6d022051bddca1eaf1ad8b5f3bd0ccde7447e56fd3c8709e5906f02ec6326e9a5b2ff30121039a421d5eb7c9de6590ae2a471cb556b60de8c6b056beb907dbdc1f5e6092f58800000000',
+        txhex: '0200000000010172a95d5410450c312634eb746d384a91355186d78ee76223d70d55afe1477a9600000000000000008002bc020000000000001976a9149fe97ddc88d33faf1664ee2b864e5366c0ceb19588acbf06000000000000160014c8fedf6887451f1555adc57b923546b5e0697ab302483045022100c2aa6d9c467a30fdc7f94d047946f7afba57942e54eab0dc35255bfda9769cfb0220517dedca45dafaa4df08ff3fd258267f1d7c5a3f55532f2fa584ce14087d2ffc012102069aa04e428df6bd54e1f1fc61e505f8d67c522e5cc97f45721ad96c5aa817e400000000',
       },
       {
         height: 554830,
-        value: 30000,
-        // address: '186FBQmCV5W1xY7ywaWtTZPAQNciVN8Por',
+        value: 1000,
+        // address: '1J9zoJz5LsAJ361SQHYnLTWg46Tc2AXUCj',
         address: '1ANLgqoLWeti3WuATUtQEW9UXVWsjupUDb',
-        txId: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
-        vout: 2,
-        txid: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
-        amount: 30000,
+        txId: '8c32fd366b2131e3cca11caaf5ad8c09cc3e443a2e934c29ac939a5e6cdfdda2',
+        vout: 0,
+        txid: '8c32fd366b2131e3cca11caaf5ad8c09cc3e443a2e934c29ac939a5e6cdfdda2',
+        amount: 1000,
         wif: 'KyvVsYXvzhFENZWRAW8zDg1awL1avpdWb4jaRQwfKBvQHtBsGk8W',
         confirmations: 1,
-        txhex:
-          '01000000000101e8d98effbb4fba4f0a89bcf217eb5a7e2f8efcae44f32ecacbc5d8cc3ce683c301000000171600148ba6d02e74c0a6e000e8b174eb2ed44e5ea211a6ffffffff0510270000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac204e0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac30750000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac409c0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac204716000000000017a914e286d58e53f9247a4710e51232cce0686f16873c8702483045022100af3800cd8171f154785cf13f46c092f61c1668f97db432bb4e7ed7bc812a8c6d022051bddca1eaf1ad8b5f3bd0ccde7447e56fd3c8709e5906f02ec6326e9a5b2ff30121039a421d5eb7c9de6590ae2a471cb556b60de8c6b056beb907dbdc1f5e6092f58800000000',
+        txhex: '020000000001016ae8246da586d0799a428a68d6031721e6f855f6c9730921c4ab6d484fb415fe00000000000000008002e8030000000000001976a91466c24d1295144c62eb3c4c054ecd493cd341557a88ac04220000000000001600141493ad0bf756993c7c206b812dd04bfa6aace98202483045022100fec3361c5e916e8a719fb972dda1ea9cd461c7067edb5208acf2bae4d1815559022064fbb4532f215255099950453c43b6a8f25fffe032806bc4c6797de6222eceff0121028bcb980e4ee8cd8351de72444ab449719af2e07bba4adb952034d52690ce2b7400000000',
       },
-      {
-        height: 554830,
-        value: 40000,
+      // {
+      //   height: 554830,
+      //   value: 30000,
+      //   // address: '186FBQmCV5W1xY7ywaWtTZPAQNciVN8Por',
+      //   address: '1ANLgqoLWeti3WuATUtQEW9UXVWsjupUDb',
+      //   txId: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
+      //   vout: 2,
+      //   txid: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
+      //   amount: 30000,
+      //   wif: 'KyvVsYXvzhFENZWRAW8zDg1awL1avpdWb4jaRQwfKBvQHtBsGk8W',
+      //   confirmations: 1,
+      //   txhex:
+      //     '01000000000101e8d98effbb4fba4f0a89bcf217eb5a7e2f8efcae44f32ecacbc5d8cc3ce683c301000000171600148ba6d02e74c0a6e000e8b174eb2ed44e5ea211a6ffffffff0510270000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac204e0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac30750000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac409c0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac204716000000000017a914e286d58e53f9247a4710e51232cce0686f16873c8702483045022100af3800cd8171f154785cf13f46c092f61c1668f97db432bb4e7ed7bc812a8c6d022051bddca1eaf1ad8b5f3bd0ccde7447e56fd3c8709e5906f02ec6326e9a5b2ff30121039a421d5eb7c9de6590ae2a471cb556b60de8c6b056beb907dbdc1f5e6092f58800000000',
+      // },
+      // {
+      //   height: 554830,
+      //   value: 40000,
 
-        // address: '1J9zoJz5LsAJ361SQHYnLTWg46Tc2AXUCj',
-        address: '1FaY9nXsGCipfmXMBuXeJE9P5uo7GbiaZC',
-        txId: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
-        vout: 3,
-        txid: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
-        amount: 40000,
-        wif: 'KyFLccDgxL8p5iYfJJjcybPie9MNKDoCguHokYUeSBV8ingxq3vj',
-        confirmations: 1,
-        txhex:
-          '01000000000101e8d98effbb4fba4f0a89bcf217eb5a7e2f8efcae44f32ecacbc5d8cc3ce683c301000000171600148ba6d02e74c0a6e000e8b174eb2ed44e5ea211a6ffffffff0510270000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac204e0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac30750000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac409c0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac204716000000000017a914e286d58e53f9247a4710e51232cce0686f16873c8702483045022100af3800cd8171f154785cf13f46c092f61c1668f97db432bb4e7ed7bc812a8c6d022051bddca1eaf1ad8b5f3bd0ccde7447e56fd3c8709e5906f02ec6326e9a5b2ff30121039a421d5eb7c9de6590ae2a471cb556b60de8c6b056beb907dbdc1f5e6092f58800000000',
-      },
+      //   // address: '1J9zoJz5LsAJ361SQHYnLTWg46Tc2AXUCj',
+      //   address: '1FaY9nXsGCipfmXMBuXeJE9P5uo7GbiaZC',
+      //   txId: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
+      //   vout: 3,
+      //   txid: '4f65c8cb159585c00d4deba9c5b36a2bcdfb1399a561114dcf6f2d0c1174bc5f',
+      //   amount: 40000,
+      //   wif: 'KyFLccDgxL8p5iYfJJjcybPie9MNKDoCguHokYUeSBV8ingxq3vj',
+      //   confirmations: 1,
+      //   txhex:
+      //     '01000000000101e8d98effbb4fba4f0a89bcf217eb5a7e2f8efcae44f32ecacbc5d8cc3ce683c301000000171600148ba6d02e74c0a6e000e8b174eb2ed44e5ea211a6ffffffff0510270000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac204e0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac30750000000000001976a9144dc6cbf64df9ab106cee812c7501960b93e9217788ac409c0000000000001976a914bc2db6b74c8db9b188711dcedd511e6a305603f588ac204716000000000017a914e286d58e53f9247a4710e51232cce0686f16873c8702483045022100af3800cd8171f154785cf13f46c092f61c1668f97db432bb4e7ed7bc812a8c6d022051bddca1eaf1ad8b5f3bd0ccde7447e56fd3c8709e5906f02ec6326e9a5b2ff30121039a421d5eb7c9de6590ae2a471cb556b60de8c6b056beb907dbdc1f5e6092f58800000000',
+      // },
     ];
 
     console.log('hd.next_free_change_address_index  : ', hd.next_free_change_address_index);
-    let txNew = hd.createTransaction(utxo, [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 80000 }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
+    // let txNew = hd.createTransaction(utxo, [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 80000 }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
+    let txNew = hd.createTransaction(utxo, [{ address: 'bc1qmvt3r3hvy4m9j27fw5fgne8ewl5zsvmm6ucuq4', value: 1010 }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
 
     let tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
-    assert.strictEqual(tx.ins.length, 3);
+    assert.strictEqual(tx.ins.length, 2);
     assert.strictEqual(tx.outs.length, 2);
-    assert.strictEqual(tx.outs[0].value, 80000); // payee
-    assert.strictEqual(tx.outs[1].value, 9478); // change
+    assert.strictEqual(tx.outs[0].value, 1010); // payee
+    assert.strictEqual(tx.outs[1].value, 316); // change
+    // 374 is the fees
     let toAddress = bitcoin.address.fromOutputScript(tx.outs[0].script);
     const changeAddress = bitcoin.address.fromOutputScript(tx.outs[1].script);
-    assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', toAddress);
+    assert.strictEqual('bc1qmvt3r3hvy4m9j27fw5fgne8ewl5zsvmm6ucuq4', toAddress);
     assert.strictEqual(hd._getInternalAddressByIndex(hd.next_free_change_address_index), changeAddress);
 
     // testing sendMax
-    txNew = hd.createTransaction(utxo, [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
+    txNew = hd.createTransaction(utxo, [{ address: 'bc1qmvt3r3hvy4m9j27fw5fgne8ewl5zsvmm6ucuq4' }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
     tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
-    assert.strictEqual(tx.ins.length, 4);
+    assert.strictEqual(tx.ins.length, 2);
     assert.strictEqual(tx.outs.length, 1);
     toAddress = bitcoin.address.fromOutputScript(tx.outs[0].script);
-    assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', toAddress);
+    assert.strictEqual('bc1qmvt3r3hvy4m9j27fw5fgne8ewl5zsvmm6ucuq4', toAddress);
   });
 
   it('can sign and verify messages', async () => {

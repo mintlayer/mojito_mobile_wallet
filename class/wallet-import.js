@@ -37,7 +37,7 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
   });
 
   const network = isTestMode ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
-
+  console.log('NETWORK ************** : ', network);
   // actions
   const reportProgress = (name) => {
     onProgress(name);

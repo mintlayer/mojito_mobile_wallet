@@ -56,11 +56,12 @@ describe('HDSegwitBech32Transaction', () => {
 
     const hd = await _getHdWallet();
 
-    let tt = new HDSegwitBech32Transaction(null, '881c54edd95cbdd1583d6b9148eb35128a47b64a2e67a5368a649d6be960f08e', hd);
+    // let tt = new HDSegwitBech32Transaction(null, '881c54edd95cbdd1583d6b9148eb35128a47b64a2e67a5368a649d6be960f08e', hd);
+    let tt = new HDSegwitBech32Transaction(null, 'e5cb56da729db598eee4dca8d45283562ff1cc95ca74dea21249da6e1df05b6f', hd);
 
     assert.ok(await tt.isOurTransaction());
 
-    tt = new HDSegwitBech32Transaction(null, '89bcff166c39b3831e03257d4bcc1034dd52c18af46a3eb459e72e692a88a2d8', hd);
+    tt = new HDSegwitBech32Transaction(null, '881c54edd95cbdd1583d6b9148eb35128a47b64a2e67a5368a649d6be960f08e', hd);
 
     assert.ok(!(await tt.isOurTransaction()));
   });
@@ -73,30 +74,30 @@ describe('HDSegwitBech32Transaction', () => {
 
     const hd = await _getHdWallet();
 
-    const tt = new HDSegwitBech32Transaction(null, '881c54edd95cbdd1583d6b9148eb35128a47b64a2e67a5368a649d6be960f08e', hd);
+    const tt = new HDSegwitBech32Transaction(null, 'e5cb56da729db598eee4dca8d45283562ff1cc95ca74dea21249da6e1df05b6f', hd);
 
     const { fee, feeRate, targets, changeAmount, utxos } = await tt.getInfo();
-    assert.strictEqual(fee, 4464);
-    assert.strictEqual(changeAmount, 103686);
-    assert.strictEqual(feeRate, 21);
+    assert.strictEqual(fee, 1898);
+    assert.strictEqual(changeAmount, 3102);
+    assert.strictEqual(feeRate, 13);
     assert.strictEqual(targets.length, 1);
-    assert.strictEqual(targets[0].value, 200000);
-    assert.strictEqual(targets[0].address, '3NLnALo49CFEF4tCRhCvz45ySSfz3UktZC');
+    assert.strictEqual(targets[0].value, 15000);
+    assert.strictEqual(targets[0].address, 'bc1qjv5m9msh37mags8sn3e5h6kv6dmlx4zmphkv3d');
     assert.strictEqual(
       JSON.stringify(utxos),
       JSON.stringify([
         {
-          vout: 1,
-          value: 108150,
-          txId: 'f3d7fb23248168c977e8085b6bd5381d73c85da423056a47cbf734b5665615f1',
-          address: 'bc1qahhgjtxexjx9t0e5pjzqwtjnxexzl6f5an38hq',
-        },
-        {
           vout: 0,
-          value: 200000,
-          txId: '89bcff166c39b3831e03257d4bcc1034dd52c18af46a3eb459e72e692a88a2d8',
-          address: 'bc1qvh44cwd2v7zld8ef9ld5rs5zafmejuslp6yd73',
+          value: 52928,
+          txId: 'b1adecfc4346c3e19d5f747b6707ac8a558e927ac132506935a944cda55aacf8',
+          address: 'bc1qgjlh4fw5u6y9d82e2v9706fcyg2n0aflmjljkd',
         },
+        // {
+        //   vout: 0,
+        //   value: 200000,
+        //   txId: '89bcff166c39b3831e03257d4bcc1034dd52c18af46a3eb459e72e692a88a2d8',
+        //   address: 'bc1qvh44cwd2v7zld8ef9ld5rs5zafmejuslp6yd73',
+        // },
       ]),
     );
   });
@@ -109,7 +110,7 @@ describe('HDSegwitBech32Transaction', () => {
 
     const hd = await _getHdWallet();
 
-    const tt = new HDSegwitBech32Transaction(null, '881c54edd95cbdd1583d6b9148eb35128a47b64a2e67a5368a649d6be960f08e', hd);
+    const tt = new HDSegwitBech32Transaction(null, 'e5cb56da729db598eee4dca8d45283562ff1cc95ca74dea21249da6e1df05b6f', hd);
 
     assert.strictEqual(await tt.canCancelTx(), true);
 
@@ -136,7 +137,7 @@ describe('HDSegwitBech32Transaction', () => {
 
     const hd = await _getHdWallet();
 
-    const tt = new HDSegwitBech32Transaction(null, '881c54edd95cbdd1583d6b9148eb35128a47b64a2e67a5368a649d6be960f08e', hd);
+    const tt = new HDSegwitBech32Transaction(null, 'e5cb56da729db598eee4dca8d45283562ff1cc95ca74dea21249da6e1df05b6f', hd);
 
     assert.strictEqual(await tt.canCancelTx(), true);
     assert.strictEqual(await tt.canBumpTx(), true);
