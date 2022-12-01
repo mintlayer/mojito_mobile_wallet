@@ -45,6 +45,10 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     for (const bal of Object.values(this._balances_by_internal_index)) {
       ret += bal.c;
     }
+    console.log('this.getUnconfirmedBalance() **** ', this.getUnconfirmedBalance());
+    console.log('this.getUnconfirmedBalance() **** ', this.getUnconfirmedBalance());
+    console.log('ret **** ', ret);
+
     return ret + (this.getUnconfirmedBalance() < 0 ? this.getUnconfirmedBalance() : 0);
   }
 
@@ -547,7 +551,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     for (let c = this.next_free_change_address_index; c < this.next_free_change_address_index + this.gap_limit; c++) {
       lagAddressesToFetch.push(this._getInternalAddressByIndex(c));
     }
-
+    console.log('this.network _fetchBalance ', this.network);
     const txs = await BlueElectrum.multiGetHistoryByAddress(lagAddressesToFetch, null, this.network); // <------ electrum call
 
     for (let c = this.next_free_address_index; c < this.next_free_address_index + this.gap_limit; c++) {
@@ -854,7 +858,6 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
       }
     }
     const { inputs, outputs, fee } = this.coinselect(utxos, targets, feeRate, changeAddress);
-    console.log('Inputs ****** ', inputs);
 
     sequence = sequence || AbstractHDElectrumWallet.defaultRBFSequence;
     let psbt = new bitcoin.Psbt({
@@ -939,9 +942,6 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     if (!skipSigning) {
       // skiping signing related stuff
       for (let cc = 0; cc < c; cc++) {
-        // console.log('cckeypairs ********** ', keypairs[cc], ' c ********** ', c);
-        console.log('cc ********** ', cc);
-        console.log('cckeypairs ********** ', keypairs[cc]);
         psbt.signInput(cc, keypairs[cc]);
       }
     }

@@ -558,6 +558,9 @@ const Navigation = () => {
       <RootStack.Screen name="TransactionStatus" component={TransactionStatus} options={TransactionStatus.navigationOptions(theme)} />
       <RootStack.Screen name="TransactionDetails" component={TransactionDetails} options={TransactionDetails.navigationOptions(theme)} />
 
+      <RootStack.Screen name="RBFBumpFee" component={RBFBumpFee} options={RBFBumpFee.navigationOptions(theme)} />
+      <RootStack.Screen name="RBFCancel" component={RBFCancel} options={RBFCancel.navigationOptions(theme)} />
+
       <RootStack.Screen
         name="ScanQRCodeRoot"
         component={ScanQRCodeRoot}

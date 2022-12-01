@@ -82,13 +82,13 @@ describe('HDSegwitBech32Transaction', () => {
     assert.strictEqual(feeRate, 13);
     assert.strictEqual(targets.length, 1);
     assert.strictEqual(targets[0].value, 15000);
-    assert.strictEqual(targets[0].address, 'bc1qjv5m9msh37mags8sn3e5h6kv6dmlx4zmphkv3d');
+    assert.strictEqual(targets[0].address, 'bc1qh30xlhgkk9nd5gmuzkw5pa06x5dwyqjzhc3j43');
     assert.strictEqual(
       JSON.stringify(utxos),
       JSON.stringify([
         {
           vout: 0,
-          value: 52928,
+          value: 20000,
           txId: 'b1adecfc4346c3e19d5f747b6707ac8a558e927ac132506935a944cda55aacf8',
           address: 'bc1qgjlh4fw5u6y9d82e2v9706fcyg2n0aflmjljkd',
         },
@@ -117,12 +117,12 @@ describe('HDSegwitBech32Transaction', () => {
     const { tx } = await tt.createRBFcancelTx(25);
 
     const createdTx = bitcoin.Transaction.fromHex(tx.toHex());
-    assert.strictEqual(createdTx.ins.length, 2);
+    assert.strictEqual(createdTx.ins.length, 1);
     assert.strictEqual(createdTx.outs.length, 1);
     const addr = SegwitBech32Wallet.scriptPubKeyToAddress(createdTx.outs[0].script);
     assert.ok(hd.weOwnAddress(addr));
 
-    const actualFeerate = (108150 + 200000 - createdTx.outs[0].value) / tx.virtualSize();
+    const actualFeerate = (20000 - createdTx.outs[0].value) / tx.virtualSize();
     assert.strictEqual(Math.round(actualFeerate), 25);
 
     const tt2 = new HDSegwitBech32Transaction(tx.toHex(), null, hd);
@@ -137,7 +137,7 @@ describe('HDSegwitBech32Transaction', () => {
 
     const hd = await _getHdWallet();
 
-    const tt = new HDSegwitBech32Transaction(null, 'e5cb56da729db598eee4dca8d45283562ff1cc95ca74dea21249da6e1df05b6f', hd);
+    const tt = new HDSegwitBech32Transaction(null, 'a0ba0ec61c5cf021673233d03fa76fb039f42d8091e659c42d5d8b89e46d20c7', hd);
 
     assert.strictEqual(await tt.canCancelTx(), true);
     assert.strictEqual(await tt.canBumpTx(), true);
@@ -145,15 +145,17 @@ describe('HDSegwitBech32Transaction', () => {
     const { tx } = await tt.createRBFbumpFee(27);
 
     const createdTx = bitcoin.Transaction.fromHex(tx.toHex());
-    assert.strictEqual(createdTx.ins.length, 2);
+    assert.strictEqual(createdTx.ins.length, 1);
     assert.strictEqual(createdTx.outs.length, 2);
     const addr0 = SegwitP2SHWallet.scriptPubKeyToAddress(createdTx.outs[0].script);
     assert.ok(!hd.weOwnAddress(addr0));
-    assert.strictEqual(addr0, '3NLnALo49CFEF4tCRhCvz45ySSfz3UktZC'); // dest address
+    console.log('addr0 ****** ', addr0);
+    console.log('createdTx.outs[0].script ****** ', createdTx.outs[0].script);
+    assert.strictEqual(addr0, '355Ky9yTAmHdk2F13XoAE6xCBBePJG72HX'); // dest address
     const addr1 = SegwitBech32Wallet.scriptPubKeyToAddress(createdTx.outs[1].script);
     assert.ok(hd.weOwnAddress(addr1));
 
-    const actualFeerate = (108150 + 200000 - (createdTx.outs[0].value + createdTx.outs[1].value)) / tx.virtualSize();
+    const actualFeerate = (129562 - (createdTx.outs[0].value + createdTx.outs[1].value)) / tx.virtualSize();
     assert.strictEqual(Math.round(actualFeerate), 28);
 
     const tt2 = new HDSegwitBech32Transaction(tx.toHex(), null, hd);
@@ -168,7 +170,7 @@ describe('HDSegwitBech32Transaction', () => {
 
     const hd = await _getHdWallet();
 
-    const tt = new HDSegwitBech32Transaction(null, '2ec8a1d0686dcccffc102ba5453a28d99c8a1e5061c27b41f5c0a23b0b27e75f', hd);
+    const tt = new HDSegwitBech32Transaction(null, 'b1adecfc4346c3e19d5f747b6707ac8a558e927ac132506935a944cda55aacf8', hd);
     assert.ok(await tt.isToUsTransaction());
     const { unconfirmedUtxos, fee: oldFee } = await tt.getInfo();
 
@@ -177,9 +179,9 @@ describe('HDSegwitBech32Transaction', () => {
       JSON.stringify([
         {
           vout: 0,
-          value: 200000,
-          txId: '2ec8a1d0686dcccffc102ba5453a28d99c8a1e5061c27b41f5c0a23b0b27e75f',
-          address: 'bc1qvlmgrq0gtatanmas0tswrsknllvupq2g844ss2',
+          value: 20000,
+          txId: 'b1adecfc4346c3e19d5f747b6707ac8a558e927ac132506935a944cda55aacf8',
+          address: 'bc1qgjlh4fw5u6y9d82e2v9706fcyg2n0aflmjljkd',
         },
       ]),
     );

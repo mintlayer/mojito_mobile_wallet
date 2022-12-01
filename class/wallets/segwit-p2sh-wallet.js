@@ -47,6 +47,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
         network: bitcoin.networks.bitcoin,
       }).address;
     } catch (_) {
+      console.log('scriptPubKeyToAddress catch  ***** ', _);
       return false;
     }
   }

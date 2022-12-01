@@ -50,16 +50,17 @@ const storageKey = 'ELECTRUM_PEERS';
 const defaultPeer = { host: 'vmd84592.contaboserver.net', ssl: '50002' };
 const defaultTestnetPeer = { host: 'testnet.qtornado.com', ssl: '51002' };
 const hardcodedPeers = [
-  { host: 'electrum5.hodlister.co', ssl: '50002' },
-  { host: 'node.degga.net', ssl: '50002' },
-  { host: 'horsey.cryptocowboys.net', ssl: '50002' },
-  { host: 'ca.poiuty.com', ssl: '50002' },
-  { host: 'electrum.bitaroo.net', ssl: '50002' },
-  { host: 'btc.ocf.sh', ssl: '50002' },
-  { host: 'electrumx.erbium.eu', ssl: '50002' },
+  // { host: 'electrum5.hodlister.co', ssl: '50002' },
+  // { host: 'node.degga.net', ssl: '50002' },
+  // { host: 'horsey.cryptocowboys.net', ssl: '50002' },
+  // { host: 'ca.poiuty.com', ssl: '50002' },
+  // { host: 'electrum.bitaroo.net', ssl: '50002' },
+  // { host: 'btc.ocf.sh', ssl: '50002' }, // connection lost
+  // { host: 'electrumx.erbium.eu', ssl: '50002' },
   { host: 'electrum.kendigisland.xyz', ssl: '50002' },
 ];
 
+// const hardcodedPeers = [{ host: 'electrum.blockstream.info', ssl: '50002' }];
 const hardcodedTestnetPeers = [
   { host: 'testnet.hsmiths.com', ssl: '53012' },
   { host: 'testnet.aranguren.org', ssl: '51002' },
@@ -681,6 +682,8 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
 
   // in bitcoin core 22.0.0+ they removed `.addresses` and replaced it with plain `.address`:
   for (const txid of Object.keys(ret) ?? []) {
+    // console.log('txid **** ', txid);
+    // console.log('ret[txid] **** ', ret[txid]);
     for (const vout of ret[txid].vout ?? []) {
       if (vout?.scriptPubKey?.address) vout.scriptPubKey.addresses = [vout.scriptPubKey.address];
     }
