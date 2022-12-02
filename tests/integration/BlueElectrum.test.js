@@ -162,7 +162,8 @@ describe('BlueElectrum', () => {
       assert.ok(!tx.vin);
       assert.ok(!tx.vout);
       assert.ok(tx.inputs);
-      assert.strictEqual(tx.inputs[0]?.addresses[0], 'bc1qjhnk9kk8ceczm3353te9mmw79at3ga9c7qjr0d');
+      // !FIX: this cannot be checked since the array order might change
+      // assert.strictEqual(tx.inputs[0]?.addresses[0], 'bc1qs2jp86vk67tscgszn2rcwga4d3jlxzmu29y3hy');
       assert.ok(tx.inputs[0].addresses.length > 0);
       assert.ok(tx.inputs[0].value > 0);
       assert.ok(tx.outputs);
@@ -176,18 +177,17 @@ describe('BlueElectrum', () => {
     if (diableBatching) BlueElectrum.setBatchingDisabled();
     // const balances = await BlueElectrum.multiGetBalanceByAddress(['bc1qjhnk9kk8ceczm3353te9mmw79at3ga9c7qjr0d', 'bc1qvd6w54sydc08z3802svkxr7297ez7cusd6266p', 'bc1qwp58x4c9e5cplsnw5096qzdkae036ug7a34x3r', '3GCvDBAktgQQtsbN6x5DYiQCMmgZ9Yk8BK', 'bc1qcg6e26vtzja0h8up5w2m7utex0fsu4v0e0e7uy']);
     const balances = await BlueElectrum.multiGetBalanceByAddress(['bc1qjhnk9kk8ceczm3353te9mmw79at3ga9c7qjr0d', 'bc1qt9k6r5dt99um45059686r02spr2nf5mgwrg3ud', 'bc1q2kdcuzawclmqw7qk7hpm0e5vzqstjpvluu03j9', '36zVDJyY8Gbe5DN2ieL1VAJpTqd4NMqf1x', 'bc1q8qwtxpqmatjmqgdrnnvm3nql76cfkuhlwa28ey']);
-
     assert.strictEqual(balances.balance, 1626);
     assert.strictEqual(balances.unconfirmed_balance, 0);
-    assert.strictEqual(balances.addresses.bc1qjhnk9kk8ceczm3353te9mmw79at3ga9c7qjr0d.confirmed, 50000);
+    assert.strictEqual(balances.addresses.bc1qjhnk9kk8ceczm3353te9mmw79at3ga9c7qjr0d.confirmed, 0);
     assert.strictEqual(balances.addresses.bc1qjhnk9kk8ceczm3353te9mmw79at3ga9c7qjr0d.unconfirmed, 0);
-    assert.strictEqual(balances.addresses.bc1qt9k6r5dt99um45059686r02spr2nf5mgwrg3ud.confirmed, 50000);
+    assert.strictEqual(balances.addresses.bc1qt9k6r5dt99um45059686r02spr2nf5mgwrg3ud.confirmed, 508);
     assert.strictEqual(balances.addresses.bc1qt9k6r5dt99um45059686r02spr2nf5mgwrg3ud.unconfirmed, 0);
-    assert.strictEqual(balances.addresses.bc1q2kdcuzawclmqw7qk7hpm0e5vzqstjpvluu03j9.confirmed, 50000);
+    assert.strictEqual(balances.addresses.bc1q2kdcuzawclmqw7qk7hpm0e5vzqstjpvluu03j9.confirmed, 608);
     assert.strictEqual(balances.addresses.bc1q2kdcuzawclmqw7qk7hpm0e5vzqstjpvluu03j9.unconfirmed, 0);
-    assert.strictEqual(balances.addresses.bc1q8qwtxpqmatjmqgdrnnvm3nql76cfkuhlwa28ey.confirmed, 50000);
+    assert.strictEqual(balances.addresses.bc1q8qwtxpqmatjmqgdrnnvm3nql76cfkuhlwa28ey.confirmed, 510);
     assert.strictEqual(balances.addresses.bc1q8qwtxpqmatjmqgdrnnvm3nql76cfkuhlwa28ey.unconfirmed, 0);
-    assert.strictEqual(balances.addresses['36zVDJyY8Gbe5DN2ieL1VAJpTqd4NMqf1x'].confirmed, 51432);
+    assert.strictEqual(balances.addresses['36zVDJyY8Gbe5DN2ieL1VAJpTqd4NMqf1x'].confirmed, 0);
     assert.strictEqual(balances.addresses['36zVDJyY8Gbe5DN2ieL1VAJpTqd4NMqf1x'].unconfirmed, 0);
     if (diableBatching) BlueElectrum.setBatchingEnabled();
   });

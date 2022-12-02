@@ -45,9 +45,6 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     for (const bal of Object.values(this._balances_by_internal_index)) {
       ret += bal.c;
     }
-    console.log('this.getUnconfirmedBalance() **** ', this.getUnconfirmedBalance());
-    console.log('this.getUnconfirmedBalance() **** ', this.getUnconfirmedBalance());
-    console.log('ret **** ', ret);
 
     return ret + (this.getUnconfirmedBalance() < 0 ? this.getUnconfirmedBalance() : 0);
   }
@@ -551,7 +548,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     for (let c = this.next_free_change_address_index; c < this.next_free_change_address_index + this.gap_limit; c++) {
       lagAddressesToFetch.push(this._getInternalAddressByIndex(c));
     }
-    console.log('this.network _fetchBalance ', this.network);
+
     const txs = await BlueElectrum.multiGetHistoryByAddress(lagAddressesToFetch, null, this.network); // <------ electrum call
 
     for (let c = this.next_free_address_index; c < this.next_free_address_index + this.gap_limit; c++) {
@@ -895,7 +892,6 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
 
       psbt = this._addPsbtInput(psbt, input, sequence, masterFingerprintBuffer);
     });
-    // console.log('PSBT ***** ', psbt.txInputs);
 
     outputs.forEach((output) => {
       // if output has no address - this is change output

@@ -12,7 +12,7 @@ it('Legacy HD Breadwallet works', async () => {
   assert.strictEqual(hdBread.validateMnemonic(), true);
 
   // assert.strictEqual(hdBread._getExternalAddressByIndex(0), '1M1UphJDb1mpXV3FVEg6b2qqaBieNuaNrt');
-  assert.strictEqual(hdBread._getExternalAddressByIndex(0), '14hskPnMnPvGURBsNKikWFM52Wr76QkdYV');
+  assert.strictEqual(hdBread._getExternalAddressByIndex(0), '1PhAdu7CbDuWBaJerexgGt7rQN7fw1KJxm');
 
   // assert.strictEqual(hdBread._getInternalAddressByIndex(0), '1A9Sc4opR6c7Ui6NazECiGmsmnUPh2WeHJ');
   assert.strictEqual(hdBread._getInternalAddressByIndex(0), '1EC8oFUsFJrhZ4KvLQtWRbZjyFEvWFdWLM');

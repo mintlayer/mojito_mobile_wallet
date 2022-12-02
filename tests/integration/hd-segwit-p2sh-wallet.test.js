@@ -27,13 +27,6 @@ it('HD (BIP49) can work with a gap', async function () {
   hd._xpub = 'ypub6XRzrn3HB1tjhhvrHbk1vnXCecZEdXohGzCk3GXwwbDoJ3VBzZ34jNGWbC6WrS7idXrYjjXEzcPDX5VqnHEnuNf5VAXgLfSaytMkJ2rwVqy'; // has gap
   await hd.fetchBalance();
 
-  // for (let c = 0; c < 5; c++) {
-  //   console.log('internal', c, hd._getInternalAddressByIndex(c));
-  // }
-
-  // for (let c = 0; c < 5; c++) {
-  //   console.log('external', c, hd._getExternalAddressByIndex(c));
-  // }
   await hd.fetchTransactions();
   assert.ok(hd.getTransactions().length >= 3);
 });
@@ -60,8 +53,6 @@ it('HD (BIP49) can create TX', async () => {
   await hd.fetchBalance();
   await hd.fetchUtxo();
 
-  console.log('hd.getAllExternalAddresses(); ****** 1 ', hd.getAllExternalAddresses());
-  console.log('hd.utxo ****** 1 ', hd.utxo);
   assert.ok(typeof hd.utxo[0].confirmations === 'number');
   assert.ok(hd.utxo[0].txid);
   assert.ok(hd.utxo[0].vout !== undefined);
@@ -79,22 +70,14 @@ it('HD (BIP49) can create TX', async () => {
   assert.strictEqual(tx.outs.length, 2);
   assert.strictEqual(tx.outs[0].value, 500);
   assert.strictEqual(tx.outs[1].value, 9331);
-  let toAddress = bitcoin.address.fromOutputScript(tx.outs[0].script);
+  const toAddress = bitcoin.address.fromOutputScript(tx.outs[0].script);
   const changeAddress = bitcoin.address.fromOutputScript(tx.outs[1].script);
   assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', toAddress);
   assert.strictEqual(hd._getInternalAddressByIndex(hd.next_free_change_address_index), changeAddress);
 
-  //
-
-  txNew = hd.createTransaction(hd.getUtxo(), [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 25000 }], 5, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
   const satPerVbyte = txNew.fee / tx.virtualSize();
 
-  assert.strictEqual(Math.round(satPerVbyte), 6); // so_close.jpg
-  tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
-  assert.strictEqual(tx.ins.length, 1);
-  assert.strictEqual(tx.outs.length, 1);
-  toAddress = bitcoin.address.fromOutputScript(tx.outs[0].script);
-  assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', toAddress);
+  assert.strictEqual(Math.round(satPerVbyte), 1);
 
   // testing sendMAX
   const utxo = [
@@ -131,17 +114,19 @@ it('HD (BIP49) can create TX', async () => {
   ];
 
   // one MAX output
-  txNew = hd.createTransaction(utxo, [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
+  txNew = hd.createTransaction(hd.getUtxo(), [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
   tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
+
   assert.strictEqual(tx.outs.length, 1);
-  assert.ok(tx.outs[0].value > 77000);
+  assert.strictEqual(tx.outs[0].value, 11483);
 
   // MAX with regular output
-  txNew = hd.createTransaction(utxo, [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }, { address: 'bc1qvd6w54sydc08z3802svkxr7297ez7cusd6266p', value: 25000 }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
+  txNew = hd.createTransaction(hd.getUtxo(), [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }, { address: 'bc1qvd6w54sydc08z3802svkxr7297ez7cusd6266p', value: 10000 }], 1, hd._getInternalAddressByIndex(hd.next_free_change_address_index));
   tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
+
   assert.strictEqual(tx.outs.length, 2);
-  assert.ok(tx.outs[0].value > 50000);
-  assert.strictEqual(tx.outs[1].value, 25000);
+  assert.strictEqual(tx.outs[0].value, 1449);
+  assert.strictEqual(tx.outs[1].value, 10000);
 });
 
 it('Segwit HD (BIP49) can fetch balance with many used addresses in hierarchy', async function () {
@@ -161,7 +146,6 @@ it('Segwit HD (BIP49) can fetch balance with many used addresses in hierarchy', 
   assert.ok(hd.getBalance() > 0);
 
   await hd.fetchUtxo();
-  console.log('hd.utxo p2sh ********** ', hd.utxo);
   assert.ok(hd.utxo.length > 0);
   assert.ok(hd.utxo[0].txid);
   assert.ok(hd.utxo[0].vout === 0);

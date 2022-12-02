@@ -67,13 +67,7 @@ it('can create escrow address', () => {
     });
   }
 
-  // psbt.signInput(0, keyPairServer);
   psbt.signInput(0, keyPairSeller);
-
-  // console.warn('signature = ', psbt.data.inputs[0].partialSig[0].signature.toString('hex'));
-
-  // let tx = psbt.finalizeAllInputs().extractTransaction();
-  // console.log(tx.toHex());
 });
 
 /**
