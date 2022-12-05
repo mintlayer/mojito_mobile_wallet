@@ -150,12 +150,9 @@ describe('BlueElectrum', () => {
   });
 
   it('BlueElectrum can do getTransactionsFullByAddress()', async function () {
-    // const txs = await BlueElectrum.getTransactionsFullByAddress('bc1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh');
     const txs = await BlueElectrum.getTransactionsFullByAddress('bc1qjhnk9kk8ceczm3353te9mmw79at3ga9c7qjr0d');
 
-    // bc1qaz26uru24jnv4t655e6h4tmktjyc2sy8lhljzm
     for (const tx of txs) {
-      // assert.ok(tx.address === 'bc1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh');
       assert.ok(tx.address === 'bc1qjhnk9kk8ceczm3353te9mmw79at3ga9c7qjr0d');
       assert.ok(tx.txid);
       assert.ok(tx.confirmations);
@@ -175,7 +172,6 @@ describe('BlueElectrum', () => {
 
   it.each([false, true])('BlueElectrum can do multiGetBalanceByAddress(), disableBatching=%p', async function (diableBatching) {
     if (diableBatching) BlueElectrum.setBatchingDisabled();
-    // const balances = await BlueElectrum.multiGetBalanceByAddress(['bc1qjhnk9kk8ceczm3353te9mmw79at3ga9c7qjr0d', 'bc1qvd6w54sydc08z3802svkxr7297ez7cusd6266p', 'bc1qwp58x4c9e5cplsnw5096qzdkae036ug7a34x3r', '3GCvDBAktgQQtsbN6x5DYiQCMmgZ9Yk8BK', 'bc1qcg6e26vtzja0h8up5w2m7utex0fsu4v0e0e7uy']);
     const balances = await BlueElectrum.multiGetBalanceByAddress(['bc1qjhnk9kk8ceczm3353te9mmw79at3ga9c7qjr0d', 'bc1qt9k6r5dt99um45059686r02spr2nf5mgwrg3ud', 'bc1q2kdcuzawclmqw7qk7hpm0e5vzqstjpvluu03j9', '36zVDJyY8Gbe5DN2ieL1VAJpTqd4NMqf1x', 'bc1q8qwtxpqmatjmqgdrnnvm3nql76cfkuhlwa28ey']);
     assert.strictEqual(balances.balance, 1626);
     assert.strictEqual(balances.unconfirmed_balance, 0);

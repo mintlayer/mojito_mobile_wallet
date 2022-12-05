@@ -124,11 +124,7 @@ describe('SegwitBech32Wallet', function () {
     const w = new SegwitBech32Wallet();
     w._address = 'bc1qaz26uru24jnv4t655e6h4tmktjyc2sy8lhljzm';
     assert.ok(w.weOwnAddress('bc1qaz26uru24jnv4t655e6h4tmktjyc2sy8lhljzm'));
-    // assert.ok(w.weOwnAddress('BC1Q063CTU6JHE5K4V8KA99QAC8RCM2TZJJNUKTYRL'));
-    // assert.ok(!w.weOwnAddress('garbage'));
-    // assert.ok(!w.weOwnAddress(false));
     await w.fetchBalance();
-    // assert.strictEqual(w.getBalance(), 69909);
     assert.strictEqual(w.getBalance(), 0);
   });
 

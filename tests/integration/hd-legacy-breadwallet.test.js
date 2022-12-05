@@ -26,7 +26,6 @@ it('Legacy HD Breadwallet can fetch balance and create transaction', async () =>
   //   return;
   // }
   // const wallet = new HDLegacyBreadwalletWallet();
-  // console.log('HD_MNEMONIC_BREAD ***** 1 ', process.env.HD_MNEMONIC_BREAD);
   // wallet.setSecret(process.env.HD_MNEMONIC_BREAD);
 
   // await wallet.fetchBalance();
@@ -43,7 +42,6 @@ it('Legacy HD Breadwallet can fetch balance and create transaction', async () =>
   // try to create a tx
   // await wallet.fetchUtxo();
   // const { tx } = wallet.createTransaction(wallet.getUtxo(), [{ address: 'bc1q47efz9aav8g4mnnz9r6ql4pf48phy3g509p7gx' }], 1, 'bc1qk9hvkxqsqmps6ex3qawr79rvtg8es4ecjfu5v0');
-
   // const transaction = bitcoin.Transaction.fromHex(tx.toHex());
   // assert.ok(transaction.ins.length === 4);
   // assert.strictEqual(transaction.outs.length, 1);

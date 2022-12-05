@@ -220,10 +220,6 @@ describe('import procedure', () => {
     assert.strictEqual(store.state.wallets[2].getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc');
     assert.strictEqual(store.state.wallets[2].type, LegacyWallet.type);
     assert.strictEqual(store.state.wallets[2].getAddress(), '1639W2kM6UY9PdavMQeLqG4SuUEae9NZfq');
-
-    // assert.strictEqual(store.state.wallets[0].getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc');
-    // assert.strictEqual(store.state.wallets[0].type, LegacyWallet.type);
-    // assert.strictEqual(store.state.wallets[0].getAddress(), '1639W2kM6UY9PdavMQeLqG4SuUEae9NZfq');
   });
 
   it('can import watch-only address', async () => {

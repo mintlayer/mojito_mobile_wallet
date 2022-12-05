@@ -38,7 +38,6 @@ describe('HDSegwitBech32Transaction', () => {
     assert.strictEqual(await T.getMaxUsedSequence(), 0xffffffff);
     assert.strictEqual(await T.isSequenceReplaceable(), false);
 
-    // 881c54edd95cbdd1583d6b9148eb35128a47b64a2e67a5368a649d6be960f08e
     T = new HDSegwitBech32Transaction(
       '02000000000102f1155666b534f7cb476a0523a45dc8731d38d56b5b08e877c968812423fbd7f3010000000000000000d8a2882a692ee759b43e6af48ac152dd3410cc4b7d25031e83b3396c16ffbc8900000000000000000002400d03000000000017a914e286d58e53f9247a4710e51232cce0686f16873c870695010000000000160014d3e2ecbf4d91321794e0297e0284c47527cf878b02483045022100d18dc865fb4d087004d021d480b983b8afb177a1934ce4cd11cf97b03e17944f02206d7310687a84aab5d4696d535bca69c2db4449b48feb55fff028aa004f2d1744012103af4b208608c75f38e78f6e5abfbcad9c360fb60d3e035193b2cd0cdc8fc0155c0247304402207556e859845df41d897fe442f59b6106c8fa39c74ba5b7b8e3268ab0aebf186f0220048a9f3742339c44a1e5c78b491822b96070bcfda3f64db9dc6434f8e8068475012102456e5223ed3884dc6b0e152067fd836e3eb1485422eda45558bf83f59c6ad09f00000000',
     );
@@ -55,8 +54,6 @@ describe('HDSegwitBech32Transaction', () => {
     }
 
     const hd = await _getHdWallet();
-
-    // let tt = new HDSegwitBech32Transaction(null, '881c54edd95cbdd1583d6b9148eb35128a47b64a2e67a5368a649d6be960f08e', hd);
     let tt = new HDSegwitBech32Transaction(null, 'e5cb56da729db598eee4dca8d45283562ff1cc95ca74dea21249da6e1df05b6f', hd);
 
     assert.ok(await tt.isOurTransaction());
@@ -92,12 +89,6 @@ describe('HDSegwitBech32Transaction', () => {
           txId: 'b1adecfc4346c3e19d5f747b6707ac8a558e927ac132506935a944cda55aacf8',
           address: 'bc1qgjlh4fw5u6y9d82e2v9706fcyg2n0aflmjljkd',
         },
-        // {
-        //   vout: 0,
-        //   value: 200000,
-        //   txId: '89bcff166c39b3831e03257d4bcc1034dd52c18af46a3eb459e72e692a88a2d8',
-        //   address: 'bc1qvh44cwd2v7zld8ef9ld5rs5zafmejuslp6yd73',
-        // },
       ]),
     );
   });
@@ -149,8 +140,6 @@ describe('HDSegwitBech32Transaction', () => {
     assert.strictEqual(createdTx.outs.length, 2);
     const addr0 = SegwitP2SHWallet.scriptPubKeyToAddress(createdTx.outs[0].script);
     assert.ok(!hd.weOwnAddress(addr0));
-    console.log('addr0 ****** ', addr0);
-    console.log('createdTx.outs[0].script ****** ', createdTx.outs[0].script);
     assert.strictEqual(addr0, '355Ky9yTAmHdk2F13XoAE6xCBBePJG72HX'); // dest address
     const addr1 = SegwitBech32Wallet.scriptPubKeyToAddress(createdTx.outs[1].script);
     assert.ok(hd.weOwnAddress(addr1));
