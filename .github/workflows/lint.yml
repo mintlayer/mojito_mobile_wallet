@@ -30,7 +30,7 @@ jobs:
         run: npm ic
 
       - name: Run Tests
-        run: npm test || npm test || npm test
+        run: npm test
         env:
           HD_MNEMONIC: ${{ secrets.HD_MNEMONIC }}
           HD_MNEMONIC_BIP49: ${{ secrets.HD_MNEMONIC_BIP49 }}
