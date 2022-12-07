@@ -79,6 +79,13 @@ Once the patches are applied, open Xcode and select "My Mac" as destination. If 
 npm run test
 ```
 
+## TESTS CASES DELETED
+
+multisig-hd-wallet.test.js
+cosign.test.js
+payjoin-transaction.test.js
+“We should bring it back once Multisign wallet is back”
+
 ## BrowserStack
 
 “This project is tested with BrowserStack.”

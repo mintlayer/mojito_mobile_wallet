@@ -450,6 +450,7 @@ class DeeplinkSchemaMatch {
     let payjoinUrl = '';
     try {
       parsedBitcoinUri = DeeplinkSchemaMatch.bip21decode(uri);
+      console.log('parsedBitcoinUri******** ', parsedBitcoinUri.options);
       address = 'address' in parsedBitcoinUri ? parsedBitcoinUri.address : address;
       if ('options' in parsedBitcoinUri) {
         if ('amount' in parsedBitcoinUri.options) {
@@ -459,6 +460,7 @@ class DeeplinkSchemaMatch {
         if ('label' in parsedBitcoinUri.options) {
           memo = parsedBitcoinUri.options.label || memo;
         }
+
         if ('pj' in parsedBitcoinUri.options) {
           payjoinUrl = parsedBitcoinUri.options.pj;
         }

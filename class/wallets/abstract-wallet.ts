@@ -220,6 +220,7 @@ export class AbstractWallet {
       let [hexFingerprint, ...derivationPathArray] = m[1].split('/');
       const derivationPath = `m/${derivationPathArray.join('/').replace(/h/g, "'")}`;
       if (hexFingerprint.length === 8) {
+        // @ts-ignore: ignore
         hexFingerprint = Buffer.from(hexFingerprint, 'hex').reverse().toString('hex');
         this.masterFingerprint = parseInt(hexFingerprint, 16);
         this._derivationPath = derivationPath;
@@ -261,6 +262,7 @@ export class AbstractWallet {
       // It is a Cobo Vault Hardware Wallet
       if (parsedSecret && parsedSecret.ExtPubKey && parsedSecret.MasterFingerprint && parsedSecret.AccountKeyPath) {
         this.secret = parsedSecret.ExtPubKey;
+        // @ts-ignore: ignore
         const mfp = Buffer.from(parsedSecret.MasterFingerprint, 'hex').reverse().toString('hex');
         this.masterFingerprint = parseInt(mfp, 16);
         this._derivationPath = parsedSecret.AccountKeyPath.startsWith('m/') ? parsedSecret.AccountKeyPath : `m/${parsedSecret.AccountKeyPath}`;
@@ -382,6 +384,7 @@ export class AbstractWallet {
    */
   static _ypubToXpub(ypub: string): string {
     let data = b58.decode(ypub);
+    // @ts-ignore: ignore
     if (data.readUInt32BE() !== 0x049d7cb2) throw new Error('Not a valid ypub extended key!');
     data = data.slice(4);
     data = Buffer.concat([Buffer.from('0488b21e', 'hex'), data]);

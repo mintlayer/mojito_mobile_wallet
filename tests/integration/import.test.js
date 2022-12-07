@@ -210,9 +210,16 @@ describe('import procedure', () => {
     const store = createStore('qwerty');
     const { promise } = startImport('6PnU5voARjBBykwSddwCdcn6Eu9EcsK24Gs5zWxbJbPZYW7eiYQP8XgKbN', false, false, ...store.callbacks);
     await promise;
+
     assert.strictEqual(store.state.wallets[0].getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc');
-    assert.strictEqual(store.state.wallets[0].type, LegacyWallet.type);
-    assert.strictEqual(store.state.wallets[0].getAddress(), '1639W2kM6UY9PdavMQeLqG4SuUEae9NZfq');
+    assert.strictEqual(store.state.wallets[0].type, SegwitBech32Wallet.type);
+    assert.strictEqual(store.state.wallets[0].getAddress(), 'bc1qxaqgapg7sugyvq3zh0re8plqkgrvrxzr6snmqr');
+    assert.strictEqual(store.state.wallets[1].getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc');
+    assert.strictEqual(store.state.wallets[1].type, SegwitP2SHWallet.type);
+    assert.strictEqual(store.state.wallets[1].getAddress(), '3ANCYnBvFPJyc4sxNFWnLkVBfDrKBZCVSp');
+    assert.strictEqual(store.state.wallets[2].getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc');
+    assert.strictEqual(store.state.wallets[2].type, LegacyWallet.type);
+    assert.strictEqual(store.state.wallets[2].getAddress(), '1639W2kM6UY9PdavMQeLqG4SuUEae9NZfq');
   });
 
   it('can import watch-only address', async () => {

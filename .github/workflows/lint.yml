@@ -30,7 +30,16 @@ jobs:
         run: npm ic
 
       - name: Run Tests
-        run: npm run unit
+        run: npm test
+        env:
+          HD_MNEMONIC: ${{ secrets.HD_MNEMONIC }}
+          HD_MNEMONIC_BIP49: ${{ secrets.HD_MNEMONIC_BIP49 }}
+          HD_MNEMONIC_BIP49_MANY_TX: ${{ secrets.HD_MNEMONIC_BIP49_MANY_TX }}
+          HD_MNEMONIC_BIP84: ${{ secrets.HD_MNEMONIC_BIP84 }}
+          HD_MNEMONIC_BREAD: ${{ secrets.HD_MNEMONIC_BREAD }}
+          FAULTY_ZPUB: ${{ secrets.FAULTY_ZPUB }}
+          MNEMONICS_COBO: ${{ secrets.MNEMONICS_COBO }}
+          MNEMONICS_COLDCARD: ${{ secrets.MNEMONICS_COLDCARD }}
 
       - name: Run linters
         uses: wearerequired/lint-action@v1
