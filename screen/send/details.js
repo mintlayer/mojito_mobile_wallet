@@ -416,9 +416,6 @@ const SendDetails = () => {
       if (!transaction.amount || transaction.amount < 0 || parseFloat(transaction.amount) === 0) {
         error = loc.send.details_amount_field_is_not_valid;
         console.log('validation error');
-      } else if (parseFloat(transaction.amountSats) <= 500) {
-        error = loc.send.details_amount_field_is_less_than_minimum_amount_sat;
-        console.log('validation error');
       } else if (!requestedSatPerByte || parseFloat(requestedSatPerByte) < 1) {
         error = loc.send.details_fee_field_is_not_valid;
         console.log('validation error');

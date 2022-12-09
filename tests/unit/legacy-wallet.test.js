@@ -63,6 +63,10 @@ describe('Legacy wallet', () => {
     assert.strictEqual('1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
     assert.strictEqual(l.getAddress(), bitcoin.address.fromOutputScript(tx.outs[1].script)); // change address
 
+    // sending less than 500 SAT Amount
+    txNew = l.createTransaction(utxos, [{ value: 10, address: '1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB' }], 1, l.getAddress());
+    assert.ok(!!txNew);
+
     // sendMax
     txNew = l.createTransaction(utxos, [{ address: '1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB' }], 1, l.getAddress());
     tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
