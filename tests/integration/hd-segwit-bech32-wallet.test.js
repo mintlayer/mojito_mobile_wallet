@@ -190,7 +190,6 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     assert.deepStrictEqual(u1, u2);
     const changeAddress = await hd.getChangeAddressAsync();
     assert.ok(changeAddress && changeAddress.startsWith('bc1'));
-
     const { tx, inputs, outputs, fee } = hd.createTransaction(hd.getUtxo(), [{ address: 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 51000 }], 13, changeAddress);
 
     assert.strictEqual(Math.round(fee / tx.virtualSize()), 13);

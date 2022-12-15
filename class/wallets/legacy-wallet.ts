@@ -407,12 +407,8 @@ export class LegacyWallet extends AbstractWallet {
     }
 
     const { inputs, outputs, fee } = algo(utxos, targets, feeRate);
-    // console.log("fee **** ",fee);
-
     // .inputs and .outputs will be undefined if no solution was found
     if (!inputs || !outputs) {
-      console.log('inputs **** ', inputs);
-      console.log('outputs **** ', outputs);
       console.trace();
       throw new Error('Not enough balance. Try sending smaller amount or decrease the fee.');
     }

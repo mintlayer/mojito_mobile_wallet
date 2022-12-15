@@ -28,6 +28,10 @@ describe('Segwit P2SH wallet', () => {
     assert.strictEqual('1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
     assert.strictEqual(bitcoin.address.fromOutputScript(tx.outs[1].script), wallet.getAddress()); // change address
 
+    // // sending less than 500 SAT Amount
+    txNew = wallet.createTransaction(utxos, [{ value: 10, address: '1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB' }], 1, wallet.getAddress());
+    assert.ok(!!txNew);
+
     // sendMax
     txNew = wallet.createTransaction(utxos, [{ address: '1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB' }], 1, wallet.getAddress());
     tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
