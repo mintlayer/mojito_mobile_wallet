@@ -369,7 +369,7 @@ PODS:
     - React
   - RemobileReactNativeQrcodeLocalImage (1.0.4):
     - React
-  - rn-ldk (0.6.3):
+  - rn-ldk (0.8.1):
     - React-Core
   - RNCAsyncStorage (1.15.14):
     - React-Core
@@ -707,7 +707,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: d85cbfa8ceea60770ef5ed7aa1e7db75f5b420d5
+  FBReactNativeSpec: 0f90f083c3042c2027a381b4cdfccc65ddbe4d81
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
@@ -761,7 +761,7 @@ SPEC CHECKSUMS:
   ReactCommon: 149906e01aa51142707a10665185db879898e966
   RealmJS: de65cc7c3ea041750d66beaa28b30585222c3d94
   RemobileReactNativeQrcodeLocalImage: 57aadc12896b148fb5e04bc7c6805f3565f5c3fa
-  rn-ldk: cad9dbee7d6c7a65049f57751c1a8e860419bc97
+  rn-ldk: fe694aaca0c661e7eb32cd9989dade5fe7e9c4e9
   RNCAsyncStorage: ea6b5c280997b2b32a587793163b1f10e580c4f7
   RNCClipboard: 99fc8ad669a376b756fbc8098ae2fd05c0ed0668
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
@@ -786,6 +786,6 @@ SPEC CHECKSUMS:
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 2312fdb39f1d22e6b847d0c67f920b8c9e43c8d9
+PODFILE CHECKSUM: b346bcdc8d5fa5760a9e9b89983b1c4ab6b4bcdd
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
