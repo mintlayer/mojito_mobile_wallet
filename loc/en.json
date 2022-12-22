@@ -182,7 +182,8 @@
     "details_label": "Description",
     "details_setAmount": "Receive with amount",
     "details_share": "Share",
-    "header": "Receive"
+    "header": "Receive",
+    "with_amount_error": "Please enter a valid amount"
   },
   "send": {
     "provided_address_is_invoice": "This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.",

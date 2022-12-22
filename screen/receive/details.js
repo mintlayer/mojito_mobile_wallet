@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { BackHandler, InteractionManager, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, BackHandler, InteractionManager, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, TextInput, View } from 'react-native';
 import LottieView from 'lottie-react-native';
 import QRCodeComponent from '../../components/QRCodeComponent';
 import { useNavigation, useRoute, useTheme, useFocusEffect } from '@react-navigation/native';
@@ -18,6 +18,8 @@ import Notifications from '../../blue_modules/notifications';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { TransactionPendingIconBig } from '../../components/TransactionPendingIconBig';
 import * as BlueElectrum from '../../blue_modules/BlueElectrum';
+
+import { amountValueRegex } from '../../constants/index';
 const currency = require('../../blue_modules/currency');
 const bitcoin = require('bitcoinjs-lib');
 
@@ -44,6 +46,8 @@ const ReceiveDetails = () => {
   const [initialUnconfirmed, setInitialUnconfirmed] = useState(0);
   const [displayBalance, setDisplayBalance] = useState('');
   const [isTestMode, setIsTestMode] = useState(false);
+  const [amountInputValue, setAmountInputValue] = useState('');
+  const [isAmountInputValid, setIsAmountInputValid] = useState(false);
   const fetchAddressInterval = useRef();
   const stylesHook = StyleSheet.create({
     modalContent: {
@@ -433,6 +437,10 @@ const ReceiveDetails = () => {
   };
 
   const createCustomAmountAddress = () => {
+    if (!isAmountInputValid) {
+      Alert.alert(loc.receive.with_amount_error);
+      return;
+    }
     setIsCustom(true);
     setIsCustomModalVisible(false);
     let amount = customAmountPreview;
@@ -461,13 +469,25 @@ const ReceiveDetails = () => {
   };
 
   const renderCustomAmountModal = () => {
+    const onInputChange = (text) => {
+      const isValueInputValid = new RegExp(amountValueRegex).test(text);
+      setAmountInputValue(text);
+      if (isValueInputValid) {
+        setCustomLabel(text);
+        setIsAmountInputValid(true);
+      } else {
+        setIsAmountInputValid(false);
+        console.log('Invalid amount value');
+      }
+    };
+
     return (
       <BottomModal isVisible={isCustomModalVisible} onClose={dismissCustomAmountModal}>
         <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
           <View style={stylesHook.modalContent}>
             <AmountInput unit={customUnitPreview} amount={customAmountPreview} onChangeText={setCustomAmountPreview} onAmountUnitChange={setCustomUnitPreview} />
             <View style={stylesHook.customAmount}>
-              <TextInput onChangeText={setCustomLabel} placeholderTextColor="#81868e" placeholder={loc.receive.details_label} value={customLabel || ''} numberOfLines={1} style={stylesHook.customAmountText} testID="CustomAmountDescription" />
+              <TextInput onChangeText={(text) => onInputChange(text)} placeholderTextColor="#81868e" placeholder={loc.receive.details_label} value={amountInputValue || ''} numberOfLines={1} style={stylesHook.customAmountText} testID="CustomAmountDescription" />
             </View>
             <BlueSpacing20 />
             <View>
