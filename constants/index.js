@@ -29,3 +29,5 @@ export const introductionContent = [
 export const androidLevel = 28;
 
 export const amountValueRegex = `^[1-9]\\d*(\\,\\d+)?$`;
+
+export const recieveDescriptionRegex = `^[\\d@a-zA-Z._+-\\s]+$`;

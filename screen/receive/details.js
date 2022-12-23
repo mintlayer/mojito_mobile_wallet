@@ -19,7 +19,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { TransactionPendingIconBig } from '../../components/TransactionPendingIconBig';
 import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 
-import { amountValueRegex } from '../../constants/index';
+import { recieveDescriptionRegex } from '../../constants/index';
 const currency = require('../../blue_modules/currency');
 const bitcoin = require('bitcoinjs-lib');
 
@@ -46,8 +46,8 @@ const ReceiveDetails = () => {
   const [initialUnconfirmed, setInitialUnconfirmed] = useState(0);
   const [displayBalance, setDisplayBalance] = useState('');
   const [isTestMode, setIsTestMode] = useState(false);
-  const [amountInputValue, setAmountInputValue] = useState('');
-  const [isAmountInputValid, setIsAmountInputValid] = useState(false);
+  const [descriptionInputValue, setDescriptionInputValue] = useState('');
+  const [isDescriptionInputValid, setIsDescriptionInputValid] = useState(false);
   const fetchAddressInterval = useRef();
   const stylesHook = StyleSheet.create({
     modalContent: {
@@ -437,7 +437,7 @@ const ReceiveDetails = () => {
   };
 
   const createCustomAmountAddress = () => {
-    if (!isAmountInputValid) {
+    if (!isDescriptionInputValid) {
       Alert.alert(loc.receive.with_amount_error);
       return;
     }
@@ -469,15 +469,15 @@ const ReceiveDetails = () => {
   };
 
   const renderCustomAmountModal = () => {
-    const onInputChange = (text) => {
-      const isValueInputValid = new RegExp(amountValueRegex).test(text);
-      setAmountInputValue(text);
-      if (isValueInputValid) {
+    const onDescriptionInputChange = (text) => {
+      const isDescriptionInputValid = new RegExp(recieveDescriptionRegex).test(text);
+      setDescriptionInputValue(text);
+      if (isDescriptionInputValid) {
         setCustomLabel(text);
-        setIsAmountInputValid(true);
+        setIsDescriptionInputValid(true);
       } else {
-        setIsAmountInputValid(false);
-        console.log('Invalid amount value');
+        setIsDescriptionInputValid(false);
+        console.log('Invalid description value');
       }
     };
 
@@ -487,7 +487,7 @@ const ReceiveDetails = () => {
           <View style={stylesHook.modalContent}>
             <AmountInput unit={customUnitPreview} amount={customAmountPreview} onChangeText={setCustomAmountPreview} onAmountUnitChange={setCustomUnitPreview} />
             <View style={stylesHook.customAmount}>
-              <TextInput onChangeText={(text) => onInputChange(text)} placeholderTextColor="#81868e" placeholder={loc.receive.details_label} value={amountInputValue || ''} numberOfLines={1} style={stylesHook.customAmountText} testID="CustomAmountDescription" />
+              <TextInput onChangeText={(text) => onDescriptionInputChange(text)} placeholderTextColor="#81868e" placeholder={loc.receive.details_label} value={descriptionInputValue || ''} numberOfLines={1} style={stylesHook.customAmountText} testID="CustomAmountDescription" />
             </View>
             <BlueSpacing20 />
             <View>
