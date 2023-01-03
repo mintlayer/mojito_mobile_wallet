@@ -75,6 +75,7 @@
     "podinstall": "./scripts/podinstall.sh",
     "start": "source $HOME/.nvm/nvm.sh; nvm use 16 && node node_modules/react-native/local-cli/cli.js start",
     "android": "react-native run-android",
+    "androindM1Prepare": "npx react-native bundle --platform android --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle && adb reverse tcp:8081 tcp:8081",
     "android:clean": "cd android;  ./gradlew clean ; cd .. ; npm run android",
     "ios": "source $HOME/.nvm/nvm.sh; nvm use 18 && react-native run-ios",
     "postinstall": "rn-nodeify --install buffer,events,process,stream,util,inherits,fs,path,assert,crypto --hack; npm run releasenotes2json; npm run branch2json; npm run podinstall",
