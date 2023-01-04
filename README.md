@@ -21,6 +21,7 @@ To view the version of Node and npm in your environment, run the following in yo
 ```
 node --version && npm --version
 ```
+
 - We are using **`node 16.14.2`**
 
 - In your console:
@@ -30,7 +31,6 @@ git clone https://github.com/mintlayer/mojito_mobile_wallet
 cd mobile_wallet
 npm install
 ```
-
 
 Please make sure that your console is running the most stable versions of npm and node (even-numbered versions).
 
@@ -42,9 +42,10 @@ You will now need to either connect an Android device to your computer or run an
 2. Click on "Open an existing Android Studio Project"
 3. Open `build.gradle` file under `mobile_wallet/android/` folder
 4. Android Studio will take some time to set things up. Once everything is set up, go to `Tools` -> `AVD Manager`.
+
    - 📝 This option [may take some time to appear in the menu](https://stackoverflow.com/questions/47173708/why-avd-manager-options-are-not-showing-in-android-studio) if you're opening the project in a freshly-installed version of Android Studio.
 
-5. Configure the [***ANDROID_SDK_ROOT***](https://reactnative.dev/docs/environment-setup) environment variable.  
+5. Configure the [**_ANDROID_SDK_ROOT_**](https://reactnative.dev/docs/environment-setup) environment variable.  
    Add the following lines to your $HOME/.bash_profile or $HOME/.bashrc (if you are using zsh then ~/.zprofile or ~/.zshrc) config file:
 
 ```
@@ -52,18 +53,21 @@ export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
 export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
 ```
+
 6. Click on "Create Virtual Device..." and go through the steps to create a virtual device
 7. Launch your newly created virtual device by clicking the `Play` button under `Actions` column
 
 Once you connected an Android device or launched an emulator, run this:
 
 ### Windows , Ubuntu , MAC intel
+
 ```
 npm start
-npx react-native run-android 
+npx react-native run-android
 ```
 
 ### M1 MAC - Android
+
 ```
 npm run androidM1Prepare
 Run Build using Android Studio
