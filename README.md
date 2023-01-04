@@ -63,6 +63,7 @@ Once you connected an Android device or launched an emulator, run this:
 
 ```
 npm start
+adb reverse tcp:8081 tcp:8081
 npx react-native run-android
 ```
 
