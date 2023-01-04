@@ -21,18 +21,20 @@ To view the version of Node and npm in your environment, run the following in yo
 ```
 node --version && npm --version
 ```
+- We are using **`node 16.14.2`**
 
 - In your console:
 
 ```
-git clone https://github.com/mintlayer/mobile_wallet
+git clone https://github.com/mintlayer/mojito_mobile_wallet
 cd mobile_wallet
 npm install
 ```
 
+
 Please make sure that your console is running the most stable versions of npm and node (even-numbered versions).
 
-- To run on Android:
+- To run on **Android**:
 
 You will now need to either connect an Android device to your computer or run an emulated Android device using AVD Manager which comes shipped with Android Studio. To run an emulator using AVD Manager:
 
@@ -41,25 +43,42 @@ You will now need to either connect an Android device to your computer or run an
 3. Open `build.gradle` file under `mobile_wallet/android/` folder
 4. Android Studio will take some time to set things up. Once everything is set up, go to `Tools` -> `AVD Manager`.
    - 📝 This option [may take some time to appear in the menu](https://stackoverflow.com/questions/47173708/why-avd-manager-options-are-not-showing-in-android-studio) if you're opening the project in a freshly-installed version of Android Studio.
-5. Click on "Create Virtual Device..." and go through the steps to create a virtual device
-6. Launch your newly created virtual device by clicking the `Play` button under `Actions` column
+
+5. Configure the [***ANDROID_SDK_ROOT***](https://reactnative.dev/docs/environment-setup) environment variable.  
+   Add the following lines to your $HOME/.bash_profile or $HOME/.bashrc (if you are using zsh then ~/.zprofile or ~/.zshrc) config file:
+
+```
+export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
+export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+```
+6. Click on "Create Virtual Device..." and go through the steps to create a virtual device
+7. Launch your newly created virtual device by clicking the `Play` button under `Actions` column
 
 Once you connected an Android device or launched an emulator, run this:
 
+### Windows , Ubuntu , MAC intel
 ```
-npx react-native run-android
+npm start
+npx react-native run-android 
+```
+
+### M1 MAC - Android
+```
+npm run androidM1Prepare
+Run Build using Android Studio
 ```
 
 The above command will build the app and install it. Once you launch the app it will take some time for all of the dependencies to load. Once everything loads up, you should have the built app running.
 
-- To run on iOS:
+- To run on **iOS**:
 
 ```
 npx pod-install
 npm start
 ```
 
-In another terminal window within the mobile_wallet folder:
+In another terminal window within the mojito_mobile_wallet folder:
 
 ```
 npx react-native run-ios
@@ -96,10 +115,10 @@ MIT
 
 ## WANT TO CONTRIBUTE?
 
-Grab an issue from [the backlog](https://github.com/mintlayer/mobile_wallet/issues), try to start or submit a PR, any doubts we will try to guide you.
+Grab an issue from [the backlog](https://github.com/mintlayer/mojito_mobile_wallet/issues), try to start or submit a PR, any doubts we will try to guide you.
 
 ## RESPONSIBLE DISCLOSURE
 
 Found critical bugs/vulnerabilities? Please email them security@mintlayer.org
 
-For more info check [here](https://github.com/mintlayer/mobile_wallet/security/policy)
+For more info check [here](https://github.com/mintlayer/mojito_mobile_wallet/security/policy)
