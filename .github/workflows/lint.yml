@@ -16,7 +16,7 @@ jobs:
     name: Run linters
     runs-on: ubuntu-latest
 
-     steps:
+    steps:
       - name: Check out Git repository
         uses: actions/checkout@v3
       - name: Set up Node.js
