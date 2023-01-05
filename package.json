@@ -224,7 +224,7 @@
     "rn-nodeify": "10.3.0",
     "scryptsy": "2.1.0",
     "secure-random": "1.1.2",
-    "slip39": "https://github.com/BlueWallet/slip39-js",
+    "slip39": "github:BlueWallet/slip39-js",
     "stream-browserify": "3.0.0",
     "url": "0.11.0",
     "util": "0.12.4",
