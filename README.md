@@ -63,15 +63,14 @@ Once you connected an Android device or launched an emulator, run this:
 
 ```
 npm start
-adb reverse tcp:8081 tcp:8081
-npx react-native run-android
+npm run android
 ```
 
-### M1 MAC - Android
+### M1 MAC
 
 ```
 npm run androidM1Prepare
-Run Build using Android Studio
+Run a Build using Android Studio
 ```
 
 The above command will build the app and install it. Once you launch the app it will take some time for all of the dependencies to load. Once everything loads up, you should have the built app running.
@@ -79,14 +78,16 @@ The above command will build the app and install it. Once you launch the app it 
 - To run on **iOS**:
 
 ```
-npx pod-install
+pod-install
 npm start
 ```
 
 In another terminal window within the mojito_mobile_wallet folder:
 
+### Windows , Ubuntu , MAC intel
+
 ```
-npx react-native run-ios
+npm run ios
 ```
 
 - To run on macOS using Mac Catalyst:
@@ -96,6 +97,13 @@ npm run maccatalystpatches
 ```
 
 Once the patches are applied, open Xcode and select "My Mac" as destination. If you are running macOS Catalina, you may need to remove all iOS 14 Widget targets.
+
+### M1 MAC
+
+```
+switch to node version 18.4.0
+npm run ios
+```
 
 ## TESTS
 
