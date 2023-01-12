@@ -78,7 +78,7 @@ The above command will build the app and install it. Once you launch the app it 
 - To run on **iOS**:
 
 ```
-pod-install
+npx pod-install
 npm start
 ```
 
