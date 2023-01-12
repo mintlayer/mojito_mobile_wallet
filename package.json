@@ -47,6 +47,7 @@
     "jest": "^26.1.0",
     "lint-staged": "^10.4.0",
     "prettier": "^2.2.1",
+    "react-native-dotenv": "^3.4.7",
     "react-test-renderer": "17.0.1",
     "typescript": "^4.3.5"
   },
@@ -164,6 +165,8 @@
     "lottie-react-native": "4.0.2",
     "metro-react-native-babel-preset": "0.66.2",
     "node-fetch": "^2.6.7",
+    "os": "^0.1.2",
+    "path": "^0.12.7",
     "path-browserify": "1.0.1",
     "payjoin-client": "1.0.1",
     "process": "0.11.10",
