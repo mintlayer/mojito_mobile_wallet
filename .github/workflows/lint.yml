@@ -42,7 +42,7 @@ jobs:
           MNEMONICS_COLDCARD: ${{ secrets.MNEMONICS_COLDCARD }}
 
       - name: Run linters
-        uses: wearerequired/lint-action@v2
+        uses: wearerequired/lint-action@v1
         with:
           eslint: true
           prettier: true
