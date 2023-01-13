@@ -1,8 +1,3 @@
-// module.exports = {
-//   presets: ['module:metro-react-native-babel-preset'],
-//   plugins: ['react-native-reanimated/plugin'], // required by react-native-reanimated v2 https://docs.swmansion.com/react-native-reanimated/docs/installation/
-// };
-
 module.exports = {
   presets: ['module:metro-react-native-babel-preset'],
   plugins: [
@@ -11,7 +6,7 @@ module.exports = {
       {
         moduleName: '@env',
         path: '.env',
-        allowlist: ['MINI_AMOUNT'],
+        allowlist: ['DUST_THRESHOLD'],
         blacklist: null,
         whitelist: null,
         safe: true,

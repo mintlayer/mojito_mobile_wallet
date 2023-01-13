@@ -7,7 +7,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import RNFS from 'react-native-fs';
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'bitcoinjs-lib';
-import { MINI_AMOUNT } from '@env';
+import { DUST_THRESHOLD } from '@env';
 
 import { BlueButton, BlueDismissKeyboardInputAccessory, BlueListItem, BlueLoading } from '../../BlueComponents';
 import { navigationStyleTx } from '../../components/navigationStyle';
@@ -417,7 +417,7 @@ const SendDetails = () => {
       if (!transaction.amount || transaction.amount < 0 || parseFloat(transaction.amount) === 0) {
         error = loc.send.details_amount_field_is_not_valid;
         console.log('validation error');
-      } else if (parseFloat(transaction.amountSats) <= MINI_AMOUNT) {
+      } else if (parseFloat(transaction.amountSats) <= DUST_THRESHOLD) {
         error = loc.send.details_amount_field_is_less_than_minimum_amount_sat;
         console.log('validation error');
       } else if (!requestedSatPerByte || parseFloat(requestedSatPerByte) < 1) {
