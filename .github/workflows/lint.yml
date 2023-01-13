@@ -27,7 +27,7 @@ jobs:
 
       # ESLint and Prettier must be in `package.json`
       - name: Install Node.js dependencies
-        run: npm i
+        run: npm i --legacy-peer-deps
 
       - name: Run Tests
         run: npm test
