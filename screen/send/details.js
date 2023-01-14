@@ -1199,11 +1199,12 @@ const SendDetails = () => {
 
   const renderBitcoinTransactionInfoFields = (params) => {
     const { item, index } = params;
+    const itemAmount = item.amount ? BigNumber(item.amount).toFormat() : null;
     return (
       <View style={{ width }} testID={'Transaction' + index}>
         <AmountInput
           isLoading={isLoading}
-          amount={item.amount ? item.amount.toString() : null}
+          amount={itemAmount}
           onAmountUnitChange={(unit) => {
             setAddresses((addresses) => {
               const item = addresses[index];
