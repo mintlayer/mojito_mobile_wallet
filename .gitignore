@@ -73,3 +73,6 @@ artifacts/
 *.mx
 *.realm
 *.realm.lock
+
+# ENV File
+.env
