@@ -138,8 +138,8 @@ android {
         applicationId "com.mojitowallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 30
-        versionName "0.2.1"
+        versionCode 31
+        versionName "0.2.2"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
@@ -217,7 +217,9 @@ dependencies {
 
     //noinspection GradleDynamicVersion
     implementation files("../../node_modules/react-native-tor/android/libs/sifir_android.aar")
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+     implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    implementation "androidx.core:core-ktx:1.6.0"
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
