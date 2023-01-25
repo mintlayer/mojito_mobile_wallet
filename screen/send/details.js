@@ -1204,7 +1204,7 @@ const SendDetails = () => {
   const renderBitcoinTransactionInfoFields = (params) => {
     const { item, index } = params;
     const itemAmount = item.amount ? item.amount.toString() : '';
-    const finalAmount = itemAmount.toString().includes('e') ? BigNumber(itemAmount).toFormat() : itemAmount;
+    const finalAmount = itemAmount.includes('e') ? BigNumber(itemAmount).toFormat() : itemAmount;
 
     return (
       <View style={{ width }} testID={'Transaction' + index}>
