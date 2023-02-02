@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { render, screen, fireEvent } from '@testing-library/react-native';
 import AmountInput from '../../components/AmountInput';
 
 const amount = 0.00000012;
@@ -20,19 +20,15 @@ const PROPS_MOCK_02 = {
 };
 
 test('renders AmountInput', () => {
-  const component = renderer.create(<AmountInput {...PROPS_MOCK_01} />);
-  const textInput = component.root.findByType('TextInput');
-
-  jest.useFakeTimers();
+  render(<AmountInput {...PROPS_MOCK_01} />);
+  const textInput = screen.getByPlaceholderText('0');
 
   expect(textInput.props.value).toBe(expectedAmount);
 });
 
 test('renders AmountInput with Scientific Notation value', () => {
-  const component = renderer.create(<AmountInput {...PROPS_MOCK_02} />);
-  const textInput = component.root.findByType('TextInput');
-
-  jest.useFakeTimers();
+  render(<AmountInput {...PROPS_MOCK_02} />);
+  const textInput = screen.getByPlaceholderText('0');
 
   expect(textInput.props.value).toBe(expectedAmount);
 });
