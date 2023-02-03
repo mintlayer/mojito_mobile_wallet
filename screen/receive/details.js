@@ -47,7 +47,7 @@ const ReceiveDetails = () => {
   const [displayBalance, setDisplayBalance] = useState('');
   const [isTestMode, setIsTestMode] = useState(false);
   const [descriptionInputValue, setDescriptionInputValue] = useState('');
-  const [isDescriptionInputValid, setIsDescriptionInputValid] = useState(false);
+  const [isDescriptionInputValid, setIsDescriptionInputValid] = useState(true);
   const fetchAddressInterval = useRef();
   const stylesHook = StyleSheet.create({
     modalContent: {

@@ -12,15 +12,18 @@ buildscript {
         firebaseVersion = "17.3.4"
         firebaseMessagingVersion = "20.2.1"
         ndkVersion = "23.0.7599858"
+        kotlinVersion = "1.6.0"
+        androidXCore = "1.6.0"   
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath('com.android.tools.build:gradle:4.1.1')
+        classpath('com.android.tools.build:gradle:4.2.2')
         // classpath("com.bugsnag:bugsnag-android-gradle-plugin:5.+")
         classpath 'com.google.gms:google-services:4.3.10'  // Google Services plugin
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0"
 
 
         // NOTE: Do not place your application dependencies here; they belong

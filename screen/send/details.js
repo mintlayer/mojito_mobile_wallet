@@ -7,8 +7,6 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import RNFS from 'react-native-fs';
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'bitcoinjs-lib';
-import { DUST_THRESHOLD } from '@env';
-
 import { BlueButton, BlueDismissKeyboardInputAccessory, BlueListItem, BlueLoading } from '../../BlueComponents';
 import { navigationStyleTx } from '../../components/navigationStyle';
 import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/networkTransactionFees';
@@ -30,6 +28,8 @@ const prompt = require('../../blue_modules/prompt');
 const fs = require('../../blue_modules/fs');
 const scanqr = require('../../helpers/scan-qr');
 const btcAddressRx = /^[a-zA-Z0-9]{26,35}$/;
+
+const DUST_THRESHOLD = process.env.DUST_THRESHOLD;
 
 const SendDetails = () => {
   const { wallets, setSelectedWallet, sleep, txMetadata, saveToDisk } = useContext(BlueStorageContext);
@@ -1203,7 +1203,7 @@ const SendDetails = () => {
 
   const renderBitcoinTransactionInfoFields = (params) => {
     const { item, index } = params;
-    const itemAmount = item.amount ? BigNumber(item.amount).toFormat() : null;
+    const itemAmount = item.amount ? item.amount.toString() : 0;
     return (
       <View style={{ width }} testID={'Transaction' + index}>
         <AmountInput
