@@ -55,6 +55,7 @@ import ReorderWallets from './screen/wallets/reorderWallets';
 import SelectWallet from './screen/wallets/selectWallet';
 import ProvideEntropy from './screen/wallets/provideEntropy';
 import AOPP from './screen/wallets/aopp';
+import EntropyGenerator from './screen/wallets/entropyGenerator';
 
 import TransactionDetails from './screen/transactions/details';
 import TransactionStatus from './screen/transactions/transactionStatus';
@@ -527,7 +528,7 @@ const Navigation = () => {
 
       <RootStack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false, translucent: false }} />
       {/* <RootStack.Screen name="WalletsRoot" component={WalletsRoot} options={{ headerShown: false, translucent: false }} /> */}
-
+      <RootStack.Screen name="EntropyGenerator" component={EntropyGenerator} options={EntropyGenerator.navigationOptions(theme)} />
       <RootStack.Screen name="AddWalletRoot" component={AddWalletRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="SendDetailsRoot" component={SendDetailsRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="LNDCreateInvoiceRoot" component={LNDCreateInvoiceRoot} options={NavigationDefaultOptions} />

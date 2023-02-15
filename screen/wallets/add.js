@@ -293,8 +293,8 @@ const WalletsAdd = () => {
           <View style={styles.createButton}>
             {/* <Text>
             disabled={!selectedWalletType || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)}
-            </Text> */}
-            {!isLoading ? <BlueButton testID="Create" title={loc.wallets.add_create} disabled={!selectedWalletType || label.length === 0 || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)} onPress={createWallet} /> : <ActivityIndicator />}
+            </Text> // createWallet */}
+            {!isLoading ? <BlueButton testID="Create" title={loc.send.details_next} disabled={!selectedWalletType || label.length === 0 || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)} onPress={() => navigate('EntropyGenerator')} /> : <ActivityIndicator />}
           </View>
           {/* !isLoading && <BlueButtonLink testID="ImportWallet" style={styles.import} title={loc.wallets.add_import_wallet} onPress={navigateToImportWallet} /> */}
           <View style={styles.importContainer}>

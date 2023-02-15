@@ -122,6 +122,7 @@
     ]
   },
   "dependencies": {
+    "@shopify/react-native-skia": "0.1.136",
     "@babel/preset-env": "7.16.5",
     "@babel/runtime-corejs2": "^7.17.2",
     "@babel/runtime-corejs3": "^7.17.2",
@@ -172,7 +173,7 @@
     "payjoin-client": "1.0.1",
     "process": "0.11.10",
     "prop-types": "15.7.2",
-    "react": "17.0.1",
+    "react": "17.0.2",
     "react-localization": "1.0.17",
     "react-native": "0.64.2",
     "react-native-blue-crypto": "https://github.com/BlueWallet/react-native-blue-crypto#fbc2e6beded0b7f61e0986ce98cca1230f84bc1c",
@@ -184,7 +185,7 @@
     "react-native-elements": "3.4.2",
     "react-native-fingerprint-scanner": "https://github.com/BlueWallet/react-native-fingerprint-scanner#ce644673681716335d786727bab998f7e632ab5e",
     "react-native-fs": "2.18.0",
-    "react-native-gesture-handler": "1.10.3",
+    "react-native-gesture-handler": "2.3.2",
     "react-native-handoff": "https://github.com/BlueWallet/react-native-handoff#31d005f93d31099d0e564590a3bbd052b8a02b39",
     "react-native-haptic-feedback": "1.13.0",
     "react-native-idle-timer": "https://github.com/BlueWallet/react-native-idle-timer#8587876d68ab5920e79619726aeca9e672beaf2b",
