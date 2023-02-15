@@ -1,25 +1,23 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Text, ScrollView, ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, View, StatusBar, TextInput, StyleSheet, useColorScheme } from 'react-native';
+import { Text, ScrollView, ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, View, StatusBar, TextInput, StyleSheet, useColorScheme, Touchable, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BlueText, BlueListItem, LightningButton, BitcoinButton, VaultButton, BlueFormLabel, BlueButton, BlueButtonLink, BlueSpacing20, MintLayerButton } from '../../BlueComponents';
+import { BlueButton, BlueButtonLink } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import { HDSegwitBech32Wallet, SegwitP2SHWallet, HDSegwitP2SHWallet, LightningCustodianWallet, AppStorage, LightningLdkWallet } from '../../class';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { useTheme, useNavigation } from '@react-navigation/native';
+import { useTheme, useNavigation, useRoute } from '@react-navigation/native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Canvas, Path } from '@shopify/react-native-skia';
 
 import { Chain } from '../../models/bitcoinUnits';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import { LdkButton } from '../../components/LdkButton';
 import alert from '../../components/Alert';
 import { type } from '../../theme/Fonts';
 import { COLORS } from '../../theme/Colors';
-import { create_wallet } from '../../theme/Images';
-import { BtcMlcComponent } from '../../components/BtcMltComponent';
 const A = require('../../blue_modules/analytics');
 const bitcoin = require('bitcoinjs-lib');
+// import { generateEntropy, normalize } from 'entropy-generator';
 
 interface IPath {
   segments: string[];
@@ -34,7 +32,11 @@ const ButtonSelected = Object.freeze({
 
 const EntropyGenerator = () => {
   const [paths, setPaths] = useState<IPath[]>([]);
+  const { navigate, goBack } = useNavigation();
+  const selectedWalletTypeProps = useRoute().params.selectedWalletType || false;
+  const labelProps = useRoute().params.label || '';
 
+  console.log('generateEntropy ***** ', generateEntropy);
   const pan = Gesture.Pan()
     .onStart((g) => {
       const newPaths = [...paths];
@@ -59,12 +61,12 @@ const EntropyGenerator = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [walletBaseURI, setWalletBaseURI] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [label, setLabel] = useState('');
+  const [label, setLabel] = useState(labelProps || '');
   const [isAdvancedOptionsEnabled, setIsAdvancedOptionsEnabled] = useState(false);
   const [isTestMode, setIsTestMode] = useState(false);
-  const [selectedWalletType, setSelectedWalletType] = useState(false);
+  const [selectedWalletType, setSelectedWalletType] = useState(selectedWalletTypeProps || false);
   const [backdoorPressed, setBackdoorPressed] = useState(1);
-  const { navigate, goBack } = useNavigation();
+
   const [entropy, setEntropy] = useState();
   const [entropyButtonText, setEntropyButtonText] = useState(loc.wallets.add_entropy_provide);
   const stylesHook = {
@@ -267,105 +269,33 @@ const EntropyGenerator = () => {
     Keyboard.dismiss();
     setSelectedWalletType(ButtonSelected.LDK);
   };
-
   return (
-    <GestureHandlerRootView style={styles.createButton}>
+    <GestureHandlerRootView style={styles.flex1}>
+      <View>
+        <Text style={[styles.headingText]}>{loc.wallets.entrophy_generator}</Text>
+        <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy}</Text>
+        <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy2}</Text>
+        <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy3}</Text>
+        <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy4}</Text>
+      </View>
       <GestureDetector gesture={pan}>
-        <View style={styles.black}>
+        <View style={styles.entrophyContainer}>
           <Canvas style={styles.flex8} mode="default">
             {paths.map((p, index) => (
               <Path key={index} path={p.segments.join(' ')} strokeWidth={3} style="stroke" color={p.color} />
             ))}
           </Canvas>
+          <TouchableOpacity onPress={() => setPaths([])} style={styles.undoButton}>
+            <Text style={[styles.descText, stylesHook.advancedText]}>Clear</Text>
+          </TouchableOpacity>
         </View>
       </GestureDetector>
+
+      <View style={styles.createButton}>{!isLoading ? <BlueButton testID="Create" title={loc.wallets.add_create} disabled={paths.length === 0} onPress={createWallet} /> : <ActivityIndicator />}</View>
+      <View style={styles.importContainer}>{!isLoading && <Text style={[styles.importText]}>{loc.wallets.add_import_wallet}</Text>}</View>
+      {!isLoading && <BlueButtonLink testID="ImportWallet" style={styles.clickImportContainer} textStyle={styles.clickImport} title={loc.wallets.click_here} onPress={navigateToImportWallet} />}
     </GestureHandlerRootView>
   );
-
-  // return (
-  //   <GestureHandlerRootView style={{ flex: 1 }}>
-  //   <GestureDetector gesture={pan}>
-  //   <ScrollView style={stylesHook.root}>
-  //     <StatusBar barStyle={Platform.select({ ios: 'light-content', default: useColorScheme() === 'dark' ? 'light-content' : 'dark-content' })} />
-  //     <BlueSpacing20 />
-  //     <KeyboardAvoidingView enabled behavior={Platform.OS === 'ios' ? 'padding' : null} keyboardVerticalOffset={62}>
-  //       <Text style={[styles.headingText]}>{loc.wallets.entrophy_generator}</Text>
-  //       <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy}</Text>
-  //       <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy2}</Text>
-  //       <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy3}</Text>
-  //       <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy4}</Text>
-
-  //     <View style={{ flex: 1, backgroundColor: "black" }}>
-  //      {/* <Canvas style={{ flex: 8 }}>
-  //         {paths.map((p, index) => (
-  //           <Path
-  //             key={index}
-  //             path={p.segments.join(" ")}
-  //             strokeWidth={5}
-  //             style="stroke"
-  //             color={p.color}
-  //           />
-  //         ))}
-  //         </Canvas> */}
-  //     </View>
-
-  //       {/* <View style={[styles.label, stylesHook.label]}>
-  //         <TextInput testID="WalletNameInput" value={label} placeholderTextColor="#81868e" placeholder={loc.wallets.add_placeholder} onChangeText={setLabel} style={styles.textInputCommon} editable={!isLoading} underlineColorAndroid="transparent" />
-  // </View> */}
-
-  //       {/* <View style={styles.buttons}>
-  //         {isTestMode ? <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} testnet /> : <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} />}
-
-  //         <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} />
-  //         {backdoorPressed > 10 ? <LdkButton active={selectedWalletType === ButtonSelected.LDK} onPress={handleOnLdkButtonPressed} style={styles.button} subtext={LightningLdkWallet.getPackageVersion()} text="LDK" /> : null}
-
-  //         <MintLayerButton testID="ActivateMintlayerButton" title="MLT" subtitle="Mintlayer" style={styles.button} />
-  // </View> */}
-
-  //       <View style={styles.advanced}>
-  //         {(() => {
-  //           if (selectedWalletType === ButtonSelected.ONCHAIN && isAdvancedOptionsEnabled) {
-  //             return (
-  //               <View>
-  //                 <BlueSpacing20 />
-  //                 <Text style={[styles.advancedText, stylesHook.advancedText]}>{loc.settings.advanced_options}</Text>
-  //                 <BlueListItem containerStyle={[styles.noPadding, stylesHook.noPadding]} bottomDivider={false} onPress={() => setSelectedIndex(0)} title={HDSegwitBech32Wallet.typeReadable} checkmark={selectedIndex === 0} />
-  //                 <BlueListItem containerStyle={[styles.noPadding, stylesHook.noPadding]} bottomDivider={false} onPress={() => setSelectedIndex(1)} title={SegwitP2SHWallet.typeReadable} checkmark={selectedIndex === 1} />
-  //                 <BlueListItem containerStyle={[styles.noPadding, stylesHook.noPadding]} bottomDivider={false} onPress={() => setSelectedIndex(2)} title={HDSegwitP2SHWallet.typeReadable} checkmark={selectedIndex === 2} />
-  //               </View>
-  //             );
-  //           } else if (selectedWalletType === ButtonSelected.OFFCHAIN) {
-  //             return (
-  //               <>
-  //                 <BlueSpacing20 />
-  //                 <Text style={[styles.advancedText, stylesHook.advancedText]}>{loc.settings.advanced_options}</Text>
-  //                 <BlueSpacing20 />
-  //                 <BlueText>{loc.wallets.add_lndhub}</BlueText>
-  //                 <View style={[styles.lndUri, stylesHook.lndUri]}>
-  //                   <TextInput value={walletBaseURI} onChangeText={setWalletBaseURI} onSubmitEditing={Keyboard.dismiss} placeholder={isTestMode ? 'https://tnlndhub.mintlayer.org' : loc.wallets.add_lndhub_placeholder} clearButtonMode="while-editing" autoCapitalize="none" textContentType="URL" autoCorrect={false} placeholderTextColor="#81868e" style={styles.textInputCommon} editable={!isLoading} underlineColorAndroid="transparent" />
-  //                 </View>
-  //               </>
-  //             );
-  //           }
-  //         })()}
-
-  //         <BlueSpacing20 />
-  //         <View style={styles.createButton}>{!isLoading ? <BlueButton testID="Create" title={loc.wallets.add_create} disabled={!selectedWalletType || label.length === 0 || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)} onPress={createWallet} /> : <ActivityIndicator />}</View>
-
-  //         <View style={styles.importContainer}>
-  //           {!isLoading && (
-  //             <Text style={[styles.importText]}>
-  //               {loc.wallets.add_import_wallet}
-  //               {!isLoading && <BlueButtonLink testID="ImportWallet" style={styles.clickImportContainer} textStyle={styles.clickImport} title={loc.wallets.click_here} onPress={navigateToImportWallet} />}
-  //             </Text>
-  //           )}
-  //         </View>
-  //       </View>
-  //     </KeyboardAvoidingView>
-  //   </ScrollView>
-  //   </GestureDetector>
-  // </GestureHandlerRootView>
-  // );
 };
 
 EntropyGenerator.navigationOptions = navigationStyle(
@@ -379,8 +309,12 @@ EntropyGenerator.navigationOptions = navigationStyle(
 );
 
 const styles = StyleSheet.create({
-  createButton: {
+  flex1: {
     flex: 1,
+  },
+  createButton: {
+    marginHorizontal: 10,
+    marginVertical: 10,
   },
   loading: {
     flex: 1,
@@ -447,12 +381,12 @@ const styles = StyleSheet.create({
     color: COLORS.dark_black,
   },
   importContainer: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    // marginTop: 10,
     marginHorizontal: 25,
-    paddingBottom: 5,
+    // paddingBottom: 10,
   },
   import: {
     marginBottom: 0,
@@ -464,7 +398,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   clickImportContainer: {
-    margin: 0,
+    marginBottom: 10,
   },
   clickImport: {
     paddingHorizontal: 10,
@@ -479,12 +413,27 @@ const styles = StyleSheet.create({
   typeMargin: {
     marginTop: 8,
   },
-  black: {
+  entrophyContainer: {
     flex: 1,
-    backgroundColor: 'black',
+    borderStyle: 'dashed',
+    borderRadius: 1,
+    borderWidth: 1,
+    borderColor: 'black',
+    marginHorizontal: 10,
   },
   flex8: {
     flex: 8,
+  },
+  undoButton: {
+    borderStyle: 'dashed',
+    borderRadius: 1,
+    borderWidth: 1,
+    borderColor: 'black',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
   },
 });
 
