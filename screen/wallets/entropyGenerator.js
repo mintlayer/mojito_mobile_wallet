@@ -19,10 +19,6 @@ const A = require('../../blue_modules/analytics');
 const bitcoin = require('bitcoinjs-lib');
 // import { generateEntropy, normalize } from 'entropy-generator';
 
-interface IPath {
-  segments: string[];
-  color?: string;
-}
 const ButtonSelected = Object.freeze({
   ONCHAIN: Chain.ONCHAIN,
   OFFCHAIN: Chain.OFFCHAIN,
@@ -31,31 +27,30 @@ const ButtonSelected = Object.freeze({
 });
 
 const EntropyGenerator = () => {
-  const [paths, setPaths] = useState<IPath[]>([]);
+  const color = '#06D6A0';
+  const [paths, setPaths] = useState([{ segments: [], color }]);
   const { navigate, goBack } = useNavigation();
   const selectedWalletTypeProps = useRoute().params.selectedWalletType || false;
   const labelProps = useRoute().params.label || '';
 
-  console.log('generateEntropy ***** ', generateEntropy);
+  const onDrawing = (mode, g) => {
+    const newPaths = [...paths];
+    newPaths[paths.length - 1].segments.push(`${mode} ${g.x} ${g.y}`);
+    setPaths(newPaths);
+  };
+
   const pan = Gesture.Pan()
     .onStart((g) => {
-      const newPaths = [...paths];
-      newPaths[paths.length] = {
-        segments: [],
-        color: '#06d6a0',
-      };
-      newPaths[paths.length].segments.push(`M ${g.x} ${g.y}`);
-      setPaths(newPaths);
+      onDrawing('M', g);
     })
     .onUpdate((g) => {
-      const index = paths.length - 1;
-      const newPaths = [...paths];
-      if (newPaths?.[index]?.segments) {
-        newPaths[index].segments.push(`L ${g.x} ${g.y}`);
-        setPaths(newPaths);
-      }
+      onDrawing('L', g);
+    })
+    .onEnd(() => {
+      setPaths([...paths, { segments: [], color }]);
     })
     .minDistance(1);
+
   const { colors } = useTheme();
   const { addWallet, saveToDisk, isAdancedModeEnabled, wallets, isTestModeEnabled } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(true);
