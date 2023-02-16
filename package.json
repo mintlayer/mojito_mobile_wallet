@@ -122,7 +122,6 @@
     ]
   },
   "dependencies": {
-    "entropy-generator": "file:../entropy-generator",
     "@shopify/react-native-skia": "0.1.136",
     "@babel/preset-env": "7.16.5",
     "@babel/runtime-corejs2": "^7.17.2",

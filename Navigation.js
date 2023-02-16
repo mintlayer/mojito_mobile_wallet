@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Platform, useWindowDimensions, Dimensions, I18nManager, Image, StyleSheet } from 'react-native';
+import { Platform, useWindowDimensions, Dimensions, I18nManager, Image, StyleSheet, View, Text, Touchable, TouchableOpacity } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -97,7 +97,8 @@ import LdkViewLogs from './screen/wallets/ldkViewLogs';
 import Introduction from './screen/introduction';
 import NativeAssets from './screen/NativeAssets';
 
-import { sendBottom, settingBottom, walletBottom } from './theme/Images';
+import { sendBottom, settingBottom, walletBottom, create_wallet, ic_back_black } from './theme/Images';
+import { COLORS } from './theme/Colors';
 import { getFlage } from './store/asyncStorage';
 
 const WalletsStack = createNativeStackNavigator();
@@ -161,13 +162,38 @@ const WalletsRoot = () => {
   );
 };
 
+const customHeader = (navigation) => {
+  return (
+    <View style={styles.customHeaderContainer}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => {
+          navigation.pop();
+        }}
+      >
+        <Image source={ic_back_black} />
+      </TouchableOpacity>
+      <Image source={create_wallet} />
+      <Text style={styles.headerTitle}>Add Wallet</Text>
+    </View>
+  );
+};
+
 const AddWalletStack = createNativeStackNavigator();
 const AddWalletRoot = () => {
   const theme = useTheme();
 
   return (
     <AddWalletStack.Navigator screenOptions={{ headerHideShadow: true }}>
-      <AddWalletStack.Screen name="AddWallet" component={AddWallet} options={AddWallet.navigationOptions(theme)} />
+      <AddWalletStack.Screen
+        name="AddWallet"
+        component={AddWallet}
+        options={({ route, navigation }) => ({
+          headerTintColor: 'black',
+          title: '',
+          headerLeft: () => customHeader(navigation),
+        })}
+      />
       <AddWalletStack.Screen name="ImportWallet" component={ImportWallet} options={ImportWallet.navigationOptions(theme)} />
       <AddWalletStack.Screen name="ImportWalletDiscovery" component={ImportWalletDiscovery} options={ImportWalletDiscovery.navigationOptions(theme)} />
       <AddWalletStack.Screen name="ImportCustomDerivationPath" component={ImportCustomDerivationPath} options={ImportCustomDerivationPath.navigationOptions(theme)} />
@@ -523,13 +549,17 @@ const Navigation = () => {
   return (
     <RootStack.Navigator screenOptions={{ headerHideShadow: true }}>
       {/* stacks initialRouteName="UnlockWithScreenRoot" */}
-      {/* add bottom here */}
+      {/* add bottom here 
+      <RootStack.Screen name="AddWallet" component={AddWallet} options={AddWallet.navigationOptions(theme)} />
+    */}
       {!getFlage() && <WalletsStack.Screen name="Introduction" component={Introduction} options={Introduction.navigationOptions(theme)} />}
 
       <RootStack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false, translucent: false }} />
       {/* <RootStack.Screen name="WalletsRoot" component={WalletsRoot} options={{ headerShown: false, translucent: false }} /> */}
       <RootStack.Screen name="EntropyGenerator" component={EntropyGenerator} options={EntropyGenerator.navigationOptions(theme)} />
+
       <RootStack.Screen name="AddWalletRoot" component={AddWalletRoot} options={NavigationDefaultOptions} />
+
       <RootStack.Screen name="SendDetailsRoot" component={SendDetailsRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="LNDCreateInvoiceRoot" component={LNDCreateInvoiceRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="ScanLndInvoiceRoot" component={ScanLndInvoiceRoot} options={NavigationDefaultOptions} />
@@ -577,6 +607,23 @@ const Navigation = () => {
 const styles = StyleSheet.create({
   marginTopTab: {
     marginTop: 20,
+  },
+  customHeaderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  backButton: {
+    paddingRight: 10,
+    paddingVertical: 10,
+  },
+  headerTitle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 10,
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: COLORS.blackOpacity90,
   },
 });
 

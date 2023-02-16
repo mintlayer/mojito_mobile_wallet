@@ -289,12 +289,41 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
+  - react-native-skia (0.1.136):
+    - React
+    - React-callinvoker
+    - React-Core
+    - react-native-skia/Api (= 0.1.136)
+    - react-native-skia/Jsi (= 0.1.136)
+    - react-native-skia/RNSkia (= 0.1.136)
+    - react-native-skia/SkiaHeaders (= 0.1.136)
+    - react-native-skia/Utils (= 0.1.136)
+  - react-native-skia/Api (0.1.136):
+    - React
+    - React-callinvoker
+    - React-Core
+  - react-native-skia/Jsi (0.1.136):
+    - React
+    - React-callinvoker
+    - React-Core
+  - react-native-skia/RNSkia (0.1.136):
+    - React
+    - React-callinvoker
+    - React-Core
+  - react-native-skia/SkiaHeaders (0.1.136):
+    - React
+    - React-callinvoker
+    - React-Core
+  - react-native-skia/Utils (0.1.136):
+    - React
+    - React-callinvoker
+    - React-Core
   - react-native-splash-screen (3.3.0):
     - React-Core
   - react-native-tcp-socket (5.5.0):
     - CocoaAsyncSocket
     - React-Core
-  - react-native-tor (0.1.7):
+  - react-native-tor (0.1.8):
     - React
   - react-native-webview (11.17.2):
     - React-Core
@@ -383,7 +412,7 @@ PODS:
     - React-Core
   - RNFS (2.18.0):
     - React
-  - RNGestureHandler (1.10.3):
+  - RNGestureHandler (2.3.2):
     - React-Core
   - RNHandoff (0.0.3):
     - React
@@ -497,6 +526,7 @@ DEPENDENCIES:
   - react-native-ios-context-menu (from `../node_modules/react-native-ios-context-menu`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
   - react-native-tor (from `../node_modules/react-native-tor`)
@@ -615,6 +645,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-randombytes"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-skia:
+    :path: "../node_modules/@shopify/react-native-skia"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
   react-native-tcp-socket:
@@ -707,7 +739,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: 0f90f083c3042c2027a381b4cdfccc65ddbe4d81
+  FBReactNativeSpec: 8a1396b424c69bc841a8cfd5e54739ecb7ee37d3
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
@@ -742,9 +774,10 @@ SPEC CHECKSUMS:
   react-native-ios-context-menu: 1ccf4d6aa1c0e7dc596613eb9a36f8c0c23ca56f
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
+  react-native-skia: 7f1c17bb3ed15c951305d6c924df917899d21613
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-tcp-socket: 199889cd48b07a0238e0feb53549607de5207116
-  react-native-tor: 6a64351e96ccd6a49941989703f63ec81fc1ae7c
+  react-native-tor: 3b14e9160b2eb7fa3f310921b2dee71a5171e5b7
   react-native-webview: 380c1a03ec94b7ed764dac8db1e7c9952d08c93a
   react-native-widget-center: 6bf4d5aa5ab10a9dbbf7ddf9192f06cc1d66ccd5
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
@@ -768,7 +801,7 @@ SPEC CHECKSUMS:
   RNDefaultPreference: 2f8d6d54230edbd78708ada8d63bb275e5a8415b
   RNDeviceInfo: 0400a6d0c94186d1120c3cbd97b23abc022187a9
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
-  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNGestureHandler: 6e757e487a4834e7280e98e9bac66d2d9c575e9c
   RNHandoff: d3b0754cca3a6bcd9b25f544f733f7f033ccf5fa
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94
   RNLocalize: f10d91c76a5692d4cf6f218c70f6e4d7dcb42d1c
