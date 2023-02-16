@@ -35,6 +35,7 @@ const EntropyGenerator = () => {
 
   const onDrawing = (mode, g) => {
     const newPaths = [...paths];
+    // Modes follow syntax of path on SVG: read more here https://css-tricks.com/svg-path-syntax-illustrated-guide/
     newPaths[paths.length - 1].segments.push(`${mode} ${g.x} ${g.y}`);
     setPaths(newPaths);
   };
