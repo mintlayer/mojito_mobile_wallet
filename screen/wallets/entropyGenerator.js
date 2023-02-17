@@ -52,6 +52,10 @@ const EntropyGenerator = () => {
     })
     .minDistance(1);
 
+  const onClearDrawingButtonClick = () => {
+    setPaths([{ segments: [], color }]);
+  };
+
   const { colors } = useTheme();
   const { addWallet, saveToDisk, isAdancedModeEnabled, wallets, isTestModeEnabled } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(true);
@@ -281,7 +285,7 @@ const EntropyGenerator = () => {
               <Path key={index} path={p.segments.join(' ')} strokeWidth={3} style="stroke" color={p.color} />
             ))}
           </Canvas>
-          <TouchableOpacity onPress={() => setPaths([])} style={styles.undoButton}>
+          <TouchableOpacity onPress={onClearDrawingButtonClick} style={styles.undoButton}>
             <Text style={[styles.descText, stylesHook.advancedText]}>Clear</Text>
           </TouchableOpacity>
         </View>
