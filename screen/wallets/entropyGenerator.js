@@ -103,24 +103,6 @@ const EntropyGenerator = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdvancedOptionsEnabled]);
 
-  const entropyGenerated = (newEntropy) => {
-    let entropyTitle;
-    if (!newEntropy) {
-      entropyTitle = loc.wallets.add_entropy_provide;
-    } else if (newEntropy.length < 32) {
-      entropyTitle = loc.formatString(loc.wallets.add_entropy_remain, {
-        gen: newEntropy.length,
-        rem: 32 - newEntropy.length,
-      });
-    } else {
-      entropyTitle = loc.formatString(loc.wallets.add_entropy_generated, {
-        gen: newEntropy.length,
-      });
-    }
-    setEntropy(newEntropy);
-    setEntropyButtonText(entropyTitle);
-  };
-
   const createWallet = async () => {
     setIsLoading(true);
 
@@ -153,7 +135,6 @@ const EntropyGenerator = () => {
           try {
             await w.generateFromEntropy(entropy);
           } catch (e) {
-            console.log(e.toString());
             alert(e.toString());
             goBack();
             return;
@@ -237,10 +218,6 @@ const EntropyGenerator = () => {
     navigate('PleaseBackupLNDHub', {
       walletID: wallet.getID(),
     });
-  };
-
-  const navigateToEntropy = () => {
-    navigate('ProvideEntropy', { onGenerated: entropyGenerated });
   };
 
   const navigateToImportWallet = () => {
