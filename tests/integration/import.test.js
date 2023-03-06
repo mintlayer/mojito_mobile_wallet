@@ -72,6 +72,7 @@ describe('import procedure', () => {
   it('can import multiple wallets', async () => {
     const store = createStore();
     const { promise } = startImport('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about', false, true, ...store.callbacks);
+    // console.log('store.state.wallets ******** ', store.state.wallets);
     await promise;
     assert.strictEqual(store.state.wallets.length > 0, true);
   });

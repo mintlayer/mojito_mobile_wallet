@@ -45,17 +45,17 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     await hd.fetchBalance();
     assert.ok(hd.getBalance() > 0);
     assert.strictEqual(await hd.getAddressAsync(), hd._getExternalAddressByIndex(7));
-    assert.strictEqual(await hd.getChangeAddressAsync(), hd._getInternalAddressByIndex(8));
+    assert.strictEqual(await hd.getChangeAddressAsync(), hd._getInternalAddressByIndex(9));
     assert.strictEqual(hd.next_free_address_index, 7);
     assert.strictEqual(hd.getNextFreeAddressIndex(), 7);
-    assert.strictEqual(hd.next_free_change_address_index, 8);
+    assert.strictEqual(hd.next_free_change_address_index, 9);
 
     // now fetch txs
     await hd.fetchTransactions();
     assert.ok(hd._lastTxFetch > 0);
     assert.ok(hd._lastBalanceFetch > 0);
     assert.strictEqual(hd.timeToRefreshBalance(), false);
-    assert.strictEqual(hd.getTransactions().length, 17);
+    assert.strictEqual(hd.getTransactions().length, 18);
 
     for (const tx of hd.getTransactions()) {
       assert.ok(tx.hash);
@@ -79,10 +79,10 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     hd.setSecret(process.env.HD_MNEMONIC);
 
     assert.strictEqual(await hd.getAddressAsync(), hd._getExternalAddressByIndex(7));
-    assert.strictEqual(await hd.getChangeAddressAsync(), hd._getInternalAddressByIndex(8));
+    assert.strictEqual(await hd.getChangeAddressAsync(), hd._getInternalAddressByIndex(9));
     assert.strictEqual(hd.next_free_address_index, 7);
     assert.strictEqual(hd.getNextFreeAddressIndex(), 7);
-    assert.strictEqual(hd.next_free_change_address_index, 8);
+    assert.strictEqual(hd.next_free_change_address_index, 9);
     if (disableBatching) BlueElectrum.setBatchingEnabled();
   });
 
@@ -181,8 +181,8 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     await hd.fetchUtxo();
     assert.ok(hd.getUtxo().length > 0);
     assert.strictEqual(hd.getDerivedUtxoFromOurTransaction().length, 5);
-    const u1 = hd.getUtxo().find((utxo) => utxo.txid === '6d7d9dff147f04012b654e5c607a19c4871b9927cd914231dfb6f6a93e031da1');
-    const u2 = hd.getDerivedUtxoFromOurTransaction().find((utxo) => utxo.txid === '6d7d9dff147f04012b654e5c607a19c4871b9927cd914231dfb6f6a93e031da1');
+    const u1 = hd.getUtxo().find((utxo) => utxo.txid === '13ecc899d09000658ac41e9e740dc38ddb1b8bada412841b714066a3d17ef3d7');
+    const u2 = hd.getDerivedUtxoFromOurTransaction().find((utxo) => utxo.txid === '13ecc899d09000658ac41e9e740dc38ddb1b8bada412841b714066a3d17ef3d7');
     delete u1.confirmations;
     delete u2.confirmations;
     delete u1.height;
