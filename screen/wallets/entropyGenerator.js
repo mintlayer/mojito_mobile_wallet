@@ -8,6 +8,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useTheme, useNavigation, useRoute } from '@react-navigation/native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Canvas, Path } from '@shopify/react-native-skia';
+import { generateEntropy, normalize } from '@mintlayer/entropy-generator';
 
 import { Chain } from '../../models/bitcoinUnits';
 import loc from '../../loc';
@@ -15,9 +16,9 @@ import { BlueStorageContext } from '../../blue_modules/storage-context';
 import alert from '../../components/Alert';
 import { type } from '../../theme/Fonts';
 import { COLORS } from '../../theme/Colors';
+import { getNRandomElementsFromArray } from '../../utils/Array';
 const A = require('../../blue_modules/analytics');
 const bitcoin = require('bitcoinjs-lib');
-// import { generateEntropy, normalize } from 'entropy-generator';
 
 const ButtonSelected = Object.freeze({
   ONCHAIN: Chain.ONCHAIN,
@@ -67,7 +68,6 @@ const EntropyGenerator = () => {
   const [selectedWalletType, setSelectedWalletType] = useState(selectedWalletTypeProps || false);
   const [backdoorPressed, setBackdoorPressed] = useState(1);
 
-  const [entropy, setEntropy] = useState();
   const [entropyButtonText, setEntropyButtonText] = useState(loc.wallets.add_entropy_provide);
   const stylesHook = {
     advancedText: {
@@ -103,6 +103,20 @@ const EntropyGenerator = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdvancedOptionsEnabled]);
 
+  const generateEntropyDrawing = async () => {
+    const flatArray = paths.flatMap((path) => path.segments);
+    const numArr = flatArray.flatMap((str) => {
+      // Split the string into parts by spaces
+      const parts = str.split(' ');
+      // Convert the numerical parts into numbers
+      const nums = parts.slice(1).map(parseFloat);
+      // Return an array with the first part and the numbers
+      return nums;
+    });
+    const normalizedPoints = normalize(numArr.map((point) => Math.round(point)));
+    return generateEntropy(normalizedPoints);
+  };
+
   const createWallet = async () => {
     setIsLoading(true);
 
@@ -111,6 +125,8 @@ const EntropyGenerator = () => {
     if (selectedWalletType === ButtonSelected.OFFCHAIN) {
       createLightningWallet(w);
     } else if (selectedWalletType === ButtonSelected.ONCHAIN) {
+      const entropy = await generateEntropyDrawing();
+      const shuffledEntropy = getNRandomElementsFromArray(entropy, 16);
       if (selectedIndex === 2) {
         // zero index radio - HD segwit
         w = new HDSegwitP2SHWallet();
@@ -131,17 +147,7 @@ const EntropyGenerator = () => {
         w.setLabel(label || loc.wallets.details_title);
       }
       if (selectedWalletType === ButtonSelected.ONCHAIN) {
-        if (entropy) {
-          try {
-            await w.generateFromEntropy(entropy);
-          } catch (e) {
-            alert(e.toString());
-            goBack();
-            return;
-          }
-        } else {
-          await w.generate();
-        }
+        await w.generateMnemonicFromEntropy(shuffledEntropy);
         addWallet(w);
         await saveToDisk();
         A(A.ENUM.CREATED_WALLET);
@@ -263,7 +269,7 @@ const EntropyGenerator = () => {
             ))}
           </Canvas>
           <TouchableOpacity onPress={onClearDrawingButtonClick} style={styles.undoButton}>
-            <Text style={[styles.descText, stylesHook.advancedText]}>Clear</Text>
+            <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.clear}</Text>
           </TouchableOpacity>
         </View>
       </GestureDetector>

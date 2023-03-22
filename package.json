@@ -122,13 +122,13 @@
     ]
   },
   "dependencies": {
-    "@shopify/react-native-skia": "0.1.136",
     "@babel/preset-env": "7.16.5",
     "@babel/runtime-corejs2": "^7.17.2",
     "@babel/runtime-corejs3": "^7.17.2",
     "@bugsnag/react-native": "7.14.1",
     "@bugsnag/source-maps": "2.3.0",
     "@keystonehq/bc-ur-registry": "0.4.4",
+    "@mintlayer/entropy-generator": "^1.0.2",
     "@ngraveio/bc-ur": "1.1.6",
     "@react-native-async-storage/async-storage": "1.15.14",
     "@react-native-clipboard/clipboard": "1.9.0",
@@ -137,6 +137,7 @@
     "@react-navigation/drawer": "5.12.5",
     "@react-navigation/native": "5.9.4",
     "@remobile/react-native-qrcode-local-image": "https://github.com/BlueWallet/react-native-qrcode-local-image",
+    "@shopify/react-native-skia": "0.1.136",
     "aez": "1.0.1",
     "assert": "2.0.0",
     "base-x": "3.0.9",
