@@ -127,6 +127,11 @@ const EntropyGenerator = () => {
     } else if (selectedWalletType === ButtonSelected.ONCHAIN) {
       const entropy = await generateEntropyDrawing();
       const shuffledEntropy = getNRandomElementsFromArray(entropy, 16);
+      if (entropy.length < 192) {
+        alert('Your entropy is too small. Please draw more lines.');
+        setIsLoading(false);
+        return;
+      }
       if (selectedIndex === 2) {
         // zero index radio - HD segwit
         w = new HDSegwitP2SHWallet();
