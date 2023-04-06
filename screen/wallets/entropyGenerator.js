@@ -17,6 +17,7 @@ import alert from '../../components/Alert';
 import { type } from '../../theme/Fonts';
 import { COLORS } from '../../theme/Colors';
 import { getNRandomElementsFromArray } from '../../utils/Array';
+import DrawingBoard from '../../components/DrawingBoard';
 const A = require('../../blue_modules/analytics');
 const bitcoin = require('bitcoinjs-lib');
 
@@ -27,12 +28,13 @@ const ButtonSelected = Object.freeze({
   LDK: 'LDK',
 });
 
-const EntropyGenerator = () => {
+const EntropyGenerator = ({ props }) => {
   const color = '#06D6A0';
   const [paths, setPaths] = useState([{ segments: [], color }]);
   const { navigate, goBack } = useNavigation();
   const selectedWalletTypeProps = useRoute().params.selectedWalletType || false;
   const labelProps = useRoute().params.label || '';
+  const selectedIndexProps = useRoute().params.selectedIndex || 0;
 
   const onDrawing = (mode, g) => {
     const newPaths = [...paths];
@@ -58,15 +60,12 @@ const EntropyGenerator = () => {
   };
 
   const { colors } = useTheme();
-  const { addWallet, saveToDisk, isAdancedModeEnabled, wallets, isTestModeEnabled } = useContext(BlueStorageContext);
+  const { addWallet, saveToDisk, wallets, isTestModeEnabled } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(true);
-  const [walletBaseURI, setWalletBaseURI] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(selectedIndexProps || 0);
   const [label, setLabel] = useState(labelProps || '');
-  const [isAdvancedOptionsEnabled, setIsAdvancedOptionsEnabled] = useState(false);
   const [isTestMode, setIsTestMode] = useState(false);
   const [selectedWalletType, setSelectedWalletType] = useState(selectedWalletTypeProps || false);
-  const [backdoorPressed, setBackdoorPressed] = useState(1);
 
   const [entropyButtonText, setEntropyButtonText] = useState(loc.wallets.add_entropy_provide);
   const stylesHook = {
@@ -93,15 +92,11 @@ const EntropyGenerator = () => {
   };
 
   useEffect(() => {
-    AsyncStorage.getItem(isTestMode ? AppStorage.TEST_LNDHUB : AppStorage.LNDHUB)
-      .then((url) => setWalletBaseURI(url || (isTestMode ? 'https://tnlndhub.mintlayer.org' : 'https://lndhub.io')))
-      .catch(() => setWalletBaseURI(''));
-    isTestModeEnabled().then(setIsTestMode);
-    isAdancedModeEnabled()
-      .then(setIsAdvancedOptionsEnabled)
+    isTestModeEnabled()
+      .then(setIsTestMode)
       .finally(() => setIsLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdvancedOptionsEnabled]);
+  }, []);
 
   const generateEntropyDrawing = async () => {
     const flatArray = paths.flatMap((path) => path.segments);
@@ -113,6 +108,7 @@ const EntropyGenerator = () => {
       // Return an array with the first part and the numbers
       return nums;
     });
+    // The following function takes a user-provided “randomness” value and XORs it with a PRNG-generated value to improve the randomness of the output.
     const normalizedPoints = normalize(numArr.map((point) => Math.round(point)));
     return generateEntropy(normalizedPoints);
   };
@@ -122,13 +118,11 @@ const EntropyGenerator = () => {
 
     let w;
 
-    if (selectedWalletType === ButtonSelected.OFFCHAIN) {
-      createLightningWallet(w);
-    } else if (selectedWalletType === ButtonSelected.ONCHAIN) {
+    if (selectedWalletType === ButtonSelected.ONCHAIN) {
       const entropy = await generateEntropyDrawing();
       const shuffledEntropy = getNRandomElementsFromArray(entropy, 16);
       if (entropy.length < 192) {
-        alert('Your entropy is too small. Please draw more lines.');
+        alert('Not enough entropy gathered. Please continue drawing.');
         setIsLoading(false);
         return;
       }
@@ -152,7 +146,13 @@ const EntropyGenerator = () => {
         w.setLabel(label || loc.wallets.details_title);
       }
       if (selectedWalletType === ButtonSelected.ONCHAIN) {
-        await w.generateMnemonicFromEntropy(shuffledEntropy);
+        if (selectedIndex === 1) {
+          // segwit (p2sh) without Entropy
+          await w.generate();
+        } else {
+          await w.generateMnemonicFromEntropy(shuffledEntropy);
+        }
+
         addWallet(w);
         await saveToDisk();
         A(A.ENUM.CREATED_WALLET);
@@ -165,98 +165,13 @@ const EntropyGenerator = () => {
           goBack();
         }
       }
-    } else if (selectedWalletType === ButtonSelected.VAULT) {
-      setIsLoading(false);
-      navigate('WalletsAddMultisig', { walletLabel: label.trim().length > 0 ? label : loc.multisig.default_label });
-    } else if (selectedWalletType === ButtonSelected.LDK) {
-      setIsLoading(false);
-      createLightningLdkWallet(w);
     }
-  };
-
-  const createLightningLdkWallet = async (wallet) => {
-    const foundLdk = wallets.find((w) => w.type === LightningLdkWallet.type);
-    if (foundLdk) {
-      return alert('LDK wallet already exists');
-    }
-    setIsLoading(true);
-    wallet = new LightningLdkWallet();
-    wallet.setLabel(label || loc.wallets.details_title);
-
-    await wallet.generate();
-    await wallet.init();
-    setIsLoading(false);
-    addWallet(wallet);
-    await saveToDisk();
-
-    A(A.ENUM.CREATED_WALLET);
-    ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
-    navigate('PleaseBackupLdk', {
-      walletID: wallet.getID(),
-    });
-  };
-
-  const createLightningWallet = async (wallet) => {
-    wallet = new LightningCustodianWallet();
-    wallet.setLabel(label || loc.wallets.details_title);
-
-    try {
-      const lndhub = walletBaseURI?.trim();
-      if (lndhub) {
-        const isValidNodeAddress = await LightningCustodianWallet.isValidNodeAddress(lndhub);
-        if (isValidNodeAddress) {
-          wallet.setBaseURI(lndhub);
-          await wallet.init();
-        } else {
-          throw new Error('The provided node address is not valid LNDHub node.');
-        }
-      }
-      await wallet.createAccount(isTestMode);
-      await wallet.authorize();
-    } catch (Err) {
-      setIsLoading(false);
-      console.warn('lnd create failure', Err);
-      return alert(Err.message || Err);
-      // giving app, not adding anything
-    }
-    A(A.ENUM.CREATED_LIGHTNING_WALLET);
-    await wallet.generate();
-    addWallet(wallet);
-    await saveToDisk();
-
-    A(A.ENUM.CREATED_WALLET);
-    ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
-    navigate('PleaseBackupLNDHub', {
-      walletID: wallet.getID(),
-    });
   };
 
   const navigateToImportWallet = () => {
     navigate('ImportWallet');
   };
 
-  const handleOnVaultButtonPressed = () => {
-    Keyboard.dismiss();
-    setSelectedWalletType(ButtonSelected.VAULT);
-  };
-
-  const handleOnBitcoinButtonPressed = () => {
-    Keyboard.dismiss();
-    setSelectedWalletType(ButtonSelected.ONCHAIN);
-  };
-
-  const handleOnLightningButtonPressed = () => {
-    setBackdoorPressed((prevState) => {
-      return prevState + 1;
-    });
-    Keyboard.dismiss();
-    setSelectedWalletType(ButtonSelected.OFFCHAIN);
-  };
-
-  const handleOnLdkButtonPressed = async () => {
-    Keyboard.dismiss();
-    setSelectedWalletType(ButtonSelected.LDK);
-  };
   return (
     <GestureHandlerRootView style={styles.flex1}>
       <View>
@@ -266,20 +181,8 @@ const EntropyGenerator = () => {
         <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy3}</Text>
         <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy4}</Text>
       </View>
-      <GestureDetector gesture={pan}>
-        <View style={styles.entrophyContainer}>
-          <Canvas style={styles.flex8} mode="default">
-            {paths.map((p, index) => (
-              <Path key={index} path={p.segments.join(' ')} strokeWidth={3} style="stroke" color={p.color} />
-            ))}
-          </Canvas>
-          <TouchableOpacity onPress={onClearDrawingButtonClick} style={styles.undoButton}>
-            <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.clear}</Text>
-          </TouchableOpacity>
-        </View>
-      </GestureDetector>
-
-      <View style={styles.createButton}>{!isLoading ? <BlueButton testID="Create" title={loc.wallets.add_create} disabled={paths.length === 0} onPress={createWallet} /> : <ActivityIndicator />}</View>
+      <DrawingBoard callbackPath={(data) => setPaths(data)} />
+      <View style={styles.createButton}>{!isLoading ? <BlueButton testID="entropyCreate" title={loc.wallets.add_create} disabled={paths.length === 0} onPress={createWallet} /> : <ActivityIndicator />}</View>
       <View style={styles.importContainer}>{!isLoading && <Text style={[styles.importText]}>{loc.wallets.add_import_wallet}</Text>}</View>
       {!isLoading && <BlueButtonLink testID="ImportWallet" style={styles.clickImportContainer} textStyle={styles.clickImport} title={loc.wallets.click_here} onPress={navigateToImportWallet} />}
     </GestureHandlerRootView>

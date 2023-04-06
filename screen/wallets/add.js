@@ -290,7 +290,7 @@ const WalletsAdd = () => {
           })()}
           {/* isAdvancedOptionsEnabled && selectedWalletType === ButtonSelected.ONCHAIN && !isLoading && <BlueButtonLink style={styles.import} title={entropyButtonText} onPress={navigateToEntropy} /> */}
           <BlueSpacing20 />
-          <View style={styles.createButton}>{!isLoading ? <BlueButton testID="Create" title={loc.send.details_next} disabled={!selectedWalletType || label.length === 0 || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)} onPress={() => navigate('EntropyGenerator', { selectedWalletType, label })} /> : <ActivityIndicator />}</View>
+          <View style={styles.createButton}>{!isLoading ? <BlueButton testID="Create" title={loc.send.details_next} disabled={!selectedWalletType || label.length === 0 || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)} onPress={() => navigate('EntropyGenerator', { selectedWalletType, label, selectedIndex })} /> : <ActivityIndicator />}</View>
           {/* !isLoading && <BlueButtonLink testID="ImportWallet" style={styles.import} title={loc.wallets.add_import_wallet} onPress={navigateToImportWallet} /> */}
           <View style={styles.importContainer}>
             {!isLoading && (
