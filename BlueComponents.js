@@ -253,7 +253,7 @@ export const LightningButton = (props) => {
             <Text
               style={{
                 color: colors.alternativeTextColor,
-                fontSize: 13,
+                fontSize: 10,
                 fontWeight: '500',
                 writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
               }}
@@ -261,6 +261,7 @@ export const LightningButton = (props) => {
               {loc.wallets.add_lightning_explain}
             </Text>
           </View>
+          {props.comingSoon ? <ComingSoon text={loc.wallets.add_lightning_coming} /> : null}
         </View>
       </View>
     </TouchableOpacity>

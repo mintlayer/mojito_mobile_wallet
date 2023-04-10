@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { StatusBar, View, TouchableOpacity, Text, StyleSheet, SectionList, Platform, Image, Dimensions, useWindowDimensions, findNodeHandle, I18nManager } from 'react-native';
-import { BlueFormInput, BlueHeaderDefaultMain, BlueSendReceiveButton } from '../../BlueComponents';
+import { StatusBar, View, TouchableOpacity, Text, StyleSheet, SectionList, Platform, Image, Dimensions, useWindowDimensions, findNodeHandle, I18nManager, Keyboard } from 'react-native';
+import { BlueFormInput, BlueHeaderDefaultMain, BlueSendReceiveButton, BlueButton } from '../../BlueComponents';
 import WalletsCarousel from '../../components/WalletsCarousel';
 import { Icon } from 'react-native-elements';
 import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
@@ -15,6 +15,9 @@ import BlueClipboard from '../../blue_modules/clipboard';
 import navigationStyle from '../../components/navigationStyle';
 import { TransactionListItem } from '../../components/TransactionListItem';
 import { SendReceiveCard } from '../../components/SendReceiveCard';
+import BottomModal from '../../components/BottomModal';
+import { LightningCustodianWallet, LightningLdkWallet } from '../class';
+import { type } from '../../theme/Fonts';
 
 const scanqrHelper = require('../../helpers/scan-qr');
 const A = require('../../blue_modules/analytics');
@@ -38,6 +41,7 @@ const WalletsList = () => {
   const dataSource = getTransactions(null, 10);
   const walletsCount = useRef(wallets.length);
   const walletActionButtonsRef = useRef();
+  const [showModal, setShowModal] = useState(false);
 
   const stylesHook = StyleSheet.create({
     walletsListWrapper: {
@@ -58,6 +62,40 @@ const WalletsList = () => {
     },
     ltTextSmall: {
       color: colors.alternativeTextColor,
+    },
+    modalStyle: {
+      justifyContent: 'center',
+      margin: 0,
+    },
+    modalContainer: {
+      backgroundColor: 'white',
+      paddingHorizontal: 10,
+      borderRadius: 10,
+      paddingVertical: 20,
+      alignItems: 'center',
+    },
+    modalMessageText: {
+      flexDirection: 'row',
+      marginHorizontal: 10,
+    },
+    modalMessage: {
+      textAlign: 'center',
+      paddingVertical: 10,
+      fontFamily: type.light,
+    },
+    modalButton: {
+      backgroundColor: colors.primary,
+      paddingVertical: 14,
+      paddingHorizontal: 70,
+      maxWidth: '80%',
+      borderRadius: 50,
+      fontWeight: '700',
+    },
+    modalTitle: {
+      textAlign: 'center',
+      color: colors.successCheck,
+      fontSize: 18,
+      fontFamily: type.semiBold,
     },
   });
 
@@ -82,6 +120,15 @@ const WalletsList = () => {
     }
     walletsCount.current = wallets.length;
   }, [wallets]);
+
+  useEffect(() => {
+    wallets.map((item) => {
+      if (item.type == LightningLdkWallet.type || item.type == LightningCustodianWallet.type) {
+        setShowModal(true);
+      }
+      return null;
+    });
+  }, []);
 
   const verifyBalance = () => {
     if (getBalance() !== 0) {
@@ -367,6 +414,29 @@ const WalletsList = () => {
   return (
     <View style={styles.root} onLayout={onLayout}>
       <StatusBar barStyle={barStyle} backgroundColor="transparent" translucent animated />
+
+      <BottomModal
+        isVisible={showModal}
+        onClose={() => {
+          setShowModal(false);
+        }}
+        style={stylesHook.modalStyle}
+      >
+        <View style={stylesHook.modalContainer}>
+          <Text style={stylesHook.modalTitle}> {loc.wallets.lightning_modal_title} </Text>
+          <View style={stylesHook.modalMessageText}>
+            <Text style={stylesHook.modalMessage}> {loc.wallets.add_lightning_msg} </Text>
+          </View>
+          <BlueButton
+            testID="CustomAmountSaveButton"
+            style={stylesHook.modalButton}
+            title={loc.wallets.add_lightning_transfer}
+            onPress={() => {
+              setShowModal(false);
+            }}
+          />
+        </View>
+      </BottomModal>
       <View style={[styles.walletsListWrapper, stylesHook.walletsListWrapper]}>
         <SectionList
           contentInsetAdjustmentBehavior="automatic"
