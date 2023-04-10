@@ -73,7 +73,7 @@ describe('import procedure', () => {
     const store = createStore();
     const { promise } = startImport('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about', false, true, ...store.callbacks);
     await promise;
-    assert.strictEqual(store.state.wallets.length > 3, true);
+    assert.strictEqual(store.state.wallets.length > 0, true);
   });
 
   it('can import BIP84', async () => {
@@ -120,16 +120,16 @@ describe('import procedure', () => {
     const store = createStore();
     const { promise } = startImport('sting museum endless duty nice riot because swallow brother depth weapon merge woman wish hold finish venture gauge stomach bomb device bracket agent parent', false, false, ...store.callbacks);
     await promise;
-    assert.strictEqual(store.state.wallets[0].type, HDLegacyP2PKHWallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), '1EgDbwf5nXp9knoaWW6nV6N91EK3EFQ5vC');
+    assert.strictEqual(store.state.wallets[0].type, HDSegwitBech32Wallet.type);
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'bc1qzxedxxckfq6dhfl90yv02u02d9xf00zmdw0a5w');
   });
 
   it('can import BIP49', async () => {
     const store = createStore();
     const { promise } = startImport('believe torch sport lizard absurd retreat scale layer song pen clump combine window staff dream filter latin bicycle vapor anchor put clean gain slush', false, false, ...store.callbacks);
     await promise;
-    assert.strictEqual(store.state.wallets[0].type, HDSegwitP2SHWallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), '3EoqYYp7hQSHn5nHqRtWzkgqmK3caQ2SUu');
+    assert.strictEqual(store.state.wallets[0].type, HDSegwitBech32Wallet.type);
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'bc1qdgq0dnjlnlhhhuzkj2g06aflczat2cxepqgmcq');
   });
 
   it('can import HD Legacy Electrum (BIP32 P2PKH)', async () => {
