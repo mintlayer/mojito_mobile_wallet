@@ -110,7 +110,6 @@ const WalletTransactions = () => {
         backgroundColor: WalletGradient.headerColorFor(wallet.type),
         borderBottomWidth: 0,
         elevation: 0,
-        // shadowRadius: 0,
         shadowOffset: { height: 0, width: 0 },
       },
     });
@@ -241,8 +240,6 @@ const WalletTransactions = () => {
 
            */}
           {wallet.getTransactions().length > 0 && wallet.chain !== Chain.OFFCHAIN && wallet.type !== LightningLdkWallet.type && renderSellFiat()}
-          {/* wallet.chain === Chain.OFFCHAIN && renderMarketplaceButton() */}
-          {/* wallet.chain === Chain.OFFCHAIN && Platform.OS === 'ios' && renderLappBrowserButton() */}
         </View>
         {wallet.type === LightningLdkWallet.type && (lnNodeInfo.canSend > 0 || lnNodeInfo.canReceive > 0) && (
           <View style={[styles.marginHorizontal18, styles.marginBottom18]}>
@@ -322,13 +319,7 @@ const WalletTransactions = () => {
     );
   };
 
-  const renderSellFiat = () => {
-    // return (
-    //   <TouchableOpacity accessibilityRole="button" onPress={navigateToBuyBitcoin} style={[styles.marketplaceButton2, stylesHook.marketplaceButton2]}>
-    //     <Text style={[styles.marketpalceText1, stylesHook.marketpalceText1]}>{loc.wallets.list_tap_here_to_buy}</Text>
-    //   </TouchableOpacity>
-    // );
-  };
+  const renderSellFiat = () => {};
 
   const onWalletSelect = async (selectedWallet) => {
     if (selectedWallet) {
@@ -583,14 +574,6 @@ const WalletTransactions = () => {
                 {(isLightning() && loc.wallets.list_empty_txs1_lightning) || loc.wallets.list_empty_txs1}
               </Text>
               {isLightning() && <Text style={styles.emptyTxsLightning}>{loc.wallets.list_empty_txs2_lightning}</Text>}
-
-              {/* !isLightning() && (
-                <TouchableOpacity onPress={navigateToBuyBitcoin} style={styles.buyBitcoin} accessibilityRole="button">
-                  <Text testID="NoTxBuyBitcoin" style={styles.buyBitcoinText}>
-                    {loc.wallets.list_tap_here_to_buy}
-                  </Text>
-                </TouchableOpacity>
-              ) */}
             </ScrollView>
           }
           {...(isElectrumDisabled ? {} : { refreshing: isLoading, onRefresh: refreshTransactions })}
