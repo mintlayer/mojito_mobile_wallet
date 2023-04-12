@@ -232,21 +232,14 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
               <Text style={iStyles.br} />
               <Text numberOfLines={1} style={[iStyles.BalanceInBtc, { color: colors.inverseForegroundColor }]}>
                 {loc.wallets.list_latest_transaction}
-                {/* <Text style={[iStyles.BalanceInBtc2, { color: colors.inverseForegroundColor }]}>{' Transaction'}</Text> */}
               </Text>
             </View>
             <Image source={bitcoin} style={iStyles.btcImg} />
           </View>
 
-          {/* <Text style={iStyles.br} /> */}
-
           <Text numberOfLines={1} style={[iStyles.btcInfoMain, { color: colors.inverseForegroundColor }]}>
             {latestTransactionText}
-            {/* <Text style={[iStyles.btcInfo, { color: colors.inverseForegroundColor, fontFamily: type.semiBold }]}>{'571915' + '    '}</Text>
-              <Text style={[iStyles.btcInfo, { color: colors.btcPercentColor, fontFamily: type.semiBold }]}>+0.3339%</Text> */}
           </Text>
-
-          {/* </View> */}
         </LinearGradient>
       </TouchableWithoutFeedback>
     </Animated.View>
