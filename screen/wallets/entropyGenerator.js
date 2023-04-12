@@ -101,14 +101,9 @@ const EntropyGenerator = ({ props }) => {
   const generateEntropyDrawing = async () => {
     const flatArray = paths.flatMap((path) => path.segments);
     const numArr = flatArray.flatMap((str) => {
-      // Split the string into parts by spaces
       const parts = str.split(' ');
-      // Convert the numerical parts into numbers
-      const nums = parts.slice(1).map(parseFloat);
-      // Return an array with the first part and the numbers
-      return nums;
+      return parts.slice(1).map(parseFloat);
     });
-    // The following function takes a user-provided “randomness” value and XORs it with a PRNG-generated value to improve the randomness of the output.
     const normalizedPoints = normalize(numArr.map((point) => Math.round(point)));
     return generateEntropy(normalizedPoints);
   };
@@ -146,12 +141,7 @@ const EntropyGenerator = ({ props }) => {
         w.setLabel(label || loc.wallets.details_title);
       }
       if (selectedWalletType === ButtonSelected.ONCHAIN) {
-        if (selectedIndex === 1) {
-          // segwit (p2sh) without Entropy
-          await w.generate();
-        } else {
-          await w.generateMnemonicFromEntropy(shuffledEntropy);
-        }
+        await w.generateMnemonicFromEntropy(shuffledEntropy);
 
         addWallet(w);
         await saveToDisk();

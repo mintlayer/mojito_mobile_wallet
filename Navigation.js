@@ -404,7 +404,6 @@ const LappBrowserStackRoot = () => {
 const InitStack = createNativeStackNavigator();
 const InitRoot = () => (
   <InitStack.Navigator>
-    {/* initialRouteName="UnlockWithScreenRoot" */}
     <InitStack.Screen name="UnlockWithScreenRoot" component={UnlockWithScreenRoot} options={{ headerShown: false }} />
     <InitStack.Screen
       name="ReorderWallets"
@@ -459,6 +458,9 @@ const NavigationDefaultOptions = {
   headerShown: false,
   stackPresentation: isDesktop ? 'containedModal' : 'modal',
 };
+const NavigationDefaultOptionsScreen = {
+  headerShown: false,
+};
 
 const SettingsStack = createNativeStackNavigator();
 const SettingsRoot = () => {
@@ -506,17 +508,6 @@ const BottomTab = () => {
 
   return (
     <Tab.Navigator initialRouteName="WalletsList" showLabel={false}>
-      {/* <WalletsStack.Screen
-        name="NativeAssets"
-        component={NativeAssets}
-        options={{
-          title: '',
-          showLabel: false,
-          tabBarIcon: ({ focused, color }) => {
-            return <Image source={sendBottom} style={[{ tintColor: focused ? colors.walletBalanceBgColor : colors.borderColor }, styles.marginTopTab]} />;
-          },
-        }}
-      /> */}
       <WalletsStack.Screen
         name="WalletsList"
         component={WalletsList}
@@ -548,14 +539,9 @@ const Navigation = () => {
 
   return (
     <RootStack.Navigator screenOptions={{ headerHideShadow: true }}>
-      {/* stacks initialRouteName="UnlockWithScreenRoot" */}
-      {/* add bottom here 
-      <RootStack.Screen name="AddWallet" component={AddWallet} options={AddWallet.navigationOptions(theme)} />
-    */}
       {!getFlage() && <WalletsStack.Screen name="Introduction" component={Introduction} options={Introduction.navigationOptions(theme)} />}
 
       <RootStack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false, translucent: false }} />
-      {/* <RootStack.Screen name="WalletsRoot" component={WalletsRoot} options={{ headerShown: false, translucent: false }} /> */}
       <RootStack.Screen name="EntropyGenerator" component={EntropyGenerator} options={EntropyGenerator.navigationOptions(theme)} />
 
       <RootStack.Screen name="AddWalletRoot" component={AddWalletRoot} options={NavigationDefaultOptions} />
