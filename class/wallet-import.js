@@ -5,6 +5,9 @@ import { HDAezeedWallet, HDLegacyBreadwalletWallet, HDLegacyElectrumSeedP2PKHWal
 import loc from '../loc';
 import bip39WalletFormats from './bip39_wallet_formats.json'; // https://github.com/spesmilo/electrum/blob/master/electrum/bip39_wallet_formats.json
 import bip39WalletFormatsBlueWallet from './bip39_wallet_formats_bluewallet.json';
+const bitcoin = require('bitcoinjs-lib');
+
+// TODO Import and subsequent scan is work, in process in import it is not
 
 // https://github.com/bitcoinjs/bip32/blob/master/ts-src/bip32.ts#L43
 export const validateBip32 = (path) => path.match(/^(m\/)?(\d+'?\/)*\d+'?$/) !== null;
@@ -18,9 +21,11 @@ export const validateBip32 = (path) => path.match(/^(m\/)?(\d+'?\/)*\d+'?$/) !==
  * @param onProgress {function} Callback to report scanning progress
  * @param onWallet {function} Callback to report wallet found
  * @param onPassword {function} Callback to ask for password if needed
+ * @param isTestMode {bool} Must be true if wallet is in testnet
  * @returns {{promise: Promise, stop: function}}
  */
-const startImport = (importTextOrig, askPassphrase = false, searchAccounts = false, onProgress, onWallet, onPassword) => {
+
+const startImport = (importTextOrig, askPassphrase = false, searchAccounts = false, onProgress, onWallet, onPassword, isTestMode) => {
   // state
   let promiseResolve;
   let promiseReject;
@@ -30,6 +35,8 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
     promiseResolve = resolve;
     promiseReject = reject;
   });
+
+  const network = isTestMode ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
 
   // actions
   const reportProgress = (name) => {
@@ -74,7 +81,7 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
     }
 
     // HD BIP39 wallet password is optinal
-    const hd = new HDSegwitBech32Wallet();
+    const hd = new HDSegwitBech32Wallet({ network });
     hd.setSecret(text);
     if (askPassphrase && hd.validateMnemonic()) {
       password = await onPassword(loc.wallets.import_passphrase_title, loc.wallets.import_passphrase_message);
@@ -101,7 +108,7 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
     }
 
     // ELECTRUM segwit wallet password is optinal
-    const electrum1 = new HDSegwitElectrumSeedP2WPKHWallet();
+    const electrum1 = new HDSegwitElectrumSeedP2WPKHWallet({ network });
     electrum1.setSecret(text);
     if (askPassphrase && electrum1.validateMnemonic()) {
       password = await onPassword(loc.wallets.import_passphrase_title, loc.wallets.import_passphrase_message);
@@ -163,7 +170,7 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
 
     // check bip39 wallets
     yield { progress: 'bip39' };
-    const hd2 = new HDSegwitBech32Wallet();
+    const hd2 = new HDSegwitBech32Wallet({ network });
     hd2.setSecret(text);
     hd2.setPassphrase(password);
     if (hd2.validateMnemonic()) {
@@ -193,11 +200,13 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
             WalletClass = HDSegwitBech32Wallet;
         }
         for (const path of paths) {
-          const wallet = new WalletClass();
+          const wallet = new WalletClass({ network });
           wallet.setSecret(text);
           wallet.setPassphrase(password);
           wallet.setDerivationPath(path);
           yield { progress: `bip39 ${i.script_type} ${path}` };
+          // TODO fix this hack
+          // Import and subsequent scan is work, but not work on this stage
           if (await wallet.wasEverUsed()) {
             yield { wallet: wallet };
             walletFound = true;
@@ -251,13 +260,14 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
     segwitWallet.setSecret(text);
     if (segwitWallet.getAddress()) {
       // ok its a valid WIF
-
+      let walletFound = false;
       yield { progress: 'wif p2wpkh' };
       const segwitBech32Wallet = new SegwitBech32Wallet();
       segwitBech32Wallet.setSecret(text);
       if (await segwitBech32Wallet.wasEverUsed()) {
         // yep, its single-address bech32 wallet
         await segwitBech32Wallet.fetchBalance();
+        walletFound = true;
         yield { wallet: segwitBech32Wallet };
       }
 
@@ -265,6 +275,7 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
       if (await segwitWallet.wasEverUsed()) {
         // yep, its single-address bech32 wallet
         await segwitWallet.fetchBalance();
+        walletFound = true;
         yield { wallet: segwitWallet };
       }
 
@@ -272,7 +283,19 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
       yield { progress: 'wif p2pkh' };
       const legacyWallet = new LegacyWallet();
       legacyWallet.setSecret(text);
-      yield { wallet: legacyWallet };
+      if (await legacyWallet.wasEverUsed()) {
+        // yep, its single-address legacy wallet
+        await legacyWallet.fetchBalance();
+        walletFound = true;
+        yield { wallet: legacyWallet };
+      }
+
+      // if no wallets was ever used, import all of them
+      if (!walletFound) {
+        yield { wallet: segwitBech32Wallet };
+        yield { wallet: segwitWallet };
+        yield { wallet: legacyWallet };
+      }
     }
 
     // case - WIF is valid, just has uncompressed pubkey
@@ -296,7 +319,7 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
 
     // electrum p2wpkh-p2sh
     yield { progress: 'electrum p2wpkh-p2sh' };
-    const el1 = new HDSegwitElectrumSeedP2WPKHWallet();
+    const el1 = new HDSegwitElectrumSeedP2WPKHWallet({ network });
     el1.setSecret(text);
     el1.setPassphrase(password);
     if (el1.validateMnemonic()) {

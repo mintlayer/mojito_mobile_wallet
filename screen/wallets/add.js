@@ -16,6 +16,7 @@ import { COLORS } from '../../theme/Colors';
 import { create_wallet } from '../../theme/Images';
 import { BtcMlcComponent } from '../../components/BtcMltComponent';
 const A = require('../../blue_modules/analytics');
+const bitcoin = require('bitcoinjs-lib');
 
 const ButtonSelected = Object.freeze({
   ONCHAIN: Chain.ONCHAIN,
@@ -26,12 +27,13 @@ const ButtonSelected = Object.freeze({
 
 const WalletsAdd = () => {
   const { colors } = useTheme();
-  const { addWallet, saveToDisk, isAdancedModeEnabled, wallets } = useContext(BlueStorageContext);
+  const { addWallet, saveToDisk, isAdancedModeEnabled, wallets, isTestModeEnabled } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(true);
   const [walletBaseURI, setWalletBaseURI] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [label, setLabel] = useState('');
   const [isAdvancedOptionsEnabled, setIsAdvancedOptionsEnabled] = useState(false);
+  const [isTestMode, setIsTestMode] = useState(false);
   const [selectedWalletType, setSelectedWalletType] = useState(false);
   const [backdoorPressed, setBackdoorPressed] = useState(1);
   const { navigate, goBack } = useNavigation();
@@ -61,9 +63,10 @@ const WalletsAdd = () => {
   };
 
   useEffect(() => {
-    AsyncStorage.getItem(AppStorage.LNDHUB)
-      .then((url) => setWalletBaseURI(url || 'https://lndhub.io'))
+    AsyncStorage.getItem(isTestMode ? AppStorage.TEST_LNDHUB : AppStorage.LNDHUB)
+      .then((url) => setWalletBaseURI(url || (isTestMode ? 'http://your_lnd_hub:3000' : 'https://lndhub.io')))
       .catch(() => setWalletBaseURI(''));
+    isTestModeEnabled().then(setIsTestMode);
     isAdancedModeEnabled()
       .then(setIsAdvancedOptionsEnabled)
       .finally(() => setIsLoading(false));
@@ -108,7 +111,11 @@ const WalletsAdd = () => {
       } else {
         // btc was selected
         // index 2 radio - hd bip84
-        w = new HDSegwitBech32Wallet();
+        if (isTestMode) {
+          w = new HDSegwitBech32Wallet({ network: bitcoin.networks.testnet });
+        } else {
+          w = new HDSegwitBech32Wallet();
+        }
         w.setLabel(label || loc.wallets.details_title);
       }
       if (selectedWalletType === ButtonSelected.ONCHAIN) {
@@ -182,12 +189,12 @@ const WalletsAdd = () => {
           throw new Error('The provided node address is not valid LNDHub node.');
         }
       }
-      await wallet.createAccount();
+      await wallet.createAccount(isTestMode);
       await wallet.authorize();
     } catch (Err) {
       setIsLoading(false);
       console.warn('lnd create failure', Err);
-      return alert(Err);
+      return alert(Err.message || Err);
       // giving app, not adding anything
     }
     A(A.ENUM.CREATED_LIGHTNING_WALLET);
@@ -239,20 +246,13 @@ const WalletsAdd = () => {
       <BlueSpacing20 />
       <KeyboardAvoidingView enabled behavior={Platform.OS === 'ios' ? 'padding' : null} keyboardVerticalOffset={62}>
         <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc}</Text>
-        {/* <BlueFormLabel>{loc.wallets.add_wallet_name}</BlueFormLabel> */}
         <View style={[styles.label, stylesHook.label]}>
           <TextInput testID="WalletNameInput" value={label} placeholderTextColor="#81868e" placeholder={loc.wallets.add_placeholder} onChangeText={setLabel} style={styles.textInputCommon} editable={!isLoading} underlineColorAndroid="transparent" />
         </View>
-        {/* <BlueFormLabel>{loc.wallets.add_wallet_type}</BlueFormLabel> */}
         <View style={styles.buttons}>
-          <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} />
-          {/* <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} /> */}
-
-          {/* <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} />
+          {isTestMode ? <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} testnet /> : <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} />}
+          <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} />
           {backdoorPressed > 10 ? <LdkButton active={selectedWalletType === ButtonSelected.LDK} onPress={handleOnLdkButtonPressed} style={styles.button} subtext={LightningLdkWallet.getPackageVersion()} text="LDK" /> : null}
-          <VaultButton active={selectedWalletType === ButtonSelected.VAULT} onPress={handleOnVaultButtonPressed} style={styles.button} /> */}
-        </View>
-        <View style={styles.buttons}>
           <MintLayerButton testID="ActivateMintlayerButton" title="MLT" subtitle="Mintlayer" style={styles.button} />
         </View>
 
@@ -282,15 +282,8 @@ const WalletsAdd = () => {
               );
             }
           })()}
-          {/* isAdvancedOptionsEnabled && selectedWalletType === ButtonSelected.ONCHAIN && !isLoading && <BlueButtonLink style={styles.import} title={entropyButtonText} onPress={navigateToEntropy} /> */}
           <BlueSpacing20 />
-          <View style={styles.createButton}>
-            {/* <Text>
-            disabled={!selectedWalletType || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)}
-            </Text> */}
-            {!isLoading ? <BlueButton testID="Create" title={loc.wallets.add_create} disabled={!selectedWalletType || label.length === 0 || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)} onPress={createWallet} /> : <ActivityIndicator />}
-          </View>
-          {/* !isLoading && <BlueButtonLink testID="ImportWallet" style={styles.import} title={loc.wallets.add_import_wallet} onPress={navigateToImportWallet} /> */}
+          <View style={styles.createButton}>{!isLoading ? <BlueButton testID="Create" title={loc.wallets.add_create} disabled={!selectedWalletType || label.length === 0 || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)} onPress={createWallet} /> : <ActivityIndicator />}</View>
           <View style={styles.importContainer}>
             {!isLoading && (
               <Text style={[styles.importText]}>

@@ -22,7 +22,7 @@
       android:theme="@style/AppTheme">
 
         <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_name"
-                    android:value="BlueWallet notifications"/> <!-- YOUR NOTIFICATION CHANNEL NAME -->
+                    android:value="Mojito Wallet notifications"/> <!-- YOUR NOTIFICATION CHANNEL NAME -->
         <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_description"
                     android:value="Notifications about incoming payments"/> <!-- YOUR NOTIFICATION CHANNEL DESCRIPTION -->
 

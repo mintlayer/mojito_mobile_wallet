@@ -377,7 +377,10 @@
     "total_balance": "Total Balance",
     "total_balance_explanation": "Display the total balance of all your wallets on your home screen widgets.",
     "widgets": "Widgets",
-    "tools": "Tools"
+    "tools": "Tools",
+    "testmode": "Test Mode",
+    "testmode_e": "Use test mode to try the application without spending real bitcoin",
+    "testmode_e_warn": "WARNING: Mojito Wallet needs to completely shut down and restart in order for this to take effect."
   },
   "notifications": {
     "would_you_like_to_receive_notifications": "Would you like to receive notifications when you get incoming payments?",
@@ -433,6 +436,8 @@
   "wallets": {
     "add_bitcoin": "Bitcoin",
     "add_bitcoin_explain": "Simple and powerful Bitcoin wallet",
+    "add_bitcoin_testnet": "Bitcoin Testnet",
+    "add_bitcoin_explain_testnet": "Bitcoin wallet for testnet",
     "add_create": "Create",
     "add_entropy_generated": "{gen} bytes of generated entropy",
     "add_entropy_provide": "Provide entropy via dice rolls",
@@ -483,6 +488,7 @@
     "export_title": "Wallet Export",
     "import_do_import": "Import",
     "import_passphrase": "Passphrase",
+    "import_passphrase_description": "Enable this option only if you have used passphrase for your wallet",
     "import_passphrase_title": "Passphrase",
     "import_passphrase_message": "Enter passphrase if you have used any",
     "import_error": "Failed to import. Please make sure that the provided data is valid.",

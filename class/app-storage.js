@@ -13,12 +13,14 @@ let savingInProgress = 0; // its both a flag and a counter of attempts to write 
 export class AppStorage {
   static FLAG_ENCRYPTED = 'data_encrypted';
   static LNDHUB = 'lndhub';
+  static TEST_LNDHUB = 'test_lndhub';
   static ADVANCED_MODE_ENABLED = 'advancedmodeenabled';
   static DO_NOT_TRACK = 'donottrack';
   static HODL_HODL_API_KEY = 'HODL_HODL_API_KEY';
   static HODL_HODL_SIGNATURE_KEY = 'HODL_HODL_SIGNATURE_KEY';
   static HODL_HODL_CONTRACTS = 'HODL_HODL_CONTRACTS';
   static HANDOFF_STORAGE_KEY = 'HandOff';
+  static TEST_MODE_ENABLED = 'TEST_MODE_ENABLED';
 
   static keys2migrate = [AppStorage.HANDOFF_STORAGE_KEY, AppStorage.DO_NOT_TRACK, AppStorage.ADVANCED_MODE_ENABLED];
 
@@ -27,6 +29,14 @@ export class AppStorage {
     this.wallets = [];
     this.tx_metadata = {};
     this.cachedPassword = false;
+    this.prefix = '';
+  }
+
+  async setTestModePrefix() {
+    const is_test_mode_enabled = await this.isTestModeEnabled();
+    const prefix = is_test_mode_enabled ? 'test_' : '';
+    this.prefix = prefix;
+    return is_test_mode_enabled;
   }
 
   async migrateKeys() {
@@ -51,10 +61,11 @@ export class AppStorage {
    * @returns {Promise<any>|Promise<any> | Promise<void> | * | Promise | void}
    */
   setItem = (key, value) => {
+    const prefix = this.prefix;
     if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
-      return RNSecureKeyStore.set(key, value, { accessible: ACCESSIBLE.WHEN_UNLOCKED });
+      return RNSecureKeyStore.set(prefix + key, value, { accessible: ACCESSIBLE.WHEN_UNLOCKED });
     } else {
-      return AsyncStorage.setItem(key, value);
+      return AsyncStorage.setItem(prefix + key, value);
     }
   };
 
@@ -66,10 +77,11 @@ export class AppStorage {
    * @returns {Promise<any>|*}
    */
   getItem = (key) => {
+    const prefix = this.prefix;
     if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
-      return RNSecureKeyStore.get(key);
+      return RNSecureKeyStore.get(prefix + key);
     } else {
-      return AsyncStorage.getItem(key);
+      return AsyncStorage.getItem(prefix + key);
     }
   };
 
@@ -79,18 +91,19 @@ export class AppStorage {
    * @returns {Promise<*>|null}
    */
   getItemWithFallbackToRealm = async (key) => {
+    const prefix = this.prefix;
     let value;
     try {
       return await this.getItem(key);
     } catch (error) {
-      console.warn('error reading', key, error.message);
+      console.warn('error reading', prefix + key, error.message);
       console.warn('fallback to realm');
       const realmKeyValue = await this.openRealmKeyValue();
-      const obj = realmKeyValue.objectForPrimaryKey('KeyValue', key); // search for a realm object with a primary key
+      const obj = realmKeyValue.objectForPrimaryKey('KeyValue', prefix + key); // search for a realm object with a primary key
       value = obj?.value;
       realmKeyValue.close();
       if (value) {
-        console.warn('successfully recovered', value.length, 'bytes from realm for key', key);
+        console.warn('successfully recovered', value.length, 'bytes from realm for key', prefix + key);
         return value;
       }
       return null;
@@ -866,4 +879,19 @@ export class AppStorage {
       path,
     });
   }
+
+  /**
+   * Get Test mode status
+   * @returns {Promise<boolean>}
+   */
+  isTestModeEnabled = async () => {
+    try {
+      return !!(await AsyncStorage.getItem(AppStorage.TEST_MODE_ENABLED));
+    } catch (_) {}
+    return false;
+  };
+
+  setIsTestModeEnabled = async (value) => {
+    await AsyncStorage.setItem(AppStorage.TEST_MODE_ENABLED, value ? '1' : '');
+  };
 }

@@ -22,6 +22,7 @@ import GeneralSettings from './screen/settings/GeneralSettings';
 import NetworkSettings from './screen/settings/NetworkSettings';
 import NotificationSettings from './screen/settings/notificationSettings';
 import DefaultView from './screen/settings/defaultView';
+import TestMode from './screen/settings/testmode';
 
 import WalletsList from './screen/wallets/list';
 import WalletTransactions from './screen/wallets/transactions';
@@ -467,6 +468,7 @@ const SettingsRoot = () => {
       <SettingsStack.Screen name="HodlHodlLoginRoot" component={HodlHodlLoginRoot} options={NavigationDefaultOptions} />
       <SettingsStack.Screen name="HodlHodlMyContracts" component={HodlHodlMyContracts} options={HodlHodlMyContracts.navigationOptions(theme)} />
       <SettingsStack.Screen name="HodlHodlWebview" component={HodlHodlWebview} options={HodlHodlWebview.navigationOptions(theme)} />
+      <SettingsStack.Screen name="TestMode" component={TestMode} options={TestMode.navigationOptions(theme)} />
     </SettingsStack.Navigator>
   );
 };
@@ -530,6 +532,7 @@ const Navigation = () => {
       <RootStack.Screen name="SendDetailsRoot" component={SendDetailsRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="LNDCreateInvoiceRoot" component={LNDCreateInvoiceRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="ScanLndInvoiceRoot" component={ScanLndInvoiceRoot} options={NavigationDefaultOptions} />
+      <RootStack.Screen name="LNDViewInvoice" component={LNDViewInvoice} options={LNDViewInvoice.navigationOptions(theme)} />
       <RootStack.Screen name="AztecoRedeemRoot" component={AztecoRedeemRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="HodlHodlLoginRoot" component={HodlHodlLoginRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="HodlHodlMyContracts" component={HodlHodlMyContracts} options={HodlHodlMyContracts.navigationOptions(theme)} />

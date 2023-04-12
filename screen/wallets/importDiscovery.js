@@ -11,6 +11,7 @@ import { HDSegwitBech32Wallet } from '../../class';
 import startImport from '../../class/wallet-import';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import prompt from '../../blue_modules/prompt';
+const bitcoin = require('bitcoinjs-lib');
 
 const ImportWalletDiscovery = () => {
   const navigation = useNavigation();
@@ -18,18 +19,24 @@ const ImportWalletDiscovery = () => {
   const route = useRoute();
   const { importText, askPassphrase, searchAccounts } = route.params;
   const task = useRef();
-  const { addAndSaveWallet } = useContext(BlueStorageContext);
+  const { addAndSaveWallet, isTestModeEnabled } = useContext(BlueStorageContext);
   const [loading, setLoading] = useState(true);
   const [wallets, setWallets] = useState([]);
   const [password, setPassword] = useState();
   const [selected, setSelected] = useState(0);
   const [progress, setProgress] = useState();
+  const [isTestMode, setIsTestMode] = useState(null);
   const importing = useRef(false);
+
   const bip39 = useMemo(() => {
-    const hd = new HDSegwitBech32Wallet();
+    const hd = new HDSegwitBech32Wallet({ network: isTestMode ? bitcoin.networks.testnet : bitcoin.networks.bitcoin });
     hd.setSecret(importText);
     return hd.validateMnemonic();
-  }, [importText]);
+  }, [importText, isTestMode]);
+
+  useEffect(() => {
+    isTestModeEnabled().then(setIsTestMode);
+  }, [isTestModeEnabled]);
 
   const stylesHook = StyleSheet.create({
     root: {
@@ -48,6 +55,11 @@ const ImportWalletDiscovery = () => {
   };
 
   useEffect(() => {
+    if (isTestMode === null) {
+      // do nothing
+      return;
+    }
+
     const onProgress = (data) => setProgress(data);
 
     const onWallet = (wallet) => {
@@ -62,11 +74,14 @@ const ImportWalletDiscovery = () => {
 
     const onPassword = async (title, subtitle) => {
       try {
-        const pass = await prompt(title, subtitle);
+        const pass = await prompt(title, subtitle, true, 'secure-text', false, loc._.ok, false);
         setPassword(pass);
         return pass;
       } catch (e) {
         if (e.message === 'Cancel Pressed') {
+          navigation.goBack();
+        }
+        if (e.message.includes('Empty')) {
           navigation.goBack();
         }
         throw e;
@@ -75,7 +90,7 @@ const ImportWalletDiscovery = () => {
 
     IdleTimerManager.setIdleTimerDisabled(true);
 
-    task.current = startImport(importText, askPassphrase, searchAccounts, onProgress, onWallet, onPassword);
+    task.current = startImport(importText, askPassphrase, searchAccounts, onProgress, onWallet, onPassword, isTestMode);
 
     task.current.promise
       .then(({ cancelled, wallets }) => {
@@ -97,7 +112,7 @@ const ImportWalletDiscovery = () => {
 
     return () => task.current.stop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isTestMode]);
 
   const handleCustomDerivation = () => {
     task.current.stop();

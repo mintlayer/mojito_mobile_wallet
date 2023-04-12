@@ -18,6 +18,11 @@ export class HDSegwitElectrumSeedP2WPKHWallet extends HDSegwitBech32Wallet {
   static typeReadable = 'HD Electrum (BIP32 P2WPKH)';
   static derivationPath = "m/0'";
 
+  constructor(opts) {
+    super(opts);
+    this.network = (opts && opts.network) || bitcoin.networks.bitcoin;
+  }
+
   validateMnemonic() {
     return mn.validateMnemonic(this.secret, PREFIX);
   }
@@ -52,6 +57,7 @@ export class HDSegwitElectrumSeedP2WPKHWallet extends HDSegwitBech32Wallet {
     const node = HDNode.fromBase58(xpub);
     const address = bitcoin.payments.p2wpkh({
       pubkey: node.derive(1).derive(index).publicKey,
+      network: this.network,
     }).address;
 
     return (this.internal_addresses_cache[index] = address);
@@ -65,6 +71,7 @@ export class HDSegwitElectrumSeedP2WPKHWallet extends HDSegwitBech32Wallet {
     const node = HDNode.fromBase58(xpub);
     const address = bitcoin.payments.p2wpkh({
       pubkey: node.derive(0).derive(index).publicKey,
+      network: this.network,
     }).address;
 
     return (this.external_addresses_cache[index] = address);

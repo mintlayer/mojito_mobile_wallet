@@ -1,3 +1,5 @@
+import { Network } from 'bitcoinjs-lib/src/networks';
+
 type Utxo = {
   height: number;
   value: number;
@@ -51,15 +53,15 @@ export async function waitTillConnected(): Promise<boolean>;
 
 export function forceDisconnect(): void;
 
-export function getBalanceByAddress(address: string): Promise<{ confirmed: number; unconfirmed: number }>;
+export function getBalanceByAddress(address: string, network: Network): Promise<{ confirmed: number; unconfirmed: number }>;
 
-export function multiGetUtxoByAddress(addresses: string[]): Promise<Record<string, Utxo[]>>;
+export function multiGetUtxoByAddress(addresses: string[], batchsize: number, network: Network): Promise<Record<string, Utxo[]>>;
 
 // TODO: this function returns different results based on the value of `verbose`, consider splitting it into two
 export function multiGetTransactionByTxid(txIds: string[], batchsize: number = 45, verbose: true = true): Promise<Record<string, Transaction>>;
 export function multiGetTransactionByTxid(txIds: string[], batchsize: number, verbose: false): Promise<Record<string, string>>;
 
-export function getTransactionsByAddress(address: string): Transaction[];
+export function getTransactionsByAddress(address: string, network: Network): Transaction[];
 
 export function getMempoolTransactionsByAddress(address: string): Promise<MempoolTransaction[]>;
 

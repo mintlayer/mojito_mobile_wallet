@@ -122,7 +122,7 @@ export const BitcoinButton = (props) => {
             <Image style={{ width: 34, height: 34, marginRight: 8 }} source={bitcoin_small} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ color: colors.walletBalanceBgColor, fontWeight: 'bold', fontSize: 18, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>{loc.wallets.add_bitcoin}</Text>
+            <Text style={{ color: colors.walletBalanceBgColor, fontWeight: 'bold', fontSize: 18, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>{props.testnet ? loc.wallets.add_bitcoin_testnet : loc.wallets.add_bitcoin}</Text>
             <Text
               style={{
                 color: colors.alternativeTextColor,
@@ -131,7 +131,7 @@ export const BitcoinButton = (props) => {
                 writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
               }}
             >
-              {loc.wallets.add_bitcoin_explain}
+              {props.testnet ? loc.wallets.add_bitcoin_explain_testnet : loc.wallets.add_bitcoin_explain}
             </Text>
           </View>
         </View>
@@ -153,7 +153,6 @@ export const MintLayerButton = (props) => {
           minHeight: props.style.height,
           height: props.style.height,
           flex: 1,
-          marginBottom: 8,
         }}
       >
         <View style={{ marginHorizontal: 16, marginVertical: 10, flexDirection: 'row', alignItems: 'center' }}>

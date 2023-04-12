@@ -9,6 +9,7 @@ import coinSelect from 'coinselect';
 import coinSelectSplit from 'coinselect/split';
 import { CreateTransactionResult, CreateTransactionUtxo, Transaction, Utxo } from './types';
 import { Signer, ECPairFactory, ECPairAPI } from 'ecpair';
+import { Network } from 'bitcoinjs-lib/src/networks';
 const ecc = require('tiny-secp256k1');
 const ECPair: ECPairAPI = ECPairFactory(ecc);
 
@@ -28,6 +29,12 @@ export class LegacyWallet extends AbstractWallet {
 
   _txs_by_external_index: Transaction[] = []; // eslint-disable-line camelcase
   _txs_by_internal_index: Transaction[] = []; // eslint-disable-line camelcase
+  network: Network;
+
+  constructor(opts: { network: Network }) {
+    super();
+    this.network = (opts && opts.network) || bitcoin.networks.bitcoin;
+  }
 
   /**
    * Simple function which says that we havent tried to fetch balance
@@ -88,6 +95,7 @@ export class LegacyWallet extends AbstractWallet {
       const keyPair = ECPair.fromWIF(this.secret);
       address = bitcoin.payments.p2pkh({
         pubkey: keyPair.publicKey,
+        network: this.network,
       }).address;
     } catch (err) {
       return false;
@@ -116,7 +124,7 @@ export class LegacyWallet extends AbstractWallet {
     try {
       const address = this.getAddress();
       if (!address) throw new Error('LegacyWallet: Invalid address');
-      const balance = await BlueElectrum.getBalanceByAddress(address);
+      const balance = await BlueElectrum.getBalanceByAddress(address, this.network);
       this.balance = Number(balance.confirmed);
       this.unconfirmed_balance = Number(balance.unconfirmed);
       this._lastBalanceFetch = +new Date();
@@ -134,7 +142,7 @@ export class LegacyWallet extends AbstractWallet {
     try {
       const address = this.getAddress();
       if (!address) throw new Error('LegacyWallet: Invalid address');
-      const utxos = await BlueElectrum.multiGetUtxoByAddress([address]);
+      const utxos = await BlueElectrum.multiGetUtxoByAddress([address], null, this.network);
       this.utxo = [];
       for (const arr of Object.values(utxos)) {
         this.utxo = this.utxo.concat(arr);
@@ -510,7 +518,7 @@ export class LegacyWallet extends AbstractWallet {
    */
   isAddressValid(address: string): boolean {
     try {
-      bitcoin.address.toOutputScript(address); // throws, no?
+      bitcoin.address.toOutputScript(address, this.network); // throws, no?
 
       if (!address.toLowerCase().startsWith('bc1')) return true;
       const decoded = bitcoin.address.fromBech32(address);
@@ -638,7 +646,7 @@ export class LegacyWallet extends AbstractWallet {
   async wasEverUsed(): Promise<boolean> {
     const address = this.getAddress();
     if (!address) return Promise.resolve(false);
-    const txs = await BlueElectrum.getTransactionsByAddress(address);
+    const txs = await BlueElectrum.getTransactionsByAddress(address, this.network);
     return txs.length > 0;
   }
 }

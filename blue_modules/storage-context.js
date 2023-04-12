@@ -223,6 +223,9 @@ export const BlueStorageProvider = ({ children }) => {
   const getItem = BlueApp.getItem;
   const setItem = BlueApp.setItem;
 
+  const isTestModeEnabled = BlueApp.isTestModeEnabled;
+  const setIsTestModeEnabled = BlueApp.setIsTestModeEnabled;
+
   return (
     <BlueStorageContext.Provider
       value={{
@@ -277,6 +280,8 @@ export const BlueStorageProvider = ({ children }) => {
         setIsTorDisabled,
         isPrivacyBlurEnabled,
         setIsPrivacyBlurEnabled,
+        isTestModeEnabled,
+        setIsTestModeEnabled,
       }}
     >
       {children}
