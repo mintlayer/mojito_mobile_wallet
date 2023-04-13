@@ -11,5 +11,6 @@ import walletBottom from '../img/bottomTab/walletBottom.png';
 import bitcoin_small from '../img/addWallet/bitcoin.png';
 import qr_code from '../img/qr-code.png';
 import circle_logo from '../img/circle_logo/LOGO.png';
+import ic_back_black from '../img/arrow/ic_back_black.png';
 
-export { page1, page2, page3, page4, create_wallet, add_wallet, bitcoin_large, sendBottom, settingBottom, walletBottom, bitcoin_small, qr_code, circle_logo };
+export { page1, page2, page3, page4, create_wallet, add_wallet, bitcoin_large, sendBottom, settingBottom, walletBottom, bitcoin_small, qr_code, circle_logo, ic_back_black };

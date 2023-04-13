@@ -218,21 +218,7 @@ const WalletsList = () => {
 
   const renderListHeaderComponent = () => {
     const style = { opacity: isLoading ? 1.0 : 0.5 };
-    return (
-      <View style={[styles.listHeaderBack, stylesHook.listHeaderBack]}>
-        {/* <Text textBreakStrategy="simple" style={[styles.listHeaderText, stylesHook.listHeaderText]}>
-          {`${loc.transactions.list_title}${'  '}`}
-    </Text> */}
-        {/* isDesktop && (
-          <TouchableOpacity accessibilityRole="button" style={style} onPress={() => refreshTransactions(true)} disabled={isLoading}>
-            <Icon name="refresh" type="font-awesome" color={colors.feeText} />
-          </TouchableOpacity>
-        ) */}
-
-        {/* <BlueSendReceiveButton text={loc.send.header} onPress={() => {}} />
-      <BlueSendReceiveButton text={loc.receive.header} onPress={() => {}} /> */}
-      </View>
-    );
+    return <View style={[styles.listHeaderBack, stylesHook.listHeaderBack]} />;
   };
 
   const handleLongPress = () => {
@@ -283,7 +269,6 @@ const WalletsList = () => {
     switch (section.section.key) {
       case WalletsListSections.TRANSACTIONS:
         if (dataSource.length === 0 && !isLoading) {
-          // if (dataSource.length === 1 && !isLoading) {
           return (
             <View style={styles.footerRoot} testID="NoTransactionsMessage">
               <Text style={styles.footerEmpty}>{loc.wallets.list_empty_txs1}</Text>
@@ -292,27 +277,9 @@ const WalletsList = () => {
           );
         } else {
           return;
-          // return (
-          //   <>
-          //     <SendReceiveCard arrowSign={loc.send.type_receive} title="Receive" amount="+ $385.00" date="15 Oct 2021 13:00" />
-          //     <SendReceiveCard arrowSign={loc.send.header} title="Send" amount="- $385.00" date="15 Oct 2021 13:00" />
-          //   </>
-          // );
         }
       default:
         return null;
-    }
-  };
-
-  const renderScanButton = () => {
-    if (wallets.length > 0) {
-      return (
-        <FContainer ref={walletActionButtonsRef}>
-          <FButton onPress={onScanButtonPressed} onLongPress={isMacCatalina ? undefined : sendButtonLongPress} icon={<Image resizeMode="stretch" source={scanImage} />} text={loc.send.details_scan} />
-        </FContainer>
-      );
-    } else {
-      return null;
     }
   };
 
@@ -457,7 +424,6 @@ const WalletsList = () => {
             { key: WalletsListSections.TRANSACTIONS, data: dataSource },
           ]}
         />
-        {/* renderScanButton() */}
       </View>
     </View>
   );

@@ -12,3 +12,4 @@
 -keep class com.sifir.** { *;}
 -keep interface com.sifir.** { *;}
 -keep enum com.sifir.** { *;}
+-keep class com.shopify.reactnative.skia.** { *; }

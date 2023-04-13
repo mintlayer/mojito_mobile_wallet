@@ -6,4 +6,5 @@ export const COLORS = {
   black: '#0C2722',
   lightGray: '#546764',
   green_shade: '#11967F',
+  dark_black: '#000000',
 };
