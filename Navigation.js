@@ -194,6 +194,7 @@ const AddWalletRoot = () => {
           headerLeft: () => customHeader(navigation),
         })}
       />
+      <AddWalletStack.Screen name="EntropyGenerator" component={EntropyGenerator} options={EntropyGenerator.navigationOptions(theme)} />
       <AddWalletStack.Screen name="ImportWallet" component={ImportWallet} options={ImportWallet.navigationOptions(theme)} />
       <AddWalletStack.Screen name="ImportWalletDiscovery" component={ImportWalletDiscovery} options={ImportWalletDiscovery.navigationOptions(theme)} />
       <AddWalletStack.Screen name="ImportCustomDerivationPath" component={ImportCustomDerivationPath} options={ImportCustomDerivationPath.navigationOptions(theme)} />
@@ -542,10 +543,7 @@ const Navigation = () => {
       {!getFlage() && <WalletsStack.Screen name="Introduction" component={Introduction} options={Introduction.navigationOptions(theme)} />}
 
       <RootStack.Screen name="BottomTab" component={BottomTab} options={{ headerShown: false, translucent: false }} />
-      <RootStack.Screen name="EntropyGenerator" component={EntropyGenerator} options={EntropyGenerator.navigationOptions(theme)} />
-
       <RootStack.Screen name="AddWalletRoot" component={AddWalletRoot} options={NavigationDefaultOptions} />
-
       <RootStack.Screen name="SendDetailsRoot" component={SendDetailsRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="LNDCreateInvoiceRoot" component={LNDCreateInvoiceRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="ScanLndInvoiceRoot" component={ScanLndInvoiceRoot} options={NavigationDefaultOptions} />
