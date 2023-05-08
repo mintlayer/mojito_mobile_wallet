@@ -246,7 +246,7 @@ const WalletsAdd = () => {
           <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} comingSoon={false} />
           {backdoorPressed > 10 ? <LdkButton active={selectedWalletType === ButtonSelected.LDK} onPress={handleOnLdkButtonPressed} style={styles.button} subtext={LightningLdkWallet.getPackageVersion()} text="LDK" /> : null}
 
-          <MintLayerButton testID="ActivateMintlayerButton" title="MLT" subtitle="Mintlayer" style={styles.button} />
+          <MintLayerButton testID="ActivateMintlayerButton" title="ML" subtitle="Mintlayer" style={styles.button} />
         </View>
 
         <View style={styles.advanced}>
