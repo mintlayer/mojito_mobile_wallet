@@ -39,6 +39,7 @@ const DrawingBoard = (props) => {
 
   const onClearDrawingButtonClick = () => {
     setPaths([{ segments: [], color }]);
+    props.callbackPath([{ segments: [], color }]);
   };
 
   return (

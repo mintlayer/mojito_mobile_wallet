@@ -43,7 +43,7 @@ const NativeAssets = () => {
 const BtcFlatItemFunc = () => {
   const dataOfBtsComponent = [
     { key: 1, imageUrl: bitcoin_small, btc: 'BTC', bitcoin: 'Bitcoin', amount: '$3835.00', date: '15 Oct 2021 13:00' },
-    { key: 2, imageUrl: create_wallet, btc: 'MLT', bitcoin: 'Mintlayer', amount: '385.00', date: '15 Oct 2021 13:00' },
+    { key: 2, imageUrl: create_wallet, btc: 'ML', bitcoin: 'Mintlayer', amount: '385.00', date: '15 Oct 2021 13:00' },
   ];
   return (
     <FlatList

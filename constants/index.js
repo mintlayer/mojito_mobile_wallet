@@ -14,13 +14,13 @@ export const introductionContent = [
   },
   {
     title: 'The Token Ecosystem',
-    subtitle: 'BTC and MLT are the native assets of your wallet. The last stands for "Mint Layer Token", which is the governance token of the sidechain. In addition, there are the MLS ("Mint Layer Standard") tokens. You will be able to add as many MLS tokens as you wish in your wallet, specifying their contract address (like it happens for the ERC20 tokens in wallets like Metamask).',
+    subtitle: 'BTC and ML are the native assets of your wallet. The last stands for "Mint Layer Token", which is the governance token of the sidechain. In addition, there are the MLS ("Mint Layer Standard") tokens. You will be able to add as many MLS tokens as you wish in your wallet, specifying their contract address (like it happens for the ERC20 tokens in wallets like Metamask).',
     image: page3,
     index: 2,
   },
   {
     title: "It's Just The Beginning",
-    subtitle: 'In this first version of the wallet, only BTC functionalities are available. Once Mintlayer mainnet is live also MLT will be supported. Then all features will be released progressively, from MLS tokens to DEXs and Lightning Network. We are glad that you joined so early the Mintlayer revolution. Mintlayer will outlast every single one of us, but you are here now, making history!',
+    subtitle: 'In this first version of the wallet, only BTC functionalities are available. Once Mintlayer mainnet is live also ML will be supported. Then all features will be released progressively, from MLS tokens to DEXs and Lightning Network. We are glad that you joined so early the Mintlayer revolution. Mintlayer will outlast every single one of us, but you are here now, making history!',
     image: page4,
     index: 3,
   },
