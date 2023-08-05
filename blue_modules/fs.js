@@ -4,11 +4,11 @@ import Share from 'react-native-share';
 import loc from '../loc';
 import DocumentPicker from 'react-native-document-picker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { presentCameraNotAuthorizedAlert } from '../class/camera';
+import { presentCameraNotAuthorizedAlert } from '../src/class/camera';
 import { isDesktop } from '../blue_modules/environment';
-import ActionSheet from '../screen/ActionSheet';
+import ActionSheet from '../src/screen/ActionSheet';
 import BlueClipboard from './clipboard';
-import alert from '../components/Alert';
+import alert from '../src/components/Alert';
 const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
 
 const writeFileAndExportToAndroidDestionation = async ({ filename, contents, destinationLocalizedString, destination }) => {

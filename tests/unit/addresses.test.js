@@ -1,6 +1,6 @@
 import assert from 'assert';
-import { getAddress, sortByAddressIndex, totalBalance, filterByAddressType } from '../../screen/wallets/addresses';
-import { TABS } from '../../components/addresses/AddressTypeTabs';
+import { getAddress, sortByAddressIndex, totalBalance, filterByAddressType } from '../../src/screen/wallets/addresses';
+import { TABS } from '../../src/components/addresses/AddressTypeTabs';
 
 const mockAddressesList = [
   { index: 2, isInternal: false, key: 'third_external_address' },

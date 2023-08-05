@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DefaultPreference from 'react-native-default-preference';
 import * as RNLocalize from 'react-native-localize';
 import BigNumber from 'bignumber.js';
-import { FiatUnit, getFiatRate } from '../models/fiatUnit';
+import { FiatUnit, getFiatRate } from '../src/models/fiatUnit';
 import WidgetCommunication from './WidgetCommunication';
 
 const PREFERRED_CURRENCY_STORAGE_KEY = 'preferredCurrency';

@@ -4,7 +4,7 @@ import { AppRegistry } from 'react-native';
 import App from './App';
 import { BlueStorageProvider } from './blue_modules/storage-context';
 import SplashScreen from 'react-native-splash-screen';
-import { getIntroSliderFlage, setFlage } from './store/asyncStorage.js';
+import { getIntroSliderFlage, setFlage } from './src/store/asyncStorage.js';
 
 const A = require('./blue_modules/analytics');
 if (!Error.captureStackTrace) {

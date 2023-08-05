@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
-import { LegacyWallet, SegwitBech32Wallet, SegwitP2SHWallet } from '../class';
+import { LegacyWallet, SegwitBech32Wallet, SegwitP2SHWallet } from '../src/class';
 import DefaultPreference from 'react-native-default-preference';
 import loc from '../loc';
 import WidgetCommunication from './WidgetCommunication';
 import { isTorDaemonDisabled } from './environment';
-import alert from '../components/Alert';
+import alert from '../src/components/Alert';
 const bitcoin = require('bitcoinjs-lib');
 const ElectrumClient = require('electrum-client');
 const reverse = require('buffer-reverse');

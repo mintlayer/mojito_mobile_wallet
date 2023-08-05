@@ -1,5 +1,5 @@
-import { AppStorage } from './class';
-import Biometric from './class/biometrics';
+import { AppStorage } from './src/class';
+import Biometric from './src/class/biometrics';
 import { Platform } from 'react-native';
 import loc from './loc';
 const prompt = require('./blue_modules/prompt');

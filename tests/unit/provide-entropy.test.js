@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import { eReducer, entropyToHex, getEntropy, convertToBuffer } from '../../screen/wallets/provideEntropy';
+import { eReducer, entropyToHex, getEntropy, convertToBuffer } from '../../src/screen/wallets/provideEntropy';
 
 describe('Entropy reducer and format', () => {
   it('handles push and pop correctly', () => {

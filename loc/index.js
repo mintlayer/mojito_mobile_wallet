@@ -6,7 +6,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import * as RNLocalize from 'react-native-localize';
 import BigNumber from 'bignumber.js';
 
-import { BitcoinUnit } from '../models/bitcoinUnits';
+import { BitcoinUnit } from '../src/models/bitcoinUnits';
 import { AvailableLanguages } from './languages';
 import { I18nManager } from 'react-native';
 const currency = require('../blue_modules/currency');

@@ -1,9 +1,9 @@
 import assert from 'assert';
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
-import Settings from '../../screen/settings/settings';
-import Selftest from '../../screen/selftest';
-import { BlueHeader } from '../../BlueComponents';
+import Settings from '../../src/screen/settings/settings';
+import Selftest from '../../src/screen/selftest';
+import { BlueHeader } from '../../src/BlueComponents';
 import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 
 jest.mock('react-native-qrcode-svg', () => 'Video');
