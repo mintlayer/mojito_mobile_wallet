@@ -168,6 +168,19 @@ export default class TransactionsNavigationHeader extends Component {
     },
   ];
 
+  // {
+  //   id: TransactionsNavigationHeader.actionKeys.RefillWithBank,
+  //   text: loc.lnd.refill_card,
+  //   icon: TransactionsNavigationHeader.actionIcons.RefillWithBank,
+  // },
+  // [
+  //   {
+  //     id: TransactionsNavigationHeader.actionKeys.Exchange,
+  //     text: loc.lnd.exchange,
+  //     icon: TransactionsNavigationHeader.actionIcons.Exchange,
+  //   },
+  // ],
+
   render() {
     const balance = !this.state.wallet.hideBalance && formatBalance(this.state.wallet.getBalance(), this.state.wallet.getPreferredBalanceUnit(), true).toString();
 

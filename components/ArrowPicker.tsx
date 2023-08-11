@@ -48,6 +48,7 @@ export const ArrowPicker = (props: ArrowPickerProps) => {
           styles.wrapperCustom,
         ]}
       >
+        {/* @ts-ignore: ignore */}
         <Icon size={24} name="chevron-left" type="ionicons" />
       </Pressable>
       <View style={{ width: 200 }}>
@@ -72,6 +73,7 @@ export const ArrowPicker = (props: ArrowPickerProps) => {
           styles.wrapperCustom,
         ]}
       >
+        {/* @ts-ignore: ignore */}
         <Icon size={24} name="chevron-right" type="ionicons" />
       </Pressable>
     </View>

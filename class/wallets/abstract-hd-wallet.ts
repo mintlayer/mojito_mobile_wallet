@@ -28,7 +28,7 @@ export class AbstractHDWallet extends LegacyWallet {
   _node0?: BIP32Interface;
   _node1?: BIP32Interface;
 
-  constructor(opts) {
+  constructor(opts: any) {
     super(opts);
     // eslint-disable-next-line prettier/prettier
     const Constructor = this.constructor as unknown as AbstractHDWalletStatics;

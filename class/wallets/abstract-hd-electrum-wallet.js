@@ -45,6 +45,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     for (const bal of Object.values(this._balances_by_internal_index)) {
       ret += bal.c;
     }
+
     return ret + (this.getUnconfirmedBalance() < 0 ? this.getUnconfirmedBalance() : 0);
   }
 
@@ -66,6 +67,10 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
   async generate() {
     const buf = await randomBytes(16);
     this.secret = bip39.entropyToMnemonic(buf.toString('hex'));
+  }
+
+  async generateMnemonicFromEntropy(entropy) {
+    this.secret = bip39.entropyToMnemonic(entropy);
   }
 
   async generateFromEntropy(user) {

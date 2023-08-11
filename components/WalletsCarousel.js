@@ -210,6 +210,9 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
         }}
       >
         <LinearGradient shadowColor={colors.shadowColor} colors={WalletGradient.gradientsFor(item.type)} style={iStyles.grad}>
+          {/* <Image source={image} style={iStyles.image} /> */}
+          {/* <View style={[iStyles.grad, { backgroundColor: colors.walletBalanceBgColor }]}> */}
+
           <Text style={iStyles.br} />
           <Text numberOfLines={1} style={[iStyles.label, { color: colors.inverseForegroundColor }]}>
             {item.getLabel()}
@@ -240,6 +243,8 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
           <Text numberOfLines={1} style={[iStyles.btcInfoMain, { color: colors.inverseForegroundColor }]}>
             {latestTransactionText}
           </Text>
+
+          {/* </View> */}
         </LinearGradient>
       </TouchableWithoutFeedback>
     </Animated.View>
@@ -303,7 +308,7 @@ const WalletsCarousel = forwardRef((props, ref) => {
   };
 
   const { width } = useWindowDimensions();
-  const sliderHeight = 190;
+  const sliderHeight = 220;
   const itemWidth = width * 0.82 > 375 ? 375 : width * 0.82;
   return (
     <FlatList

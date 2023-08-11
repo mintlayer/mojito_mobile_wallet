@@ -14,60 +14,93 @@ Learn more about Mintlayer [here.](https://www.mintlayer.org/technology/)
 
 ## BUILD & RUN IT
 
-Please refer to the engines field in package.json file for the minimum required versions of Node and npm. It is preferred that you use an even-numbered version of Node as these are LTS versions.
+### Node and Java versions
 
-To view the version of Node and npm in your environment, run the following in your console:
+It is recommended to run everything with node `16.14.2` for Android build. But `npm run ios` uses node version `>18`, so in this case you will need two different node versions. We recommend NVM to make that easier.
 
-```
-node --version && npm --version
-```
+The recommended `JDK` version is `11`.
 
-- In your console:
+### Dependencies
 
-```
+After installing the correct vesions of Java and Node, clone this repo and install dependencies:
+
+```bash
 git clone https://github.com/mintlayer/mobile_wallet
 cd mobile_wallet
 npm install
 ```
 
-Please make sure that your console is running the most stable versions of npm and node (even-numbered versions).
+#### Possible Issues
 
-- To run on Android:
+##### Got an `EINTEGRITY` error on install
 
-You will now need to either connect an Android device to your computer or run an emulated Android device using AVD Manager which comes shipped with Android Studio. To run an emulator using AVD Manager:
+Remove lock file and node_modules and try installing again.
 
-1. Download and run Android Studio
-2. Click on "Open an existing Android Studio Project"
-3. Open `build.gradle` file under `mobile_wallet/android/` folder
-4. Android Studio will take some time to set things up. Once everything is set up, go to `Tools` -> `AVD Manager`.
-   - 📝 This option [may take some time to appear in the menu](https://stackoverflow.com/questions/47173708/why-avd-manager-options-are-not-showing-in-android-studio) if you're opening the project in a freshly-installed version of Android Studio.
-5. Click on "Create Virtual Device..." and go through the steps to create a virtual device
-6. Launch your newly created virtual device by clicking the `Play` button under `Actions` column
-
-Once you connected an Android device or launched an emulator, run this:
-
-```
-npx react-native run-android
+```bash
+rm -rf node_modules package-lock.json
+npm install
 ```
 
-The above command will build the app and install it. Once you launch the app it will take some time for all of the dependencies to load. Once everything loads up, you should have the built app running.
+##### Got an `ERESOLVE unable ro resolve dependency tree` error on install
 
-- To run on iOS:
+Try running the install with legacy deps flag:
 
+```bash
+npm install --legacy-peer-deps
 ```
-npx pod-install
+
+### Running on Android:
+
+You will now need to either connect an Android device to your computer or run an emulated Android device using AVD Manager which comes shipped with Android Studio. So first of all, install Android Studio.
+
+Then verify if you have these env vars set on you OS:
+
+```bash
+export PATH=$PATH:$HOME/android-studio/bin
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
+
+Now run metro web server in one terminal with:
+
+```bash
 npm start
 ```
 
-In another terminal window within the mobile_wallet folder:
+Then build, install it, and run on android emulator in another terminal:
 
-```
-npx react-native run-ios
+```bash
+npm run android
 ```
 
-- To run on macOS using Mac Catalyst:
+Once you launch the app it will take some time for all of the dependencies to load. Once everything loads up, you should have the built app running.
 
+### Running on iOS:
+
+Run `pod-install` (just on first run):
+
+```bash
+npx pod-install
 ```
+
+Now run metro web server in one terminal with:
+
+```bash
+npm start
+```
+
+Then build, install it, and run on iOS emulator in another terminal:
+
+```bash
+npm run ios
+```
+
+#### Specifics
+
+##### Run on macOS using Mac Catalyst:
+
+```bash
 npm run maccatalystpatches
 ```
 
@@ -78,6 +111,17 @@ Once the patches are applied, open Xcode and select "My Mac" as destination. If 
 ```bash
 npm run test
 ```
+
+## TESTS CASES DELETED
+
+multisig-hd-wallet.test.js
+cosign.test.js
+payjoin-transaction.test.js
+“We should bring it back once Multisign wallet is back”
+
+## BrowserStack
+
+“This project is tested with BrowserStack.”
 
 ## LICENSE
 

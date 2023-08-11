@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { TouchableOpacity, ScrollView, Linking, Image, View, Text, StyleSheet, useWindowDimensions, Platform } from 'react-native';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
@@ -19,7 +19,13 @@ const About = () => {
   const { navigate } = useNavigation();
   const { colors } = useTheme();
   const { width, height } = useWindowDimensions();
-  const { isElectrumDisabled } = useContext(BlueStorageContext);
+  const { isElectrumDisabled, isTestModeEnabled } = useContext(BlueStorageContext);
+
+  const [isTestMode, setIsTestMode] = useState(false);
+
+  useEffect(() => {
+    isTestModeEnabled().then(setIsTestMode);
+  }, [isTestModeEnabled]);
   const styles = StyleSheet.create({
     copyToClipboard: {
       justifyContent: 'center',
@@ -149,7 +155,7 @@ const About = () => {
         onPress={handleOnTelegramPress}
         title={loc.settings.about_sm_telegram}
       />
-      <BlueListItem
+      {/* <BlueListItem
         leftIcon={{
           name: 'discord',
           type: 'font-awesome-5',
@@ -157,7 +163,7 @@ const About = () => {
         }}
         onPress={handleOnDiscordPress}
         title={loc.settings.about_sm_discord}
-      />
+      /> */}
       <BlueCard>
         <View style={styles.buildWith}>
           <BlueSpacing20 />
@@ -196,17 +202,19 @@ const About = () => {
         onPress={handleOnLicensingPress}
         title={loc.settings.about_license}
       />
-      <BlueListItem
-        leftIcon={{
-          name: 'flask',
-          type: 'font-awesome',
-          color: '#FC0D44',
-        }}
-        chevron
-        onPress={handleOnSelfTestPress}
-        testID="RunSelfTestButton"
-        title={loc.settings.about_selftest}
-      />
+      {!isTestMode ? (
+        <BlueListItem
+          leftIcon={{
+            name: 'flask',
+            type: 'font-awesome',
+            color: '#FC0D44',
+          }}
+          chevron
+          onPress={handleOnSelfTestPress}
+          testID="RunSelfTestButton"
+          title={loc.settings.about_selftest}
+        />
+      ) : null}
       <BlueSpacing20 />
       <BlueSpacing20 />
       <BlueTextCentered>

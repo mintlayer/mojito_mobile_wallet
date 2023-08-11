@@ -147,6 +147,7 @@ const LdkInfo = () => {
   // do we even need periodic sync when user stares at this screen..?
   useEffect(() => {
     refetchData().then(() => {
+      // @ts-ignore: ignore
       refreshDataInterval.current = setInterval(() => {
         refetchData(false);
         if (wallet.timeToCheckBlockchain()) {

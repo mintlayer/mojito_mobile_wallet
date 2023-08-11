@@ -17,9 +17,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   touchOpacityTextElement: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     paddingVertical: 4,
     fontFamily: type.semiBold,
+    fontSize: 11,
   },
 });
 

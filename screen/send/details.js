@@ -7,7 +7,6 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import RNFS from 'react-native-fs';
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'bitcoinjs-lib';
-
 import { BlueButton, BlueDismissKeyboardInputAccessory, BlueListItem, BlueLoading } from '../../BlueComponents';
 import { navigationStyleTx } from '../../components/navigationStyle';
 import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/networkTransactionFees';
@@ -30,6 +29,8 @@ const fs = require('../../blue_modules/fs');
 const scanqr = require('../../helpers/scan-qr');
 const btcAddressRx = /^[a-zA-Z0-9]{26,35}$/;
 
+const DUST_THRESHOLD = process.env.DUST_THRESHOLD;
+
 const SendDetails = () => {
   const { wallets, setSelectedWallet, sleep, txMetadata, saveToDisk } = useContext(BlueStorageContext);
   const navigation = useNavigation();
@@ -48,7 +49,7 @@ const SendDetails = () => {
   const [optionsVisible, setOptionsVisible] = useState(false);
   const [isTransactionReplaceable, setIsTransactionReplaceable] = useState(false);
   const [addresses, setAddresses] = useState([]);
-  const [units, setUnits] = useState([]);
+  const [units, setUnits] = useState([BitcoinUnit.BTC]);
   const [transactionMemo, setTransactionMemo] = useState('');
   const [networkTransactionFees, setNetworkTransactionFees] = useState(new NetworkTransactionFee(3, 2, 1));
   const [networkTransactionFeesIsLoading, setNetworkTransactionFeesIsLoading] = useState(false);
@@ -111,10 +112,10 @@ const SendDetails = () => {
   useEffect(() => {
     // decode route params
     const currentAddress = addresses[scrollIndex.current];
+
     if (routeParams.uri) {
       try {
         const { address, amount, memo, payjoinUrl } = DeeplinkSchemaMatch.decodeBitcoinUri(routeParams.uri);
-
         setUnits((units) => {
           units[scrollIndex.current] = BitcoinUnit.BTC; // also resetting current unit to BTC
           return [...units];
@@ -212,7 +213,6 @@ const SendDetails = () => {
   useEffect(() => {
     if (!wallet) return;
     setSelectedWallet(wallet.getID());
-
     // reset other values
     setUtxo(null);
     setChangeAddress(null);
@@ -417,7 +417,7 @@ const SendDetails = () => {
       if (!transaction.amount || transaction.amount < 0 || parseFloat(transaction.amount) === 0) {
         error = loc.send.details_amount_field_is_not_valid;
         console.log('validation error');
-      } else if (parseFloat(transaction.amountSats) <= 500) {
+      } else if (parseFloat(transaction.amountSats) <= DUST_THRESHOLD) {
         error = loc.send.details_amount_field_is_less_than_minimum_amount_sat;
         console.log('validation error');
       } else if (!requestedSatPerByte || parseFloat(requestedSatPerByte) < 1) {
@@ -746,6 +746,10 @@ const SendDetails = () => {
     setAddresses((addresses) => {
       addresses.splice(scrollIndex.current, 1);
       return [...addresses];
+    });
+    setUnits((units) => {
+      units.splice(scrollIndex.current, 1);
+      return [...units];
     });
     setOptionsVisible(false);
     if (addresses.length === 0) return;
@@ -1199,11 +1203,12 @@ const SendDetails = () => {
 
   const renderBitcoinTransactionInfoFields = (params) => {
     const { item, index } = params;
+    const itemAmount = item.amount ? item.amount.toString() : 0;
     return (
       <View style={{ width }} testID={'Transaction' + index}>
         <AmountInput
           isLoading={isLoading}
-          amount={item.amount ? item.amount.toString() : null}
+          amount={itemAmount}
           onAmountUnitChange={(unit) => {
             setAddresses((addresses) => {
               const item = addresses[index];
@@ -1292,7 +1297,7 @@ const SendDetails = () => {
         <StatusBar barStyle="light-content" />
         <View>
           <KeyboardAvoidingView enabled={!Platform.isPad} behavior="position">
-            <FlatList keyboardShouldPersistTaps="always" scrollEnabled={addresses.length > 1} data={addresses} renderItem={renderBitcoinTransactionInfoFields} ref={scrollView} horizontal pagingEnabled removeClippedSubviews={false} onMomentumScrollBegin={Keyboard.dismiss} onMomentumScrollEnd={handleRecipientsScrollEnds} onScroll={handleRecipientsScroll} scrollEventThrottle={200} scrollIndicatorInsets={styles.scrollViewIndicator} contentContainerStyle={styles.scrollViewContent} />
+            <FlatList scrollEnabled={addresses.length > 1} data={addresses} renderItem={renderBitcoinTransactionInfoFields} ref={scrollView} horizontal pagingEnabled removeClippedSubviews={false} onMomentumScrollBegin={Keyboard.dismiss} onMomentumScrollEnd={handleRecipientsScrollEnds} onScroll={handleRecipientsScroll} scrollEventThrottle={200} scrollIndicatorInsets={styles.scrollViewIndicator} contentContainerStyle={styles.scrollViewContent} />
             <View style={[styles.memo, stylesHook.memo]}>
               <TextInput onChangeText={setTransactionMemo} placeholder={loc.send.details_note_placeholder} placeholderTextColor="#81868e" value={transactionMemo} numberOfLines={1} style={styles.memoText} editable={!isLoading} onSubmitEditing={Keyboard.dismiss} inputAccessoryViewID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID} />
             </View>

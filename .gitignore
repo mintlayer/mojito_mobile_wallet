@@ -24,6 +24,7 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
+release/
 build/
 .idea
 .gradle
@@ -73,3 +74,6 @@ artifacts/
 *.mx
 *.realm
 *.realm.lock
+
+# ENV File
+.env

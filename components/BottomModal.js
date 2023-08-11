@@ -29,7 +29,7 @@ const BottomModal = ({ onBackButtonPress = undefined, onBackdropPress = undefine
     },
   });
   return (
-    <Modal style={styles.root} deviceHeight={windowHeight ?? valueWindowHeight} deviceWidth={windowWidth ?? valueWindowWidth} onBackButtonPress={handleBackButtonPress} onBackdropPress={handleBackdropPress} {...props} accessibilityViewIsModal avoidKeyboard={avoidKeyboard} useNativeDriverForBackdrop={Platform.OS === 'android'}>
+    <Modal style={[styles.root, props.style]} deviceHeight={windowHeight ?? valueWindowHeight} deviceWidth={windowWidth ?? valueWindowWidth} onBackButtonPress={handleBackButtonPress} onBackdropPress={handleBackdropPress} {...props} accessibilityViewIsModal avoidKeyboard={avoidKeyboard} useNativeDriverForBackdrop={Platform.OS === 'android'}>
       {props.children}
       {doneButton && (
         <View style={[styles.hasDoneButton, stylesHook.hasDoneButton]}>

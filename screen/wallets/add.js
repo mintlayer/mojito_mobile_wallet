@@ -64,7 +64,7 @@ const WalletsAdd = () => {
 
   useEffect(() => {
     AsyncStorage.getItem(isTestMode ? AppStorage.TEST_LNDHUB : AppStorage.LNDHUB)
-      .then((url) => setWalletBaseURI(url || (isTestMode ? 'http://your_lnd_hub:3000' : 'https://lndhub.io')))
+      .then((url) => setWalletBaseURI(url || (isTestMode ? 'https://tnlndhub.mintlayer.org' : '')))
       .catch(() => setWalletBaseURI(''));
     isTestModeEnabled().then(setIsTestMode);
     isAdancedModeEnabled()
@@ -195,7 +195,6 @@ const WalletsAdd = () => {
       setIsLoading(false);
       console.warn('lnd create failure', Err);
       return alert(Err.message || Err);
-      // giving app, not adding anything
     }
     A(A.ENUM.CREATED_LIGHTNING_WALLET);
     await wallet.generate();
@@ -209,17 +208,8 @@ const WalletsAdd = () => {
     });
   };
 
-  const navigateToEntropy = () => {
-    navigate('ProvideEntropy', { onGenerated: entropyGenerated });
-  };
-
   const navigateToImportWallet = () => {
     navigate('ImportWallet');
-  };
-
-  const handleOnVaultButtonPressed = () => {
-    Keyboard.dismiss();
-    setSelectedWalletType(ButtonSelected.VAULT);
   };
 
   const handleOnBitcoinButtonPressed = () => {
@@ -251,9 +241,12 @@ const WalletsAdd = () => {
         </View>
         <View style={styles.buttons}>
           {isTestMode ? <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} testnet /> : <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} />}
-          <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} />
+          {/* <BitcoinButton testID="ActivateBitcoinButton" active={selectedWalletType === ButtonSelected.ONCHAIN} onPress={handleOnBitcoinButtonPressed} style={styles.button} /> */}
+
+          <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} comingSoon={false} />
           {backdoorPressed > 10 ? <LdkButton active={selectedWalletType === ButtonSelected.LDK} onPress={handleOnLdkButtonPressed} style={styles.button} subtext={LightningLdkWallet.getPackageVersion()} text="LDK" /> : null}
-          <MintLayerButton testID="ActivateMintlayerButton" title="MLT" subtitle="Mintlayer" style={styles.button} />
+
+          <MintLayerButton testID="ActivateMintlayerButton" title="ML" subtitle="Mintlayer" style={styles.button} />
         </View>
 
         <View style={styles.advanced}>
@@ -276,14 +269,31 @@ const WalletsAdd = () => {
                   <BlueSpacing20 />
                   <BlueText>{loc.wallets.add_lndhub}</BlueText>
                   <View style={[styles.lndUri, stylesHook.lndUri]}>
-                    <TextInput value={walletBaseURI} onChangeText={setWalletBaseURI} onSubmitEditing={Keyboard.dismiss} placeholder={loc.wallets.add_lndhub_placeholder} clearButtonMode="while-editing" autoCapitalize="none" textContentType="URL" autoCorrect={false} placeholderTextColor="#81868e" style={styles.textInputCommon} editable={!isLoading} underlineColorAndroid="transparent" />
+                    <TextInput value={walletBaseURI} onChangeText={setWalletBaseURI} onSubmitEditing={Keyboard.dismiss} placeholder={isTestMode ? 'https://tnlndhub.mintlayer.org' : loc.wallets.add_lndhub_placeholder} clearButtonMode="while-editing" autoCapitalize="none" textContentType="URL" autoCorrect={false} placeholderTextColor="#81868e" style={styles.textInputCommon} editable={!isLoading} underlineColorAndroid="transparent" />
                   </View>
                 </>
               );
             }
           })()}
           <BlueSpacing20 />
-          <View style={styles.createButton}>{!isLoading ? <BlueButton testID="Create" title={loc.wallets.add_create} disabled={!selectedWalletType || label.length === 0 || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)} onPress={createWallet} /> : <ActivityIndicator />}</View>
+          <View style={styles.createButton}>
+            {!isLoading ? (
+              <BlueButton
+                testID="Create"
+                title={selectedIndex == 1 ? loc.multisig.create : loc.send.details_next}
+                disabled={!selectedWalletType || label.length === 0 || (selectedWalletType === Chain.OFFCHAIN && (walletBaseURI ?? '').trim().length === 0)}
+                onPress={() => {
+                  if (selectedIndex == 1) {
+                    createWallet();
+                  } else {
+                    navigate('EntropyGenerator', { selectedWalletType, label, selectedIndex });
+                  }
+                }}
+              />
+            ) : (
+              <ActivityIndicator />
+            )}
+          </View>
           <View style={styles.importContainer}>
             {!isLoading && (
               <Text style={[styles.importText]}>
