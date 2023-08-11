@@ -67,6 +67,12 @@ const hardcodedTestnetPeers = [
   { host: 'electrum.blockstream.info', ssl: '60002' },
 ];
 
+const hardcodedTestnetPeers = [
+  { host: 'testnet.hsmiths.com', ssl: '53012' },
+  { host: 'testnet.aranguren.org', ssl: '51002' },
+  { host: 'electrum.blockstream.info', ssl: '60002' },
+];
+
 /** @type {ElectrumClient} */
 let mainClient;
 let mainConnected = false;
