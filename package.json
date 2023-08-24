@@ -130,7 +130,7 @@
     "@bugsnag/react-native": "7.14.1",
     "@bugsnag/source-maps": "2.3.0",
     "@keystonehq/bc-ur-registry": "0.4.4",
-    "@mintlayer/entropy-generator": "^1.0.2",
+    "@mintlayer/entropy-generator": "^1.0.3",
     "@ngraveio/bc-ur": "1.1.6",
     "@react-native-async-storage/async-storage": "1.15.14",
     "@react-native-clipboard/clipboard": "1.9.0",

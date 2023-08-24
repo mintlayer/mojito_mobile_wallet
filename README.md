@@ -51,6 +51,8 @@ npm install --legacy-peer-deps
 
 ### Running on Android:
 
+#### Android Studio
+
 You will now need to either connect an Android device to your computer or run an emulated Android device using AVD Manager which comes shipped with Android Studio. So first of all, install Android Studio.
 
 Then verify if you have these env vars set on you OS:
@@ -61,6 +63,26 @@ export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
+
+Now, inside Android Studio, remove all default emulators and create a new one using API 33 (Tiramisu).
+
+##### Possible issues
+
+###### Android studio not working properly
+
+You might to reinstall Android Studio for different reasons. If you are on Linux and used default installation we recommend using this command to start from scratch:
+
+```bash
+rm -rf .local/share/Google/ .local/share/Android\ Open\ Source\ Project .local/share/kotlin .config/Android\ Open\ Source\ Project .config/Google/AndroidStudio2022.3 .cache/Android\ Open\ Source\ Project .cache/Google/AndroidStudio2022.3 android-studio Android
+```
+
+If you are not on Linux, or not running the default install, you should look for these folders:
+
+- `android-studio`: where is keeps the software itself
+- `Android`: where SDKs are kept
+- User specific settings, configs and cache.
+
+#### Node
 
 Now run metro web server in one terminal with:
 
