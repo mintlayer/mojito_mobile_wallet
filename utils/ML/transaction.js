@@ -1,7 +1,7 @@
 import * as ML from '../../blue_modules/mintlayer/mintlayer';
 
 const getUtxoBalance = (utxo) => {
-  return utxo.reduce((sum, item) => sum + Number(item.utxo.value.amount), 0);
+  return utxo.reduce((sum, item) => sum + Number(item.utxo.value.amount.atoms), 0);
 };
 
 const getUtxoAvailable = (utxo) => {
@@ -18,7 +18,7 @@ const getUtxoAvailable = (utxo) => {
 
 const getUtxoTransaction = (utxo) => {
   return utxo.map((item) => ({
-    transaction: item.outpoint.id.Transaction,
+    transaction: item.outpoint.source_id,
     index: item.outpoint.index,
   }));
 };
@@ -99,9 +99,12 @@ const getTxInputs = async (outpointSourceIds) => {
   return txInputs;
 };
 
-const getTxOutput = async (amount, address, networkType) => {
-  const txOutput = await ML.getOutputs({ amount, address, networkType });
-  return txOutput;
+const getTxOutput = async (amount, address, networkType, poolId, delegationId) => {
+  return await ML.getOutputs({
+    amount,
+    address,
+    networkType,
+  });
 };
 
 const getTransactionHex = (encodedSignedTransaction) => {
@@ -112,7 +115,7 @@ const getOptUtxos = async (utxos, network) => {
   const opt_utxos = await Promise.all(
     utxos.map((item) => {
       return ML.getOutputs({
-        amount: item.utxo.value.amount,
+        amount: item.utxo.value.amount.atoms,
         address: item.utxo.destination,
         networkType: network,
         type: item.utxo.type,
@@ -160,7 +163,12 @@ const getArraySpead = (inputs) => {
 };
 
 const totalUtxosAmount = (utxosToSpend) => {
-  return utxosToSpend.flatMap((utxo) => [...utxo]).reduce((acc, utxo) => acc + Number(utxo.utxo.value.amount), 0);
+  return utxosToSpend
+    .flatMap((utxo) => [...utxo])
+    .reduce((acc, utxo) => {
+      const amount = utxo.utxo.value ? Number(utxo.utxo.value.amount.atoms) : 0;
+      return acc + amount;
+    }, 0);
 };
 
 export { getUtxoBalance, getUtxoTransaction, getUtxoTransactionsBytes, getOutpointedSourceId, getTransactionUtxos, getUtxoTransactions, getTransactionsBytes, getOutpointedSourceIds, getTxInputs, getTxOutput, getTransactionHex, getOptUtxos, getEncodedWitnesses, getArraySpead, getUtxoAvailable, totalUtxosAmount };

@@ -276,14 +276,14 @@ export class MintLayerWallet extends AbstractHDWallet {
       for (const vin of tx.inputs) {
         // if input (spending) goes from our address - we are loosing!
         if (vin.utxo.destination && ownedAddressesHashmap[vin.utxo.destination]) {
-          tx.value -= Number(vin.utxo.value.amount);
+          tx.value -= Number(vin.utxo.value.amount.atoms);
         }
       }
 
       for (const vout of tx.outputs) {
         // when output goes to our address - this means we are gaining!
         if (vout.destination && ownedAddressesHashmap[vout.destination]) {
-          tx.value += Number(vout.value.amount);
+          tx.value += Number(vout.value.amount.atoms);
         }
       }
       ret.push(tx);
@@ -700,7 +700,7 @@ export class MintLayerWallet extends AbstractHDWallet {
       const response = await getAddressData(address, this.network);
       const data = JSON.parse(response);
       const balance = {
-        balanceInAtoms: data.coin_balance,
+        balanceInAtoms: data.coin_balance.atoms,
       };
       return balance;
     } catch (error) {

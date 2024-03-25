@@ -1,9 +1,9 @@
-const prefix = '/api/v1';
+const prefix = '/api/v2';
 
 const MINTLAYER_ENDPOINTS = {
   GET_ADDRESS_DATA: '/address/:address',
   GET_TRANSACTION_DATA: '/transaction/:txid',
-  GET_ADDRESS_UTXO: '/address/:address/available-utxos',
+  GET_ADDRESS_UTXO: '/address/:address/spendable-utxos',
   POST_TRANSACTION: '/transaction',
   GET_FEES_ESTIMATES: '/feerate',
 };
@@ -26,7 +26,7 @@ const requestMintlayer = async (url, body = null, request = fetch) => {
     const error = await result.json();
 
     if (error.error === 'Address not found') {
-      return Promise.resolve(JSON.stringify({ coin_balance: 0, transaction_history: [] }));
+      return Promise.resolve(JSON.stringify({ coin_balance: { atoms: '0', decimal: '0' }, transaction_history: [] }));
     }
 
     // handle RPC error

@@ -169,7 +169,7 @@ const TransactionsDetails = () => {
     Clipboard.setString(`https://mempool.space/tx/${tx.hash}`);
   };
 
-  const txFee = isMlTx ? formatBalance(tx?.fee, walletPreferredBalanceUnit) : tx?.fee + ' sats';
+  const txFee = isMlTx ? formatBalance(tx?.fee.atoms, walletPreferredBalanceUnit) : tx?.fee + ' sats';
 
   if (isLoading || !tx) {
     return <BlueLoading />;
