@@ -1,5 +1,5 @@
 import { Alert, Text, View } from 'react-native';
-import AmountInput from '../../../../components/amoint_input/AmountInput';
+import AmountInput from '../../../../components/amount_input/AmountInput';
 import { BitcoinUnit } from '../../../../models/bitcoinUnits';
 import currency from '../../../../blue_modules/currency';
 import InputAccessoryAllFunds from '../../../../components/InputAccessoryAllFunds';
@@ -9,7 +9,7 @@ import { BlueDismissKeyboardInputAccessory } from '../../../../BlueComponents';
 import loc from '../../../../loc';
 import React from 'react';
 import BigNumber from 'bignumber.js';
-import AmountInputML from '../../../../components/amoint_input/AmountInputML';
+import AmountInputML from '../../../../components/amount_input/AmountInputML';
 import { MintlayerUnit } from '../../../../models/mintlayerUnits';
 
 const btcAddressRx = /^[a-zA-Z0-9]{26,35}$/;

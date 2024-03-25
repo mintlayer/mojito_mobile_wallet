@@ -6,7 +6,7 @@ import navigationStyle from '../../components/navigationStyle';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import BigNumber from 'bignumber.js';
 import AddressInput from '../../components/AddressInput';
-import AmountInput from '../../components/amoint_input/AmountInput';
+import AmountInput from '../../components/amount_input/AmountInput';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
 import loc from '../../loc';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
