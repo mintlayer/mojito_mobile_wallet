@@ -10,6 +10,7 @@ import { LightningCustodianWallet, LightningLdkWallet, MultisigHDWallet } from '
 import WalletGradient from '../../class/wallet-gradient';
 import loc, { formatBalance, transactionTimeToReadable } from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
+import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
 
 const styles = StyleSheet.create({
   loading: {
@@ -131,6 +132,8 @@ const ReorderWallets = () => {
                   return I18nManager.isRTL ? require('../../img/lnd-shape-rtl.png') : require('../../img/lnd-shape.png');
                 case MultisigHDWallet.type:
                   return I18nManager.isRTL ? require('../../img/vault-shape-rtl.png') : require('../../img/vault-shape.png');
+                case MintLayerWallet.type:
+                  return I18nManager.isRTL ? require('../../img/ml-shape-rtl.png') : require('../../img/ml-shape.png');
                 default:
                   return I18nManager.isRTL ? require('../../img/btc-shape-rtl.png') : require('../../img/btc-shape.png');
               }

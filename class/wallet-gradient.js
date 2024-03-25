@@ -13,6 +13,7 @@ import { HDAezeedWallet } from './wallets/hd-aezeed-wallet';
 import { LightningLdkWallet } from './wallets/lightning-ldk-wallet';
 import { SLIP39LegacyP2PKHWallet, SLIP39SegwitP2SHWallet, SLIP39SegwitBech32Wallet } from './wallets/slip39-wallets';
 import { useTheme } from '@react-navigation/native';
+import { MintLayerWallet } from './wallets/mintlayer-wallet';
 
 export default class WalletGradient {
   static hdSegwitP2SHWallet = ['#007AFF', '#0040FF'];
@@ -27,6 +28,7 @@ export default class WalletGradient {
   static lightningCustodianWallet = ['#F1AA07', '#FD7E37'];
   static aezeedWallet = ['#8584FF', '#5351FB'];
   static ldkWallet = ['#8584FF', '#5351FB'];
+  static mlWallet = ['#11967f', '#0a5b5b'];
 
   static createWallet = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -74,6 +76,9 @@ export default class WalletGradient {
         break;
       case LightningLdkWallet.type:
         gradient = WalletGradient.ldkWallet;
+        break;
+      case MintLayerWallet.type:
+        gradient = WalletGradient.mlWallet;
         break;
       default:
         gradient = WalletGradient.defaultGradients;
@@ -137,6 +142,9 @@ export default class WalletGradient {
         break;
       case LightningLdkWallet.type:
         gradient = WalletGradient.ldkWallet;
+        break;
+      case MintLayerWallet.type:
+        gradient = WalletGradient.mlWallet;
         break;
       default:
         gradient = WalletGradient.defaultGradients;

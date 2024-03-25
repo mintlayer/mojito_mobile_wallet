@@ -6,7 +6,7 @@ import { useFocusEffect, useNavigation, useRoute, useTheme } from '@react-naviga
 
 import { BlueAlertWalletExportReminder, BlueButton, BlueDismissKeyboardInputAccessory, BlueLoading } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
-import AmountInput from '../../components/AmountInput';
+import AmountInput from '../../components/amoint_input/AmountInput';
 import * as NavigationService from '../../NavigationService';
 import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
 import loc, { formatBalanceWithoutSuffix, formatBalancePlain } from '../../loc';

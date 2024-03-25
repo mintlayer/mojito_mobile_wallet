@@ -20,7 +20,7 @@
 		782F075B5DD048449E2DECE9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D9B3A7B2CB4255876B67AF /* libz.tbd */; };
 		84E05A842721191B001A0D3A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84E05A832721191B001A0D3A /* Settings.bundle */; };
 		906451CAD44154C2950030EC /* libPods-BlueWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 731973BA0AC6EA78962CE5B6 /* libPods-BlueWallet.a */; };
-		97E38907093A44A8B3161821 /* wasm_crypto_bg.wasm in Resources */ = {isa = PBXBuildFile; fileRef = B10E5342D1F84BABA12D0087 /* wasm_crypto_bg.wasm */; };
+		6789E49FF4434F498BC4852E /* wasm_crypto_bg.wasm in Resources */ = {isa = PBXBuildFile; fileRef = 4F7A12E5683046E9B8D3C1C9 /* wasm_crypto_bg.wasm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -241,7 +241,7 @@
 		FC98DC24A81A463AB8B2E6B1 /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
 		FD7977067E1A496F94D8B1B7 /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
 		FF45EB303C9601ED114589A4 /* Pods-MarketWidgetExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarketWidgetExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-MarketWidgetExtension/Pods-MarketWidgetExtension.release.xcconfig"; sourceTree = "<group>"; };
-		B10E5342D1F84BABA12D0087 /* wasm_crypto_bg.wasm */ = {isa = PBXFileReference; name = "wasm_crypto_bg.wasm"; path = "../assets/mintlayer/wasm_crypto_bg.wasm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4F7A12E5683046E9B8D3C1C9 /* wasm_crypto_bg.wasm */ = {isa = PBXFileReference; name = "wasm_crypto_bg.wasm"; path = "../assets/mintlayer/wasm_crypto_bg.wasm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -355,7 +355,7 @@
 				4D746BBE67E84684848246E2 /* SimpleLineIcons.ttf */,
 				47C436B1EF23484B8181DBEA /* Zocial.ttf */,
 				DBB3EE9542AA4406B5711FB9 /* Fontisto.ttf */,
-				B10E5342D1F84BABA12D0087 /* wasm_crypto_bg.wasm */,
+				4F7A12E5683046E9B8D3C1C9 /* wasm_crypto_bg.wasm */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -680,7 +680,7 @@
 				6DF25A9F249DB97E001D06F5 /* LaunchScreen.storyboard in Resources */,
 				84E05A842721191B001A0D3A /* Settings.bundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				97E38907093A44A8B3161821 /* wasm_crypto_bg.wasm in Resources */,
+				6789E49FF4434F498BC4852E /* wasm_crypto_bg.wasm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -927,10 +927,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 2M9FGAF5DV;
+				DEVELOPMENT_TEAM = 7F93Z7NQJ4;
 				ENABLE_BITCODE = NO;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"COCOAPODS=1",
@@ -972,14 +971,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlueWallet/BlueWalletRelease.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 7F93Z7NQJ4;
 				ENABLE_BITCODE = NO;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = BlueWallet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1000,8 +997,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mojitowallet;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = "";
 				PRODUCT_NAME = BlueWallet;
-				PROVISIONING_PROFILE_SPECIFIER = "mojitowallet app store 2";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "BlueWallet-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
@@ -1058,7 +1054,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1108,9 +1104,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LIBRARY_SEARCH_PATHS = "\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 4.2;

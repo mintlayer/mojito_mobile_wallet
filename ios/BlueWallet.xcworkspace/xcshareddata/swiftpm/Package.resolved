@@ -1,4 +1,5 @@
 {
+  "originHash" : "f26b6def06834624703e59f1cb597ca7f79a28d4a2374002b2056fff3c303cec",
   "pins" : [
     {
       "identity" : "efqrcode",
@@ -19,5 +20,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

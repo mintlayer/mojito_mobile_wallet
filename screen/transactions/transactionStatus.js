@@ -254,7 +254,7 @@ const TransactionsStatus = () => {
     });
   };
   const navigateToTransactionDetials = () => {
-    navigate('TransactionDetails', { hash: tx.hash });
+    navigate('TransactionDetails', { hash: tx.hash, walletType: wallet.current.type, walletPreferredBalanceUnit: wallet.current.preferredBalanceUnit });
   };
 
   const renderCPFP = () => {

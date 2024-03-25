@@ -4,6 +4,7 @@ import * as Keychain from 'react-native-keychain';
 import { HDLegacyBreadwalletWallet, HDSegwitP2SHWallet, HDLegacyP2PKHWallet, WatchOnlyWallet, LegacyWallet, SegwitP2SHWallet, SegwitBech32Wallet, HDSegwitBech32Wallet, LightningCustodianWallet, HDLegacyElectrumSeedP2PKHWallet, HDSegwitElectrumSeedP2WPKHWallet, HDAezeedWallet, MultisigHDWallet, LightningLdkWallet, SLIP39SegwitP2SHWallet, SLIP39LegacyP2PKHWallet, SLIP39SegwitBech32Wallet } from './';
 import { randomBytes } from './rng';
 import alert from '../components/Alert';
+import { MintLayerWallet } from './wallets/mintlayer-wallet';
 const encryption = require('../blue_modules/encryption');
 const Realm = require('realm');
 const createHash = require('create-hash');
@@ -283,11 +284,12 @@ export class AppStorage {
   }
 
   saveToRealmKeyValue(realmkeyValue, key, value) {
+    const prefix = this.prefix;
     realmkeyValue.write(() => {
       realmkeyValue.create(
         'KeyValue',
         {
-          key: key,
+          key: prefix + key,
           value: value,
         },
         Realm.UpdateMode.Modified,
@@ -328,6 +330,9 @@ export class AppStorage {
         switch (tempObj.type) {
           case SegwitBech32Wallet.type:
             unserializedWallet = SegwitBech32Wallet.fromJson(key);
+            break;
+          case MintLayerWallet.type:
+            unserializedWallet = MintLayerWallet.fromJson(key);
             break;
           case SegwitP2SHWallet.type:
             unserializedWallet = SegwitP2SHWallet.fromJson(key);

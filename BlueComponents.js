@@ -172,7 +172,6 @@ export const MintLayerButton = (props) => {
               {props.subtitle}
             </Text>
           </View>
-          <ComingSoon text={loc.addresses.comming_soon} />
         </View>
       </View>
     </TouchableOpacity>

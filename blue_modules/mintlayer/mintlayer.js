@@ -1,3 +1,4 @@
+import bigInt from 'big-integer';
 import { SignatureHashType, SourceId } from './@mintlayerlib-js/wasm_crypto.js';
 import webviewEventBus from '../../class/webview-event-bus';
 
@@ -61,14 +62,14 @@ export const getTxInput = async (outpointSourceId, index) => {
   return webviewEventBus.exec(wasmMethods.encode_input_for_utxo, [outpointSourceId, index]);
 };
 
-export const getOutputs = async (amount, address, networkType) => {
+export const getOutputs = async ({ amount, address, networkType }) => {
   const networkIndex = NETWORKS[networkType];
   return webviewEventBus.exec(wasmMethods.encode_output_transfer, [amount, address, networkIndex]);
 };
 
 export const getTransaction = async (inputs, outputs) => {
-  // const flags = BigInt(0);
-  return webviewEventBus.exec(wasmMethods.encode_transaction, [inputs, outputs, 0]);
+  const flags = bigInt(0);
+  return webviewEventBus.exec(wasmMethods.encode_transaction, [inputs, outputs, flags]);
 };
 
 export const getEncodedWitness = async (

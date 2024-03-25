@@ -474,7 +474,7 @@
     "details_are_you_sure": "Are you sure?",
     "details_connected_to": "Connected to",
     "details_del_wb_err": "The provided balance amount doesn’t match this wallet’s balance. Please try again.",
-    "details_del_wb_q": "This wallet has a balance. Before proceeding, please be aware that you will not be able to recover the funds without this wallet’s seed phrase. In order to avoid accidental removal, please enter your wallet’s balance of {balance} satoshis.",
+    "details_del_wb_q": "This wallet has a balance. Before proceeding, please be aware that you will not be able to recover the funds without this wallet’s seed phrase. In order to avoid accidental removal, please enter your wallet’s balance of {balance} {unit}.",
     "details_delete": "Delete",
     "details_delete_wallet": "Delete Wallet",
     "details_derivation_path": "derivation path",
@@ -654,8 +654,10 @@
   },
   "units": {
     "BTC": "BTC",
+    "ML": "ML",
     "MAX": "Max",
     "sat_vbyte": "sat/vByte",
+    "ml_vbyte": "ML/vByte",
     "sats": "sats"
   },
   "addresses": {

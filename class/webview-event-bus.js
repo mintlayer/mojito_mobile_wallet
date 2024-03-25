@@ -20,6 +20,9 @@ class WebViewEventBus {
             if (i instanceof Uint8Array) {
               return Array.from(i);
             }
+            if (typeof i === 'bigint') {
+              return String(i);
+            }
             return i;
           }),
         }),
