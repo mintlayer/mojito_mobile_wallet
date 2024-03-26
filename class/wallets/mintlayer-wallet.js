@@ -4,7 +4,7 @@ import { AbstractHDWallet } from './abstract-hd-wallet';
 import { MintlayerUnit } from '../../models/mintlayerUnits';
 import { broadcastTransaction, getAddressData, getAddressUtxo, getTransactionData, ML_NETWORK_TYPES } from '../../blue_modules/Mintlayer';
 import { range } from '../../utils/Array';
-import { getArraySpead, getEncodedWitnesses, getOptUtxos, getOutpointedSourceIds, getTransactionHex, getTransactionsBytes, getTransactionUtxos, getTxInputs, getTxOutput, getUtxoAvailable, getUtxoTransactions, totalUtxosAmount } from '../../utils/ML/transaction';
+import { getArraySpead, getEncodedWitnesses, getOptUtxos, getOutpointedSourceIds, getTransactionHex, getTransactionsBytes, getTransactionUtxos, getTxInputs, getTxOutput, getUtxoAddress, getUtxoAvailable, getUtxoTransactions, totalUtxosAmount } from '../../utils/ML/transaction';
 
 export class MintLayerWallet extends AbstractHDWallet {
   static type = 'ML_HDsegwitBech32';
@@ -467,8 +467,9 @@ export class MintLayerWallet extends AbstractHDWallet {
     if (totalAmount < Number(amountToUse)) {
       throw new Error('Insufficient funds');
     }
-    const { inputs, outputs, optUtxos } = await this._buildInputsAndOutputs({ utxos, amount: amountToUse, address, changeAddress });
-    const size = await ML.getEstimatetransactionSize(inputs, optUtxos, outputs);
+    const { inputs, outputs, requireUtxo } = await this._buildInputsAndOutputs({ utxos, amount: amountToUse, address, changeAddress });
+    const addressList = getUtxoAddress(requireUtxo);
+    const size = await ML.getEstimatetransactionSize(inputs, addressList, outputs, this.network);
     const fee = Math.ceil(feeRate * size);
 
     return fee;

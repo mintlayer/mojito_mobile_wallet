@@ -6,6 +6,9 @@ const MINTLAYER_ENDPOINTS = {
   GET_ADDRESS_UTXO: '/address/:address/spendable-utxos',
   POST_TRANSACTION: '/transaction',
   GET_FEES_ESTIMATES: '/feerate',
+  GET_ADDRESS_DELEGATIONS: '/address/:address/delegations',
+  GET_DELEGATION: '/delegation/:delegation',
+  GET_CHAIN_TIP: '/chain/tip',
 };
 
 const ML_NETWORK_TYPES = {
@@ -87,6 +90,10 @@ const getWalletUtxos = (addresses) => {
   return Promise.all(utxosPromises);
 };
 
+const getChainTip = async () => {
+  return tryServers(MINTLAYER_ENDPOINTS.GET_CHAIN_TIP);
+};
+
 const getFeesEstimates = async (network) => {
   return tryServers({ endpoint: MINTLAYER_ENDPOINTS.GET_FEES_ESTIMATES, network });
 };
@@ -95,4 +102,4 @@ const broadcastTransaction = (transaction, network) => {
   return tryServers({ endpoint: MINTLAYER_ENDPOINTS.POST_TRANSACTION, body: transaction, network });
 };
 
-export { getAddressData, getTransactionData, getAddressUtxo, getWalletUtxos, broadcastTransaction, getFeesEstimates, MINTLAYER_ENDPOINTS, ML_NETWORK_TYPES, ML_ATOMS_PER_COIN };
+export { getAddressData, getTransactionData, getAddressUtxo, getWalletUtxos, broadcastTransaction, getFeesEstimates, getChainTip, MINTLAYER_ENDPOINTS, ML_NETWORK_TYPES, ML_ATOMS_PER_COIN };

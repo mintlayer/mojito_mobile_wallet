@@ -1,14 +1,14 @@
 {
-  "name": "wasm-crypto",
-  "version": "0.3.0",
+  "name": "wasm-wrappers",
+  "version": "0.4.1",
   "license": "MIT",
   "files": [
-    "wasm_crypto_bg.wasm",
-    "wasm_crypto.js",
-    "wasm_crypto.d.ts"
+    "../../../assets/mintlayer/wasm_wrappers_bg.wasm",
+    "wasm_wrappers.js",
+    "wasm_wrappers.d.ts"
   ],
-  "module": "wasm_crypto.js",
-  "types": "wasm_crypto.d.ts",
+  "module": "wasm_wrappers.js",
+  "types": "wasm_wrappers.d.ts",
   "sideEffects": [
     "./snippets/*"
   ]

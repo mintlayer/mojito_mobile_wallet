@@ -59,34 +59,6 @@ function takeObject(idx) {
   return ret;
 }
 
-let cachedInt32Memory0 = null;
-
-function getInt32Memory0() {
-  if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
-    cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
-  }
-  return cachedInt32Memory0;
-}
-
-function getArrayU8FromWasm0(ptr, len) {
-  ptr = ptr >>> 0;
-  return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
-}
-
-function make_private_key() {
-  try {
-    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    wasm.make_private_key(retptr);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var v1 = getArrayU8FromWasm0(r0, r1).slice();
-    wasm.__wbindgen_free(r0, r1 * 1, 1);
-    return v1;
-  } finally {
-    wasm.__wbindgen_add_to_stack_pointer(16);
-  }
-}
-
 let WASM_VECTOR_LEN = 0;
 
 const cachedTextEncoder =
@@ -152,6 +124,73 @@ function passStringToWasm0(arg, malloc, realloc) {
   return ptr;
 }
 
+function isLikeNone(x) {
+  return x === undefined || x === null;
+}
+
+let cachedInt32Memory0 = null;
+
+function getInt32Memory0() {
+  if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
+    cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
+  }
+  return cachedInt32Memory0;
+}
+
+function passArray8ToWasm0(arg, malloc) {
+  const ptr = malloc(arg.length * 1, 1) >>> 0;
+  getUint8Memory0().set(arg, ptr / 1);
+  WASM_VECTOR_LEN = arg.length;
+  return ptr;
+}
+
+function getArrayU8FromWasm0(ptr, len) {
+  ptr = ptr >>> 0;
+  return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
+}
+/**
+ * A utxo can either come from a transaction or a block reward.
+ * Given a source id, whether from a block reward or transaction, this function
+ * takes a generic id with it, and returns serialized binary data of the id
+ * with the given source id.
+ * @param {Uint8Array} id
+ * @param {SourceId} source
+ * @returns {Uint8Array}
+ */
+function encode_outpoint_source_id(id, source) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    const ptr0 = passArray8ToWasm0(id, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    wasm.encode_outpoint_source_id(retptr, ptr0, len0, source);
+    var r0 = getInt32Memory0()[retptr / 4 + 0];
+    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var v2 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v2;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
+ * Generates a new, random private key from entropy
+ * @returns {Uint8Array}
+ */
+function make_private_key() {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    wasm.make_private_key(retptr);
+    var r0 = getInt32Memory0()[retptr / 4 + 0];
+    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var v1 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v1;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
 /**
  * Create the default account's extended private key for a given mnemonic
  * derivation path: 44'/mintlayer_coin_type'/0'
@@ -180,12 +219,6 @@ function make_default_account_privkey(mnemonic, network) {
   }
 }
 
-function passArray8ToWasm0(arg, malloc) {
-  const ptr = malloc(arg.length * 1, 1) >>> 0;
-  getUint8Memory0().set(arg, ptr / 1);
-  WASM_VECTOR_LEN = arg.length;
-  return ptr;
-}
 /**
  * From an extended private key create a receiving private key for a given key index
  * derivation path: 44'/mintlayer_coin_type'/0'/0/key_index
@@ -243,18 +276,20 @@ function make_change_address(private_key_bytes, key_index) {
 }
 
 /**
+ * Given a public key (as bytes) and a network type (mainnet, testnet, etc),
+ * return the address public key hash from that public key as an address
  * @param {Uint8Array} public_key_bytes
  * @param {Network} network
  * @returns {string}
  */
-function pubkey_to_string(public_key_bytes, network) {
+function pubkey_to_pubkeyhash_address(public_key_bytes, network) {
   let deferred3_0;
   let deferred3_1;
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     const ptr0 = passArray8ToWasm0(public_key_bytes, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
-    wasm.pubkey_to_string(retptr, ptr0, len0, network);
+    wasm.pubkey_to_pubkeyhash_address(retptr, ptr0, len0, network);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -276,6 +311,7 @@ function pubkey_to_string(public_key_bytes, network) {
 }
 
 /**
+ * Given a private key, as bytes, return the bytes of the corresponding public key
  * @param {Uint8Array} private_key
  * @returns {Uint8Array}
  */
@@ -301,18 +337,21 @@ function public_key_from_private_key(private_key) {
 }
 
 /**
+ * Given a message and a private key, sign the message with the given private key
+ * This kind of signature is to be used when signing spend requests, such as transaction
+ * input witness.
  * @param {Uint8Array} private_key
  * @param {Uint8Array} message
  * @returns {Uint8Array}
  */
-function sign_message(private_key, message) {
+function sign_message_for_spending(private_key, message) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     const ptr0 = passArray8ToWasm0(private_key, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
     const ptr1 = passArray8ToWasm0(message, wasm.__wbindgen_malloc);
     const len1 = WASM_VECTOR_LEN;
-    wasm.sign_message(retptr, ptr0, len0, ptr1, len1);
+    wasm.sign_message_for_spending(retptr, ptr0, len0, ptr1, len1);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -329,12 +368,17 @@ function sign_message(private_key, message) {
 }
 
 /**
+ * Given a digital signature, a public key and a message. Verify that
+ * the signature is produced by signing the message with the private key
+ * that derived the given public key.
+ * Note that this function is used for verifying messages related to spending,
+ * such as transaction input witness.
  * @param {Uint8Array} public_key
  * @param {Uint8Array} signature
  * @param {Uint8Array} message
  * @returns {boolean}
  */
-function verify_signature(public_key, signature, message) {
+function verify_signature_for_spending(public_key, signature, message) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     const ptr0 = passArray8ToWasm0(public_key, wasm.__wbindgen_malloc);
@@ -343,7 +387,7 @@ function verify_signature(public_key, signature, message) {
     const len1 = WASM_VECTOR_LEN;
     const ptr2 = passArray8ToWasm0(message, wasm.__wbindgen_malloc);
     const len2 = WASM_VECTOR_LEN;
-    wasm.verify_signature(retptr, ptr0, len0, ptr1, len1, ptr2, len2);
+    wasm.verify_signature_for_spending(retptr, ptr0, len0, ptr1, len1, ptr2, len2);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -356,8 +400,16 @@ function verify_signature(public_key, signature, message) {
   }
 }
 
+function _assertClass(instance, klass) {
+  if (!(instance instanceof klass)) {
+    throw new Error('expected instance of {klass.name}');
+  }
+  return instance.ptr;
+}
 /**
- * @param {string} amount
+ * Given a destination address, an amount and a network type (mainnet, testnet, etc), this function
+ * creates an output of type Transfer, and returns it as bytes.
+ * @param {Amount} amount
  * @param {string} address
  * @param {Network} network
  * @returns {Uint8Array}
@@ -365,11 +417,11 @@ function verify_signature(public_key, signature, message) {
 function encode_output_transfer(amount, address, network) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    const ptr0 = passStringToWasm0(amount, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len0 = WASM_VECTOR_LEN;
+    _assertClass(amount, Amount);
+    var ptr0 = amount.__destroy_into_raw();
     const ptr1 = passStringToWasm0(address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
-    wasm.encode_output_transfer(retptr, ptr0, len0, ptr1, len1, network);
+    wasm.encode_output_transfer(retptr, ptr0, ptr1, len1, network);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -386,6 +438,10 @@ function encode_output_transfer(amount, address, network) {
 }
 
 /**
+ * Given the current block height and a network type (mainnet, testnet, etc),
+ * this function returns the number of blocks, after which a pool that decommissioned,
+ * will have its funds unlocked and available for spending.
+ * The current block height information is used in case a network upgrade changed the value.
  * @param {bigint} current_block_height
  * @param {Network} network
  * @returns {bigint}
@@ -396,13 +452,16 @@ function staking_pool_spend_maturity_block_count(current_block_height, network) 
 }
 
 /**
- * @param {bigint} num
+ * Given a number of blocks, this function returns the output timelock
+ * which is used in locked outputs to lock an output for a given number of blocks
+ * since that output's transaction is included the blockchain
+ * @param {bigint} block_count
  * @returns {Uint8Array}
  */
-function encode_lock_for_block_count(num) {
+function encode_lock_for_block_count(block_count) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    wasm.encode_lock_for_block_count(retptr, num);
+    wasm.encode_lock_for_block_count(retptr, block_count);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
@@ -414,13 +473,16 @@ function encode_lock_for_block_count(num) {
 }
 
 /**
- * @param {bigint} num
+ * Given a number of clock seconds, this function returns the output timelock
+ * which is used in locked outputs to lock an output for a given number of seconds
+ * since that output's transaction is included in the blockchain
+ * @param {bigint} total_seconds
  * @returns {Uint8Array}
  */
-function encode_lock_for_seconds(num) {
+function encode_lock_for_seconds(total_seconds) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    wasm.encode_lock_for_seconds(retptr, num);
+    wasm.encode_lock_for_seconds(retptr, total_seconds);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
@@ -432,13 +494,16 @@ function encode_lock_for_seconds(num) {
 }
 
 /**
- * @param {bigint} num
+ * Given a timestamp represented by as unix timestamp, i.e., number of seconds since unix epoch,
+ * this function returns the output timelock which is used in locked outputs to lock an output
+ * until the given timestamp
+ * @param {bigint} timestamp_since_epoch_in_seconds
  * @returns {Uint8Array}
  */
-function encode_lock_until_time(num) {
+function encode_lock_until_time(timestamp_since_epoch_in_seconds) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    wasm.encode_lock_until_time(retptr, num);
+    wasm.encode_lock_until_time(retptr, timestamp_since_epoch_in_seconds);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
@@ -450,13 +515,15 @@ function encode_lock_until_time(num) {
 }
 
 /**
- * @param {bigint} num
+ * Given a block height, this function returns the output timelock which is used in
+ * locked outputs to lock an output until that block height is reached.
+ * @param {bigint} block_height
  * @returns {Uint8Array}
  */
-function encode_lock_until_height(num) {
+function encode_lock_until_height(block_height) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    wasm.encode_lock_until_height(retptr, num);
+    wasm.encode_lock_until_height(retptr, block_height);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
@@ -468,7 +535,10 @@ function encode_lock_until_height(num) {
 }
 
 /**
- * @param {string} amount
+ * Given a valid receiving address, and a locking rule as bytes (available in this file),
+ * and a network type (mainnet, testnet, etc), this function creates an output of type
+ * LockThenTransfer with the parameters provided.
+ * @param {Amount} amount
  * @param {string} address
  * @param {Uint8Array} lock
  * @param {Network} network
@@ -477,13 +547,13 @@ function encode_lock_until_height(num) {
 function encode_output_lock_then_transfer(amount, address, lock, network) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    const ptr0 = passStringToWasm0(amount, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len0 = WASM_VECTOR_LEN;
+    _assertClass(amount, Amount);
+    var ptr0 = amount.__destroy_into_raw();
     const ptr1 = passStringToWasm0(address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
     const ptr2 = passArray8ToWasm0(lock, wasm.__wbindgen_malloc);
     const len2 = WASM_VECTOR_LEN;
-    wasm.encode_output_lock_then_transfer(retptr, ptr0, len0, ptr1, len1, ptr2, len2, network);
+    wasm.encode_output_lock_then_transfer(retptr, ptr0, ptr1, len1, ptr2, len2, network);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -500,15 +570,16 @@ function encode_output_lock_then_transfer(amount, address, lock, network) {
 }
 
 /**
- * @param {string} amount
+ * Given an amount, this function creates an output (as bytes) to burn a given amount of coins
+ * @param {Amount} amount
  * @returns {Uint8Array}
  */
-function encode_output_burn(amount) {
+function encode_output_coin_burn(amount) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    const ptr0 = passStringToWasm0(amount, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len0 = WASM_VECTOR_LEN;
-    wasm.encode_output_burn(retptr, ptr0, len0);
+    _assertClass(amount, Amount);
+    var ptr0 = amount.__destroy_into_raw();
+    wasm.encode_output_coin_burn(retptr, ptr0);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -525,17 +596,20 @@ function encode_output_burn(amount) {
 }
 
 /**
+ * Given a pool id as string, an owner address and a network type (mainnet, testnet, etc),
+ * this function returns an output (as bytes) to create a delegation to the given pool.
+ * The owner address is the address that is authorized to withdraw from that delegation.
  * @param {string} pool_id
- * @param {string} address
+ * @param {string} owner_address
  * @param {Network} network
  * @returns {Uint8Array}
  */
-function encode_output_create_delegation(pool_id, address, network) {
+function encode_output_create_delegation(pool_id, owner_address, network) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     const ptr0 = passStringToWasm0(pool_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len0 = WASM_VECTOR_LEN;
-    const ptr1 = passStringToWasm0(address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const ptr1 = passStringToWasm0(owner_address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
     wasm.encode_output_create_delegation(retptr, ptr0, len0, ptr1, len1, network);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
@@ -554,7 +628,9 @@ function encode_output_create_delegation(pool_id, address, network) {
 }
 
 /**
- * @param {string} amount
+ * Given a delegation id (as string, in address form), an amount and a network type (mainnet, testnet, etc),
+ * this function returns an output (as bytes) that would delegate coins to be staked in the specified delegation id.
+ * @param {Amount} amount
  * @param {string} delegation_id
  * @param {Network} network
  * @returns {Uint8Array}
@@ -562,11 +638,11 @@ function encode_output_create_delegation(pool_id, address, network) {
 function encode_output_delegate_staking(amount, delegation_id, network) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    const ptr0 = passStringToWasm0(amount, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len0 = WASM_VECTOR_LEN;
+    _assertClass(amount, Amount);
+    var ptr0 = amount.__destroy_into_raw();
     const ptr1 = passStringToWasm0(delegation_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
-    wasm.encode_output_delegate_staking(retptr, ptr0, len0, ptr1, len1, network);
+    wasm.encode_output_delegate_staking(retptr, ptr0, ptr1, len1, network);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -583,51 +659,31 @@ function encode_output_delegate_staking(amount, delegation_id, network) {
 }
 
 /**
- * @param {string} value
+ * This function returns the staking pool data needed to create a staking pool in an output as bytes,
+ * given its parameters and the network type (testnet, mainnet, etc).
+ * @param {Amount} value
  * @param {string} staker
  * @param {string} vrf_public_key
  * @param {string} decommission_key
  * @param {number} margin_ratio_per_thousand
- * @param {string} cost_per_block
+ * @param {Amount} cost_per_block
  * @param {Network} network
  * @returns {Uint8Array}
  */
-function encode_stake_pool_data(
-  value,
-  staker,
-  vrf_public_key,
-  decommission_key,
-  margin_ratio_per_thousand,
-  cost_per_block,
-  network,
-) {
+function encode_stake_pool_data(value, staker, vrf_public_key, decommission_key, margin_ratio_per_thousand, cost_per_block, network) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    const ptr0 = passStringToWasm0(value, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len0 = WASM_VECTOR_LEN;
+    _assertClass(value, Amount);
+    var ptr0 = value.__destroy_into_raw();
     const ptr1 = passStringToWasm0(staker, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
     const ptr2 = passStringToWasm0(vrf_public_key, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len2 = WASM_VECTOR_LEN;
     const ptr3 = passStringToWasm0(decommission_key, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len3 = WASM_VECTOR_LEN;
-    const ptr4 = passStringToWasm0(cost_per_block, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len4 = WASM_VECTOR_LEN;
-    wasm.encode_stake_pool_data(
-      retptr,
-      ptr0,
-      len0,
-      ptr1,
-      len1,
-      ptr2,
-      len2,
-      ptr3,
-      len3,
-      margin_ratio_per_thousand,
-      ptr4,
-      len4,
-      network,
-    );
+    _assertClass(cost_per_block, Amount);
+    var ptr4 = cost_per_block.__destroy_into_raw();
+    wasm.encode_stake_pool_data(retptr, ptr0, ptr1, len1, ptr2, len2, ptr3, len3, margin_ratio_per_thousand, ptr4, network);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -644,6 +700,10 @@ function encode_stake_pool_data(
 }
 
 /**
+ * Given a pool id, staking data as bytes and the network type (mainnet, testnet, etc),
+ * this function returns an output that creates that staking pool.
+ * Note that the pool id is mandated to be taken from the hash of the first input.
+ * It is not arbitrary.
  * @param {string} pool_id
  * @param {Uint8Array} pool_data
  * @param {Network} network
@@ -673,26 +733,19 @@ function encode_output_create_stake_pool(pool_id, pool_data, network) {
 }
 
 /**
+ * Given the parameters needed to issue a fungible token, and a network type (mainnet, testnet, etc),
+ * this function creates an output that issues that token.
  * @param {string} authority
  * @param {Uint8Array} token_ticker
  * @param {Uint8Array} metadata_uri
  * @param {number} number_of_decimals
  * @param {TotalSupply} total_supply
- * @param {string} supply_amount
+ * @param {Amount | undefined} supply_amount
  * @param {FreezableToken} is_token_freezable
  * @param {Network} network
  * @returns {Uint8Array}
  */
-function encode_output_issue_fungible_token(
-  authority,
-  token_ticker,
-  metadata_uri,
-  number_of_decimals,
-  total_supply,
-  supply_amount,
-  is_token_freezable,
-  network,
-) {
+function encode_output_issue_fungible_token(authority, token_ticker, metadata_uri, number_of_decimals, total_supply, supply_amount, is_token_freezable, network) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     const ptr0 = passStringToWasm0(authority, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
@@ -701,23 +754,12 @@ function encode_output_issue_fungible_token(
     const len1 = WASM_VECTOR_LEN;
     const ptr2 = passArray8ToWasm0(metadata_uri, wasm.__wbindgen_malloc);
     const len2 = WASM_VECTOR_LEN;
-    const ptr3 = passStringToWasm0(supply_amount, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len3 = WASM_VECTOR_LEN;
-    wasm.encode_output_issue_fungible_token(
-      retptr,
-      ptr0,
-      len0,
-      ptr1,
-      len1,
-      ptr2,
-      len2,
-      number_of_decimals,
-      total_supply,
-      ptr3,
-      len3,
-      is_token_freezable,
-      network,
-    );
+    let ptr3 = 0;
+    if (!isLikeNone(supply_amount)) {
+      _assertClass(supply_amount, Amount);
+      ptr3 = supply_amount.__destroy_into_raw();
+    }
+    wasm.encode_output_issue_fungible_token(retptr, ptr0, len0, ptr1, len1, ptr2, len2, number_of_decimals, total_supply, ptr3, is_token_freezable, network);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -734,6 +776,7 @@ function encode_output_issue_fungible_token(
 }
 
 /**
+ * Given data to be deposited in the blockchain, this function provides the output that deposits this data
  * @param {Uint8Array} data
  * @returns {Uint8Array}
  */
@@ -759,27 +802,8 @@ function encode_output_data_deposit(data) {
 }
 
 /**
- * @param {Uint8Array} id
- * @param {SourceId} source
- * @returns {Uint8Array}
- */
-function encode_outpoint_source_id(id, source) {
-  try {
-    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-    const ptr0 = passArray8ToWasm0(id, wasm.__wbindgen_malloc);
-    const len0 = WASM_VECTOR_LEN;
-    wasm.encode_outpoint_source_id(retptr, ptr0, len0, source);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var v2 = getArrayU8FromWasm0(r0, r1).slice();
-    wasm.__wbindgen_free(r0, r1 * 1, 1);
-    return v2;
-  } finally {
-    wasm.__wbindgen_add_to_stack_pointer(16);
-  }
-}
-
-/**
+ * Given an output source id as bytes, and an output index, together representing a utxo,
+ * this function returns the input that puts them together, as bytes.
  * @param {Uint8Array} outpoint_source_id
  * @param {number} output_index
  * @returns {Uint8Array}
@@ -806,20 +830,23 @@ function encode_input_for_utxo(outpoint_source_id, output_index) {
 }
 
 /**
+ * Given a delegation id, an amount and a network type (mainnet, testnet, etc), this function
+ * creates an input that withdraws from a delegation.
+ * A nonce is needed because this spends from an account. The nonce must be in sequence for everything in that account.
  * @param {string} delegation_id
- * @param {string} amount
+ * @param {Amount} amount
  * @param {bigint} nonce
  * @param {Network} network
  * @returns {Uint8Array}
  */
-function encode_input_for_account_outpoint(delegation_id, amount, nonce, network) {
+function encode_input_for_withdraw_from_delegation(delegation_id, amount, nonce, network) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     const ptr0 = passStringToWasm0(delegation_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len0 = WASM_VECTOR_LEN;
-    const ptr1 = passStringToWasm0(amount, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len1 = WASM_VECTOR_LEN;
-    wasm.encode_input_for_account_outpoint(retptr, ptr0, len0, ptr1, len1, nonce, network);
+    _assertClass(amount, Amount);
+    var ptr1 = amount.__destroy_into_raw();
+    wasm.encode_input_for_withdraw_from_delegation(retptr, ptr0, len0, ptr1, nonce, network);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -835,22 +862,46 @@ function encode_input_for_account_outpoint(delegation_id, amount, nonce, network
   }
 }
 
+let cachedUint32Memory0 = null;
+
+function getUint32Memory0() {
+  if (cachedUint32Memory0 === null || cachedUint32Memory0.byteLength === 0) {
+    cachedUint32Memory0 = new Uint32Array(wasm.memory.buffer);
+  }
+  return cachedUint32Memory0;
+}
+
+function passArrayJsValueToWasm0(array, malloc) {
+  const ptr = malloc(array.length * 4, 4) >>> 0;
+  const mem = getUint32Memory0();
+  for (let i = 0; i < array.length; i++) {
+    mem[ptr / 4 + i] = addHeapObject(array[i]);
+  }
+  WASM_VECTOR_LEN = array.length;
+  return ptr;
+}
 /**
+ * Given the inputs, along each input's destination that can spend that input
+ * (e.g. If we are spending a UTXO in input number 1 and it is owned by address mtc1xxxx, then it is mtc1xxxx in element number 2 in the vector/list.
+ * for Account inputs that spend from a delegation it is the owning address of that delegation,
+ * and in the case of AccountCommand inputs which change a token it is the token's authority destination)
+ * and the outputs, estimate the transaction size.
  * @param {Uint8Array} inputs
- * @param {Uint8Array} opt_utxos
+ * @param {(string)[]} input_utxos_destinations
  * @param {Uint8Array} outputs
+ * @param {Network} network
  * @returns {number}
  */
-function estimate_transaction_size(inputs, opt_utxos, outputs) {
+function estimate_transaction_size(inputs, input_utxos_destinations, outputs, network) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     const ptr0 = passArray8ToWasm0(inputs, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
-    const ptr1 = passArray8ToWasm0(opt_utxos, wasm.__wbindgen_malloc);
+    const ptr1 = passArrayJsValueToWasm0(input_utxos_destinations, wasm.__wbindgen_malloc);
     const len1 = WASM_VECTOR_LEN;
     const ptr2 = passArray8ToWasm0(outputs, wasm.__wbindgen_malloc);
     const len2 = WASM_VECTOR_LEN;
-    wasm.estimate_transaction_size(retptr, ptr0, len0, ptr1, len1, ptr2, len2);
+    wasm.estimate_transaction_size(retptr, ptr0, len0, ptr1, len1, ptr2, len2, network);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -864,6 +915,8 @@ function estimate_transaction_size(inputs, opt_utxos, outputs) {
 }
 
 /**
+ * Given inputs as bytes, outputs as bytes, and flags settings, this function returns
+ * the transaction that contains them all, as bytes.
  * @param {Uint8Array} inputs
  * @param {Uint8Array} outputs
  * @param {bigint} flags
@@ -893,6 +946,7 @@ function encode_transaction(inputs, outputs, flags) {
 }
 
 /**
+ * Encode an input witness of the variant that contains no signature.
  * @returns {Uint8Array}
  */
 function encode_witness_no_signature() {
@@ -910,21 +964,23 @@ function encode_witness_no_signature() {
 }
 
 /**
+ * Given a private key, inputs and an input number to sign, and the destination that owns that output (through the utxo),
+ * and a network type (mainnet, testnet, etc), this function returns a witness to be used in a signed transaction, as bytes.
  * @param {SignatureHashType} sighashtype
  * @param {Uint8Array} private_key_bytes
- * @param {string} address
+ * @param {string} input_owner_destination
  * @param {Uint8Array} transaction_bytes
  * @param {Uint8Array} inputs
  * @param {number} input_num
  * @param {Network} network
  * @returns {Uint8Array}
  */
-function encode_witness(sighashtype, private_key_bytes, address, transaction_bytes, inputs, input_num, network) {
+function encode_witness(sighashtype, private_key_bytes, input_owner_destination, transaction_bytes, inputs, input_num, network) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     const ptr0 = passArray8ToWasm0(private_key_bytes, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
-    const ptr1 = passStringToWasm0(address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const ptr1 = passStringToWasm0(input_owner_destination, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
     const ptr2 = passArray8ToWasm0(transaction_bytes, wasm.__wbindgen_malloc);
     const len2 = WASM_VECTOR_LEN;
@@ -947,6 +1003,7 @@ function encode_witness(sighashtype, private_key_bytes, address, transaction_byt
 }
 
 /**
+ * Given an unsigned transaction, and signatures, this function returns a SignedTransaction object as bytes.
  * @param {Uint8Array} transaction_bytes
  * @param {Uint8Array} signatures
  * @returns {Uint8Array}
@@ -974,6 +1031,62 @@ function encode_signed_transaction(transaction_bytes, signatures) {
   }
 }
 
+function get_transaction_id(transaction_bytes, strict_byte_size) {
+  let deferred3_0;
+  let deferred3_1;
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    const ptr0 = passArray8ToWasm0(transaction_bytes, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    wasm.get_transaction_id(retptr, ptr0, len0, strict_byte_size);
+    var r0 = getInt32Memory0()[retptr / 4 + 0];
+    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r2 = getInt32Memory0()[retptr / 4 + 2];
+    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var ptr2 = r0;
+    var len2 = r1;
+    if (r3) {
+      ptr2 = 0;
+      len2 = 0;
+      throw takeObject(r2);
+    }
+    deferred3_0 = ptr2;
+    deferred3_1 = len2;
+    return getStringFromWasm0(ptr2, len2);
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+    wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
+  }
+}
+
+/**
+ * Calculate the "effective balance" of a pool, given the total pool balance and pledge by the pool owner/staker.
+ * The effective balance is how the influence of a pool is calculated due to its balance.
+ * @param {Network} network
+ * @param {Amount} pledge_amount
+ * @param {Amount} pool_balance
+ * @returns {Amount}
+ */
+function effective_pool_balance(network, pledge_amount, pool_balance) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    _assertClass(pledge_amount, Amount);
+    var ptr0 = pledge_amount.__destroy_into_raw();
+    _assertClass(pool_balance, Amount);
+    var ptr1 = pool_balance.__destroy_into_raw();
+    wasm.effective_pool_balance(retptr, network, ptr0, ptr1);
+    var r0 = getInt32Memory0()[retptr / 4 + 0];
+    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r2 = getInt32Memory0()[retptr / 4 + 2];
+    if (r2) {
+      throw takeObject(r1);
+    }
+    return Amount.__wrap(r0);
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
 function handleError(f, args) {
   try {
     return f.apply(this, args);
@@ -981,58 +1094,101 @@ function handleError(f, args) {
     wasm.__wbindgen_exn_store(addHeapObject(e));
   }
 }
-
 /**
- */
-const FreezableToken = Object.freeze({
-  No: 0,
-  0: 'No',
-  Yes: 1,
-  1: 'Yes',
-});
-
-/**
- */
-const SourceId = Object.freeze({
-  Transaction: 0,
-  0: 'Transaction',
-  BlockReward: 1,
-  1: 'BlockReward',
-});
-/**
- */
-const Network = Object.freeze({
-  Mainnet: 0,
-  0: 'Mainnet',
-  Testnet: 1,
-  1: 'Testnet',
-  Regtest: 2,
-  2: 'Regtest',
-  Signet: 3,
-  3: 'Signet',
-});
-/**
- */
-const SignatureHashType = Object.freeze({
-  ALL: 0,
-  0: 'ALL',
-  NONE: 1,
-  1: 'NONE',
-  SINGLE: 2,
-  2: 'SINGLE',
-  ANYONECANPAY: 3,
-  3: 'ANYONECANPAY',
-});
-/**
+ * The token supply of a specific token, set on issuance
  */
 const TotalSupply = Object.freeze({
+  /**
+   * Can be issued with no limit, but then can be locked to have a fixed supply.
+   */
   Lockable: 0,
   0: 'Lockable',
+  /**
+   * Unlimited supply, no limits except for numeric limits due to u128
+   */
   Unlimited: 1,
   1: 'Unlimited',
+  /**
+   * On issuance, the total number of coins is fixed
+   */
   Fixed: 2,
   2: 'Fixed',
 });
+/**
+ * A utxo can either come from a transaction or a block reward. This enum signifies that.
+ */
+const SourceId = Object.freeze({ Transaction: 0, 0: 'Transaction', BlockReward: 1, 1: 'BlockReward' });
+/**
+ * The part of the transaction that will be committed in the signature. Similar to bitcoin's sighash.
+ */
+const SignatureHashType = Object.freeze({ ALL: 0, 0: 'ALL', NONE: 1, 1: 'NONE', SINGLE: 2, 2: 'SINGLE', ANYONECANPAY: 3, 3: 'ANYONECANPAY' });
+/**
+ * The network, for which an operation to be done. Mainnet, testnet, etc.
+ */
+const Network = Object.freeze({ Mainnet: 0, 0: 'Mainnet', Testnet: 1, 1: 'Testnet', Regtest: 2, 2: 'Regtest', Signet: 3, 3: 'Signet' });
+/**
+ * Indicates whether a token can be frozen
+ */
+const FreezableToken = Object.freeze({ No: 0, 0: 'No', Yes: 1, 1: 'Yes' });
+
+const AmountFinalization = typeof FinalizationRegistry === 'undefined' ? { register: () => {}, unregister: () => {} } : new FinalizationRegistry((ptr) => wasm.__wbg_amount_free(ptr >>> 0));
+/**
+ * Amount type abstraction. The amount type is stored in a string
+ * since JavaScript number type cannot fit 128-bit integers.
+ * The amount is given as an integer in units of "atoms".
+ * Atoms are the smallest, indivisible amount of a coin or token.
+ */
+class Amount {
+  static __wrap(ptr) {
+    ptr = ptr >>> 0;
+    const obj = Object.create(Amount.prototype);
+    obj.__wbg_ptr = ptr;
+    AmountFinalization.register(obj, obj.__wbg_ptr, obj);
+    return obj;
+  }
+
+  __destroy_into_raw() {
+    const ptr = this.__wbg_ptr;
+    this.__wbg_ptr = 0;
+    AmountFinalization.unregister(this);
+    return ptr;
+  }
+
+  free() {
+    const ptr = this.__destroy_into_raw();
+    wasm.__wbg_amount_free(ptr);
+  }
+  /**
+   * @param {string} atoms
+   * @returns {Amount}
+   */
+  static from_atoms(atoms) {
+    const ptr0 = passStringToWasm0(atoms, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.amount_from_atoms(ptr0, len0);
+    return Amount.__wrap(ret);
+  }
+  /**
+   * @returns {string}
+   */
+  atoms() {
+    let deferred1_0;
+    let deferred1_1;
+    try {
+      const ptr = this.__destroy_into_raw();
+      const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+      wasm.amount_atoms(retptr, ptr);
+      var r0 = getInt32Memory0()[retptr / 4 + 0];
+      var r1 = getInt32Memory0()[retptr / 4 + 1];
+      deferred1_0 = r0;
+      deferred1_1 = r1;
+      return getStringFromWasm0(r0, r1);
+    } finally {
+      wasm.__wbindgen_add_to_stack_pointer(16);
+      wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+    }
+  }
+}
 
 async function __wbg_load(module, imports) {
   if (typeof Response === 'function' && module instanceof Response) {
@@ -1041,7 +1197,6 @@ async function __wbg_load(module, imports) {
         return await WebAssembly.instantiateStreaming(module, imports);
       } catch (e) {
         if (module.headers.get('Content-Type') != 'application/wasm') {
-         
         } else {
           throw e;
         }
@@ -1120,11 +1275,11 @@ function __wbg_get_imports() {
       getObject(arg0).getRandomValues(getObject(arg1));
     }, arguments);
   };
-  imports.wbg.__wbg_newnoargs_cfecb3965268594c = function (arg0, arg1) {
+  imports.wbg.__wbg_newnoargs_e258087cd0daa0ea = function (arg0, arg1) {
     const ret = new Function(getStringFromWasm0(arg0, arg1));
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_call_3f093dd26d5569f8 = function () {
+  imports.wbg.__wbg_call_27c0f87801dedf93 = function () {
     return handleError(function (arg0, arg1) {
       const ret = getObject(arg0).call(getObject(arg1));
       return addHeapObject(ret);
@@ -1134,25 +1289,25 @@ function __wbg_get_imports() {
     const ret = getObject(arg0);
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_self_05040bd9523805b9 = function () {
+  imports.wbg.__wbg_self_ce0dbfc45cf2f5be = function () {
     return handleError(function () {
       const ret = self.self;
       return addHeapObject(ret);
     }, arguments);
   };
-  imports.wbg.__wbg_window_adc720039f2cb14f = function () {
+  imports.wbg.__wbg_window_c6fb939a7f436783 = function () {
     return handleError(function () {
       const ret = window.window;
       return addHeapObject(ret);
     }, arguments);
   };
-  imports.wbg.__wbg_globalThis_622105db80c1457d = function () {
+  imports.wbg.__wbg_globalThis_d1e6af4856ba331b = function () {
     return handleError(function () {
       const ret = globalThis.globalThis;
       return addHeapObject(ret);
     }, arguments);
   };
-  imports.wbg.__wbg_global_f56b013ed9bcf359 = function () {
+  imports.wbg.__wbg_global_207b558942527489 = function () {
     return handleError(function () {
       const ret = global.global;
       return addHeapObject(ret);
@@ -1162,34 +1317,42 @@ function __wbg_get_imports() {
     const ret = getObject(arg0) === undefined;
     return ret;
   };
-  imports.wbg.__wbg_call_67f2111acd2dfdb6 = function () {
+  imports.wbg.__wbg_call_b3ca7c6051f9bec1 = function () {
     return handleError(function (arg0, arg1, arg2) {
       const ret = getObject(arg0).call(getObject(arg1), getObject(arg2));
       return addHeapObject(ret);
     }, arguments);
   };
-  imports.wbg.__wbg_buffer_b914fb8b50ebbc3e = function (arg0) {
+  imports.wbg.__wbg_buffer_12d079cc21e14bdb = function (arg0) {
     const ret = getObject(arg0).buffer;
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_newwithbyteoffsetandlength_0de9ee56e9f6ee6e = function (arg0, arg1, arg2) {
+  imports.wbg.__wbg_newwithbyteoffsetandlength_aa4a17c33a06e5cb = function (arg0, arg1, arg2) {
     const ret = new Uint8Array(getObject(arg0), arg1 >>> 0, arg2 >>> 0);
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_new_b1f2d6842d615181 = function (arg0) {
+  imports.wbg.__wbg_new_63b92bc8671ed464 = function (arg0) {
     const ret = new Uint8Array(getObject(arg0));
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_set_7d988c98e6ced92d = function (arg0, arg1, arg2) {
+  imports.wbg.__wbg_set_a47bac70306a19a7 = function (arg0, arg1, arg2) {
     getObject(arg0).set(getObject(arg1), arg2 >>> 0);
   };
-  imports.wbg.__wbg_newwithlength_0d03cef43b68a530 = function (arg0) {
+  imports.wbg.__wbg_newwithlength_e9b4878cebadb3d3 = function (arg0) {
     const ret = new Uint8Array(arg0 >>> 0);
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_subarray_adc418253d76e2f1 = function (arg0, arg1, arg2) {
+  imports.wbg.__wbg_subarray_a1f73cd4b5b42fe1 = function (arg0, arg1, arg2) {
     const ret = getObject(arg0).subarray(arg1 >>> 0, arg2 >>> 0);
     return addHeapObject(ret);
+  };
+  imports.wbg.__wbindgen_string_get = function (arg0, arg1) {
+    const obj = getObject(arg1);
+    const ret = typeof obj === 'string' ? obj : undefined;
+    var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len1 = WASM_VECTOR_LEN;
+    getInt32Memory0()[arg0 / 4 + 1] = len1;
+    getInt32Memory0()[arg0 / 4 + 0] = ptr1;
   };
   imports.wbg.__wbindgen_throw = function (arg0, arg1) {
     throw new Error(getStringFromWasm0(arg0, arg1));
@@ -1208,6 +1371,7 @@ function __wbg_finalize_init(instance, module) {
   wasm = instance.exports;
   __wbg_init.__wbindgen_wasm_module = module;
   cachedInt32Memory0 = null;
+  cachedUint32Memory0 = null;
   cachedUint8Memory0 = null;
 
   return wasm;
@@ -1233,15 +1397,11 @@ async function __wbg_init(input) {
   if (wasm !== undefined) return wasm;
 
   // if (typeof input === 'undefined') {
-  //   input = new URL('wasm_crypto_bg.wasm', import.meta.url)
+  // input = new URL('wasm_wrappers_bg.wasm', import.meta.url);
   // }
   const imports = __wbg_get_imports();
 
-  if (
-    typeof input === 'string' ||
-    (typeof Request === 'function' && input instanceof Request) ||
-    (typeof URL === 'function' && input instanceof URL)
-  ) {
+  if (typeof input === 'string' || (typeof Request === 'function' && input instanceof Request) || (typeof URL === 'function' && input instanceof URL)) {
     input = fetch(input);
   }
 
@@ -1256,16 +1416,21 @@ const context = {
   echo: (message) => Promise.resolve(message),
   public_key_from_private_key,
   make_receiving_address,
-  pubkey_to_string,
+  pubkey_to_pubkeyhash_address,
   make_default_account_privkey,
   make_change_address,
   encode_outpoint_source_id,
   encode_input_for_utxo,
-  encode_output_transfer,
+  encode_output_transfer: (amount, address, network) => {
+    return encode_output_transfer(Amount.from_atoms(amount), address, network);
+  },
   encode_transaction,
   encode_witness,
   encode_signed_transaction,
   estimate_transaction_size,
+  encode_output_lock_then_transfer: (amount, address, lockEncoded, networkIndex) => {
+    return encode_output_lock_then_transfer(Amount.from_atoms(amount), address, lockEncoded, networkIndex);
+  },
   initWasm,
 };
 
@@ -1296,6 +1461,7 @@ const onmessage = (e) => {
     postMessage({
       type: 'callback',
       callbackId,
+      method,
       error: error && { message: error.message, name: error.name },
       result,
     });

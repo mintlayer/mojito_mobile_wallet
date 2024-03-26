@@ -171,4 +171,8 @@ const totalUtxosAmount = (utxosToSpend) => {
     }, 0);
 };
 
-export { getUtxoBalance, getUtxoTransaction, getUtxoTransactionsBytes, getOutpointedSourceId, getTransactionUtxos, getUtxoTransactions, getTransactionsBytes, getOutpointedSourceIds, getTxInputs, getTxOutput, getTransactionHex, getOptUtxos, getEncodedWitnesses, getArraySpead, getUtxoAvailable, totalUtxosAmount };
+const getUtxoAddress = (utxosToSpend) => {
+  return utxosToSpend.flatMap((utxo) => [...utxo]).map((utxo) => utxo.utxo.destination);
+};
+
+export { getUtxoBalance, getUtxoTransaction, getUtxoTransactionsBytes, getOutpointedSourceId, getTransactionUtxos, getUtxoTransactions, getTransactionsBytes, getOutpointedSourceIds, getTxInputs, getTxOutput, getTransactionHex, getOptUtxos, getEncodedWitnesses, getArraySpead, getUtxoAvailable, totalUtxosAmount, getUtxoAddress };

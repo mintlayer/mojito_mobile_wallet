@@ -14,8 +14,8 @@
       "sha1": "4ef29a9163b56df34a3486b98b24be3a3d0cdca6"
     },
     {
-      "path": "assets/mintlayer/wasm_crypto_bg.wasm",
-      "sha1": "c146af2a955dff3172aca7585e744b13d58a0f5d"
+      "path": "assets/mintlayer/wasm_wrappers_bg.wasm",
+      "sha1": "415a233de3bcfbc1ee1163db0b0334b833b3b879"
     }
   ]
 }

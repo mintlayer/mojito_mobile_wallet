@@ -32,7 +32,7 @@ class WebViewEventBus {
 
   onMessage(e) {
     const data = JSON.parse(e.nativeEvent.data);
-    const { type, error, result, callbackId } = data;
+    const { type, error, result, callbackId, method } = data;
 
     const defer = this._pending[callbackId];
     if (!defer) {
@@ -42,7 +42,7 @@ class WebViewEventBus {
 
     delete this._pending[callbackId];
     if (error) {
-      console.error('onMessage', error);
+      console.error('onMessage', method, error);
       defer.reject(new Error(error.message));
     } else {
       defer.resolve(result);
