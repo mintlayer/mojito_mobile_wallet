@@ -66,7 +66,7 @@ import RBFCancel from './screen/transactions/RBFCancel';
 import ReceiveDetails from './screen/receive/details';
 import AztecoRedeem from './screen/receive/aztecoRedeem';
 
-import SendDetails from './screen/send/details';
+import SendDetails from './screen/send/details/index';
 import ScanQRCode from './screen/send/ScanQRCode';
 import SendCreate from './screen/send/create';
 import Confirm from './screen/send/confirm';

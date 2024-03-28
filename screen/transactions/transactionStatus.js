@@ -12,6 +12,8 @@ import loc, { formatBalanceWithoutSuffix } from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
+import { MintlayerUnit } from '../../models/mintlayerUnits';
 
 const buttonStatus = Object.freeze({
   possible: 1,
@@ -254,7 +256,7 @@ const TransactionsStatus = () => {
     });
   };
   const navigateToTransactionDetials = () => {
-    navigate('TransactionDetails', { hash: tx.hash });
+    navigate('TransactionDetails', { hash: tx.hash, walletType: wallet.current.type, walletPreferredBalanceUnit: wallet.current.preferredBalanceUnit });
   };
 
   const renderCPFP = () => {
@@ -327,6 +329,9 @@ const TransactionsStatus = () => {
     }
   };
 
+  const fee = wallet.current.type === MintLayerWallet.type ? tx?.fee.atoms : tx?.fee;
+  const feeUnit = wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit !== MintlayerUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit;
+
   if (isLoading || !tx) {
     return (
       <SafeBlueArea>
@@ -378,10 +383,10 @@ const TransactionsStatus = () => {
             </View>
           </View>
 
-          {tx.fee && (
+          {fee && (
             <View style={styles.fee}>
               <BlueText style={styles.feeText}>
-                {loc.send.create_fee.toLowerCase()} {formatBalanceWithoutSuffix(tx.fee, wallet.current.preferredBalanceUnit, true)} {wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit}
+                {loc.send.create_fee.toLowerCase()} {formatBalanceWithoutSuffix(fee, wallet.current.preferredBalanceUnit, true)} {feeUnit}
               </BlueText>
             </View>
           )}

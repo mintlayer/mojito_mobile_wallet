@@ -1,5 +1,7 @@
-import { SignatureHashType, SourceId } from './@mintlayerlib-js/wasm_crypto.js';
+import bigInt from 'big-integer';
+import { SignatureHashType, SourceId } from './@mintlayerlib-js/wasm_wrappers';
 import webviewEventBus from '../../class/webview-event-bus';
+import * as Mintlayer from '../Mintlayer';
 
 const NETWORKS = {
   mainnet: 0,
@@ -11,7 +13,7 @@ const NETWORKS = {
 const wasmMethods = {
   public_key_from_private_key: 'public_key_from_private_key',
   make_receiving_address: 'make_receiving_address',
-  pubkey_to_string: 'pubkey_to_string',
+  pubkey_to_pubkeyhash_address: 'pubkey_to_pubkeyhash_address',
   make_default_account_privkey: 'make_default_account_privkey',
   make_change_address: 'make_change_address',
   encode_outpoint_source_id: 'encode_outpoint_source_id',
@@ -21,6 +23,11 @@ const wasmMethods = {
   encode_witness: 'encode_witness',
   encode_signed_transaction: 'encode_signed_transaction',
   estimate_transaction_size: 'estimate_transaction_size',
+  encode_lock_until_time: 'encode_lock_until_time',
+  encode_lock_until_height: 'encode_lock_until_height',
+  encode_output_lock_then_transfer: 'encode_output_lock_then_transfer',
+  staking_pool_spend_maturity_block_count: 'staking_pool_spend_maturity_block_count',
+  encode_lock_for_block_count: 'encode_lock_for_block_count',
 };
 
 export const getPrivateKeyFromMnemonic = async (mnemonic, networkType) => {
@@ -45,7 +52,7 @@ export const getPublicKeyFromPrivate = async (privateKey) => {
 };
 
 export const getPubKeyString = (pubkey, network) => {
-  return webviewEventBus.exec(wasmMethods.pubkey_to_string, [pubkey, network]);
+  return webviewEventBus.exec(wasmMethods.pubkey_to_pubkeyhash_address, [pubkey, network]);
 };
 
 export const getAddressFromPubKey = (pubKey, networkType) => {
@@ -61,14 +68,42 @@ export const getTxInput = async (outpointSourceId, index) => {
   return webviewEventBus.exec(wasmMethods.encode_input_for_utxo, [outpointSourceId, index]);
 };
 
-export const getOutputs = async (amount, address, networkType) => {
+export const getOutputs = async ({ amount, address, networkType, type = 'Transfer', lock }) => {
+  if (type === 'LockThenTransfer' && !lock) {
+    throw new Error('LockThenTransfer requires a lock');
+  }
+
   const networkIndex = NETWORKS[networkType];
-  return webviewEventBus.exec(wasmMethods.encode_output_transfer, [amount, address, networkIndex]);
+  if (type === 'Transfer') {
+    return webviewEventBus.exec(wasmMethods.encode_output_transfer, [amount, address, networkIndex]);
+  }
+  if (type === 'LockThenTransfer') {
+    let lockEncoded;
+    if (lock.UntilTime) {
+      lockEncoded = await webviewEventBus.exec(wasmMethods.encode_lock_until_time, [BigInt(lock.UntilTime.timestamp)]);
+    }
+    if (lock.ForBlockCount) {
+      lockEncoded = await webviewEventBus.exec(wasmMethods.encode_lock_until_height, [BigInt(lock.ForBlockCount)]);
+    }
+
+    return webviewEventBus.exec(wasmMethods.encode_output_lock_then_transfer, [amount, address, lockEncoded, networkIndex]);
+  }
+  if (type === 'spendFromDelegation') {
+    const chainTip = await Mintlayer.getChainTip();
+    const stakingMaturity = await getStakingMaturity(JSON.parse(chainTip).block_height, networkType);
+    const encodedLockForBlock = await webviewEventBus.exec(wasmMethods.encode_lock_for_block_count, [stakingMaturity]);
+    return webviewEventBus.exec(wasmMethods.encode_output_lock_then_transfer, [amount, address, encodedLockForBlock, networkIndex]);
+  }
+};
+
+export const getStakingMaturity = async (blockHeight, networkType) => {
+  const networkIndex = NETWORKS[networkType];
+  return webviewEventBus.exec(wasmMethods.staking_pool_spend_maturity_block_count, [BigInt(Number(blockHeight)), networkIndex]);
 };
 
 export const getTransaction = async (inputs, outputs) => {
-  // const flags = BigInt(0);
-  return webviewEventBus.exec(wasmMethods.encode_transaction, [inputs, outputs, 0]);
+  const flags = bigInt(0);
+  return webviewEventBus.exec(wasmMethods.encode_transaction, [inputs, outputs, flags]);
 };
 
 export const getEncodedWitness = async (
@@ -88,6 +123,7 @@ export const getEncodedSignedTransaction = async (transaction, witness) => {
   return webviewEventBus.exec(wasmMethods.encode_signed_transaction, [transaction, witness]);
 };
 
-export const getEstimatetransactionSize = async (inputs, optUtxos, outputs) => {
-  return webviewEventBus.exec(wasmMethods.estimate_transaction_size, [inputs, optUtxos, outputs]);
+export const getEstimatetransactionSize = async (inputs, inputAddresses, outputs, networkType) => {
+  const networkIndex = NETWORKS[networkType];
+  return webviewEventBus.exec(wasmMethods.estimate_transaction_size, [inputs, inputAddresses, outputs, networkIndex]);
 };

@@ -23,6 +23,7 @@ const ButtonSelected = Object.freeze({
   OFFCHAIN: Chain.OFFCHAIN,
   VAULT: 'VAULT',
   LDK: 'LDK',
+  ML: 'ML',
 });
 
 const WalletsAdd = () => {
@@ -230,6 +231,11 @@ const WalletsAdd = () => {
     setSelectedWalletType(ButtonSelected.LDK);
   };
 
+  const handleOnMLButtonPressed = async () => {
+    Keyboard.dismiss();
+    setSelectedWalletType(ButtonSelected.ML);
+  };
+
   return (
     <ScrollView style={stylesHook.root}>
       <StatusBar barStyle={Platform.select({ ios: 'light-content', default: useColorScheme() === 'dark' ? 'light-content' : 'dark-content' })} />
@@ -246,7 +252,7 @@ const WalletsAdd = () => {
           <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} comingSoon={false} />
           {backdoorPressed > 10 ? <LdkButton active={selectedWalletType === ButtonSelected.LDK} onPress={handleOnLdkButtonPressed} style={styles.button} subtext={LightningLdkWallet.getPackageVersion()} text="LDK" /> : null}
 
-          <MintLayerButton testID="ActivateMintlayerButton" title="ML" subtitle="Mintlayer" style={styles.button} />
+          <MintLayerButton testID="ActivateMintlayerButton" active={selectedWalletType === ButtonSelected.ML} onPress={handleOnMLButtonPressed} title="ML" subtitle="Mintlayer" style={styles.button} />
         </View>
 
         <View style={styles.advanced}>

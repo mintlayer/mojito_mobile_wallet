@@ -11,6 +11,7 @@ import loc, { formatBalance } from '../loc';
 import { BlueStorageContext } from '../blue_modules/storage-context';
 import ToolTipMenu from './TooltipMenu';
 import { BluePrivateBalance } from '../BlueComponents';
+import { MintLayerWallet } from '../class/wallets/mintlayer-wallet';
 
 export default class TransactionsNavigationHeader extends Component {
   static propTypes = {
@@ -124,18 +125,23 @@ export default class TransactionsNavigationHeader extends Component {
     this.menuRef.current?.dismissMenu();
     let walletPreviousPreferredUnit = this.state.wallet.getPreferredBalanceUnit();
     const wallet = this.state.wallet;
-    if (walletPreviousPreferredUnit === BitcoinUnit.BTC) {
-      wallet.preferredBalanceUnit = BitcoinUnit.SATS;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
-    } else if (walletPreviousPreferredUnit === BitcoinUnit.SATS) {
-      wallet.preferredBalanceUnit = BitcoinUnit.LOCAL_CURRENCY;
-      walletPreviousPreferredUnit = BitcoinUnit.SATS;
-    } else if (walletPreviousPreferredUnit === BitcoinUnit.LOCAL_CURRENCY) {
-      wallet.preferredBalanceUnit = BitcoinUnit.BTC;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
+
+    if (wallet.type === MintLayerWallet.type) {
+      wallet.changePreferredBalanceUnit();
     } else {
-      wallet.preferredBalanceUnit = BitcoinUnit.BTC;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
+      if (walletPreviousPreferredUnit === BitcoinUnit.BTC) {
+        wallet.preferredBalanceUnit = BitcoinUnit.SATS;
+        walletPreviousPreferredUnit = BitcoinUnit.BTC;
+      } else if (walletPreviousPreferredUnit === BitcoinUnit.SATS) {
+        wallet.preferredBalanceUnit = BitcoinUnit.LOCAL_CURRENCY;
+        walletPreviousPreferredUnit = BitcoinUnit.SATS;
+      } else if (walletPreviousPreferredUnit === BitcoinUnit.LOCAL_CURRENCY) {
+        wallet.preferredBalanceUnit = BitcoinUnit.BTC;
+        walletPreviousPreferredUnit = BitcoinUnit.BTC;
+      } else {
+        wallet.preferredBalanceUnit = BitcoinUnit.BTC;
+        walletPreviousPreferredUnit = BitcoinUnit.BTC;
+      }
     }
 
     this.setState({ wallet, walletPreviousPreferredUnit: walletPreviousPreferredUnit }, () => {
@@ -194,6 +200,8 @@ export default class TransactionsNavigationHeader extends Component {
                 return I18nManager.isRTL ? require('../img/lnd-shape-rtl.png') : require('../img/lnd-shape.png');
               case MultisigHDWallet.type:
                 return I18nManager.isRTL ? require('../img/vault-shape-rtl.png') : require('../img/vault-shape.png');
+              case MintLayerWallet.type:
+                return I18nManager.isRTL ? require('../img/ml-shape-rtl.png') : require('../img/ml-shape.png');
               default:
                 return I18nManager.isRTL ? require('../img/btc-shape-rtl.png') : require('../img/btc-shape.png');
             }

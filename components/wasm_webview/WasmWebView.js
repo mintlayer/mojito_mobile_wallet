@@ -25,7 +25,8 @@ export const WasmWebView = ({ setWasmInitializationFinished }) => {
 
   const onLoadEnd = async () => {
     try {
-      const pathToWasm = Platform.OS === 'android' ? 'custom/wasm_crypto_bg.wasm' : 'wasm_crypto_bg.wasm';
+      const wasmFileName = 'wasm_wrappers_bg.wasm';
+      const pathToWasm = Platform.OS === 'android' ? `custom/${wasmFileName}` : wasmFileName;
       const path = RNFetchBlob.fs.asset(pathToWasm);
       const wasmBinary = await RNFetchBlob.fs.readFile(path, 'base64').then();
       webViewEventBus.setWebViewRef(webviewRef);
