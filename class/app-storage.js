@@ -224,7 +224,8 @@ export class AppStorage {
     const password = this.hashIt(this.cachedPassword || 'fyegjitkyf[eqjnc.lf');
     const buf = Buffer.from(this.hashIt(password) + this.hashIt(password), 'hex');
     const encryptionKey = Int8Array.from(buf);
-    const path = this.hashIt(this.hashIt(password)) + '-wallettransactions.realm';
+    const prefix = this.prefix;
+    const path = prefix + this.hashIt(this.hashIt(password)) + '-wallettransactions.realm';
 
     const schema = [
       {
