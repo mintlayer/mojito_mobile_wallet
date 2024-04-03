@@ -10,6 +10,7 @@ import { BlueText } from '../../BlueComponents';
 import dayjs from 'dayjs';
 import { MintlayerUnit } from '../../models/mintlayerUnits';
 import { ML_ATOMS_PER_COIN } from '../../blue_modules/Mintlayer';
+import { getFormattedMlUnitByTestMode } from '../../utils/ML/format';
 const currency = require('../../blue_modules/currency');
 dayjs.extend(require('dayjs/plugin/localizedFormat'));
 
@@ -25,6 +26,7 @@ class AmountInputML extends Component {
     unit: PropTypes.string,
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
+    isTestMode: PropTypes.bool,
   };
 
   /**
@@ -71,6 +73,7 @@ class AmountInputML extends Component {
     let ml = 0;
     switch (previousUnit) {
       case MintlayerUnit.ML:
+      case MintlayerUnit.TML:
         ml = amount * ML_ATOMS_PER_COIN;
         break;
       case MintlayerUnit.LOCAL_CURRENCY:
@@ -96,7 +99,7 @@ class AmountInputML extends Component {
   changeAmountUnit = () => {
     let previousUnit = this.props.unit;
     let newUnit;
-    if (previousUnit === MintlayerUnit.ML) {
+    if (previousUnit === MintlayerUnit.ML || previousUnit === MintlayerUnit.TML) {
       newUnit = MintlayerUnit.LOCAL_CURRENCY;
     } else if (previousUnit === MintlayerUnit.LOCAL_CURRENCY) {
       newUnit = MintlayerUnit.ML;
@@ -110,6 +113,7 @@ class AmountInputML extends Component {
   maxLength = () => {
     switch (this.props.unit) {
       case MintlayerUnit.ML:
+      case MintlayerUnit.TML:
         return 12;
       default:
         return 15;
@@ -181,7 +185,8 @@ class AmountInputML extends Component {
   };
 
   render() {
-    const { colors, disabled, unit } = this.props;
+    const { colors, disabled, unit, isTestMode } = this.props;
+    const displayUnit = (unit) => getFormattedMlUnitByTestMode(unit, isTestMode);
     const originalAmount = this.props.amount || 0;
     const amount = originalAmount.toString().includes('e') ? BigNumber(originalAmount).toFormat() : originalAmount;
     let secondaryDisplayCurrency = formatBalanceWithoutSuffix(amount, MintlayerUnit.LOCAL_CURRENCY, false);
@@ -189,6 +194,7 @@ class AmountInputML extends Component {
     let amountInCoins;
     switch (unit) {
       case MintlayerUnit.ML:
+      case MintlayerUnit.TML:
         amountInCoins = new BigNumber(amount).multipliedBy(ML_ATOMS_PER_COIN).toString();
         secondaryDisplayCurrency = formatBalanceWithoutSuffix(amountInCoins, MintlayerUnit.LOCAL_CURRENCY, false);
         break;
@@ -240,12 +246,12 @@ class AmountInputML extends Component {
                     <Text style={[styles.input, stylesHook.input]}>{MintlayerUnit.MAX}</Text>
                   </Pressable>
                 )}
-                {unit !== MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX && <Text style={[styles.cryptoCurrency, stylesHook.cryptoCurrency]}>{' ' + loc.units[unit]}</Text>}
+                {unit !== MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX && <Text style={[styles.cryptoCurrency, stylesHook.cryptoCurrency]}>{' ' + loc.units[displayUnit(unit)]}</Text>}
               </View>
               <View style={styles.secondaryRoot}>
                 <Text style={styles.secondaryText}>
                   {unit === MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX ? removeTrailingZeros(secondaryDisplayCurrency) : secondaryDisplayCurrency}
-                  {unit === MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX ? ` ${loc.units[MintlayerUnit.ML]}` : null}
+                  {unit === MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX ? ` ${loc.units[displayUnit(MintlayerUnit.ML)]}` : null}
                 </Text>
               </View>
             </View>

@@ -83,7 +83,7 @@ export const getOutputs = async ({ amount, address, networkType, type = 'Transfe
       lockEncoded = await webviewEventBus.exec(wasmMethods.encode_lock_until_time, [BigInt(lock.UntilTime.timestamp)]);
     }
     if (lock.ForBlockCount) {
-      lockEncoded = await webviewEventBus.exec(wasmMethods.encode_lock_until_height, [BigInt(lock.ForBlockCount)]);
+      lockEncoded = await webviewEventBus.exec(wasmMethods.encode_lock_for_block_count, [BigInt(lock.ForBlockCount)]);
     }
 
     return webviewEventBus.exec(wasmMethods.encode_output_lock_then_transfer, [amount, address, lockEncoded, networkIndex]);

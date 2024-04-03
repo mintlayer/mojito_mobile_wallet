@@ -20,9 +20,9 @@ export class MintLayerWallet extends AbstractHDWallet {
     this._txs_by_external_index = {};
     this._txs_by_internal_index = {};
 
-    this.preferredBalanceUnit = MintlayerUnit.ML;
     this.gapLimit = 20;
     this.network = (opts && opts.network) || ML_NETWORK_TYPES.MAINNET;
+    this.preferredBalanceUnit = this.network === ML_NETWORK_TYPES.MAINNET ? MintlayerUnit.ML : MintlayerUnit.TML;
   }
 
   getPreferredBalanceUnit() {
@@ -31,11 +31,15 @@ export class MintLayerWallet extends AbstractHDWallet {
         return this.preferredBalanceUnit;
       }
     }
-    return MintlayerUnit.ML;
+    return this.network === ML_NETWORK_TYPES.MAINNET ? MintlayerUnit.ML : MintlayerUnit.TML;
   }
 
   changePreferredBalanceUnit() {
-    this.preferredBalanceUnit = this.getPreferredBalanceUnit() === MintlayerUnit.ML ? MintlayerUnit.LOCAL_CURRENCY : MintlayerUnit.ML;
+    if (this.getPreferredBalanceUnit() === MintlayerUnit.ML || this.getPreferredBalanceUnit() === MintlayerUnit.TML) {
+      this.preferredBalanceUnit = MintlayerUnit.LOCAL_CURRENCY;
+    } else {
+      this.preferredBalanceUnit = this.network === ML_NETWORK_TYPES.MAINNET ? MintlayerUnit.ML : MintlayerUnit.TML;
+    }
   }
 
   async generateMnemonicFromEntropy(entropy) {

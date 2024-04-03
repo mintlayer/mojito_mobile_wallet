@@ -655,9 +655,11 @@
   "units": {
     "BTC": "BTC",
     "ML": "ML",
+    "TML": "TML",
     "MAX": "Max",
     "sat_vbyte": "sat/vByte",
     "ml_vbyte": "ML/vByte",
+    "tml_vbyte": "TML/vByte",
     "sats": "sats"
   },
   "addresses": {

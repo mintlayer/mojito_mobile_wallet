@@ -24,7 +24,7 @@ const currency = require('../../../blue_modules/currency');
 const prompt = require('../../../blue_modules/prompt');
 
 const SendDetails = () => {
-  const { wallets, setSelectedWallet, sleep, txMetadata, saveToDisk, isTestModeEnabled } = useContext(BlueStorageContext);
+  const { wallets, setSelectedWallet, sleep, txMetadata, saveToDisk, isTestMode } = useContext(BlueStorageContext);
   const navigation = useNavigation();
   const { name, params: routeParams } = useRoute();
   const scrollView = useRef();
@@ -52,7 +52,7 @@ const SendDetails = () => {
   const [dumb, setDumb] = useState(false);
   const { isEditable = true } = routeParams;
   const isMintlayerWallet = wallet?.type === MintLayerWallet.type;
-  const unit = isMintlayerWallet ? MintlayerUnit.ML : BitcoinUnit.BTC;
+  const unit = isMintlayerWallet ? (isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML) : BitcoinUnit.BTC;
 
   // if utxo is limited we use it to calculate available balance
   const balance = utxo ? utxo.reduce((prev, curr) => prev + curr.value, 0) : wallet?.getBalance();
@@ -165,9 +165,6 @@ const SendDetails = () => {
   }, [routeParams.uri, routeParams.address]);
 
   useEffect(() => {
-    isTestModeEnabled().then((a) => {
-      console.log('isTestModeEnabled', a);
-    });
     // check if we have a suitable wallet
     const suitable = wallets.filter((wallet) => wallet.chain === Chain.ONCHAIN && wallet.allowSend());
     if (suitable.length === 0) {
@@ -258,13 +255,13 @@ const SendDetails = () => {
 
   const formatFee = (fee) => formatBalance(fee, feeUnit, true);
 
-  const { renderTransactionInfoFields } = useTransactionInfoFields({ wallet, scrollView, isMintlayerWallet, scrollIndex, isLoading, setIsLoading, addresses, setAddresses, units, setUnits, amountUnit, setAmountUnit, isEditable, transactionMemo, setTransactionMemo, setPayjoinUrl, width, name, stylesHook, styles });
+  const { renderTransactionInfoFields } = useTransactionInfoFields({ wallet, scrollView, isMintlayerWallet, scrollIndex, isLoading, setIsLoading, addresses, setAddresses, units, setUnits, amountUnit, setAmountUnit, isEditable, transactionMemo, setTransactionMemo, setPayjoinUrl, width, name, isTestMode, stylesHook, styles });
 
   const getFeeRateVByte = (rate) => {
     if (isMintlayerWallet) {
       const calculateFeeFailed = feePrecalc.slowFee === null;
       const finalRate = calculateFeeFailed ? networkTransactionFees.fastestFee : rate;
-      return `${formatBalanceWithoutSuffix(finalRate, MintlayerUnit.ML)} ${loc.units.ml_vbyte}`;
+      return `${formatBalanceWithoutSuffix(finalRate, MintlayerUnit.ML)} ${isTestMode ? loc.units.tml_vbyte : loc.units.ml_vbyte}`;
     }
 
     return `${rate} ${loc.units.sat_vbyte}`;

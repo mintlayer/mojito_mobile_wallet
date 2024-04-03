@@ -14,7 +14,7 @@ import { MintlayerUnit } from '../../../../models/mintlayerUnits';
 
 const btcAddressRx = /^[a-zA-Z0-9]{26,35}$/;
 
-export const useTransactionInfoFields = ({ wallet, scrollView, isMintlayerWallet, scrollIndex, isLoading, setIsLoading, addresses, setAddresses, units, setUnits, amountUnit, setAmountUnit, isEditable, transactionMemo, setTransactionMemo, setPayjoinUrl, width, name, stylesHook, styles }) => {
+export const useTransactionInfoFields = ({ wallet, scrollView, isMintlayerWallet, scrollIndex, isLoading, setIsLoading, addresses, setAddresses, units, setUnits, amountUnit, setAmountUnit, isEditable, transactionMemo, setTransactionMemo, setPayjoinUrl, width, name, isTestMode, stylesHook, styles }) => {
   const renderBitcoinTransactionInfoFields = (params) => {
     const { item, index } = params;
     const itemAmount = item.amount ? item.amount.toString() : 0;
@@ -172,10 +172,10 @@ export const useTransactionInfoFields = ({ wallet, scrollView, isMintlayerWallet
 
               switch (unit) {
                 case MintlayerUnit.ML:
+                case MintlayerUnit.TML:
                   item.amountInCoins = currency.mlToCoins(item.amount);
                   break;
                 case MintlayerUnit.LOCAL_CURRENCY:
-                  // also accounting for cached fiat->sat conversion to avoid rounding error
                   item.amountInCoins = currency.mlToCoins(currency.fiatToML(item.amount));
                   break;
               }
@@ -193,6 +193,7 @@ export const useTransactionInfoFields = ({ wallet, scrollView, isMintlayerWallet
               item.amount = text;
               switch (units[index] || amountUnit) {
                 case MintlayerUnit.ML:
+                case MintlayerUnit.TML:
                   item.amountInCoins = currency.mlToCoins(item.amount);
                   break;
                 case BitcoinUnit.LOCAL_CURRENCY:
@@ -208,6 +209,7 @@ export const useTransactionInfoFields = ({ wallet, scrollView, isMintlayerWallet
           editable={isEditable}
           disabled={!isEditable}
           inputAccessoryViewID={InputAccessoryAllFunds.InputAccessoryViewID}
+          isTestMode={isTestMode}
         />
         <AddressInput
           onChangeText={(text) => {

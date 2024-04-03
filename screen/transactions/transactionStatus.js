@@ -330,7 +330,7 @@ const TransactionsStatus = () => {
   };
 
   const fee = wallet.current.type === MintLayerWallet.type ? tx?.fee.atoms : tx?.fee;
-  const feeUnit = wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit !== MintlayerUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit;
+  const unit = wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit !== MintlayerUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit;
 
   if (isLoading || !tx) {
     return (
@@ -348,7 +348,7 @@ const TransactionsStatus = () => {
         <BlueCard>
           <View style={styles.center}>
             <Text style={[styles.value, stylesHook.value]}>
-              {formatBalanceWithoutSuffix(tx.value, wallet.current.preferredBalanceUnit, true)} {wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && <Text style={[styles.valueUnit, stylesHook.valueUnit]}>{loc.units[wallet.current.preferredBalanceUnit]}</Text>}
+              {formatBalanceWithoutSuffix(tx.value, wallet.current.preferredBalanceUnit, true)} {unit && <Text style={[styles.valueUnit, stylesHook.valueUnit]}>{loc.units[unit]}</Text>}
             </Text>
           </View>
 
@@ -386,7 +386,7 @@ const TransactionsStatus = () => {
           {fee && (
             <View style={styles.fee}>
               <BlueText style={styles.feeText}>
-                {loc.send.create_fee.toLowerCase()} {formatBalanceWithoutSuffix(fee, wallet.current.preferredBalanceUnit, true)} {feeUnit}
+                {loc.send.create_fee.toLowerCase()} {formatBalanceWithoutSuffix(fee, wallet.current.preferredBalanceUnit, true)} {unit}
               </BlueText>
             </View>
           )}
