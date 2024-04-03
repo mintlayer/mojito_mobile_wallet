@@ -9,6 +9,7 @@ import loc from '../loc';
 import { LegacyWallet } from '../class';
 import { isTorDaemonDisabled, setIsTorDaemonDisabled } from './environment';
 import alert from '../components/Alert';
+import { MintLayerWallet } from '../class/wallets/mintlayer-wallet';
 const BlueApp = require('../BlueApp');
 const BlueElectrum = require('./BlueElectrum');
 const currency = require('../blue_modules/currency');
@@ -183,9 +184,10 @@ export const BlueStorageProvider = ({ children }) => {
   };
 
   const addAndSaveWallet = async (w) => {
+    const walletName = w.type === MintLayerWallet.type ? 'Mintlayer' : w.typeReadable;
     if (wallets.some((i) => i.getID() === w.getID())) {
       ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
-      Alert.alert('', 'This wallet has been previously imported.');
+      Alert.alert('', `This ${walletName} wallet has been previously imported.`);
       return;
     }
     const emptyWalletLabel = new LegacyWallet().getLabel();
@@ -195,7 +197,7 @@ export const BlueStorageProvider = ({ children }) => {
     addWallet(w);
     await saveToDisk();
     A(A.ENUM.CREATED_WALLET);
-    Alert.alert('', loc.wallets.import_success);
+    Alert.alert('', loc.formatString(loc.wallets.import_success, { w: walletName }));
     Notifications.majorTomToGroundControl(w.getAllExternalAddresses(), [], []);
     // start balance fetching at the background
     await w.fetchBalance();
