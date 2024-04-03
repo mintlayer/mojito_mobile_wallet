@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 });
 
 const WalletDetails = () => {
-  const { saveToDisk, wallets, deleteWallet, setSelectedWallet } = useContext(BlueStorageContext);
+  const { saveToDisk, wallets, deleteWallet, setSelectedWallet, isTestMode } = useContext(BlueStorageContext);
   const { walletID } = useRoute().params;
   const [isLoading, setIsLoading] = useState(false);
   const [backdoorPressed, setBackdoorPressed] = useState(0);
@@ -194,7 +194,7 @@ const WalletDetails = () => {
   };
 
   const presentWalletHasBalanceAlert = useCallback(async () => {
-    const unit = wallet.type === MintLayerWallet.type ? 'ml coins' : 'satoshis';
+    const unit = wallet.type === MintLayerWallet.type ? (isTestMode ? 'TML coins' : 'ML coins') : 'satoshis';
     ReactNativeHapticFeedback.trigger('notificationWarning', { ignoreAndroidSystemSettings: false });
     try {
       const walletBalanceConfirmation = await prompt(loc.wallets.details_delete_wallet, loc.formatString(loc.wallets.details_del_wb_q, { balance: wallet.getBalance(), unit }), true, 'plain-text', true, loc.wallets.details_delete);

@@ -507,7 +507,7 @@
     "import_file": "Import File",
     "import_imported": "Imported",
     "import_scan_qr": "Scan or import a file",
-    "import_success": "Your wallet has been successfully imported.",
+    "import_success": "Your {w} wallet has been successfully imported.",
     "import_search_accounts": "Search accounts",
     "import_title": "Import Wallet",
     "import_discovery_title": "Discovery",
