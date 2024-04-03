@@ -31,6 +31,11 @@ export const BlueStorageProvider = ({ children }) => {
   const [isElectrumDisabled, setIsElectrumDisabled] = useState(true);
   const [isTorDisabled, setIsTorDisabled] = useState(false);
   const [isPrivacyBlurEnabled, setIsPrivacyBlurEnabled] = useState(true);
+  const [isTestMode, setIsTestMode] = useState(false);
+
+  useEffect(() => {
+    BlueApp.isTestModeEnabled().then(setIsTestMode);
+  }, []);
 
   useEffect(() => {
     BlueElectrum.isDisabled().then(setIsElectrumDisabled);
@@ -282,6 +287,7 @@ export const BlueStorageProvider = ({ children }) => {
         setIsPrivacyBlurEnabled,
         isTestModeEnabled,
         setIsTestModeEnabled,
+        isTestMode,
       }}
     >
       {children}

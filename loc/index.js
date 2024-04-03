@@ -304,9 +304,9 @@ export function formatBalance(balance, toUnit, withFormatting = false) {
     return (withFormatting ? new Intl.NumberFormat().format(balance).toString() : String(balance)) + ' ' + strings.units[BitcoinUnit.SATS];
   } else if (toUnit === BitcoinUnit.LOCAL_CURRENCY) {
     return currency.satoshiToLocalCurrency(balance);
-  } else if (toUnit === MintlayerUnit.ML) {
+  } else if (toUnit === MintlayerUnit.ML || toUnit === MintlayerUnit.TML) {
     const value = new BigNumber(balance).dividedBy(ML_ATOMS_PER_COIN).toFixed(8);
-    return removeTrailingZeros(value) + ' ' + strings.units[MintlayerUnit.ML];
+    return removeTrailingZeros(value) + ' ' + strings.units[toUnit];
   } else if (toUnit === MintlayerUnit.LOCAL_CURRENCY) {
     return currency.mlCoinsToLocalCurrency(balance);
   }
@@ -331,7 +331,7 @@ export function formatBalanceWithoutSuffix(balance = 0, toUnit, withFormatting =
       return withFormatting ? new Intl.NumberFormat().format(balance).toString() : String(balance);
     } else if (toUnit === BitcoinUnit.LOCAL_CURRENCY) {
       return currency.satoshiToLocalCurrency(balance);
-    } else if (toUnit === MintlayerUnit.ML) {
+    } else if (toUnit === MintlayerUnit.ML || toUnit === MintlayerUnit.TML) {
       const value = new BigNumber(balance).dividedBy(ML_ATOMS_PER_COIN).toFixed(8);
       return removeTrailingZeros(value);
     } else if (toUnit === MintlayerUnit.LOCAL_CURRENCY) {

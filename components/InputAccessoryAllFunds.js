@@ -31,7 +31,7 @@ const InputAccessoryAllFunds = ({ balance, canUseAll, onUseAllPressed, unit = Bi
           <BlueButtonLink onPress={onUseAllPressed} style={styles.totalCan} title={`${balance} ${unit}`} />
         ) : (
           <Text style={[styles.totalCanNot, stylesHook.totalCanNot]}>
-            {balance} {BitcoinUnit.BTC}
+            {balance} {unit}
           </Text>
         )}
       </View>

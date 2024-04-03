@@ -26,7 +26,7 @@ const bitcoin = require('bitcoinjs-lib');
 const torrific = require('../../blue_modules/torrific');
 
 const Confirm = () => {
-  const { wallets, fetchAndSaveWalletTransactions, isElectrumDisabled, isTorDisabled } = useContext(BlueStorageContext);
+  const { wallets, fetchAndSaveWalletTransactions, isElectrumDisabled, isTorDisabled, isTestMode } = useContext(BlueStorageContext);
   const [isBiometricUseCapableAndEnabled, setIsBiometricUseCapableAndEnabled] = useState(false);
   const { params } = useRoute();
   const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt } = params;
@@ -206,7 +206,7 @@ const Confirm = () => {
       navigate('Success', {
         fee: Number(fee),
         amount,
-        amountUnit: MintlayerUnit.ML,
+        amountUnit: isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML,
       });
 
       setIsLoading(false);
@@ -243,7 +243,7 @@ const Confirm = () => {
   };
 
   const send = isMintlayerWallet ? sendMl : sendBtc;
-  const unit = isMintlayerWallet ? MintlayerUnit.ML : BitcoinUnit.BTC;
+  const unit = isMintlayerWallet ? (isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML) : BitcoinUnit.BTC;
   const toLocalCurrencyFn = isMintlayerWallet ? currency.mlCoinsToLocalCurrency : currency.satoshiToLocalCurrency;
 
   const _renderItem = ({ index, item }) => {
