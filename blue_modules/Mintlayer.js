@@ -16,6 +16,14 @@ const ML_NETWORK_TYPES = {
   TESTNET: 'testnet',
 };
 
+const TransactionType = {
+  Transfer: 'Transfer',
+  LockThenTransfer: 'LockThenTransfer',
+  CreateDelegationId: 'CreateDelegationId',
+  DelegateStaking: 'DelegateStaking',
+  CreateStakePool: 'CreateStakePool',
+};
+
 const ML_ATOMS_PER_COIN = 100000000000;
 
 const MAINNET_MINTLAYER_SERVERS = ['https://api-server.mintlayer.org'];
@@ -102,4 +110,4 @@ const broadcastTransaction = (transaction, network) => {
   return tryServers({ endpoint: MINTLAYER_ENDPOINTS.POST_TRANSACTION, body: transaction, network });
 };
 
-export { getAddressData, getTransactionData, getAddressUtxo, getWalletUtxos, broadcastTransaction, getFeesEstimates, getChainTip, MINTLAYER_ENDPOINTS, ML_NETWORK_TYPES, ML_ATOMS_PER_COIN };
+export { TransactionType, getAddressData, getTransactionData, getAddressUtxo, getWalletUtxos, broadcastTransaction, getFeesEstimates, getChainTip, MINTLAYER_ENDPOINTS, ML_NETWORK_TYPES, ML_ATOMS_PER_COIN };
