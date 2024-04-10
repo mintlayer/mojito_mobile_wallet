@@ -140,7 +140,7 @@ export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, ad
     if (WatchOnlyWallet.type === wallet.type && !wallet.isHd()) {
       // plain watchonly - just get the address
       change = wallet.getAddress();
-    } else if (WatchOnlyWallet.type === wallet.type || wallet instanceof AbstractHDElectrumWallet) {
+    } else if (MintLayerWallet.type === wallet.type || WatchOnlyWallet.type === wallet.type || wallet instanceof AbstractHDElectrumWallet) {
       change = wallet._getInternalAddressByIndex(wallet.getNextFreeChangeAddressIndex());
     } else {
       // legacy wallets
