@@ -163,7 +163,7 @@ export const useCreateTransaction = ({ wallet, setIsLoading, feeRate, addresses,
 
       if (!change) {
         // either sleep expired or getChangeAddressAsync threw an exception
-        if (wallet instanceof AbstractHDElectrumWallet) {
+        if (wallet.type === MintLayerWallet.type || wallet instanceof AbstractHDElectrumWallet) {
           change = wallet._getInternalAddressByIndex(wallet.getNextFreeChangeAddressIndex());
         } else {
           // legacy wallets
