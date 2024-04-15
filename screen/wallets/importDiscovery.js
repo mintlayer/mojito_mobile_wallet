@@ -11,6 +11,7 @@ import { HDSegwitBech32Wallet } from '../../class';
 import startImport from '../../class/wallet-import';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import prompt from '../../blue_modules/prompt';
+import { range } from '../../utils/Array';
 const bitcoin = require('bitcoinjs-lib');
 
 const ImportWalletDiscovery = () => {
@@ -76,7 +77,10 @@ const ImportWalletDiscovery = () => {
       try {
         subtitle = wallet.getDerivationPath?.();
       } catch (e) {}
-      setWallets((wallets) => [...wallets, { wallet, subtitle, id }]);
+      setWallets((wallets) => {
+        setSelected(range(0, (wallets.length || 0) + 1));
+        return [...wallets, { wallet, subtitle, id }];
+      });
     };
 
     const onPassword = async (title, subtitle) => {

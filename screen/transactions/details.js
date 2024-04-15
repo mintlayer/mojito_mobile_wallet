@@ -10,6 +10,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import ToolTipMenu from '../../components/TooltipMenu';
 import alert from '../../components/Alert';
 import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
+import { TransactionType } from '../../blue_modules/Mintlayer';
 const dayjs = require('dayjs');
 
 function onlyUnique(value, index, self) {
@@ -93,10 +94,22 @@ const TransactionsDetails = () => {
         if (tx.hash === hash) {
           foundTx = tx;
           for (const input of foundTx.inputs) {
-            from = from.concat(input.utxo.destination);
+            if (input.input.account_type === 'DelegationBalance') {
+              from = from.concat(input.input.delegation_id);
+            } else {
+              from = from.concat(input.utxo?.destination);
+            }
           }
           for (const output of foundTx.outputs) {
-            if (output.destination) to = to.concat(output.destination);
+            if (output.type === TransactionType.CreateDelegationId) {
+              to = to.concat(output.pool_id);
+            } else if (output.type === TransactionType.DelegateStaking) {
+              to = to.concat(output.delegation_id);
+            } else if (output.type === TransactionType.CreateStakePool) {
+              to = to.concat(output.pool_id);
+            } else if (output.destination) {
+              to = to.concat(output.destination);
+            }
           }
         }
       }

@@ -3,7 +3,7 @@ import { View, ActivityIndicator, Text, TouchableOpacity, StyleSheet, StatusBar,
 import { Icon } from 'react-native-elements';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 
-import { BlueButton, BlueCard, BlueLoading, BlueSpacing10, BlueSpacing20, BlueText, BlueTransactionIncomingIcon, BlueTransactionOutgoingIcon, BlueTransactionPendingIcon, SafeBlueArea } from '../../BlueComponents';
+import { BlueButton, BlueCard, BlueLoading, BlueSpacing10, BlueSpacing20, BlueText, BlueTransactionDelegateStakingIcon, BlueTransactionDelegateWithdrawalIcon, BlueTransactionIncomingIcon, BlueTransactionOutgoingIcon, BlueTransactionPendingIcon, BlueTransactionStakingIcon, SafeBlueArea } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import { HDSegwitBech32Transaction } from '../../class';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
@@ -14,6 +14,7 @@ import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
 import { MintlayerUnit } from '../../models/mintlayerUnits';
+import { TransactionType } from '../../blue_modules/Mintlayer';
 
 const buttonStatus = Object.freeze({
   possible: 1,
@@ -364,6 +365,24 @@ const TransactionsStatus = () => {
                   return (
                     <View style={styles.icon}>
                       <BlueTransactionPendingIcon />
+                    </View>
+                  );
+                } else if (tx.type === TransactionType.CreateDelegationId || tx.type === TransactionType.CreateStakePool) {
+                  return (
+                    <View style={styles.iconWidth}>
+                      <BlueTransactionStakingIcon />
+                    </View>
+                  );
+                } else if (tx.type === TransactionType.DelegateStaking) {
+                  return (
+                    <View style={styles.iconWidth}>
+                      <BlueTransactionDelegateStakingIcon />
+                    </View>
+                  );
+                } else if (tx.type === TransactionType.LockThenTransfer) {
+                  return (
+                    <View style={styles.iconWidth}>
+                      <BlueTransactionDelegateWithdrawalIcon />
                     </View>
                   );
                 } else if (tx.value < 0) {

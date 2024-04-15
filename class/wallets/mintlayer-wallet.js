@@ -2,7 +2,7 @@ import * as bip39 from 'bip39';
 import * as ML from '../../blue_modules/mintlayer/mintlayer';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 import { MintlayerUnit } from '../../models/mintlayerUnits';
-import { broadcastTransaction, getAddressData, getAddressUtxo, getTransactionData, ML_NETWORK_TYPES } from '../../blue_modules/Mintlayer';
+import { broadcastTransaction, getAddressData, getAddressUtxo, getTransactionData, ML_NETWORK_TYPES, TransactionType } from '../../blue_modules/Mintlayer';
 import { range } from '../../utils/Array';
 import { getArraySpead, getEncodedWitnesses, getOptUtxos, getOutpointedSourceIds, getTransactionHex, getTransactionsBytes, getTransactionUtxos, getTxInputs, getTxOutput, getUtxoAddress, getUtxoAvailable, getUtxoTransactions, totalUtxosAmount } from '../../utils/ML/transaction';
 
@@ -44,6 +44,18 @@ export class MintLayerWallet extends AbstractHDWallet {
 
   async generateMnemonicFromEntropy(entropy) {
     this.secret = bip39.entropyToMnemonic(entropy);
+  }
+
+  getLockedBalance() {
+    let lockedBalance = 0;
+    for (const bal of Object.values(this._balances_by_external_index)) {
+      lockedBalance += bal.l;
+    }
+    for (const bal of Object.values(this._balances_by_internal_index)) {
+      lockedBalance += bal.l;
+    }
+
+    return lockedBalance;
   }
 
   getBalance() {
@@ -164,6 +176,7 @@ export class MintLayerWallet extends AbstractHDWallet {
         this._balances_by_external_index[c] = {
           c: Number(balances.addresses[addr].confirmed),
           u: Number(balances.addresses[addr].unconfirmed),
+          l: Number(balances.addresses[addr].locked),
         };
       }
     }
@@ -181,6 +194,7 @@ export class MintLayerWallet extends AbstractHDWallet {
         this._balances_by_internal_index[c] = {
           c: Number(balances.addresses[addr].confirmed),
           u: Number(balances.addresses[addr].unconfirmed),
+          l: Number(balances.addresses[addr].locked),
         };
       }
     }
@@ -276,10 +290,20 @@ export class MintLayerWallet extends AbstractHDWallet {
       tx.confirmations = Number(tx.confirmations) || 0; // unconfirmed
       tx.hash = tx.txid;
       tx.value = 0;
+      tx.type = TransactionType.Transfer;
 
       for (const vin of tx.inputs) {
         // if input (spending) goes from our address - we are loosing!
-        if (vin.utxo.destination && ownedAddressesHashmap[vin.utxo.destination]) {
+        if (vin.utxo?.destination && ownedAddressesHashmap[vin.utxo.destination]) {
+          const isDelegateStaking = tx.outputs.some((vout) => vout.type === TransactionType.DelegateStaking);
+          const isCreateStakePool = tx.outputs.some((vout) => vout.type === TransactionType.CreateStakePool);
+
+          if (isDelegateStaking) {
+            tx.type = TransactionType.DelegateStaking;
+          } else if (isCreateStakePool) {
+            tx.type = TransactionType.CreateStakePool;
+          }
+
           tx.value -= Number(vin.utxo.value.amount.atoms);
         }
       }
@@ -287,7 +311,21 @@ export class MintLayerWallet extends AbstractHDWallet {
       for (const vout of tx.outputs) {
         // when output goes to our address - this means we are gaining!
         if (vout.destination && ownedAddressesHashmap[vout.destination]) {
-          tx.value += Number(vout.value.amount.atoms);
+          if (vout.type === TransactionType.Transfer) {
+            tx.value += Number(vout.value?.amount.atoms) || 0;
+          } else if (vout.type === TransactionType.CreateDelegationId) {
+            tx.type = TransactionType.CreateDelegationId;
+            tx.poolId = vout.pool_id;
+          } else if (vout.type === TransactionType.LockThenTransfer) {
+            tx.type = TransactionType.LockThenTransfer;
+            tx.value += Number(vout.value?.amount.atoms) || 0;
+          } else if (vout.type === TransactionType.DelegateStaking) {
+            tx.type = TransactionType.DelegateStaking;
+            tx.delegationId = vout.delegation_id;
+            tx.value += Number(vout?.amount.atoms);
+          } else {
+            tx.value += Number(vout.value?.amount.atoms) || 0;
+          }
         }
       }
       ret.push(tx);
@@ -318,10 +356,14 @@ export class MintLayerWallet extends AbstractHDWallet {
     for (let c = 0; c < this.next_free_address_index + this.gap_limit; c++) {
       // external(receiving) addresses first
       let hasUnconfirmed = false;
+      let usedInCreateDelegation = false;
       this._txs_by_external_index[c] = this._txs_by_external_index[c] || [];
-      for (const tx of this._txs_by_external_index[c]) hasUnconfirmed = hasUnconfirmed || !tx.confirmations || tx.confirmations < 7;
+      for (const tx of this._txs_by_external_index[c]) {
+        hasUnconfirmed = hasUnconfirmed || !tx.confirmations || tx.confirmations < 7;
+        usedInCreateDelegation = tx.outputs.some((vout) => vout.type === TransactionType.CreateDelegationId);
+      }
 
-      if (hasUnconfirmed || this._txs_by_external_index[c].length === 0 || this._balances_by_external_index[c].u !== 0) {
+      if (hasUnconfirmed || usedInCreateDelegation || this._txs_by_external_index[c].length === 0 || this._balances_by_external_index[c].u !== 0) {
         addresses2fetch.push(this._getExternalAddressByIndex(c));
       }
     }
@@ -366,7 +408,7 @@ export class MintLayerWallet extends AbstractHDWallet {
     for (let c = 0; c < this.next_free_address_index + this.gap_limit; c++) {
       for (const tx of Object.values(txdatas)) {
         for (const vin of tx.inputs) {
-          if (vin.utxo.destination && vin.utxo.destination === this._getExternalAddressByIndex(c)) {
+          if (vin.utxo?.destination && vin.utxo.destination === this._getExternalAddressByIndex(c)) {
             replaceOrPushTx(tx, this._txs_by_external_index, c);
           }
         }
@@ -381,7 +423,7 @@ export class MintLayerWallet extends AbstractHDWallet {
     for (let c = 0; c < this.next_free_change_address_index + this.gap_limit; c++) {
       for (const tx of Object.values(txdatas)) {
         for (const vin of tx.inputs) {
-          if (vin.utxo.destination && vin.utxo.destination === this._getInternalAddressByIndex(c)) {
+          if (vin.utxo?.destination && vin.utxo.destination === this._getInternalAddressByIndex(c)) {
             replaceOrPushTx(tx, this._txs_by_internal_index, c);
           }
         }
@@ -693,7 +735,7 @@ export class MintLayerWallet extends AbstractHDWallet {
     const balances = await Promise.all(balancePromises);
     return addresses.reduce(
       (acc, item, index) => {
-        acc.addresses[item] = { confirmed: balances[index].balanceInAtoms, unconfirmed: 0 };
+        acc.addresses[item] = { confirmed: balances[index].balanceInAtoms, unconfirmed: 0, locked: balances[index].lockedBalanceInAtoms };
         return acc;
       },
       { addresses: {} },
@@ -706,10 +748,11 @@ export class MintLayerWallet extends AbstractHDWallet {
       const data = JSON.parse(response);
       const balance = {
         balanceInAtoms: data.coin_balance.atoms,
+        lockedBalanceInAtoms: data.locked_coin_balance.atoms,
       };
       return balance;
     } catch (error) {
-      return { balanceInAtoms: 0 };
+      return { balanceInAtoms: 0, lockedBalanceInAtoms: 0 };
     }
   }
 
