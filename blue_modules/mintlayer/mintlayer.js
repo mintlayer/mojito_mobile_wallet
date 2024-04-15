@@ -1,4 +1,4 @@
-import bigInt from 'big-integer';
+import BigInt from 'big-integer';
 import { SignatureHashType, SourceId } from './@mintlayerlib-js/wasm_wrappers';
 import webviewEventBus from '../../class/webview-event-bus';
 import * as Mintlayer from '../Mintlayer';
@@ -102,7 +102,7 @@ export const getStakingMaturity = async (blockHeight, networkType) => {
 };
 
 export const getTransaction = async (inputs, outputs) => {
-  const flags = bigInt(0);
+  const flags = BigInt(0);
   return webviewEventBus.exec(wasmMethods.encode_transaction, [inputs, outputs, flags]);
 };
 

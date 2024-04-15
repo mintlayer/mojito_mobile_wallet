@@ -1428,6 +1428,10 @@ const context = {
   encode_witness,
   encode_signed_transaction,
   estimate_transaction_size,
+  encode_lock_until_time,
+  encode_lock_until_height,
+  staking_pool_spend_maturity_block_count,
+  encode_lock_for_block_count,
   encode_output_lock_then_transfer: (amount, address, lockEncoded, networkIndex) => {
     return encode_output_lock_then_transfer(Amount.from_atoms(amount), address, lockEncoded, networkIndex);
   },
