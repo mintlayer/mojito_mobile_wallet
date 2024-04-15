@@ -300,14 +300,14 @@ const WalletsAdd = () => {
               <ActivityIndicator />
             )}
           </View>
-          <View style={styles.importContainer}>
-            {!isLoading && (
+          {!isLoading && (
+            <View style={styles.importContainer}>
+              <Text style={[styles.importText]}>{loc.wallets.add_import_wallet}</Text>
               <Text style={[styles.importText]}>
-                {loc.wallets.add_import_wallet}
-                {!isLoading && <BlueButtonLink testID="ImportWallet" style={styles.clickImportContainer} textStyle={styles.clickImport} title={loc.wallets.click_here} onPress={navigateToImportWallet} />}
+                <BlueButtonLink testID="ImportWallet" style={styles.clickImportContainer} textStyle={styles.clickImport} title={loc.wallets.click_here} onPress={navigateToImportWallet} />
               </Text>
-            )}
-          </View>
+            </View>
+          )}
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   importContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
