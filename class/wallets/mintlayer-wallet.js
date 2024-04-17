@@ -20,6 +20,8 @@ export class MintLayerWallet extends AbstractHDWallet {
     this._txs_by_external_index = {};
     this._txs_by_internal_index = {};
 
+    this._unconfirmedTxs = [];
+
     this.gapLimit = 20;
     this.network = (opts && opts.network) || ML_NETWORK_TYPES.MAINNET;
     this.preferredBalanceUnit = this.network === ML_NETWORK_TYPES.MAINNET ? MintlayerUnit.ML : MintlayerUnit.TML;
@@ -128,7 +130,10 @@ export class MintLayerWallet extends AbstractHDWallet {
 
     const txs = await this._multiGetHistoryByAddress(lagAddressesToFetch);
 
-    for (let c = this.next_free_address_index; c < this.next_free_address_index + this.gap_limit; c++) {
+    const nextFreeAddressIndex = this.next_free_address_index;
+    const nextFreeChangeAddressIndex = this.next_free_change_address_index;
+
+    for (let c = nextFreeAddressIndex; c < nextFreeAddressIndex + this.gap_limit; c++) {
       const address = this._getExternalAddressByIndex(c);
       if (txs[address] && Array.isArray(txs[address]) && txs[address].length > 0) {
         // whoa, someone uses our wallet outside! better catch up
@@ -136,12 +141,16 @@ export class MintLayerWallet extends AbstractHDWallet {
       }
     }
 
-    for (let c = this.next_free_change_address_index; c < this.next_free_change_address_index + this.gap_limit; c++) {
+    for (let c = nextFreeChangeAddressIndex; c < nextFreeChangeAddressIndex + this.gap_limit; c++) {
       const address = this._getInternalAddressByIndex(c);
       if (txs[address] && Array.isArray(txs[address]) && txs[address].length > 0) {
         // whoa, someone uses our wallet outside! better catch up
         this.next_free_change_address_index = c + 1;
       }
+    }
+
+    if (nextFreeAddressIndex < this.next_free_address_index || nextFreeChangeAddressIndex < this.next_free_change_address_index) {
+      await this._prefetchAddresses();
     }
 
     // next, business as usuall. fetch balances
@@ -263,6 +272,10 @@ export class MintLayerWallet extends AbstractHDWallet {
     return txs;
   }
 
+  addUnconfirmedTx(unconfirmedTx) {
+    this._unconfirmedTxs.push(unconfirmedTx);
+  }
+
   getTransactions() {
     let txs = [];
     for (const addressTxs of Object.values(this._txs_by_external_index)) {
@@ -286,6 +299,7 @@ export class MintLayerWallet extends AbstractHDWallet {
     const ret = [];
     for (const tx of txs) {
       tx.received = tx.timestamp * 1000;
+      tx.sortKey = tx.timestamp * 1000;
       if (!tx.timestamp) tx.received = +new Date() - 30 * 1000; // unconfirmed
       tx.confirmations = Number(tx.confirmations) || 0; // unconfirmed
       tx.hash = tx.txid;
@@ -331,6 +345,8 @@ export class MintLayerWallet extends AbstractHDWallet {
       ret.push(tx);
     }
 
+    ret.push(...this._unconfirmedTxs);
+
     // now, deduplication:
     const usedTxIds = {};
     const ret2 = [];
@@ -340,7 +356,7 @@ export class MintLayerWallet extends AbstractHDWallet {
     }
 
     return ret2.sort(function (a, b) {
-      return b.received - a.received;
+      return b.sortKey - a.sortKey;
     });
   }
 
@@ -435,6 +451,14 @@ export class MintLayerWallet extends AbstractHDWallet {
       }
     }
 
+    for (let i = 0; i < this._unconfirmedTxs.length; i++) {
+      const found = Object.values(txdatas).some(({ id }) => id === this._unconfirmedTxs[i].id);
+
+      if (found) {
+        this._unconfirmedTxs = this._unconfirmedTxs.filter(({ id }) => id !== this._unconfirmedTxs[i].id);
+      }
+    }
+
     this._lastTxFetch = +new Date();
   }
 
@@ -477,7 +501,14 @@ export class MintLayerWallet extends AbstractHDWallet {
     let ret = [];
 
     if (this._utxo?.length !== 0) {
-      ret = this._utxo;
+      const usedUtxo = this._unconfirmedTxs.flatMap(({ usedUtxo }) => usedUtxo.flatMap((utxo) => [...utxo]));
+      const unusedUtxo = this._utxo.map((utxo) => {
+        return utxo.filter(({ outpoint: { source_id, index } }) => {
+          return !usedUtxo.some(({ outpoint }) => outpoint.source_id === source_id && outpoint.index === index);
+        });
+      });
+
+      ret = unusedUtxo;
     }
     if (!respectFrozen) {
       ret = ret.filter(({ txid, vout }) => !this.getUTXOMetadata(txid, vout).frozen);
@@ -566,9 +597,10 @@ export class MintLayerWallet extends AbstractHDWallet {
       const encodedSignedTransaction = await ML.getEncodedSignedTransaction(transaction, finalWitnesses);
       const transactionHex = getTransactionHex(encodedSignedTransaction);
       const outputsObj = [{ ...targets[0], value: amount }];
-      return { tx: transactionHex, outputs: outputsObj, fee };
+      return { tx: transactionHex, outputs: outputsObj, fee, requireUtxo };
     } catch (e) {
-      console.log('coinselect err', e);
+      console.error('createTransaction err', e);
+      throw e;
     }
   }
 
@@ -718,14 +750,14 @@ export class MintLayerWallet extends AbstractHDWallet {
       if (this.external_addresses_cache[index]) {
         return this.external_addresses_cache[index];
       }
-      throw Error('no cached address');
+      throw Error(`No external cached address #${index}`);
     }
 
     if (node === 1) {
       if (this.internal_addresses_cache[index]) {
         return this.internal_addresses_cache[index];
       } else {
-        throw Error('no cached address');
+        throw Error(`No internal cached address #${index}`);
       }
     }
   }
