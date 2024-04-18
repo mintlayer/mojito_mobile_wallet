@@ -233,7 +233,7 @@ export const useCreateTransaction = ({ wallet, setIsLoading, feeRate, addresses,
         }
       }
 
-      const { tx, outputs, fee } = await wallet.createTransaction(lutxo, targets, requestedMlCoinsPerByteNum, changeAddress);
+      const { tx, outputs, fee, requireUtxo } = await wallet.createTransaction(lutxo, targets, requestedMlCoinsPerByteNum, changeAddress);
 
       const recipients = outputs.filter(({ address }) => address !== changeAddress);
 
@@ -243,6 +243,7 @@ export const useCreateTransaction = ({ wallet, setIsLoading, feeRate, addresses,
         walletID: wallet.getID(),
         tx,
         recipients,
+        requireUtxo,
       });
 
       setIsLoading(false);

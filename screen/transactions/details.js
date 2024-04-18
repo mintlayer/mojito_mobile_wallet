@@ -93,14 +93,14 @@ const TransactionsDetails = () => {
       for (const tx of getTransactions(null, Infinity, true)) {
         if (tx.hash === hash) {
           foundTx = tx;
-          for (const input of foundTx.inputs) {
+          for (const input of foundTx.inputs || []) {
             if (input.input.account_type === 'DelegationBalance') {
               from = from.concat(input.input.delegation_id);
             } else {
               from = from.concat(input.utxo?.destination);
             }
           }
-          for (const output of foundTx.outputs) {
+          for (const output of foundTx.outputs || []) {
             if (output.type === TransactionType.CreateDelegationId) {
               to = to.concat(output.pool_id);
             } else if (output.type === TransactionType.DelegateStaking) {
@@ -198,7 +198,7 @@ const TransactionsDetails = () => {
           <BlueSpacing20 />
         </View>
 
-        {from && (
+        {Boolean(from.length) && (
           <>
             <View style={styles.rowHeader}>
               <BlueText style={styles.rowCaption}>{loc.transactions.details_from}</BlueText>
@@ -208,7 +208,7 @@ const TransactionsDetails = () => {
           </>
         )}
 
-        {to && (
+        {Boolean(to.length) && (
           <>
             <View style={styles.rowHeader}>
               <BlueText style={styles.rowCaption}>{loc.transactions.details_to}</BlueText>

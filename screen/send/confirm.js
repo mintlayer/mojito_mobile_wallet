@@ -18,7 +18,7 @@ import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import alert from '../../components/Alert';
 import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
 import { MintlayerUnit } from '../../models/mintlayerUnits';
-import { ML_ATOMS_PER_COIN } from '../../blue_modules/Mintlayer';
+import { ML_ATOMS_PER_COIN, TransactionType } from '../../blue_modules/Mintlayer';
 const currency = require('../../blue_modules/currency');
 const BlueElectrum = require('../../blue_modules/BlueElectrum');
 const Bignumber = require('bignumber.js');
@@ -29,7 +29,7 @@ const Confirm = () => {
   const { wallets, fetchAndSaveWalletTransactions, isElectrumDisabled, isTorDisabled, isTestMode } = useContext(BlueStorageContext);
   const [isBiometricUseCapableAndEnabled, setIsBiometricUseCapableAndEnabled] = useState(false);
   const { params } = useRoute();
-  const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt } = params;
+  const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt, requireUtxo } = params;
   const [isLoading, setIsLoading] = useState(false);
   const [isPayjoinEnabled, setIsPayjoinEnabled] = useState(false);
   const wallet = wallets.find((wallet) => wallet.getID() === walletID);
@@ -195,11 +195,26 @@ const Confirm = () => {
     setIsLoading(true);
     try {
       const result = await broadcast(tx);
+      const txId = JSON.parse(result).tx_id;
 
       let amount = 0;
       for (const recipient of recipients) {
         amount += recipient.value;
       }
+
+      const unconfirmedTx = {
+        sortKey: Date.now(),
+        confirmations: 0,
+        id: txId,
+        hash: txId,
+        value: amount,
+        fee: { atoms: currency.mlToCoins(Number(fee)), decimal: Number(fee) },
+        isUnconfirmedTx: true,
+        type: TransactionType.Transfer,
+        usedUtxo: requireUtxo,
+      };
+
+      wallet.addUnconfirmedTx(unconfirmedTx);
 
       amount = formatBalanceWithoutSuffix(amount, MintlayerUnit.ML, false);
       ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
