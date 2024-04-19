@@ -176,7 +176,7 @@ const WalletTransactions = () => {
       const balanceEnd = +new Date();
       console.log(wallet.getLabel(), 'fetch balance took', (balanceEnd - balanceStart) / 1000, 'sec');
       const start = +new Date();
-      const oldTxLen = wallet.getTransactions().length;
+      const oldTx = wallet.getTransactions();
       await wallet.fetchTransactions();
       if (wallet.fetchPendingTransactions) {
         await wallet.fetchPendingTransactions();
@@ -184,7 +184,12 @@ const WalletTransactions = () => {
       if (wallet.fetchUserInvoices) {
         await wallet.fetchUserInvoices();
       }
-      if (oldTxLen !== wallet.getTransactions().length) smthChanged = true;
+      const newTx = wallet.getTransactions();
+      if (oldTx.length !== newTx.length) smthChanged = true;
+      if (!smthChanged) {
+        const maxConfirmationsForUpdate = 7;
+        smthChanged = oldTx.length && oldTx[0].confirmations < maxConfirmationsForUpdate && oldTx[0].confirmations !== newTx[0].confirmations;
+      }
       const end = +new Date();
       console.log(wallet.getLabel(), 'fetch tx took', (end - start) / 1000, 'sec');
     } catch (err) {
@@ -196,7 +201,7 @@ const WalletTransactions = () => {
     if (noErr && smthChanged) {
       console.log('saving to disk');
       await saveToDisk(); // caching
-      //    setDataSource([...getTransactionsSliced(limit)]);
+      setDataSource([...getTransactionsSliced(limit)]);
     }
     setIsLoading(false);
     setTimeElapsed((prev) => prev + 1);
