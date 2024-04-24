@@ -14,4 +14,8 @@ const getNRandomElementsFromArray = (array, n) => {
   return result;
 };
 
-export { getNRandomElementsFromArray };
+const range = (start, end) => {
+  return Array.from(new Array(end - start), (x, i) => i + start);
+};
+
+export { getNRandomElementsFromArray, range };

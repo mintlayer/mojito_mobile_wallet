@@ -16,6 +16,9 @@ import { BlueStorageContext } from '../../blue_modules/storage-context';
 import { Psbt } from 'bitcoinjs-lib';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import alert from '../../components/Alert';
+import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
+import { MintlayerUnit } from '../../models/mintlayerUnits';
+import { ML_ATOMS_PER_COIN, TransactionType } from '../../blue_modules/Mintlayer';
 const currency = require('../../blue_modules/currency');
 const BlueElectrum = require('../../blue_modules/BlueElectrum');
 const Bignumber = require('bignumber.js');
@@ -23,15 +26,16 @@ const bitcoin = require('bitcoinjs-lib');
 const torrific = require('../../blue_modules/torrific');
 
 const Confirm = () => {
-  const { wallets, fetchAndSaveWalletTransactions, isElectrumDisabled, isTorDisabled } = useContext(BlueStorageContext);
+  const { wallets, fetchAndSaveWalletTransactions, isElectrumDisabled, isTorDisabled, isTestMode } = useContext(BlueStorageContext);
   const [isBiometricUseCapableAndEnabled, setIsBiometricUseCapableAndEnabled] = useState(false);
   const { params } = useRoute();
-  const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt } = params;
+  const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt, requireUtxo } = params;
   const [isLoading, setIsLoading] = useState(false);
   const [isPayjoinEnabled, setIsPayjoinEnabled] = useState(false);
   const wallet = wallets.find((wallet) => wallet.getID() === walletID);
   const payjoinUrl = wallet.allowPayJoin() ? params.payjoinUrl : false;
-  const feeSatoshi = new Bignumber(fee).multipliedBy(100000000).toNumber();
+  const isMintlayerWallet = wallet.type === MintLayerWallet.type;
+  const formattedFee = new Bignumber(fee).multipliedBy(isMintlayerWallet ? ML_ATOMS_PER_COIN : 100000000).toNumber();
   const { navigate, setOptions } = useNavigation();
   const { colors } = useTheme();
   const stylesHook = StyleSheet.create({
@@ -69,36 +73,37 @@ const Confirm = () => {
   }, []);
 
   useEffect(() => {
-    setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          accessibilityRole="button"
-          testID="TransactionDetailsButton"
-          style={[styles.txDetails, stylesHook.txDetails]}
-          onPress={async () => {
-            if (isBiometricUseCapableAndEnabled) {
-              if (!(await Biometric.unlockWithBiometrics())) {
-                return;
+    !isMintlayerWallet &&
+      setOptions({
+        headerRight: () => (
+          <TouchableOpacity
+            accessibilityRole="button"
+            testID="TransactionDetailsButton"
+            style={[styles.txDetails, stylesHook.txDetails]}
+            onPress={async () => {
+              if (isBiometricUseCapableAndEnabled) {
+                if (!(await Biometric.unlockWithBiometrics())) {
+                  return;
+                }
               }
-            }
 
-            navigate('CreateTransaction', {
-              fee,
-              recipients,
-              memo,
-              tx,
-              satoshiPerByte,
-              wallet,
-              feeSatoshi,
-            });
-          }}
-        >
-          <Text style={[styles.txText, stylesHook.valueUnit]}>{loc.send.create_details}</Text>
-        </TouchableOpacity>
-      ),
-    });
+              navigate('CreateTransaction', {
+                fee,
+                recipients,
+                memo,
+                tx,
+                satoshiPerByte,
+                wallet,
+                formattedFee,
+              });
+            }}
+          >
+            <Text style={[styles.txText, stylesHook.valueUnit]}>{loc.send.create_details}</Text>
+          </TouchableOpacity>
+        ),
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colors, fee, feeSatoshi, isBiometricUseCapableAndEnabled, memo, recipients, satoshiPerByte, tx, wallet]);
+  }, [colors, fee, formattedFee, isBiometricUseCapableAndEnabled, memo, recipients, satoshiPerByte, tx, wallet, isMintlayerWallet]);
 
   /**
    * we need to look into `recipients`, find destination address and return its outputScript
@@ -110,7 +115,7 @@ const Confirm = () => {
     return bitcoin.address.toOutputScript(recipients[0].address);
   };
 
-  const send = async () => {
+  const sendBtc = async () => {
     setIsLoading(true);
     try {
       const txids2watch = [];
@@ -186,9 +191,57 @@ const Confirm = () => {
     }
   };
 
+  const sendMl = async () => {
+    setIsLoading(true);
+    try {
+      const result = await broadcast(tx);
+      const txId = JSON.parse(result).tx_id;
+
+      let amount = 0;
+      for (const recipient of recipients) {
+        amount += recipient.value;
+      }
+
+      const unconfirmedTx = {
+        sortKey: Date.now(),
+        confirmations: 0,
+        id: txId,
+        hash: txId,
+        value: amount,
+        fee: { atoms: currency.mlToCoins(Number(fee)), decimal: Number(fee) },
+        isUnconfirmedTx: true,
+        type: TransactionType.Transfer,
+        usedUtxo: requireUtxo,
+      };
+
+      wallet.addUnconfirmedTx(unconfirmedTx);
+
+      amount = formatBalanceWithoutSuffix(amount, MintlayerUnit.ML, false);
+      ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
+      navigate('Success', {
+        fee: Number(fee),
+        amount,
+        amountUnit: isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML,
+      });
+
+      setIsLoading(false);
+
+      await new Promise((resolve) => setTimeout(resolve, 3000)); // sleep to make sure network propagates
+      fetchAndSaveWalletTransactions(walletID);
+    } catch (error) {
+      ReactNativeHapticFeedback.trigger('notificationError', {
+        ignoreAndroidSystemSettings: false,
+      });
+      setIsLoading(false);
+      alert(error.message);
+    }
+  };
+
   const broadcast = async (tx) => {
-    await BlueElectrum.ping();
-    await BlueElectrum.waitTillConnected();
+    if (!isMintlayerWallet) {
+      await BlueElectrum.ping();
+      await BlueElectrum.waitTillConnected();
+    }
 
     if (isBiometricUseCapableAndEnabled) {
       if (!(await Biometric.unlockWithBiometrics())) {
@@ -204,16 +257,22 @@ const Confirm = () => {
     return result;
   };
 
+  const send = isMintlayerWallet ? sendMl : sendBtc;
+  const unit = isMintlayerWallet ? (isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML) : BitcoinUnit.BTC;
+  const toLocalCurrencyFn = isMintlayerWallet ? currency.mlCoinsToLocalCurrency : currency.satoshiToLocalCurrency;
+
   const _renderItem = ({ index, item }) => {
+    const amount = isMintlayerWallet ? currency.coinsToML(item.value) : currency.satoshiToBTC(item.value);
+
     return (
       <>
         <View style={styles.valueWrap}>
           <Text testID="TransactionValue" style={[styles.valueValue, stylesHook.valueValue]}>
-            {currency.satoshiToBTC(item.value)}
+            {amount}
           </Text>
-          <Text style={[styles.valueUnit, stylesHook.valueValue]}>{' ' + loc.units[BitcoinUnit.BTC]}</Text>
+          <Text style={[styles.valueUnit, stylesHook.valueValue]}>{' ' + loc.units[unit]}</Text>
         </View>
-        <Text style={[styles.transactionAmountFiat, stylesHook.transactionAmountFiat]}>{currency.satoshiToLocalCurrency(item.value)}</Text>
+        <Text style={[styles.transactionAmountFiat, stylesHook.transactionAmountFiat]}>{toLocalCurrencyFn(item.value)}</Text>
         <BlueCard>
           <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.send.create_to}</Text>
           <Text testID="TransactionAddress" style={[styles.transactionDetailsSubtitle, stylesHook.transactionDetailsSubtitle]}>
@@ -251,7 +310,7 @@ const Confirm = () => {
       <View style={styles.cardBottom}>
         <BlueCard>
           <Text style={styles.cardText} testID="TransactionFee">
-            {loc.send.create_fee}: {formatBalance(feeSatoshi, BitcoinUnit.BTC)} ({currency.satoshiToLocalCurrency(feeSatoshi)})
+            {loc.send.create_fee}: {formatBalance(formattedFee, unit)} ({toLocalCurrencyFn(formattedFee)})
           </Text>
           {isLoading ? <ActivityIndicator /> : <BlueButton disabled={isElectrumDisabled} onPress={send} title={loc.send.confirm_sendNow} />}
         </BlueCard>

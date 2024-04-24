@@ -10,7 +10,8 @@ import loc, { formatBalanceWithoutSuffix, transactionTimeToReadable } from '../l
 import Lnurl from '../class/lnurl';
 import { BlueStorageContext } from '../blue_modules/storage-context';
 import ToolTipMenu from './TooltipMenu';
-import { BlueListItem, BlueTransactionExpiredIcon, BlueTransactionIncomingIcon, BlueTransactionOffchainIcon, BlueTransactionOffchainIncomingIcon, BlueTransactionOnchainIcon, BlueTransactionOutgoingIcon, BlueTransactionPendingIcon } from '../BlueComponents';
+import { BlueListItem, BlueTransactionDelegateStakingIcon, BlueTransactionDelegateWithdrawalIcon, BlueTransactionExpiredIcon, BlueTransactionIncomingIcon, BlueTransactionOffchainIcon, BlueTransactionOffchainIncomingIcon, BlueTransactionOnchainIcon, BlueTransactionOutgoingIcon, BlueTransactionPendingIcon, BlueTransactionStakingIcon } from '../BlueComponents';
+import { TransactionType } from '../blue_modules/Mintlayer';
 
 export const TransactionListItem = React.memo(({ item, itemPriceUnit = BitcoinUnit.BTC, walletID }) => {
   const [subtitleNumberOfLines, setSubtitleNumberOfLines] = useState(1);
@@ -151,6 +152,24 @@ export const TransactionListItem = React.memo(({ item, itemPriceUnit = BitcoinUn
       return (
         <View style={styles.iconWidth}>
           <BlueTransactionPendingIcon />
+        </View>
+      );
+    } else if (item.type === TransactionType.CreateDelegationId || item.type === TransactionType.CreateStakePool) {
+      return (
+        <View style={styles.iconWidth}>
+          <BlueTransactionStakingIcon />
+        </View>
+      );
+    } else if (item.type === TransactionType.DelegateStaking) {
+      return (
+        <View style={styles.iconWidth}>
+          <BlueTransactionDelegateStakingIcon />
+        </View>
+      );
+    } else if (item.type === TransactionType.LockThenTransfer) {
+      return (
+        <View style={styles.iconWidth}>
+          <BlueTransactionDelegateWithdrawalIcon />
         </View>
       );
     } else if (item.value < 0) {

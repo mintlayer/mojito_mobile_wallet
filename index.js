@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './shim.js';
 import { AppRegistry } from 'react-native';
 import App from './App';
 import { BlueStorageProvider } from './blue_modules/storage-context';
 import SplashScreen from 'react-native-splash-screen';
 import { getIntroSliderFlage, setFlage } from './store/asyncStorage.js';
+import { WasmWebView } from './components/wasm_webview/WasmWebView';
 
 const A = require('./blue_modules/analytics');
 if (!Error.captureStackTrace) {
@@ -13,6 +14,8 @@ if (!Error.captureStackTrace) {
 }
 
 const BlueAppComponent = () => {
+  const [wasmInitializationFinished, setWasmInitializationFinished] = useState(false);
+
   useEffect(() => {
     A(A.ENUM.INIT);
     setTimeout(() => {
@@ -28,7 +31,8 @@ const BlueAppComponent = () => {
 
   return (
     <BlueStorageProvider>
-      <App />
+      {wasmInitializationFinished && <App />}
+      <WasmWebView setWasmInitializationFinished={setWasmInitializationFinished} />
     </BlueStorageProvider>
   );
 };

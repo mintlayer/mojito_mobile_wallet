@@ -4,12 +4,12 @@ import BigNumber from 'bignumber.js';
 import { Badge, Icon, Text } from 'react-native-elements';
 import { Image, LayoutAnimation, Pressable, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
-import confirm from '../helpers/confirm';
-import { BitcoinUnit } from '../models/bitcoinUnits';
-import loc, { formatBalanceWithoutSuffix, formatBalancePlain, removeTrailingZeros } from '../loc';
-import { BlueText } from '../BlueComponents';
+import confirm from '../../helpers/confirm';
+import { BitcoinUnit } from '../../models/bitcoinUnits';
+import loc, { formatBalanceWithoutSuffix, formatBalancePlain, removeTrailingZeros } from '../../loc';
+import { BlueText } from '../../BlueComponents';
 import dayjs from 'dayjs';
-const currency = require('../blue_modules/currency');
+const currency = require('../../blue_modules/currency');
 dayjs.extend(require('dayjs/plugin/localizedFormat'));
 
 class AmountInput extends Component {
@@ -285,7 +285,7 @@ class AmountInput extends Component {
             </View>
             {!disabled && amount !== BitcoinUnit.MAX && (
               <TouchableOpacity accessibilityRole="button" testID="changeAmountUnitButton" style={styles.changeAmountUnit} onPress={this.changeAmountUnit}>
-                <Image source={require('../img/round-compare-arrows-24-px.png')} />
+                <Image source={require('../../img/round-compare-arrows-24-px.png')} />
               </TouchableOpacity>
             )}
           </View>

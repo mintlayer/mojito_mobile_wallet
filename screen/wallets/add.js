@@ -23,6 +23,7 @@ const ButtonSelected = Object.freeze({
   OFFCHAIN: Chain.OFFCHAIN,
   VAULT: 'VAULT',
   LDK: 'LDK',
+  ML: 'ML',
 });
 
 const WalletsAdd = () => {
@@ -230,6 +231,11 @@ const WalletsAdd = () => {
     setSelectedWalletType(ButtonSelected.LDK);
   };
 
+  const handleOnMLButtonPressed = async () => {
+    Keyboard.dismiss();
+    setSelectedWalletType(ButtonSelected.ML);
+  };
+
   return (
     <ScrollView style={stylesHook.root}>
       <StatusBar barStyle={Platform.select({ ios: 'light-content', default: useColorScheme() === 'dark' ? 'light-content' : 'dark-content' })} />
@@ -246,7 +252,7 @@ const WalletsAdd = () => {
           <LightningButton active={selectedWalletType === ButtonSelected.OFFCHAIN} onPress={handleOnLightningButtonPressed} style={styles.button} comingSoon={false} />
           {backdoorPressed > 10 ? <LdkButton active={selectedWalletType === ButtonSelected.LDK} onPress={handleOnLdkButtonPressed} style={styles.button} subtext={LightningLdkWallet.getPackageVersion()} text="LDK" /> : null}
 
-          <MintLayerButton testID="ActivateMintlayerButton" title="ML" subtitle="Mintlayer" style={styles.button} />
+          <MintLayerButton testID="ActivateMintlayerButton" active={selectedWalletType === ButtonSelected.ML} onPress={handleOnMLButtonPressed} title="ML" subtitle="Mintlayer" style={styles.button} />
         </View>
 
         <View style={styles.advanced}>
@@ -294,14 +300,14 @@ const WalletsAdd = () => {
               <ActivityIndicator />
             )}
           </View>
-          <View style={styles.importContainer}>
-            {!isLoading && (
+          {!isLoading && (
+            <View style={styles.importContainer}>
+              <Text style={[styles.importText]}>{loc.wallets.add_import_wallet}</Text>
               <Text style={[styles.importText]}>
-                {loc.wallets.add_import_wallet}
-                {!isLoading && <BlueButtonLink testID="ImportWallet" style={styles.clickImportContainer} textStyle={styles.clickImport} title={loc.wallets.click_here} onPress={navigateToImportWallet} />}
+                <BlueButtonLink testID="ImportWallet" style={styles.clickImportContainer} textStyle={styles.clickImport} title={loc.wallets.click_here} onPress={navigateToImportWallet} />
               </Text>
-            )}
-          </View>
+            </View>
+          )}
         </View>
       </KeyboardAvoidingView>
     </ScrollView>
@@ -377,7 +383,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   importContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,

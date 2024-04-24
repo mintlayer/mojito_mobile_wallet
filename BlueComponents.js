@@ -172,7 +172,6 @@ export const MintLayerButton = (props) => {
               {props.subtitle}
             </Text>
           </View>
-          <ComingSoon text={loc.addresses.comming_soon} />
         </View>
       </View>
     </TouchableOpacity>
@@ -774,6 +773,7 @@ const stylesBlueIcon = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
+    justifyContent: 'center',
   },
   ballReceive: {
     width: 30,
@@ -835,6 +835,62 @@ export const BlueTransactionIncomingIcon = (props) => {
       <View style={stylesBlueIcon.boxIncoming}>
         <View style={[stylesBlueIcon.ballIncoming, stylesBlueIconHooks.ballIncoming]}>
           <Icon {...props} name="arrow-down" size={16} type="font-awesome" color={colors.incomingForegroundColor} />
+        </View>
+      </View>
+    </View>
+  );
+};
+
+export const BlueTransactionStakingIcon = (props) => {
+  const { colors } = useTheme();
+  const stylesBlueIconHooks = StyleSheet.create({
+    ballIncoming: {
+      backgroundColor: colors.alternativeTextColor,
+    },
+  });
+  return (
+    <View {...props}>
+      <View style={stylesBlueIcon.boxIncoming}>
+        <View style={[stylesBlueIcon.ballIncomingWithoutRotate, stylesBlueIconHooks.ballIncoming]}>
+          <Icon {...props} name="database" size={16} type="font-awesome" color={colors.inverseForegroundColor} />
+        </View>
+      </View>
+    </View>
+  );
+};
+
+export const BlueTransactionDelegateStakingIcon = (props) => {
+  const { colors } = useTheme();
+  const stylesBlueIconHooks = StyleSheet.create({
+    ballIncoming: {
+      backgroundColor: colors.alternativeTextColor,
+    },
+  });
+  return (
+    <View {...props}>
+      <View style={stylesBlueIcon.boxIncoming}>
+        <View style={[stylesBlueIcon.ballIncomingWithoutRotate, stylesBlueIconHooks.ballIncoming]}>
+          <Icon {...props} name="graph-pie" size={22} type="foundation" color={colors.inverseForegroundColor} />
+        </View>
+      </View>
+    </View>
+  );
+};
+
+export const BlueTransactionDelegateWithdrawalIcon = (props) => {
+  const { colors } = useTheme();
+  const stylesBlueIconHooks = StyleSheet.create({
+    ballIncoming: {
+      backgroundColor: colors.ballReceive,
+    },
+    row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 5 },
+  });
+  return (
+    <View {...props}>
+      <View style={stylesBlueIcon.boxIncoming}>
+        <View style={[stylesBlueIcon.ballIncomingWithoutRotate, stylesBlueIconHooks.row, stylesBlueIconHooks.ballIncoming]}>
+          <Icon {...props} name="database" size={14} type="font-awesome" color={colors.incomingForegroundColor} />
+          <Icon {...props} name="long-arrow-down" size={16} type="font-awesome" color={colors.incomingForegroundColor} />
         </View>
       </View>
     </View>

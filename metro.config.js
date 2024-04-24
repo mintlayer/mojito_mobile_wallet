@@ -6,6 +6,7 @@
  */
 const path = require('path');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
+const metroDefault = require('metro-config/src/defaults/defaults');
 
 module.exports = {
   resolver: {
@@ -15,6 +16,7 @@ module.exports = {
       // This prevents "react-native run-windows" from hitting: EBUSY: resource busy or locked, open msbuild.ProjectImports.zip
       /.*\.ProjectImports\.zip/,
     ]),
+    assetExts: metroDefault.assetExts.concat(['wasm']),
   },
   transformer: {
     getTransformOptions: async () => ({
@@ -24,4 +26,14 @@ module.exports = {
       },
     }),
   },
+  server: {
+    rewriteRequestUrl: (url) => {
+      if (!url.endsWith('.bundle')) {
+        return url;
+      }
+      // https://github.com/facebook/react-native/issues/36794
+      // JavaScriptCore strips query strings, so try to re-add them with a best guess.
+      return url + '?platform=ios&dev=true&minify=false&modulesOnly=false&runModule=true';
+    }, // ...
+  }, // ...
 };

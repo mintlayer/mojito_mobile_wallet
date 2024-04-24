@@ -5,6 +5,8 @@ import { HDAezeedWallet, HDLegacyBreadwalletWallet, HDLegacyElectrumSeedP2PKHWal
 import loc from '../loc';
 import bip39WalletFormats from './bip39_wallet_formats.json'; // https://github.com/spesmilo/electrum/blob/master/electrum/bip39_wallet_formats.json
 import bip39WalletFormatsBlueWallet from './bip39_wallet_formats_bluewallet.json';
+import { MintLayerWallet } from './wallets/mintlayer-wallet';
+import { ML_NETWORK_TYPES } from '../blue_modules/Mintlayer';
 const bitcoin = require('bitcoinjs-lib');
 
 // TODO Import and subsequent scan is work, in process in import it is not
@@ -37,6 +39,7 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
   });
 
   const network = isTestMode ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
+  const mlNetwork = isTestMode ? ML_NETWORK_TYPES.TESTNET : ML_NETWORK_TYPES.MAINNET;
   // actions
   const reportProgress = (name) => {
     onProgress(name);
@@ -252,6 +255,16 @@ const startImport = (importTextOrig, askPassphrase = false, searchAccounts = fal
         yield { wallet: hd2 };
       }
       // return;
+    }
+
+    yield { progress: 'mintlayer bip39' };
+    const mintLayerWallet = new MintLayerWallet({ network: mlNetwork });
+    mintLayerWallet.setSecret(text);
+    if (password) {
+      mintLayerWallet.setPassphrase(password);
+    }
+    if (mintLayerWallet.validateMnemonic()) {
+      yield { wallet: mintLayerWallet };
     }
 
     yield { progress: 'wif' };

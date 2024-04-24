@@ -11,6 +11,7 @@ import { HDSegwitBech32Wallet } from '../../class';
 import startImport from '../../class/wallet-import';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import prompt from '../../blue_modules/prompt';
+import { range } from '../../utils/Array';
 const bitcoin = require('bitcoinjs-lib');
 
 const ImportWalletDiscovery = () => {
@@ -23,7 +24,7 @@ const ImportWalletDiscovery = () => {
   const [loading, setLoading] = useState(true);
   const [wallets, setWallets] = useState([]);
   const [password, setPassword] = useState();
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState([0]);
   const [progress, setProgress] = useState();
   const [isTestMode, setIsTestMode] = useState(null);
   const importing = useRef(false);
@@ -54,6 +55,13 @@ const ImportWalletDiscovery = () => {
     navigation.dangerouslyGetParent().pop();
   };
 
+  const saveWallets = () => {
+    if (importing.current) return;
+    importing.current = true;
+    selected.forEach((selectedIndex) => addAndSaveWallet(wallets[selectedIndex].wallet));
+    navigation.dangerouslyGetParent().pop();
+  };
+
   useEffect(() => {
     if (isTestMode === null) {
       // do nothing
@@ -69,7 +77,10 @@ const ImportWalletDiscovery = () => {
       try {
         subtitle = wallet.getDerivationPath?.();
       } catch (e) {}
-      setWallets((wallets) => [...wallets, { wallet, subtitle, id }]);
+      setWallets((wallets) => {
+        setSelected(range(0, (wallets.length || 0) + 1));
+        return [...wallets, { wallet, subtitle, id }];
+      });
     };
 
     const onPassword = async (title, subtitle) => {
@@ -119,14 +130,25 @@ const ImportWalletDiscovery = () => {
     navigation.navigate('ImportCustomDerivationPath', { importText, password });
   };
 
+  const updateSelectedWallet = (index) => {
+    setSelected((prevSelected) => {
+      const foundIndex = prevSelected.find((i) => i === index);
+      if (foundIndex !== undefined) {
+        return prevSelected.filter((i) => i !== index);
+      }
+
+      return [...prevSelected, index];
+    });
+  };
+
   const renderItem = ({ item, index }) => (
     <WalletToImport
       key={item.id}
       title={item.wallet.typeReadable}
       subtitle={item.subtitle}
-      active={selected === index}
+      active={selected.includes(index)}
       onPress={() => {
-        setSelected(index);
+        updateSelectedWallet(index);
         ReactNativeHapticFeedback.trigger('selection', { ignoreAndroidSystemSettings: false });
       }}
     />
@@ -161,7 +183,7 @@ const ImportWalletDiscovery = () => {
         {bip39 && <BlueButtonLink title={loc.wallets.import_discovery_derivation} testID="CustomDerivationPathButton" onPress={handleCustomDerivation} />}
         <BlueSpacing10 />
         <View style={styles.buttonContainer}>
-          <BlueButton disabled={wallets.length === 0} title={loc.wallets.import_do_import} onPress={() => saveWallet(wallets[selected].wallet)} />
+          <BlueButton disabled={wallets.length === 0 || selected.length === 0} title={loc.wallets.import_do_import} onPress={saveWallets} />
         </View>
       </View>
     </SafeBlueArea>

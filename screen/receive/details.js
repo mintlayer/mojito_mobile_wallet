@@ -10,7 +10,7 @@ import navigationStyle from '../../components/navigationStyle';
 import BottomModal from '../../components/BottomModal';
 import { Chain, BitcoinUnit } from '../../models/bitcoinUnits';
 import HandoffComponent from '../../components/handoff';
-import AmountInput from '../../components/AmountInput';
+import AmountInput from '../../components/amount_input/AmountInput';
 import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
 import loc, { formatBalance } from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
@@ -20,6 +20,7 @@ import { TransactionPendingIconBig } from '../../components/TransactionPendingIc
 import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 
 import { recieveDescriptionRegex } from '../../constants/index';
+import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
 const currency = require('../../blue_modules/currency');
 const bitcoin = require('bitcoinjs-lib');
 
@@ -322,7 +323,7 @@ const ReceiveDetails = () => {
         </View>
         <View style={stylesHook.share}>
           <BlueCard>
-            <BlueButtonLink style={stylesHook.link} testID="SetCustomAmountButton" title={loc.receive.details_setAmount} onPress={showCustomAmountModal} />
+            {wallet.type !== MintLayerWallet.type && <BlueButtonLink style={stylesHook.link} testID="SetCustomAmountButton" title={loc.receive.details_setAmount} onPress={showCustomAmountModal} />}
             <BlueButton onPress={handleShareButtonPressed} title={loc.receive.details_share} />
           </BlueCard>
         </View>
@@ -373,7 +374,10 @@ const ReceiveDetails = () => {
   }, []);
 
   const setAddressBIP21Encoded = (address) => {
-    const bip21encoded = DeeplinkSchemaMatch.bip21encode(address);
+    let bip21encoded = address;
+    if (wallet.type !== MintLayerWallet.type) {
+      bip21encoded = DeeplinkSchemaMatch.bip21encode(address);
+    }
     setParams({ address });
     setBip21encoded(bip21encoded);
     setShowAddress(true);

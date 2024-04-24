@@ -3,7 +3,7 @@ import { View, ActivityIndicator, Text, TouchableOpacity, StyleSheet, StatusBar,
 import { Icon } from 'react-native-elements';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 
-import { BlueButton, BlueCard, BlueLoading, BlueSpacing10, BlueSpacing20, BlueText, BlueTransactionIncomingIcon, BlueTransactionOutgoingIcon, BlueTransactionPendingIcon, SafeBlueArea } from '../../BlueComponents';
+import { BlueButton, BlueCard, BlueLoading, BlueSpacing10, BlueSpacing20, BlueText, BlueTransactionDelegateStakingIcon, BlueTransactionDelegateWithdrawalIcon, BlueTransactionIncomingIcon, BlueTransactionOutgoingIcon, BlueTransactionPendingIcon, BlueTransactionStakingIcon, SafeBlueArea } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import { HDSegwitBech32Transaction } from '../../class';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
@@ -12,6 +12,9 @@ import loc, { formatBalanceWithoutSuffix } from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
+import { MintlayerUnit } from '../../models/mintlayerUnits';
+import { TransactionType } from '../../blue_modules/Mintlayer';
 
 const buttonStatus = Object.freeze({
   possible: 1,
@@ -254,7 +257,7 @@ const TransactionsStatus = () => {
     });
   };
   const navigateToTransactionDetials = () => {
-    navigate('TransactionDetails', { hash: tx.hash });
+    navigate('TransactionDetails', { hash: tx.hash, walletType: wallet.current.type, walletPreferredBalanceUnit: wallet.current.preferredBalanceUnit });
   };
 
   const renderCPFP = () => {
@@ -327,6 +330,9 @@ const TransactionsStatus = () => {
     }
   };
 
+  const fee = wallet.current.type === MintLayerWallet.type ? tx?.fee.atoms : tx?.fee;
+  const unit = wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit !== MintlayerUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit;
+
   if (isLoading || !tx) {
     return (
       <SafeBlueArea>
@@ -343,7 +349,7 @@ const TransactionsStatus = () => {
         <BlueCard>
           <View style={styles.center}>
             <Text style={[styles.value, stylesHook.value]}>
-              {formatBalanceWithoutSuffix(tx.value, wallet.current.preferredBalanceUnit, true)} {wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && <Text style={[styles.valueUnit, stylesHook.valueUnit]}>{loc.units[wallet.current.preferredBalanceUnit]}</Text>}
+              {formatBalanceWithoutSuffix(tx.value, wallet.current.preferredBalanceUnit, true)} {unit && <Text style={[styles.valueUnit, stylesHook.valueUnit]}>{loc.units[unit]}</Text>}
             </Text>
           </View>
 
@@ -359,6 +365,24 @@ const TransactionsStatus = () => {
                   return (
                     <View style={styles.icon}>
                       <BlueTransactionPendingIcon />
+                    </View>
+                  );
+                } else if (tx.type === TransactionType.CreateDelegationId || tx.type === TransactionType.CreateStakePool) {
+                  return (
+                    <View style={styles.iconWidth}>
+                      <BlueTransactionStakingIcon />
+                    </View>
+                  );
+                } else if (tx.type === TransactionType.DelegateStaking) {
+                  return (
+                    <View style={styles.iconWidth}>
+                      <BlueTransactionDelegateStakingIcon />
+                    </View>
+                  );
+                } else if (tx.type === TransactionType.LockThenTransfer) {
+                  return (
+                    <View style={styles.iconWidth}>
+                      <BlueTransactionDelegateWithdrawalIcon />
                     </View>
                   );
                 } else if (tx.value < 0) {
@@ -378,10 +402,10 @@ const TransactionsStatus = () => {
             </View>
           </View>
 
-          {tx.fee && (
+          {fee && (
             <View style={styles.fee}>
               <BlueText style={styles.feeText}>
-                {loc.send.create_fee.toLowerCase()} {formatBalanceWithoutSuffix(tx.fee, wallet.current.preferredBalanceUnit, true)} {wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit}
+                {loc.send.create_fee.toLowerCase()} {formatBalanceWithoutSuffix(fee, wallet.current.preferredBalanceUnit, true)} {unit}
               </BlueText>
             </View>
           )}

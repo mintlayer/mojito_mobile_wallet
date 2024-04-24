@@ -1,0 +1,15 @@
+{
+  "name": "wasm-wrappers",
+  "version": "0.4.1",
+  "license": "MIT",
+  "files": [
+    "../../../assets/mintlayer/wasm_wrappers_bg.wasm",
+    "wasm_wrappers.js",
+    "wasm_wrappers.d.ts"
+  ],
+  "module": "wasm_wrappers.js",
+  "types": "wasm_wrappers.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
