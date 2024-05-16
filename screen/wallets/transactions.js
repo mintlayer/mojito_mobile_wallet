@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useContext, useRef, useMemo } from 'react';
 import { ActivityIndicator, Alert, Dimensions, FlatList, InteractionManager, Linking, PixelRatio, Platform, ScrollView, StatusBar, StyleSheet, Text, findNodeHandle, TouchableOpacity, View, I18nManager } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useRoute, useNavigation, useTheme, useFocusEffect } from '@react-navigation/native';
@@ -28,7 +28,7 @@ const buttonFontSize = PixelRatio.roundToNearestPixel(Dimensions.get('window').w
 const WalletTransactions = () => {
   const { wallets, saveToDisk, setSelectedWallet, walletTransactionUpdateStatus, isElectrumDisabled } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(false);
-  const { walletID } = useRoute().params;
+  const { walletID, token_info } = useRoute().params;
   const { name } = useRoute();
   const wallet = wallets.find((w) => w.getID() === walletID);
   const [itemPriceUnit, setItemPriceUnit] = useState(wallet.getPreferredBalanceUnit());
@@ -211,7 +211,7 @@ const WalletTransactions = () => {
 
   const renderListFooterComponent = () => {
     // if not all txs rendered - display indicator
-    return (getTransactionsSliced(Infinity).length > limit && <ActivityIndicator style={styles.activityIndicator} />) || <View />;
+    return (!token_info && getTransactionsSliced(Infinity).length > limit && <ActivityIndicator style={styles.activityIndicator} />) || <View />;
   };
 
   const renderListHeaderComponent = () => {
@@ -254,7 +254,10 @@ const WalletTransactions = () => {
           </View>
         )}
         <View style={[styles.listHeaderTextRow, stylesHook.listHeaderTextRow]}>
-          <Text style={[styles.listHeaderText, stylesHook.listHeaderText]}>{loc.transactions.list_title}</Text>
+          <Text style={[styles.listHeaderText, stylesHook.listHeaderText]}>
+            {token_info && (token_info?.token_ticker?.symbol || token_info?.token_ticker?.string) + ' / '}
+            {loc.transactions.list_title}
+          </Text>
           <TouchableOpacity accessibilityRole="button" testID="refreshTransactions" style={style} onPress={refreshTransactions} disabled={isLoading}>
             <Icon name="refresh" type="font-awesome" color={colors.feeText} />
           </TouchableOpacity>
@@ -525,6 +528,14 @@ const WalletTransactions = () => {
     }
   };
 
+  const filteredDataSource = useMemo(() => {
+    if (token_info && token_info.token_ticker.string !== 'Mintlayer') {
+      return dataSource.filter(({ token_id }) => token_id && token_id === token_info?.token_id);
+    }
+
+    return dataSource;
+  }, [dataSource, token_info]);
+
   return (
     <View style={styles.flex}>
       <StatusBar barStyle="light-content" backgroundColor={WalletGradient.headerColorFor(wallet.type)} animated />
@@ -590,7 +601,7 @@ const WalletTransactions = () => {
             </ScrollView>
           }
           {...(isElectrumDisabled ? {} : { refreshing: isLoading, onRefresh: refreshTransactions })}
-          data={dataSource}
+          data={filteredDataSource}
           extraData={[timeElapsed, dataSource, wallets]}
           keyExtractor={_keyExtractor}
           renderItem={renderItem}

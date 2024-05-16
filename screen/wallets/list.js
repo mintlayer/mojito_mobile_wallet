@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { StatusBar, View, TouchableOpacity, Text, StyleSheet, SectionList, Platform, Image, Dimensions, useWindowDimensions, findNodeHandle, I18nManager, Keyboard } from 'react-native';
+import { StatusBar, View, TouchableOpacity, Text, StyleSheet, SectionList, Platform, Image, Dimensions, useWindowDimensions, findNodeHandle, I18nManager, Keyboard, Button } from 'react-native';
 import { BlueFormInput, BlueHeaderDefaultMain, BlueSendReceiveButton, BlueButton } from '../../BlueComponents';
 import WalletsCarousel from '../../components/WalletsCarousel';
 import { Icon } from 'react-native-elements';
@@ -18,6 +18,7 @@ import { SendReceiveCard } from '../../components/SendReceiveCard';
 import BottomModal from '../../components/BottomModal';
 import { LightningCustodianWallet, LightningLdkWallet } from '../class';
 import { type } from '../../theme/Fonts';
+import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
 
 const scanqrHelper = require('../../helpers/scan-qr');
 const A = require('../../blue_modules/analytics');
@@ -188,7 +189,8 @@ const WalletsList = () => {
     if (index <= wallets.length - 1) {
       const wallet = wallets[index];
       const walletID = wallet.getID();
-      navigate('WalletTransactions', {
+      const screenName = wallet.type === MintLayerWallet.type ? 'MLWalletTransactions' : 'WalletTransactions';
+      navigate(screenName, {
         walletID,
         walletType: wallet.type,
         key: `WalletTransactions-${walletID}`,

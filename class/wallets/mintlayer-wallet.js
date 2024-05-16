@@ -2,9 +2,10 @@ import * as bip39 from 'bip39';
 import * as ML from '../../blue_modules/mintlayer/mintlayer';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 import { MintlayerUnit } from '../../models/mintlayerUnits';
-import { broadcastTransaction, getAddressData, getAddressUtxo, getTransactionData, ML_NETWORK_TYPES, TransactionType } from '../../blue_modules/Mintlayer';
+import { broadcastTransaction, getAddressData, getAddressUtxo, getTokenData, getTransactionData, ML_NETWORK_TYPES, TransactionType } from '../../blue_modules/Mintlayer';
 import { range } from '../../utils/Array';
 import { getArraySpead, getEncodedWitnesses, getOptUtxos, getOutpointedSourceIds, getTransactionHex, getTransactionsBytes, getTransactionUtxos, getTxInputs, getTxOutput, getUtxoAddress, getUtxoAvailable, getUtxoTransactions, totalUtxosAmount } from '../../utils/ML/transaction';
+import * as ExchangeRates from '../../models/exchangeRates';
 
 export class MintLayerWallet extends AbstractHDWallet {
   static type = 'ML_HDsegwitBech32';
@@ -93,8 +94,22 @@ export class MintLayerWallet extends AbstractHDWallet {
       } // end rescanning fresh wallet
 
       // finally fetching balance
+      const prefetchAddressesStart = +new Date();
       await this._prefetchAddresses();
+      const prefetchAddressesEnd = +new Date();
+      console.log('_prefetchAddresses', (prefetchAddressesEnd - prefetchAddressesStart) / 1000, 'sec');
+      const fetchBalanceStart = +new Date();
       await this._fetchBalance();
+      const fetchBalanceEnd = +new Date();
+      console.log('_fetchBalance', (fetchBalanceEnd - fetchBalanceStart) / 1000, 'sec');
+      const fetchUtxoStart = +new Date();
+      await this.fetchUtxo();
+      const fetchUtxoEnd = +new Date();
+      console.log('fetchUtxo', (fetchUtxoEnd - fetchUtxoStart) / 1000, 'sec');
+      const fetchTokenBalancesStart = +new Date();
+      await this.fetchTokenBalances();
+      const fetchTokenBalancesEnd = +new Date();
+      console.log('fetchTokenBalances', (fetchTokenBalancesEnd - fetchTokenBalancesStart) / 1000, 'sec');
     } catch (err) {
       console.error(err);
     }
@@ -325,7 +340,11 @@ export class MintLayerWallet extends AbstractHDWallet {
       for (const vout of tx.outputs) {
         // when output goes to our address - this means we are gaining!
         if (vout.destination && ownedAddressesHashmap[vout.destination]) {
-          if (vout.type === TransactionType.Transfer) {
+          if (vout.type === TransactionType.Transfer && vout.value.type === 'TokenV1' && vout.value.token_id) {
+            tx.type = TransactionType.TokenTransfer;
+            tx.token_id = vout.value.token_id;
+            tx.value += Number(vout.value?.amount.decimal) || 0;
+          } else if (vout.type === TransactionType.Transfer) {
             tx.value += Number(vout.value?.amount.atoms) || 0;
           } else if (vout.type === TransactionType.CreateDelegationId) {
             tx.type = TransactionType.CreateDelegationId;
@@ -466,28 +485,36 @@ export class MintLayerWallet extends AbstractHDWallet {
     // fetching utxo of addresses that only have some balance
     let addressess = [];
 
+    // todo uncomment when address endpoint will return token balance
     // considering confirmed balance:
-    for (let c = 0; c < this.next_free_address_index + this.gap_limit; c++) {
-      if (this._balances_by_external_index[c] && this._balances_by_external_index[c].c && this._balances_by_external_index[c].c > 0) {
-        addressess.push(this._getExternalAddressByIndex(c));
-      }
-    }
-    for (let c = 0; c < this.next_free_change_address_index + this.gap_limit; c++) {
-      if (this._balances_by_internal_index[c] && this._balances_by_internal_index[c].c && this._balances_by_internal_index[c].c > 0) {
-        addressess.push(this._getInternalAddressByIndex(c));
-      }
-    }
+    // for (let c = 0; c < this.next_free_address_index + this.gap_limit; c++) {
+    //   if (this._balances_by_external_index[c] && this._balances_by_external_index[c].c && this._balances_by_external_index[c].c > 0) {
+    //     addressess.push(this._getExternalAddressByIndex(c));
+    //   }
+    // }
+    // for (let c = 0; c < this.next_free_change_address_index + this.gap_limit; c++) {
+    //   if (this._balances_by_internal_index[c] && this._balances_by_internal_index[c].c && this._balances_by_internal_index[c].c > 0) {
+    //     addressess.push(this._getInternalAddressByIndex(c));
+    //   }
+    // }
+    //
+    // // considering Unconfirmed balance:
+    // for (let c = 0; c < this.next_free_address_index + this.gap_limit; c++) {
+    //   if (this._balances_by_external_index[c] && this._balances_by_external_index[c].u && this._balances_by_external_index[c].u > 0) {
+    //     addressess.push(this._getExternalAddressByIndex(c));
+    //   }
+    // }
+    // for (let c = 0; c < this.next_free_change_address_index + this.gap_limit; c++) {
+    //   if (this._balances_by_internal_index[c] && this._balances_by_internal_index[c].u && this._balances_by_internal_index[c].u > 0) {
+    //     addressess.push(this._getInternalAddressByIndex(c));
+    //   }
+    // }
 
-    // considering UNconfirmed balance:
     for (let c = 0; c < this.next_free_address_index + this.gap_limit; c++) {
-      if (this._balances_by_external_index[c] && this._balances_by_external_index[c].u && this._balances_by_external_index[c].u > 0) {
-        addressess.push(this._getExternalAddressByIndex(c));
-      }
+      addressess.push(this._getExternalAddressByIndex(c));
     }
     for (let c = 0; c < this.next_free_change_address_index + this.gap_limit; c++) {
-      if (this._balances_by_internal_index[c] && this._balances_by_internal_index[c].u && this._balances_by_internal_index[c].u > 0) {
-        addressess.push(this._getInternalAddressByIndex(c));
-      }
+      addressess.push(this._getInternalAddressByIndex(c));
     }
 
     addressess = [...new Set(addressess)]; // deduplicate just for any case
@@ -514,6 +541,80 @@ export class MintLayerWallet extends AbstractHDWallet {
       ret = ret.filter(({ txid, vout }) => !this.getUTXOMetadata(txid, vout).frozen);
     }
     return ret;
+  }
+
+  async fetchTokenBalances() {
+    const available = this._utxo
+      .flatMap((utxo) => [...utxo])
+      .filter((item) => item.utxo.value)
+      .reduce((acc, item) => {
+        acc.push(item);
+        return acc;
+      }, []);
+
+    const tokenBalances = {};
+    available.forEach((item) => {
+      const { value } = item.utxo;
+      const token = value.token_id;
+
+      if (token && value.type === 'TokenV1') {
+        if (tokenBalances[token]) {
+          tokenBalances[token] += parseFloat(value.amount.decimal);
+        } else {
+          tokenBalances[token] = parseFloat(value.amount.decimal);
+        }
+      }
+    });
+
+    const tokensData = {};
+    const tokens = Object.keys(tokenBalances);
+    tokens.forEach((token) => {
+      tokensData[token] = {};
+    });
+    const tokensPromises = tokens.map((token) => {
+      return getTokenData(token, this.network)
+        .then(JSON.parse)
+        .then((data) => {
+          tokensData[token] = data;
+        });
+    });
+    await Promise.all(tokensPromises);
+    this._tokenData = tokensData;
+
+    const tokensUsdRate = {};
+    const tokensUsdPromises = tokens.map((token) => {
+      const tokenString = tokensData[token].token_ticker.string;
+      return ExchangeRates.getRate(tokenString, 'usd')
+        .then((data) => {
+          tokensUsdRate[token] = data[`${tokenString}-usd`];
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    });
+    await Promise.all(tokensUsdPromises);
+
+    const merged = Object.keys(tokenBalances).reduce((acc, key) => {
+      acc[key] = {
+        balance: tokenBalances[key],
+        usdBalance: tokensUsdRate[key],
+        token_info: {
+          token_ticker: tokensData[key].token_ticker,
+          token_id: key,
+        },
+      };
+      return acc;
+    }, {});
+
+    this._tokenBalances = merged;
+  }
+
+  getTokenData(key) {
+    return this._tokenData[key];
+  }
+
+  getTokenBalances() {
+    return this._tokenBalances || {};
   }
 
   async _multiGetUtxoByAddress(addresses) {

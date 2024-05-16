@@ -2,8 +2,9 @@ import React from 'react';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Platform, useWindowDimensions, Dimensions, I18nManager, Image, StyleSheet, View, Text, Touchable, TouchableOpacity } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+import { useRoute, useTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import Settings from './screen/settings/settings';
 import About from './screen/settings/about';
@@ -26,6 +27,9 @@ import TestMode from './screen/settings/testmode';
 
 import WalletsList from './screen/wallets/list';
 import WalletTransactions from './screen/wallets/transactions';
+import WalletTransactionsHeader from './screen/wallets/transactions-header';
+import MLWalletTransactions from './screen/wallets/ml-transactions';
+import MLWalletTokens from './screen/wallets/ml-tokens';
 import AddWallet from './screen/wallets/add';
 import WalletsAddMultisig from './screen/wallets/addMultisig';
 import WalletsAddMultisigStep2 from './screen/wallets/addMultisigStep2';
@@ -535,6 +539,31 @@ const BottomTab = () => {
   );
 };
 
+const TopTab = createMaterialTopTabNavigator();
+
+function MlWalletRoot() {
+  const { walletID } = useRoute().params;
+  const { colors } = useTheme();
+  const tabBarOptions = {
+    labelStyle: { fontSize: 18, fontWeight: 'bold', textTransform: 'none' },
+    indicatorStyle: { backgroundColor: colors.mainColor },
+    activeTintColor: colors.foregroundColor,
+    tabStyle: { padding: 2 },
+    style: { marginTop: 8, marginHorizontal: 16, elevation: 0 },
+    pressColor: colors.background,
+  };
+
+  return (
+    <View style={styles.flex}>
+      <WalletTransactionsHeader />
+      <TopTab.Navigator tabBarOptions={tabBarOptions}>
+        <TopTab.Screen name="Transactions" component={MLWalletTransactions} initialParams={{ walletID }} />
+        <TopTab.Screen name="Tokens" component={MLWalletTokens} initialParams={{ walletID }} />
+      </TopTab.Navigator>
+    </View>
+  );
+}
+
 const Navigation = () => {
   const theme = useTheme();
 
@@ -554,6 +583,7 @@ const Navigation = () => {
       <RootStack.Screen name="HodlHodlWebview" component={HodlHodlWebview} options={HodlHodlWebview.navigationOptions(theme)} />
 
       <RootStack.Screen name="WalletTransactions" component={WalletTransactions} options={WalletTransactions.navigationOptions(theme)} />
+      <RootStack.Screen name="MLWalletTransactions" component={MlWalletRoot} options={WalletTransactions.navigationOptions(theme)} />
       <WalletsStack.Screen name="WalletDetails" component={WalletDetails} options={WalletDetails.navigationOptions(theme)} />
       <WalletsStack.Screen name="WalletAddresses" component={WalletAddresses} options={WalletAddresses.navigationOptions(theme)} />
 
@@ -589,6 +619,9 @@ const Navigation = () => {
 };
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   marginTopTab: {
     marginTop: 20,
   },
