@@ -437,6 +437,40 @@ export function encode_output_transfer(amount, address, network) {
 }
 
 /**
+ * Given a destination address, an amount, token ID (in address form) and a network type (mainnet, testnet, etc), this function
+ * creates an output of type Transfer for tokens, and returns it as bytes.
+ * @param {Amount} amount
+ * @param {string} address
+ * @param {string} token_id
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_output_token_transfer(amount, address, token_id, network) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    _assertClass(amount, Amount);
+    var ptr0 = amount.__destroy_into_raw();
+    const ptr1 = passStringToWasm0(address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ptr2 = passStringToWasm0(token_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len2 = WASM_VECTOR_LEN;
+    wasm.encode_output_token_transfer(retptr, ptr0, ptr1, len1, ptr2, len2, network);
+    var r0 = getInt32Memory0()[retptr / 4 + 0];
+    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r2 = getInt32Memory0()[retptr / 4 + 2];
+    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    if (r3) {
+      throw takeObject(r2);
+    }
+    var v4 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v4;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
  * Given the current block height and a network type (mainnet, testnet, etc),
  * this function returns the number of blocks, after which a pool that decommissioned,
  * will have its funds unlocked and available for spending.
@@ -569,6 +603,44 @@ export function encode_output_lock_then_transfer(amount, address, lock, network)
 }
 
 /**
+ * Given a valid receiving address, token ID (in address form), a locking rule as bytes (available in this file),
+ * and a network type (mainnet, testnet, etc), this function creates an output of type
+ * LockThenTransfer with the parameters provided.
+ * @param {Amount} amount
+ * @param {string} address
+ * @param {string} token_id
+ * @param {Uint8Array} lock
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_output_token_lock_then_transfer(amount, address, token_id, lock, network) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    _assertClass(amount, Amount);
+    var ptr0 = amount.__destroy_into_raw();
+    const ptr1 = passStringToWasm0(address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ptr2 = passStringToWasm0(token_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len2 = WASM_VECTOR_LEN;
+    const ptr3 = passArray8ToWasm0(lock, wasm.__wbindgen_malloc);
+    const len3 = WASM_VECTOR_LEN;
+    wasm.encode_output_token_lock_then_transfer(retptr, ptr0, ptr1, len1, ptr2, len2, ptr3, len3, network);
+    var r0 = getInt32Memory0()[retptr / 4 + 0];
+    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r2 = getInt32Memory0()[retptr / 4 + 2];
+    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    if (r3) {
+      throw takeObject(r2);
+    }
+    var v5 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v5;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
  * Given an amount, this function creates an output (as bytes) to burn a given amount of coins
  * @param {Amount} amount
  * @returns {Uint8Array}
@@ -589,6 +661,37 @@ export function encode_output_coin_burn(amount) {
     var v2 = getArrayU8FromWasm0(r0, r1).slice();
     wasm.__wbindgen_free(r0, r1 * 1, 1);
     return v2;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
+ * Given an amount, token ID (in address form) and network type (mainnet, testnet, etc),
+ * this function creates an output (as bytes) to burn a given amount of tokens
+ * @param {Amount} amount
+ * @param {string} token_id
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_output_token_burn(amount, token_id, network) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    _assertClass(amount, Amount);
+    var ptr0 = amount.__destroy_into_raw();
+    const ptr1 = passStringToWasm0(token_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    wasm.encode_output_token_burn(retptr, ptr0, ptr1, len1, network);
+    var r0 = getInt32Memory0()[retptr / 4 + 0];
+    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r2 = getInt32Memory0()[retptr / 4 + 2];
+    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    if (r3) {
+      throw takeObject(r2);
+    }
+    var v3 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v3;
   } finally {
     wasm.__wbindgen_add_to_stack_pointer(16);
   }
@@ -732,6 +835,70 @@ export function encode_output_create_stake_pool(pool_id, pool_data, network) {
 }
 
 /**
+ * Returns the fee that needs to be paid by a transaction for issuing a new fungible token
+ * @param {bigint} _current_block_height
+ * @param {Network} network
+ * @returns {Amount}
+ */
+export function fungible_token_issuance_fee(_current_block_height, network) {
+  const ret = wasm.fungible_token_issuance_fee(_current_block_height, network);
+  return Amount.__wrap(ret);
+}
+
+/**
+ * Given the current block height and a network type (mainnet, testnet, etc),
+ * this will return the fee that needs to be paid by a transaction for issuing a new NFT
+ * The current block height information is used in case a network upgrade changed the value.
+ * @param {bigint} current_block_height
+ * @param {Network} network
+ * @returns {Amount}
+ */
+export function nft_issuance_fee(current_block_height, network) {
+  const ret = wasm.nft_issuance_fee(current_block_height, network);
+  return Amount.__wrap(ret);
+}
+
+/**
+ * Given the current block height and a network type (mainnet, testnet, etc),
+ * this will return the fee that needs to be paid by a transaction for changing the total supply of a token
+ * by either minting or unminting tokens
+ * The current block height information is used in case a network upgrade changed the value.
+ * @param {bigint} current_block_height
+ * @param {Network} network
+ * @returns {Amount}
+ */
+export function token_supply_change_fee(current_block_height, network) {
+  const ret = wasm.token_supply_change_fee(current_block_height, network);
+  return Amount.__wrap(ret);
+}
+
+/**
+ * Given the current block height and a network type (mainnet, testnet, etc),
+ * this will return the fee that needs to be paid by a transaction for freezing/unfreezing a token
+ * The current block height information is used in case a network upgrade changed the value.
+ * @param {bigint} current_block_height
+ * @param {Network} network
+ * @returns {Amount}
+ */
+export function token_freeze_fee(current_block_height, network) {
+  const ret = wasm.token_freeze_fee(current_block_height, network);
+  return Amount.__wrap(ret);
+}
+
+/**
+ * Given the current block height and a network type (mainnet, testnet, etc),
+ * this will return the fee that needs to be paid by a transaction for changing the authority of a token
+ * The current block height information is used in case a network upgrade changed the value.
+ * @param {bigint} current_block_height
+ * @param {Network} network
+ * @returns {Amount}
+ */
+export function token_change_authority_fee(current_block_height, network) {
+  const ret = wasm.token_change_authority_fee(current_block_height, network);
+  return Amount.__wrap(ret);
+}
+
+/**
  * Given the parameters needed to issue a fungible token, and a network type (mainnet, testnet, etc),
  * this function creates an output that issues that token.
  * @param {string} authority
@@ -741,10 +908,11 @@ export function encode_output_create_stake_pool(pool_id, pool_data, network) {
  * @param {TotalSupply} total_supply
  * @param {Amount | undefined} supply_amount
  * @param {FreezableToken} is_token_freezable
+ * @param {bigint} _current_block_height
  * @param {Network} network
  * @returns {Uint8Array}
  */
-export function encode_output_issue_fungible_token(authority, token_ticker, metadata_uri, number_of_decimals, total_supply, supply_amount, is_token_freezable, network) {
+export function encode_output_issue_fungible_token(authority, token_ticker, metadata_uri, number_of_decimals, total_supply, supply_amount, is_token_freezable, _current_block_height, network) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     const ptr0 = passStringToWasm0(authority, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
@@ -758,7 +926,7 @@ export function encode_output_issue_fungible_token(authority, token_ticker, meta
       _assertClass(supply_amount, Amount);
       ptr3 = supply_amount.__destroy_into_raw();
     }
-    wasm.encode_output_issue_fungible_token(retptr, ptr0, len0, ptr1, len1, ptr2, len2, number_of_decimals, total_supply, ptr3, is_token_freezable, network);
+    wasm.encode_output_issue_fungible_token(retptr, ptr0, len0, ptr1, len1, ptr2, len2, number_of_decimals, total_supply, ptr3, is_token_freezable, _current_block_height, network);
     var r0 = getInt32Memory0()[retptr / 4 + 0];
     var r1 = getInt32Memory0()[retptr / 4 + 1];
     var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -769,6 +937,62 @@ export function encode_output_issue_fungible_token(authority, token_ticker, meta
     var v5 = getArrayU8FromWasm0(r0, r1).slice();
     wasm.__wbindgen_free(r0, r1 * 1, 1);
     return v5;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
+ * Given the parameters needed to issue an NFT, and a network type (mainnet, testnet, etc),
+ * this function creates an output that issues that NFT.
+ * @param {string} token_id
+ * @param {string} authority
+ * @param {string} name
+ * @param {string} ticker
+ * @param {string} description
+ * @param {Uint8Array} media_hash
+ * @param {string | undefined} creator
+ * @param {Uint8Array | undefined} media_uri
+ * @param {Uint8Array | undefined} icon_uri
+ * @param {Uint8Array | undefined} additional_metadata_uri
+ * @param {bigint} _current_block_height
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_output_issue_nft(token_id, authority, name, ticker, description, media_hash, creator, media_uri, icon_uri, additional_metadata_uri, _current_block_height, network) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    const ptr0 = passStringToWasm0(token_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passStringToWasm0(authority, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ptr2 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len2 = WASM_VECTOR_LEN;
+    const ptr3 = passStringToWasm0(ticker, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len3 = WASM_VECTOR_LEN;
+    const ptr4 = passStringToWasm0(description, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len4 = WASM_VECTOR_LEN;
+    const ptr5 = passArray8ToWasm0(media_hash, wasm.__wbindgen_malloc);
+    const len5 = WASM_VECTOR_LEN;
+    var ptr6 = isLikeNone(creator) ? 0 : passStringToWasm0(creator, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len6 = WASM_VECTOR_LEN;
+    var ptr7 = isLikeNone(media_uri) ? 0 : passArray8ToWasm0(media_uri, wasm.__wbindgen_malloc);
+    var len7 = WASM_VECTOR_LEN;
+    var ptr8 = isLikeNone(icon_uri) ? 0 : passArray8ToWasm0(icon_uri, wasm.__wbindgen_malloc);
+    var len8 = WASM_VECTOR_LEN;
+    var ptr9 = isLikeNone(additional_metadata_uri) ? 0 : passArray8ToWasm0(additional_metadata_uri, wasm.__wbindgen_malloc);
+    var len9 = WASM_VECTOR_LEN;
+    wasm.encode_output_issue_nft(retptr, ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3, ptr4, len4, ptr5, len5, ptr6, len6, ptr7, len7, ptr8, len8, ptr9, len9, _current_block_height, network);
+    var r0 = getInt32Memory0()[retptr / 4 + 0];
+    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r2 = getInt32Memory0()[retptr / 4 + 2];
+    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    if (r3) {
+      throw takeObject(r2);
+    }
+    var v11 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v11;
   } finally {
     wasm.__wbindgen_add_to_stack_pointer(16);
   }
@@ -1108,6 +1332,18 @@ function handleError(f, args) {
   }
 }
 /**
+ * The network, for which an operation to be done. Mainnet, testnet, etc.
+ */
+export const Network = Object.freeze({ Mainnet: 0, 0: 'Mainnet', Testnet: 1, 1: 'Testnet', Regtest: 2, 2: 'Regtest', Signet: 3, 3: 'Signet' });
+/**
+ * Indicates whether a token can be frozen
+ */
+export const FreezableToken = Object.freeze({ No: 0, 0: 'No', Yes: 1, 1: 'Yes' });
+/**
+ * A utxo can either come from a transaction or a block reward. This enum signifies that.
+ */
+export const SourceId = Object.freeze({ Transaction: 0, 0: 'Transaction', BlockReward: 1, 1: 'BlockReward' });
+/**
  * The token supply of a specific token, set on issuance
  */
 export const TotalSupply = Object.freeze({
@@ -1128,21 +1364,9 @@ export const TotalSupply = Object.freeze({
   2: 'Fixed',
 });
 /**
- * A utxo can either come from a transaction or a block reward. This enum signifies that.
- */
-export const SourceId = Object.freeze({ Transaction: 0, 0: 'Transaction', BlockReward: 1, 1: 'BlockReward' });
-/**
  * The part of the transaction that will be committed in the signature. Similar to bitcoin's sighash.
  */
 export const SignatureHashType = Object.freeze({ ALL: 0, 0: 'ALL', NONE: 1, 1: 'NONE', SINGLE: 2, 2: 'SINGLE', ANYONECANPAY: 3, 3: 'ANYONECANPAY' });
-/**
- * The network, for which an operation to be done. Mainnet, testnet, etc.
- */
-export const Network = Object.freeze({ Mainnet: 0, 0: 'Mainnet', Testnet: 1, 1: 'Testnet', Regtest: 2, 2: 'Regtest', Signet: 3, 3: 'Signet' });
-/**
- * Indicates whether a token can be frozen
- */
-export const FreezableToken = Object.freeze({ No: 0, 0: 'No', Yes: 1, 1: 'Yes' });
 
 const AmountFinalization = typeof FinalizationRegistry === 'undefined' ? { register: () => {}, unregister: () => {} } : new FinalizationRegistry((ptr) => wasm.__wbg_amount_free(ptr >>> 0));
 /**
@@ -1171,21 +1395,21 @@ export class Amount {
     const ptr = this.__destroy_into_raw();
     wasm.__wbg_amount_free(ptr);
   }
+
   /**
    * @param {string} atoms
    * @returns {Amount}
    */
-
   static from_atoms(atoms) {
     const ptr0 = passStringToWasm0(atoms, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len0 = WASM_VECTOR_LEN;
     const ret = wasm.amount_from_atoms(ptr0, len0);
     return Amount.__wrap(ret);
   }
+
   /**
    * @returns {string}
    */
-
   atoms() {
     let deferred1_0;
     let deferred1_1;
@@ -1242,7 +1466,7 @@ function __wbg_get_imports() {
   imports.wbg.__wbindgen_object_drop_ref = function (arg0) {
     takeObject(arg0);
   };
-  imports.wbg.__wbg_crypto_d05b68a3572bb8ca = function (arg0) {
+  imports.wbg.__wbg_crypto_1d1f22824a6a080c = function (arg0) {
     const ret = getObject(arg0).crypto;
     return addHeapObject(ret);
   };
@@ -1251,15 +1475,15 @@ function __wbg_get_imports() {
     const ret = typeof val === 'object' && val !== null;
     return ret;
   };
-  imports.wbg.__wbg_process_b02b3570280d0366 = function (arg0) {
+  imports.wbg.__wbg_process_4a72847cc503995b = function (arg0) {
     const ret = getObject(arg0).process;
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_versions_c1cb42213cedf0f5 = function (arg0) {
+  imports.wbg.__wbg_versions_f686565e586dd935 = function (arg0) {
     const ret = getObject(arg0).versions;
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_node_43b1089f407e4ec2 = function (arg0) {
+  imports.wbg.__wbg_node_104a2ff8d6ea03a2 = function (arg0) {
     const ret = getObject(arg0).node;
     return addHeapObject(ret);
   };
@@ -1267,26 +1491,26 @@ function __wbg_get_imports() {
     const ret = typeof getObject(arg0) === 'string';
     return ret;
   };
-  imports.wbg.__wbg_require_9a7e0f667ead4995 = function () {
+  imports.wbg.__wbg_msCrypto_eb05e62b530a1508 = function (arg0) {
+    const ret = getObject(arg0).msCrypto;
+    return addHeapObject(ret);
+  };
+  imports.wbg.__wbg_require_cca90b1a94a0255b = function () {
     return handleError(function () {
       const ret = module.require;
       return addHeapObject(ret);
     }, arguments);
   };
-  imports.wbg.__wbg_msCrypto_10fc94afee92bd76 = function (arg0) {
-    const ret = getObject(arg0).msCrypto;
-    return addHeapObject(ret);
-  };
   imports.wbg.__wbindgen_is_function = function (arg0) {
     const ret = typeof getObject(arg0) === 'function';
     return ret;
   };
-  imports.wbg.__wbg_randomFillSync_b70ccbdf4926a99d = function () {
+  imports.wbg.__wbg_randomFillSync_5c9c955aa56b6049 = function () {
     return handleError(function (arg0, arg1) {
       getObject(arg0).randomFillSync(takeObject(arg1));
     }, arguments);
   };
-  imports.wbg.__wbg_getRandomValues_7e42b4fb8779dc6d = function () {
+  imports.wbg.__wbg_getRandomValues_3aa56aa6edec874c = function () {
     return handleError(function (arg0, arg1) {
       getObject(arg0).getRandomValues(getObject(arg1));
     }, arguments);
@@ -1301,6 +1525,14 @@ function __wbg_get_imports() {
       const ret = getObject(arg0).call(getObject(arg1));
       return addHeapObject(ret);
     }, arguments);
+  };
+  imports.wbg.__wbindgen_string_get = function (arg0, arg1) {
+    const obj = getObject(arg1);
+    const ret = typeof obj === 'string' ? obj : undefined;
+    var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len1 = WASM_VECTOR_LEN;
+    getInt32Memory0()[arg0 / 4 + 1] = len1;
+    getInt32Memory0()[arg0 / 4 + 0] = ptr1;
   };
   imports.wbg.__wbindgen_object_clone_ref = function (arg0) {
     const ret = getObject(arg0);
@@ -1363,14 +1595,6 @@ function __wbg_get_imports() {
   imports.wbg.__wbg_subarray_a1f73cd4b5b42fe1 = function (arg0, arg1, arg2) {
     const ret = getObject(arg0).subarray(arg1 >>> 0, arg2 >>> 0);
     return addHeapObject(ret);
-  };
-  imports.wbg.__wbindgen_string_get = function (arg0, arg1) {
-    const obj = getObject(arg1);
-    const ret = typeof obj === 'string' ? obj : undefined;
-    var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    var len1 = WASM_VECTOR_LEN;
-    getInt32Memory0()[arg0 / 4 + 1] = len1;
-    getInt32Memory0()[arg0 / 4 + 0] = ptr1;
   };
   imports.wbg.__wbindgen_throw = function (arg0, arg1) {
     throw new Error(getStringFromWasm0(arg0, arg1));

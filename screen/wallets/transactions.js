@@ -367,10 +367,13 @@ const WalletTransactions = () => {
     }
   };
   const navigateToSendScreen = () => {
+    const tokenInfo = token_info.token_ticker.string !== 'Mintlayer' ? token_info : undefined;
+
     navigate('SendDetailsRoot', {
       screen: 'SendDetails',
       params: {
         walletID: wallet.getID(),
+        tokenInfo,
       },
     });
   };

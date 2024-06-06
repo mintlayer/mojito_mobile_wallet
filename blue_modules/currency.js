@@ -250,6 +250,14 @@ function fiatToBTC(fiatFloat) {
   return b;
 }
 
+function getAmountInCoins(amointInAtoms, atomsPerCoin = ML_ATOMS_PER_COIN) {
+  return amointInAtoms / atomsPerCoin;
+}
+
+function getAmountInAtoms(amountInCoins, atomsPerCoin = ML_ATOMS_PER_COIN) {
+  return BigInt(Math.round(amountInCoins * atomsPerCoin));
+}
+
 function coinsToML(coins) {
   let b = new BigNumber(coins);
   b = b.dividedBy(ML_ATOMS_PER_COIN);
@@ -294,6 +302,8 @@ module.exports.init = init;
 module.exports.mlCoinsToLocalCurrency = mlCoinsToLocalCurrency;
 module.exports.satoshiToLocalCurrency = satoshiToLocalCurrency;
 module.exports.fiatToBTC = fiatToBTC;
+module.exports.getAmountInCoins = getAmountInCoins;
+module.exports.getAmountInAtoms = getAmountInAtoms;
 module.exports.coinsToML = coinsToML;
 module.exports.mlToCoins = mlToCoins;
 module.exports.fiatToML = fiatToML;

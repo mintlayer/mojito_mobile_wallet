@@ -16,7 +16,7 @@ const Success = () => {
   };
   const { colors } = useTheme();
   const { dangerouslyGetParent } = useNavigation();
-  const { amount, fee, amountUnit = BitcoinUnit.BTC, invoiceDescription = '', onDonePressed = pop } = useRoute().params;
+  const { amount, fee, amountUnit = BitcoinUnit.BTC, feeUnit = BitcoinUnit.BTC, invoiceDescription = '', onDonePressed = pop } = useRoute().params;
   const stylesHook = StyleSheet.create({
     root: {
       backgroundColor: colors.elevated,
@@ -35,7 +35,7 @@ const Success = () => {
 
   return (
     <SafeAreaView style={[styles.root, stylesHook.root]}>
-      <SuccessView amount={amount} amountUnit={amountUnit} fee={fee} invoiceDescription={invoiceDescription} onDonePressed={onDonePressed} />
+      <SuccessView amount={amount} amountUnit={amountUnit} fee={fee} feeUnit={feeUnit} invoiceDescription={invoiceDescription} onDonePressed={onDonePressed} />
       <View style={styles.buttonContainer}>
         <BlueButton onPress={onDonePressed} title={loc.send.success_done} />
       </View>
@@ -45,7 +45,7 @@ const Success = () => {
 
 export default Success;
 
-export const SuccessView = ({ amount, amountUnit, fee, invoiceDescription, shouldAnimate = true }) => {
+export const SuccessView = ({ amount, amountUnit, fee, feeUnit, invoiceDescription, shouldAnimate = true }) => {
   const animationRef = useRef();
   const { colors } = useTheme();
 
@@ -73,13 +73,13 @@ export const SuccessView = ({ amount, amountUnit, fee, invoiceDescription, shoul
           {amount ? (
             <>
               <Text style={[styles.amountValue, stylesHook.amountValue]}>{amount}</Text>
-              <Text style={[styles.amountUnit, stylesHook.amountUnit]}>{' ' + loc.units[amountUnit]}</Text>
+              <Text style={[styles.amountUnit, stylesHook.amountUnit]}>{' ' + (loc.units[amountUnit] || amountUnit)}</Text>
             </>
           ) : null}
         </View>
         {fee > 0 && (
           <Text style={styles.feeText}>
-            {loc.send.create_fee}: {new BigNumber(fee).toFixed()} {loc.units[amountUnit]}
+            {loc.send.create_fee}: {new BigNumber(fee).toFixed()} {loc.units[feeUnit]}
           </Text>
         )}
         <Text numberOfLines={0} style={styles.feeText}>
@@ -118,6 +118,7 @@ SuccessView.propTypes = {
   amount: PropTypes.number,
   amountUnit: PropTypes.string,
   fee: PropTypes.number,
+  feeUnit: PropTypes.string,
   invoiceDescription: PropTypes.string,
   shouldAnimate: PropTypes.bool,
 };
