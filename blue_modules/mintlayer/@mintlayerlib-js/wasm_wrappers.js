@@ -1336,13 +1336,9 @@ function handleError(f, args) {
  */
 export const Network = Object.freeze({ Mainnet: 0, 0: 'Mainnet', Testnet: 1, 1: 'Testnet', Regtest: 2, 2: 'Regtest', Signet: 3, 3: 'Signet' });
 /**
- * Indicates whether a token can be frozen
+ * The part of the transaction that will be committed in the signature. Similar to bitcoin's sighash.
  */
-export const FreezableToken = Object.freeze({ No: 0, 0: 'No', Yes: 1, 1: 'Yes' });
-/**
- * A utxo can either come from a transaction or a block reward. This enum signifies that.
- */
-export const SourceId = Object.freeze({ Transaction: 0, 0: 'Transaction', BlockReward: 1, 1: 'BlockReward' });
+export const SignatureHashType = Object.freeze({ ALL: 0, 0: 'ALL', NONE: 1, 1: 'NONE', SINGLE: 2, 2: 'SINGLE', ANYONECANPAY: 3, 3: 'ANYONECANPAY' });
 /**
  * The token supply of a specific token, set on issuance
  */
@@ -1364,9 +1360,13 @@ export const TotalSupply = Object.freeze({
   2: 'Fixed',
 });
 /**
- * The part of the transaction that will be committed in the signature. Similar to bitcoin's sighash.
+ * Indicates whether a token can be frozen
  */
-export const SignatureHashType = Object.freeze({ ALL: 0, 0: 'ALL', NONE: 1, 1: 'NONE', SINGLE: 2, 2: 'SINGLE', ANYONECANPAY: 3, 3: 'ANYONECANPAY' });
+export const FreezableToken = Object.freeze({ No: 0, 0: 'No', Yes: 1, 1: 'Yes' });
+/**
+ * A utxo can either come from a transaction or a block reward. This enum signifies that.
+ */
+export const SourceId = Object.freeze({ Transaction: 0, 0: 'Transaction', BlockReward: 1, 1: 'BlockReward' });
 
 const AmountFinalization = typeof FinalizationRegistry === 'undefined' ? { register: () => {}, unregister: () => {} } : new FinalizationRegistry((ptr) => wasm.__wbg_amount_free(ptr >>> 0));
 /**

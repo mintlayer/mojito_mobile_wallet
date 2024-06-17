@@ -115,10 +115,10 @@ const getTxInputs = async (outpointSourceIds) => {
 const getTxOutput = ({ amount, address, networkType, poolId, delegationId, chainTip, tokenId }) => {
   let txOutput;
   if (poolId) {
-    txOutput = ML.getDelegationOutput(poolId, address, networkType);
+    txOutput = ML.getDelegationOutput({ poolId, address, networkType });
   } else {
     if (delegationId) {
-      txOutput = ML.getStakingOutput(amount, delegationId, networkType);
+      txOutput = ML.getStakingOutput({ amount, delegationId, networkType });
     } else {
       txOutput = ML.getOutputs({ amount, address, networkType, chainTip, tokenId });
     }

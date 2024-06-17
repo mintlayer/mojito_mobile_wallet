@@ -402,7 +402,7 @@ function verify_signature_for_spending(public_key, signature, message) {
 
 function _assertClass(instance, klass) {
   if (!(instance instanceof klass)) {
-    throw new Error('expected instance of {klass.name}');
+    throw new Error(\`Expected instance of \${klass.name}\`);
   }
   return instance.ptr;
 }
@@ -482,7 +482,8 @@ function encode_output_token_transfer(amount, address, token_id, network) {
  */
 function staking_pool_spend_maturity_block_count(current_block_height, network) {
   const ret = wasm.staking_pool_spend_maturity_block_count(current_block_height, network);
-  return BigInt.asUintN(64, ret);
+  const MAX_UINT64 = 0xFFFFFFFFFFFFFFFFn;
+  return Number(ret & MAX_UINT64);
 }
 
 /**
@@ -1255,6 +1256,20 @@ function encode_signed_transaction(transaction_bytes, signatures) {
   }
 }
 
+/**
+ * Given a \`Transaction\` encoded in bytes (not a signed transaction, but a signed transaction is tolerated by ignoring the extra bytes, by choice)
+ * this function will return the transaction id.
+ *
+ * The second parameter, the boolean, is provided as means of asserting that the given bytes exactly match a \`Transaction\` object.
+ * When set to \`true\`, the bytes provided must exactly match a single \`Transaction\` object.
+ * When set to \`false\`, extra bytes can exist, but will be ignored.
+ * This is useful when the provided bytes are of a \`SignedTransaction\` instead of a \`Transaction\`,
+ * since the signatures are appended at the end of the \`Transaction\` object as a vector to create a \`SignedTransaction\`.
+ * It is recommended to use a strict \`Transaction\` size and set the second parameter to \`true\`.
+ * @param {Uint8Array} transaction_bytes
+ * @param {boolean} strict_byte_size
+ * @returns {string}
+ */
 function get_transaction_id(transaction_bytes, strict_byte_size) {
   let deferred3_0;
   let deferred3_1;
@@ -1319,6 +1334,14 @@ function handleError(f, args) {
   }
 }
 /**
+ * The network, for which an operation to be done. Mainnet, testnet, etc.
+ */
+const Network = Object.freeze({ Mainnet: 0, 0: 'Mainnet', Testnet: 1, 1: 'Testnet', Regtest: 2, 2: 'Regtest', Signet: 3, 3: 'Signet' });
+/**
+ * The part of the transaction that will be committed in the signature. Similar to bitcoin's sighash.
+ */
+const SignatureHashType = Object.freeze({ ALL: 0, 0: 'ALL', NONE: 1, 1: 'NONE', SINGLE: 2, 2: 'SINGLE', ANYONECANPAY: 3, 3: 'ANYONECANPAY' });
+/**
  * The token supply of a specific token, set on issuance
  */
 const TotalSupply = Object.freeze({
@@ -1339,9 +1362,13 @@ const TotalSupply = Object.freeze({
   2: 'Fixed',
 });
 /**
- * The part of the transaction that will be committed in the signature. Similar to bitcoin's sighash.
+ * Indicates whether a token can be frozen
  */
-const SignatureHashType = Object.freeze({ ALL: 0, 0: 'ALL', NONE: 1, 1: 'NONE', SINGLE: 2, 2: 'SINGLE', ANYONECANPAY: 3, 3: 'ANYONECANPAY' });
+const FreezableToken = Object.freeze({ No: 0, 0: 'No', Yes: 1, 1: 'Yes' });
+/**
+ * A utxo can either come from a transaction or a block reward. This enum signifies that.
+ */
+const SourceId = Object.freeze({ Transaction: 0, 0: 'Transaction', BlockReward: 1, 1: 'BlockReward' });
 
 const AmountFinalization = typeof FinalizationRegistry === 'undefined' ? { register: () => {}, unregister: () => {} } : new FinalizationRegistry((ptr) => wasm.__wbg_amount_free(ptr >>> 0));
 /**
@@ -1649,6 +1676,13 @@ const context = {
   encode_lock_for_block_count,
   encode_output_lock_then_transfer: (amount, address, lockEncoded, networkIndex) => {
     return encode_output_lock_then_transfer(Amount.from_atoms(amount), address, lockEncoded, networkIndex);
+  },
+  encode_output_create_delegation,
+  encode_output_delegate_staking: (amount, delegation_id, network) => {
+    return encode_output_delegate_staking(Amount.from_atoms(amount), delegation_id, network);
+  },
+  encode_input_for_withdraw_from_delegation: (delegation_id, amount, nonce, network) => {
+    return encode_input_for_withdraw_from_delegation(delegation_id, Amount.from_atoms(amount), nonce, network);
   },
   initWasm,
 };

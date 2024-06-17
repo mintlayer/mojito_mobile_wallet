@@ -101,6 +101,10 @@ import LdkViewLogs from './screen/wallets/ldkViewLogs';
 import Introduction from './screen/introduction';
 import NativeAssets from './screen/NativeAssets';
 
+import Staking from './screen/staking/staking';
+import StakingDelegationDetails from './screen/staking/delegationDetails';
+import StakingConfirm from './screen/staking/confirm';
+
 import { sendBottom, settingBottom, walletBottom, create_wallet, ic_back_black } from './theme/Images';
 import { COLORS } from './theme/Colors';
 import { getFlage } from './store/asyncStorage';
@@ -211,6 +215,20 @@ const AddWalletRoot = () => {
       <AddWalletStack.Screen name="WalletsAddMultisigStep2" component={WalletsAddMultisigStep2} options={WalletsAddMultisigStep2.navigationOptions(theme)} />
       <AddWalletStack.Screen name="WalletsAddMultisigHelp" component={WalletsAddMultisigHelp} options={WalletsAddMultisigHelp.navigationOptions(theme)} />
     </AddWalletStack.Navigator>
+  );
+};
+
+const StakingStack = createNativeStackNavigator();
+
+const StakingRoot = () => {
+  const theme = useTheme();
+
+  return (
+    <StakingStack.Navigator screenOptions={{ headerHideShadow: true }}>
+      <StakingStack.Screen name="Staking" component={Staking} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Delegation" component={StakingDelegationDetails} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Confirm" component={StakingConfirm} options={Staking.navigationOptions(theme)} />
+    </StakingStack.Navigator>
   );
 };
 
@@ -614,6 +632,8 @@ const Navigation = () => {
           stackPresentation: isDesktop ? 'containedModal' : 'fullScreenModal',
         }}
       />
+
+      <RootStack.Screen name="StakingRoot" component={StakingRoot} options={NavigationDefaultOptions} />
     </RootStack.Navigator>
   );
 };

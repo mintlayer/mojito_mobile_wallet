@@ -7,7 +7,7 @@ import { WatchOnlyWallet } from '../../../../class';
 import { AbstractHDElectrumWallet } from '../../../../class/wallets/abstract-hd-electrum-wallet';
 import { MintLayerWallet } from '../../../../class/wallets/mintlayer-wallet';
 
-export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, addresses, changeAddress, dumb, feePrecalc, setFeePrecalc, balance, tokenInfo }) => {
+export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, addresses, changeAddress, poolId, delegationId, dumb, feePrecalc, setFeePrecalc, balance, tokenInfo }) => {
   // recalc fees in effect so we don't block render
   useEffect(() => {
     function recalcBtcFees() {
@@ -84,6 +84,7 @@ export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, ad
     async function recalcMlFees() {
       if (!wallet) return;
       const fees = networkTransactionFees;
+      console.log('fees', fees);
       const changeAddress = getChangeAddressFast();
       const requestedSatPerByte = Number(feeRate);
       const lutxo = utxo || wallet.getUtxo();
@@ -97,8 +98,12 @@ export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, ad
 
       const newFeePrecalc = { ...feePrecalc };
 
+      console.log('newFeePrecalc', newFeePrecalc);
+
       for (const opt of options) {
         const targets = [];
+
+        console.log('addresses', addresses);
 
         for (const transaction of addresses) {
           if (transaction.amount === BitcoinUnit.MAX) {
@@ -107,6 +112,11 @@ export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, ad
             continue;
           }
           const value = parseInt(transaction.amountInCoins);
+
+          if (value === 0) {
+            targets.push({ address: transaction.address, value: 0 });
+          }
+
           if (tokenInfo) {
             const atoms = tokenInfo.number_of_decimals;
             const tokenValue = BigInt(Math.round(transaction.amount * Math.pow(10, atoms)));
@@ -121,10 +131,12 @@ export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, ad
           }
         }
 
+        console.log('targets', targets);
+
         try {
           // only one target available now
           const { value: amountToUse, address } = targets[0];
-          const fee = await wallet.calculateFee(lutxo, address, changeAddress, amountToUse, opt.fee, tokenInfo?.token_id);
+          const fee = await wallet.calculateFee({ utxosTotal: lutxo, address: address, changeAddress: changeAddress, amountToUse, feeRate: opt.fee, poolId, delegationId, tokenId: tokenInfo?.token_id });
           newFeePrecalc[opt.key] = fee;
         } catch (e) {
           newFeePrecalc[opt.key] = null;

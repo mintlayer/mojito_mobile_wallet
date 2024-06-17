@@ -270,6 +270,9 @@
     "txSaved": "The transaction file ({filePath}) has been saved in your Downloads folder.",
     "problem_with_psbt": "Problem with PSBT"
   },
+  "stake": {
+    "header": "Stake"
+  },
   "settings": {
     "about": "About",
     "about_awesome": "Built with the awesome",

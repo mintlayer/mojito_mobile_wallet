@@ -378,6 +378,15 @@ const WalletTransactions = () => {
     });
   };
 
+  const navigateToStakingScreen = () => {
+    navigate('StakingRoot', {
+      screen: 'Staking',
+      params: {
+        walletID: wallet.getID(),
+      },
+    });
+  };
+
   const renderItem = (item) => <TransactionListItem item={item.item} itemPriceUnit={itemPriceUnit} timeElapsed={timeElapsed} walletID={walletID} />;
 
   const onBarCodeRead = (ret) => {
@@ -496,6 +505,14 @@ const WalletTransactions = () => {
         });
       }
     }
+  };
+
+  const stakeButtonPress = () => {
+    navigateToStakingScreen();
+  };
+
+  const stakeButtonLongPress = () => {
+    //
   };
 
   const navigateToViewEditCosigners = () => {
@@ -637,6 +654,19 @@ const WalletTransactions = () => {
             onPress={sendButtonPress}
             text={loc.send.header}
             testID="SendButton"
+            icon={
+              <View style={styles.sendIcon}>
+                <Icon name="arrow-down" size={buttonFontSize} type="font-awesome" color={COLORS.white} />
+              </View>
+            }
+          />
+        )}
+        {(wallet.allowStaking() || (wallet.type === WatchOnlyWallet.type && wallet.isHd())) && (
+          <FButton
+            onLongPress={stakeButtonLongPress}
+            onPress={stakeButtonPress}
+            text={loc.stake.header}
+            testID="StakeButton"
             icon={
               <View style={styles.sendIcon}>
                 <Icon name="arrow-down" size={buttonFontSize} type="font-awesome" color={COLORS.white} />

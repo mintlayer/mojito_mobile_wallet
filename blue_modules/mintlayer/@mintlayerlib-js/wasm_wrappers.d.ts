@@ -398,18 +398,13 @@ export enum Network {
   Signet = 3,
 }
 /**
- * Indicates whether a token can be frozen
+ * The part of the transaction that will be committed in the signature. Similar to bitcoin's sighash.
  */
-export enum FreezableToken {
-  No = 0,
-  Yes = 1,
-}
-/**
- * A utxo can either come from a transaction or a block reward. This enum signifies that.
- */
-export enum SourceId {
-  Transaction = 0,
-  BlockReward = 1,
+export enum SignatureHashType {
+  ALL = 0,
+  NONE = 1,
+  SINGLE = 2,
+  ANYONECANPAY = 3,
 }
 /**
  * The token supply of a specific token, set on issuance
@@ -429,13 +424,18 @@ export enum TotalSupply {
   Fixed = 2,
 }
 /**
- * The part of the transaction that will be committed in the signature. Similar to bitcoin's sighash.
+ * Indicates whether a token can be frozen
  */
-export enum SignatureHashType {
-  ALL = 0,
-  NONE = 1,
-  SINGLE = 2,
-  ANYONECANPAY = 3,
+export enum FreezableToken {
+  No = 0,
+  Yes = 1,
+}
+/**
+ * A utxo can either come from a transaction or a block reward. This enum signifies that.
+ */
+export enum SourceId {
+  Transaction = 0,
+  BlockReward = 1,
 }
 /**
  * Amount type abstraction. The amount type is stored in a string

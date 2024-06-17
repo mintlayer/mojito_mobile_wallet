@@ -2,11 +2,12 @@ import * as bip39 from 'bip39';
 import * as ML from '../../blue_modules/mintlayer/mintlayer';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 import { MintlayerUnit } from '../../models/mintlayerUnits';
-import { broadcastTransaction, getAddressData, getAddressUtxo, getTokenData, getTransactionData, ML_NETWORK_TYPES, TransactionType } from '../../blue_modules/Mintlayer';
+import { broadcastTransaction, getAddressData, getAddressUtxo, getBlocksData, getDelegationDetails, getTransactionData, getWalletDelegations, ML_NETWORK_TYPES, TransactionType, getTokenData } from '../../blue_modules/Mintlayer';
 import { range } from '../../utils/Array';
 import { getArraySpead, getEncodedWitnesses, getOptUtxos, getOutpointedSourceIds, getTransactionHex, getTransactionsBytes, getTransactionUtxos, getTxInputs, getTxOutput, getUtxoAddress, getUtxoAvailable, getUtxoTransactions, totalUtxosAmount } from '../../utils/ML/transaction';
 import * as ExchangeRates from '../../models/exchangeRates';
 import { removeTrailingZeros } from '../../loc';
+import BigInt from 'big-integer';
 
 export class MintLayerWallet extends AbstractHDWallet {
   static type = 'ML_HDsegwitBech32';
@@ -27,6 +28,8 @@ export class MintLayerWallet extends AbstractHDWallet {
     this.gapLimit = 20;
     this.network = (opts && opts.network) || ML_NETWORK_TYPES.MAINNET;
     this.preferredBalanceUnit = this.network === ML_NETWORK_TYPES.MAINNET ? MintlayerUnit.ML : MintlayerUnit.TML;
+
+    this._delegations = [];
   }
 
   getPreferredBalanceUnit() {
@@ -98,19 +101,15 @@ export class MintLayerWallet extends AbstractHDWallet {
       const prefetchAddressesStart = +new Date();
       await this._prefetchAddresses();
       const prefetchAddressesEnd = +new Date();
-      console.log('_prefetchAddresses', (prefetchAddressesEnd - prefetchAddressesStart) / 1000, 'sec');
       const fetchBalanceStart = +new Date();
       await this._fetchBalance();
       const fetchBalanceEnd = +new Date();
-      console.log('_fetchBalance', (fetchBalanceEnd - fetchBalanceStart) / 1000, 'sec');
       const fetchUtxoStart = +new Date();
       await this.fetchUtxo();
       const fetchUtxoEnd = +new Date();
-      console.log('fetchUtxo', (fetchUtxoEnd - fetchUtxoStart) / 1000, 'sec');
       const fetchTokenBalancesStart = +new Date();
       await this.fetchTokenBalances();
       const fetchTokenBalancesEnd = +new Date();
-      console.log('fetchTokenBalances', (fetchTokenBalancesEnd - fetchTokenBalancesStart) / 1000, 'sec');
     } catch (err) {
       console.error(err);
     }
@@ -542,6 +541,48 @@ export class MintLayerWallet extends AbstractHDWallet {
     this._utxo = parsedUtxos;
   }
 
+  async fetchDelegations() {
+    const addresses2fetch = [];
+
+    for (let c = 0; c < this.next_free_address_index + this.gap_limit; c++) {
+      addresses2fetch.push(this._getExternalAddressByIndex(c));
+    }
+
+    const delegations = await getWalletDelegations(addresses2fetch, this.network);
+
+    const delegation_details = await getDelegationDetails(
+      delegations.map((delegation) => delegation.delegation_id),
+      this.network,
+    );
+    const blocks_data = await getBlocksData(
+      delegation_details.map((delegation) => delegation.creation_block_height),
+      this.network,
+    );
+
+    const mergedDelegations = delegations.map((delegation, index) => {
+      return {
+        ...delegation,
+        balance: delegation.balance.atoms,
+        creation_block_height: delegation_details[index].creation_block_height,
+        creation_time: blocks_data.find(({ height }) => height === delegation_details[index].creation_block_height).header.timestamp.timestamp,
+      };
+    });
+
+    this._delegations = mergedDelegations;
+
+    const totalDelegationBalance = mergedDelegations.reduce((acc, delegation) => acc + (delegation.balance ? Number(delegation.balance) : 0), 0);
+
+    this._delegations_balance = totalDelegationBalance;
+  }
+
+  getDelegations() {
+    return this._delegations;
+  }
+
+  getTotalDelegationBalance() {
+    return this._delegations_balance;
+  }
+
   getUtxo(respectFrozen = false) {
     let ret = [];
 
@@ -642,11 +683,10 @@ export class MintLayerWallet extends AbstractHDWallet {
     return receivingUtxos;
   }
 
-  async coinselect({ utxosTotal, targets, feeRate, changeAddress, tokenId, poolId }) {
-    const { value: amountToUse, address } = targets[0];
+  async coinselect({ utxosTotal, targets, feeRate, changeAddress, tokenId }) {
+    const { value: amountToUse, address, poolId, delegationId } = targets[0];
     const utxos = getUtxoAvailable(utxosTotal);
-    const fee = await this.calculateFee(utxosTotal, address, changeAddress, amountToUse, feeRate, tokenId);
-
+    const fee = await this.calculateFee({ utxosTotal, address, changeAddress, amountToUse, feeRate, tokenId, poolId, delegationId });
     const amountToUseFinaleCoin = !tokenId ? BigInt(amountToUse) + BigInt(fee) : BigInt(fee);
     const amountToUseFinaleToken = tokenId ? BigInt(amountToUse) : BigInt(0);
     const totalAmountCoin = !poolId ? totalUtxosAmount(utxos) : BigInt(0);
@@ -661,12 +701,27 @@ export class MintLayerWallet extends AbstractHDWallet {
     const utxoCoin = utxos.filter((utxo) => utxo.utxo.value.type === 'Coin');
     const utxoToken = tokenId ? utxos.filter((utxo) => utxo.utxo.value.token_id === tokenId) : [];
 
-    const { inputs, outputs, optUtxos, requireUtxo } = await this._buildInputsAndOutputs({ tokenId, utxoCoin, utxoToken, amountToUseFinaleCoin, amountToUseFinaleToken, address, changeAddress, fee });
+    const { inputs, outputs, optUtxos, requireUtxo } = await this._buildInputsAndOutputs({
+      tokenId,
+      utxoCoin,
+      utxoToken,
+      amountToUseFinaleCoin,
+      amountToUseFinaleToken,
+      address,
+      changeAddress,
+      fee,
+      poolId,
+      delegationId,
+    });
 
     return { inputs, outputs, optUtxos, requireUtxo, fee, amount: amountToUse };
   }
 
-  async calculateFee(utxosTotal, address, changeAddress, amountToUse, feeRate, tokenId) {
+  async calculateFee({ utxosTotal, address, changeAddress, amountToUse, feeRate, poolId, delegationId, tokenId, delegationWithdraw, delegation }) {
+    if (delegationWithdraw) {
+      return await this.calculateFeeDelegationWithdraw({ amount: amountToUse, delegation, feeRate });
+    }
+
     const utxos = getUtxoAvailable(utxosTotal);
 
     let amountToUseFinaleCoin = !tokenId ? BigInt(amountToUse) : BigInt(0);
@@ -683,20 +738,39 @@ export class MintLayerWallet extends AbstractHDWallet {
     const utxoCoin = utxos.filter((utxo) => utxo.utxo.value.type === 'Coin');
     const utxoToken = tokenId ? utxos.filter((utxo) => utxo.utxo.value.token_id === tokenId) : [];
 
-    const { inputs, outputs, requireUtxo } = await this._buildInputsAndOutputs({ tokenId, utxoCoin, utxoToken, amountToUseFinaleCoin, amountToUseFinaleToken, address, changeAddress });
+    const { inputs, outputs, requireUtxo } = await this._buildInputsAndOutputs({ tokenId, utxoCoin, utxoToken, amountToUseFinaleCoin, amountToUseFinaleToken, address, changeAddress, poolId, delegationId });
     const addressList = getUtxoAddress(requireUtxo);
     const size = await ML.getEstimatetransactionSize(inputs, addressList, outputs, this.network);
     const fee = Math.ceil(feeRate * size);
 
     amountToUseFinaleCoin = !tokenId ? BigInt(amountToUse) + BigInt(fee) : BigInt(fee);
-    const { inputs: newInputs, outputs: newOutputs, requireUtxo: newRequireUtxo } = await this._buildInputsAndOutputs({ tokenId, utxoCoin, utxoToken, amountToUseFinaleCoin, amountToUseFinaleToken, address, changeAddress, fee });
+    const { inputs: newInputs, outputs: newOutputs, requireUtxo: newRequireUtxo } = await this._buildInputsAndOutputs({ tokenId, utxoCoin, utxoToken, amountToUseFinaleCoin, amountToUseFinaleToken, address, changeAddress, fee, poolId, delegationId });
     const newAddressList = getUtxoAddress(newRequireUtxo);
     const newSize = await ML.getEstimatetransactionSize(newInputs, newAddressList, newOutputs, this.network);
     const newFee = Math.ceil(feeRate * newSize);
     return newFee;
   }
 
-  async _buildInputsAndOutputs({ tokenId, utxoCoin, utxoToken, amountToUseFinaleCoin, amountToUseFinaleToken, address, changeAddress, fee = 0 }) {
+  async calculateFeeDelegationWithdraw({ amount, delegation, feeRate }) {
+    const input = await ML.getAccountOutpointInput(delegation.delegation_id, amount, delegation.next_nonce, this.network);
+    const inputsArray = [...input];
+    const spendÒutput = await ML.getOutputs({
+      amount: amount,
+      address: delegation.spend_destination,
+      networkType: this.network,
+      type: 'spendFromDelegation',
+      lock: {
+        content: 7200,
+        type: 'ForBlockCount',
+      },
+    });
+    const outputs = [...spendÒutput];
+    const size = await ML.getEstimatetransactionSize(inputsArray, [delegation.spend_destination], outputs, this.network);
+    const fee = Math.ceil(feeRate * size);
+    return fee;
+  }
+
+  async _buildInputsAndOutputs({ tokenId, utxoCoin, utxoToken, amountToUseFinaleCoin, amountToUseFinaleToken, address, changeAddress, fee = 0, poolId, delegationId }) {
     const requireUtxoCoin = getTransactionUtxos({ utxos: utxoCoin, amount: amountToUseFinaleCoin });
     const requireUtxoToken = tokenId ? getTransactionUtxos({ utxos: utxoToken, amount: amountToUseFinaleToken, tokenId }) : [];
     const requireUtxo = [...requireUtxoCoin, ...requireUtxoToken];
@@ -709,8 +783,8 @@ export class MintLayerWallet extends AbstractHDWallet {
       amount: tokenId ? amountToUseFinaleToken.toString() : (amountToUseFinaleCoin - BigInt(fee)).toString(),
       address,
       networkType: this.network,
-      // poolId,
-      // delegationId,
+      poolId,
+      delegationId,
       tokenId,
     });
 
@@ -773,6 +847,39 @@ export class MintLayerWallet extends AbstractHDWallet {
       console.error('createTransaction err', e);
       throw e;
     }
+  }
+
+  async withdrawDelegation({ delegation, feeRate, amount }) {
+    const fee = await this.calculateFeeDelegationWithdraw({ amount, delegation, feeRate });
+
+    const amountToUse = BigInt(amount) + BigInt(fee);
+    const outputAmount = BigInt(amount);
+
+    const input = await ML.getAccountOutpointInput(delegation.delegation_id, amountToUse.toString(), delegation.next_nonce, this.network);
+    const inputs = [...input];
+    const spendÒutput = await ML.getOutputs({
+      amount: outputAmount,
+      address: delegation.spend_destination,
+      networkType: this.network,
+      type: 'spendFromDelegation',
+      lock: {
+        content: 7200,
+        type: 'ForBlockCount',
+      },
+    });
+    const outputs = [...spendÒutput];
+    const transaction = await ML.getTransaction(inputs, outputs);
+    const walletPrivKeys = await this._getWalletPrivKeysList();
+    const keysList = {
+      ...walletPrivKeys.mlReceivingPrivKeys,
+      ...walletPrivKeys.mlChangePrivKeys,
+    };
+    const optUtxos = [0];
+    const encodedWitnesses = await ML.getEncodedWitness(keysList[delegation.spend_destination], delegation.spend_destination, transaction, optUtxos, 0, this.network);
+    const finalWitnesses = [...encodedWitnesses];
+    const encodedSignedTransaction = await ML.getEncodedSignedTransaction(transaction, finalWitnesses);
+    const transactionHex = getTransactionHex(encodedSignedTransaction);
+    return { tx: transactionHex, fee };
   }
 
   isAddressValid(address) {
@@ -1000,6 +1107,10 @@ export class MintLayerWallet extends AbstractHDWallet {
   }
 
   allowSend() {
+    return true;
+  }
+
+  allowStaking() {
     return true;
   }
 }
