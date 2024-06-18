@@ -18,6 +18,8 @@ import { type } from '../../theme/Fonts';
 import { COLORS } from '../../theme/Colors';
 import { getNRandomElementsFromArray } from '../../utils/Array';
 import DrawingBoard from '../../components/DrawingBoard';
+import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
+import { ML_NETWORK_TYPES } from '../../blue_modules/Mintlayer';
 const A = require('../../blue_modules/analytics');
 const bitcoin = require('bitcoinjs-lib');
 
@@ -26,6 +28,7 @@ const ButtonSelected = Object.freeze({
   OFFCHAIN: Chain.OFFCHAIN,
   VAULT: 'VAULT',
   LDK: 'LDK',
+  ML: 'ML',
 });
 
 const EntropyGenerator = ({ props }) => {
@@ -111,16 +114,26 @@ const EntropyGenerator = ({ props }) => {
   const createWallet = async () => {
     setIsLoading(true);
 
+    if (selectedWalletType !== ButtonSelected.ML && selectedWalletType !== ButtonSelected.ONCHAIN) {
+      return;
+    }
+
     let w;
+    const entropy = await generateEntropyDrawing();
+    const shuffledEntropy = getNRandomElementsFromArray(entropy, 16);
+    if (entropy.length < 192) {
+      alert('Not enough entropy gathered. Please continue drawing.');
+      setIsLoading(false);
+      return;
+    }
+
+    if (selectedWalletType === ButtonSelected.ML) {
+      const network = isTestMode ? ML_NETWORK_TYPES.TESTNET : ML_NETWORK_TYPES.MAINNET;
+      w = new MintLayerWallet({ network });
+      w.setLabel(label || loc.wallets.details_title);
+    }
 
     if (selectedWalletType === ButtonSelected.ONCHAIN) {
-      const entropy = await generateEntropyDrawing();
-      const shuffledEntropy = getNRandomElementsFromArray(entropy, 16);
-      if (entropy.length < 192) {
-        alert('Not enough entropy gathered. Please continue drawing.');
-        setIsLoading(false);
-        return;
-      }
       if (selectedIndex === 2) {
         // zero index radio - HD segwit
         w = new HDSegwitP2SHWallet();
@@ -140,21 +153,20 @@ const EntropyGenerator = ({ props }) => {
         }
         w.setLabel(label || loc.wallets.details_title);
       }
-      if (selectedWalletType === ButtonSelected.ONCHAIN) {
-        await w.generateMnemonicFromEntropy(shuffledEntropy);
+    }
 
-        addWallet(w);
-        await saveToDisk();
-        A(A.ENUM.CREATED_WALLET);
-        ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
-        if (w.type === HDSegwitP2SHWallet.type || w.type === HDSegwitBech32Wallet.type) {
-          navigate('PleaseBackup', {
-            walletID: w.getID(),
-          });
-        } else {
-          goBack();
-        }
-      }
+    await w.generateMnemonicFromEntropy(shuffledEntropy);
+
+    addWallet(w);
+    await saveToDisk();
+    A(A.ENUM.CREATED_WALLET);
+    ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
+    if (w.type === HDSegwitP2SHWallet.type || w.type === HDSegwitBech32Wallet.type || w.type === MintLayerWallet.type) {
+      navigate('PleaseBackup', {
+        walletID: w.getID(),
+      });
+    } else {
+      goBack();
     }
   };
 

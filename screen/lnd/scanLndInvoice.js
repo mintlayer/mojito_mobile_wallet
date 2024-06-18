@@ -7,7 +7,7 @@ import { useFocusEffect, useNavigation, useRoute, useTheme } from '@react-naviga
 import { BlueButton, BlueCard, BlueDismissKeyboardInputAccessory, BlueLoading, SafeBlueArea } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import AddressInput from '../../components/AddressInput';
-import AmountInput from '../../components/AmountInput';
+import AmountInput from '../../components/amount_input/AmountInput';
 import Lnurl from '../../class/lnurl';
 import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
 import Biometric from '../../class/biometrics';

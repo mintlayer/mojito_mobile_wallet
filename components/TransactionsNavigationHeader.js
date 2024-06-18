@@ -11,6 +11,8 @@ import loc, { formatBalance } from '../loc';
 import { BlueStorageContext } from '../blue_modules/storage-context';
 import ToolTipMenu from './TooltipMenu';
 import { BluePrivateBalance } from '../BlueComponents';
+import { MintLayerWallet } from '../class/wallets/mintlayer-wallet';
+import { type } from '../theme/Fonts';
 
 export default class TransactionsNavigationHeader extends Component {
   static propTypes = {
@@ -124,18 +126,23 @@ export default class TransactionsNavigationHeader extends Component {
     this.menuRef.current?.dismissMenu();
     let walletPreviousPreferredUnit = this.state.wallet.getPreferredBalanceUnit();
     const wallet = this.state.wallet;
-    if (walletPreviousPreferredUnit === BitcoinUnit.BTC) {
-      wallet.preferredBalanceUnit = BitcoinUnit.SATS;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
-    } else if (walletPreviousPreferredUnit === BitcoinUnit.SATS) {
-      wallet.preferredBalanceUnit = BitcoinUnit.LOCAL_CURRENCY;
-      walletPreviousPreferredUnit = BitcoinUnit.SATS;
-    } else if (walletPreviousPreferredUnit === BitcoinUnit.LOCAL_CURRENCY) {
-      wallet.preferredBalanceUnit = BitcoinUnit.BTC;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
+
+    if (wallet.type === MintLayerWallet.type) {
+      wallet.changePreferredBalanceUnit();
     } else {
-      wallet.preferredBalanceUnit = BitcoinUnit.BTC;
-      walletPreviousPreferredUnit = BitcoinUnit.BTC;
+      if (walletPreviousPreferredUnit === BitcoinUnit.BTC) {
+        wallet.preferredBalanceUnit = BitcoinUnit.SATS;
+        walletPreviousPreferredUnit = BitcoinUnit.BTC;
+      } else if (walletPreviousPreferredUnit === BitcoinUnit.SATS) {
+        wallet.preferredBalanceUnit = BitcoinUnit.LOCAL_CURRENCY;
+        walletPreviousPreferredUnit = BitcoinUnit.SATS;
+      } else if (walletPreviousPreferredUnit === BitcoinUnit.LOCAL_CURRENCY) {
+        wallet.preferredBalanceUnit = BitcoinUnit.BTC;
+        walletPreviousPreferredUnit = BitcoinUnit.BTC;
+      } else {
+        wallet.preferredBalanceUnit = BitcoinUnit.BTC;
+        walletPreviousPreferredUnit = BitcoinUnit.BTC;
+      }
     }
 
     this.setState({ wallet, walletPreviousPreferredUnit: walletPreviousPreferredUnit }, () => {
@@ -183,6 +190,8 @@ export default class TransactionsNavigationHeader extends Component {
 
   render() {
     const balance = !this.state.wallet.hideBalance && formatBalance(this.state.wallet.getBalance(), this.state.wallet.getPreferredBalanceUnit(), true).toString();
+    const lockedBalance = (this.state.wallet.type === MintLayerWallet.type && this.state.wallet?.getLockedBalance()) || 0;
+    const formattedLockedBalance = !this.state.wallet.hideBalance && formatBalance(lockedBalance, this.state.wallet.getPreferredBalanceUnit(), true).toString();
 
     return (
       <LinearGradient colors={WalletGradient.gradientsFor(this.state.wallet.type)} style={styles.lineaderGradient} {...WalletGradient.linearGradientProps(this.state.wallet.type)}>
@@ -194,6 +203,8 @@ export default class TransactionsNavigationHeader extends Component {
                 return I18nManager.isRTL ? require('../img/lnd-shape-rtl.png') : require('../img/lnd-shape.png');
               case MultisigHDWallet.type:
                 return I18nManager.isRTL ? require('../img/vault-shape-rtl.png') : require('../img/vault-shape.png');
+              case MintLayerWallet.type:
+                return I18nManager.isRTL ? require('../img/ml-shape-rtl.png') : require('../img/ml-shape.png');
               default:
                 return I18nManager.isRTL ? require('../img/btc-shape-rtl.png') : require('../img/btc-shape.png');
             }
@@ -235,15 +246,24 @@ export default class TransactionsNavigationHeader extends Component {
             {this.state.wallet.hideBalance ? (
               <BluePrivateBalance />
             ) : (
-              <Text
-                testID="WalletBalance"
-                key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
-                numberOfLines={1}
-                adjustsFontSizeToFit
-                style={styles.walletBalance}
-              >
-                {balance}
-              </Text>
+              <View>
+                <Text
+                  testID="WalletBalance"
+                  key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                  style={styles.walletBalance}
+                >
+                  {balance}
+                </Text>
+                {!!lockedBalance && (
+                  <Text testID="WalletLockedBalance" key={lockedBalance} numberOfLines={1} adjustsFontSizeToFit style={styles.lockedWalletBalance}>
+                    {loc.formatString(loc.wallets.locked_balance, {
+                      locked: formattedLockedBalance,
+                    })}
+                  </Text>
+                )}
+              </View>
             )}
           </View>
         </ToolTipMenu>
@@ -296,6 +316,14 @@ const styles = StyleSheet.create({
     fontSize: 36,
     color: '#fff',
     writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+  },
+  lockedWalletBalance: {
+    backgroundColor: 'transparent',
+    color: '#fff',
+    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+    fontSize: 16,
+    fontFamily: type.light,
+    marginTop: 14,
   },
   manageFundsButton: {
     marginTop: 14,

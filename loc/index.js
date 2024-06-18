@@ -9,6 +9,8 @@ import BigNumber from 'bignumber.js';
 import { BitcoinUnit } from '../models/bitcoinUnits';
 import { AvailableLanguages } from './languages';
 import { I18nManager } from 'react-native';
+import { MintlayerUnit } from '../models/mintlayerUnits';
+import { ML_ATOMS_PER_COIN } from '../blue_modules/Mintlayer';
 const currency = require('../blue_modules/currency');
 
 const LANG = 'lang';
@@ -286,8 +288,8 @@ export const removeTrailingZeros = (value) => {
 
 /**
  *
- * @param balance {number} Satoshis
- * @param toUnit {String} Value from models/bitcoinUnits.js
+ * @param balance {number} Satoshis for Bitcoin or ML for Mintlayer
+ * @param toUnit {String} Value from models/bitcoinUnits.ts or models/mintlayerUnits.ts
  * @param withFormatting {boolean} Works only with `BitcoinUnit.SATS`, makes spaces wetween groups of 000
  * @returns {string}
  */
@@ -302,14 +304,19 @@ export function formatBalance(balance, toUnit, withFormatting = false) {
     return (withFormatting ? new Intl.NumberFormat().format(balance).toString() : String(balance)) + ' ' + strings.units[BitcoinUnit.SATS];
   } else if (toUnit === BitcoinUnit.LOCAL_CURRENCY) {
     return currency.satoshiToLocalCurrency(balance);
+  } else if (toUnit === MintlayerUnit.ML || toUnit === MintlayerUnit.TML) {
+    const value = new BigNumber(balance).dividedBy(ML_ATOMS_PER_COIN).toFixed(8);
+    return removeTrailingZeros(value) + ' ' + strings.units[toUnit];
+  } else if (toUnit === MintlayerUnit.LOCAL_CURRENCY) {
+    return currency.mlCoinsToLocalCurrency(balance);
   }
 }
 
 /**
  *
- * @param balance {Integer} Satoshis
- * @param toUnit {String} Value from models/bitcoinUnits.js, for example `BitcoinUnit.SATS`
- * @param withFormatting {boolean} Works only with `BitcoinUnit.SATS`, makes spaces wetween groups of 000
+ * @param balance {Integer} Satoshis for Bitcoin or ML for Mintlayer
+ * @param toUnit {String} Value from models/bitcoinUnits.ts or models/mintlayerUnits.ts, for example `BitcoinUnit.SATS`
+ * @param withFormatting {boolean} Works only with `BitcoinUnit.SATS`, makes spaces between groups of 000
  * @returns {string}
  */
 export function formatBalanceWithoutSuffix(balance = 0, toUnit, withFormatting = false) {
@@ -324,6 +331,11 @@ export function formatBalanceWithoutSuffix(balance = 0, toUnit, withFormatting =
       return withFormatting ? new Intl.NumberFormat().format(balance).toString() : String(balance);
     } else if (toUnit === BitcoinUnit.LOCAL_CURRENCY) {
       return currency.satoshiToLocalCurrency(balance);
+    } else if (toUnit === MintlayerUnit.ML || toUnit === MintlayerUnit.TML) {
+      const value = new BigNumber(balance).dividedBy(ML_ATOMS_PER_COIN).toFixed(8);
+      return removeTrailingZeros(value);
+    } else if (toUnit === MintlayerUnit.LOCAL_CURRENCY) {
+      return currency.mlCoinsToLocalCurrency(balance);
     }
   }
   return balance.toString();

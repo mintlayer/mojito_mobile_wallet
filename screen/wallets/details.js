@@ -16,6 +16,7 @@ import { isDesktop } from '../../blue_modules/environment';
 import { AbstractHDElectrumWallet } from '../../class/wallets/abstract-hd-electrum-wallet';
 import { Chain } from '../../models/bitcoinUnits';
 import alert from '../../components/Alert';
+import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
 
 const prompt = require('../../blue_modules/prompt');
 
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
 });
 
 const WalletDetails = () => {
-  const { saveToDisk, wallets, deleteWallet, setSelectedWallet } = useContext(BlueStorageContext);
+  const { saveToDisk, wallets, deleteWallet, setSelectedWallet, isTestMode } = useContext(BlueStorageContext);
   const { walletID } = useRoute().params;
   const [isLoading, setIsLoading] = useState(false);
   const [backdoorPressed, setBackdoorPressed] = useState(0);
@@ -193,9 +194,10 @@ const WalletDetails = () => {
   };
 
   const presentWalletHasBalanceAlert = useCallback(async () => {
+    const unit = wallet.type === MintLayerWallet.type ? (isTestMode ? 'TML coins' : 'ML coins') : 'satoshis';
     ReactNativeHapticFeedback.trigger('notificationWarning', { ignoreAndroidSystemSettings: false });
     try {
-      const walletBalanceConfirmation = await prompt(loc.wallets.details_delete_wallet, loc.formatString(loc.wallets.details_del_wb_q, { balance: wallet.getBalance() }), true, 'plain-text', true, loc.wallets.details_delete);
+      const walletBalanceConfirmation = await prompt(loc.wallets.details_delete_wallet, loc.formatString(loc.wallets.details_del_wb_q, { balance: wallet.getBalance(), unit }), true, 'plain-text', true, loc.wallets.details_delete);
       if (Number(walletBalanceConfirmation) === wallet.getBalance()) {
         navigateToOverviewAndDeleteWallet();
       } else {

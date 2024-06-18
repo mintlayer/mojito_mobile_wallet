@@ -7,7 +7,7 @@ import { Icon } from 'react-native-elements';
 
 import { BlueButton, BlueCard, BlueDismissKeyboardInputAccessory, BlueLoading, BlueSpacing20, BlueText, SafeBlueArea } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
-import AmountInput from '../../components/AmountInput';
+import AmountInput from '../../components/amount_input/AmountInput';
 import Lnurl from '../../class/lnurl';
 import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
 import loc, { formatBalanceWithoutSuffix, formatBalance } from '../../loc';

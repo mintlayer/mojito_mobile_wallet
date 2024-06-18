@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Montserrat-Bold.ttf",
+      "sha1": "bf257f6f91f6522eccea6d4f28d57bb118c98729"
+    },
+    {
+      "path": "assets/fonts/Montserrat-Light_0.ttf",
+      "sha1": "08e510137064a3c9859b71cff5b999fe8c351e67"
+    },
+    {
+      "path": "assets/fonts/Montserrat-SemiBold.ttf",
+      "sha1": "4ef29a9163b56df34a3486b98b24be3a3d0cdca6"
+    },
+    {
+      "path": "assets/mintlayer/wasm_wrappers_bg.wasm",
+      "sha1": "fec25b2cc459a2a7866029751541b43f2edf0852"
+    }
+  ]
+}

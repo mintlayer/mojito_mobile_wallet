@@ -4,11 +4,13 @@ import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { BlueCard, BlueCopyToClipboardButton, BlueLoading, BlueSpacing20, BlueText } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import HandoffComponent from '../../components/handoff';
-import loc from '../../loc';
+import loc, { formatBalance } from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import Clipboard from '@react-native-clipboard/clipboard';
 import ToolTipMenu from '../../components/TooltipMenu';
 import alert from '../../components/Alert';
+import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
+import { TransactionType } from '../../blue_modules/Mintlayer';
 const dayjs = require('dayjs');
 
 function onlyUnique(value, index, self) {
@@ -27,14 +29,15 @@ function arrDiff(a1, a2) {
 
 const TransactionsDetails = () => {
   const { setOptions } = useNavigation();
-  const { hash } = useRoute().params;
-  const { saveToDisk, txMetadata, wallets, getTransactions } = useContext(BlueStorageContext);
+  const { hash, walletType, walletPreferredBalanceUnit } = useRoute().params;
+  const { saveToDisk, txMetadata, wallets, getTransactions, isTestModeEnabled } = useContext(BlueStorageContext);
   const [from, setFrom] = useState();
   const [to, setTo] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [tx, setTX] = useState();
   const [memo, setMemo] = useState();
   const { colors } = useTheme();
+  const isMlTx = walletType === MintLayerWallet.type;
   const stylesHooks = StyleSheet.create({
     txLink: {
       color: colors.alternativeTextColor2,
@@ -70,17 +73,52 @@ const TransactionsDetails = () => {
     let foundTx = {};
     let from = [];
     let to = [];
-    for (const tx of getTransactions(null, Infinity, true)) {
-      if (tx.hash === hash) {
-        foundTx = tx;
-        for (const input of foundTx.inputs) {
-          from = from.concat(input.addresses);
-        }
-        for (const output of foundTx.outputs) {
-          if (output.addresses) to = to.concat(output.addresses);
-          if (output.scriptPubKey && output.scriptPubKey.addresses) to = to.concat(output.scriptPubKey.addresses);
+
+    function getBtcAddresses() {
+      for (const tx of getTransactions(null, Infinity, true)) {
+        if (tx.hash === hash) {
+          foundTx = tx;
+          for (const input of foundTx.inputs) {
+            from = from.concat(input.addresses);
+          }
+          for (const output of foundTx.outputs) {
+            if (output.addresses) to = to.concat(output.addresses);
+            if (output.scriptPubKey && output.scriptPubKey.addresses) to = to.concat(output.scriptPubKey.addresses);
+          }
         }
       }
+    }
+
+    function getMlAddresses() {
+      for (const tx of getTransactions(null, Infinity, true)) {
+        if (tx.hash === hash) {
+          foundTx = tx;
+          for (const input of foundTx.inputs || []) {
+            if (input.input.account_type === 'DelegationBalance') {
+              from = from.concat(input.input.delegation_id);
+            } else {
+              from = from.concat(input.utxo?.destination);
+            }
+          }
+          for (const output of foundTx.outputs || []) {
+            if (output.type === TransactionType.CreateDelegationId) {
+              to = to.concat(output.pool_id);
+            } else if (output.type === TransactionType.DelegateStaking) {
+              to = to.concat(output.delegation_id);
+            } else if (output.type === TransactionType.CreateStakePool) {
+              to = to.concat(output.pool_id);
+            } else if (output.destination) {
+              to = to.concat(output.destination);
+            }
+          }
+        }
+      }
+    }
+
+    if (isMlTx) {
+      getMlAddresses();
+    } else {
+      getBtcAddresses();
     }
 
     for (const w of wallets) {
@@ -109,8 +147,17 @@ const TransactionsDetails = () => {
     saveToDisk().then((_success) => alert(loc.transactions.transaction_note_saved));
   };
 
-  const handleOnOpenTransactionOnBlockExporerTapped = () => {
-    const url = `https://mempool.space/tx/${tx.hash}`;
+  const handleOnOpenTransactionOnBlockExporerTapped = async () => {
+    const btcUrl = `https://mempool.space/tx/${tx.hash}`;
+    const mlTestnetUrl = `https://lovelace.explorer.mintlayer.org/tx/${tx.hash}`;
+    const mlMainnetUrl = `https://explorer.mintlayer.org/tx/${tx.hash}`;
+    let url = btcUrl;
+
+    const isTestMode = await isTestModeEnabled();
+    if (isMlTx) {
+      url = isTestMode ? mlTestnetUrl : mlMainnetUrl;
+    }
+
     Linking.canOpenURL(url)
       .then((supported) => {
         if (supported) {
@@ -135,6 +182,8 @@ const TransactionsDetails = () => {
     Clipboard.setString(`https://mempool.space/tx/${tx.hash}`);
   };
 
+  const txFee = isMlTx ? formatBalance(tx?.fee.atoms, walletPreferredBalanceUnit) : tx?.fee + ' sats';
+
   if (isLoading || !tx) {
     return <BlueLoading />;
   }
@@ -149,7 +198,7 @@ const TransactionsDetails = () => {
           <BlueSpacing20 />
         </View>
 
-        {from && (
+        {Boolean(from.length) && (
           <>
             <View style={styles.rowHeader}>
               <BlueText style={styles.rowCaption}>{loc.transactions.details_from}</BlueText>
@@ -159,7 +208,7 @@ const TransactionsDetails = () => {
           </>
         )}
 
-        {to && (
+        {Boolean(to.length) && (
           <>
             <View style={styles.rowHeader}>
               <BlueText style={styles.rowCaption}>{loc.transactions.details_to}</BlueText>
@@ -172,7 +221,7 @@ const TransactionsDetails = () => {
         {tx.fee && (
           <>
             <BlueText style={styles.rowCaption}>{loc.send.create_fee}</BlueText>
-            <BlueText style={styles.rowValue}>{tx.fee + ' sats'}</BlueText>
+            <BlueText style={styles.rowValue}>{txFee}</BlueText>
           </>
         )}
 

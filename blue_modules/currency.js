@@ -3,7 +3,9 @@ import DefaultPreference from 'react-native-default-preference';
 import * as RNLocalize from 'react-native-localize';
 import BigNumber from 'bignumber.js';
 import { FiatUnit, getFiatRate } from '../models/fiatUnit';
+import * as ExchangeRates from '../models/exchangeRates';
 import WidgetCommunication from './WidgetCommunication';
+import { ML_ATOMS_PER_COIN } from './Mintlayer';
 
 const PREFERRED_CURRENCY_STORAGE_KEY = 'preferredCurrency';
 const EXCHANGE_RATES_STORAGE_KEY = 'currency';
@@ -53,12 +55,13 @@ async function _restoreSavedPreferredFiatCurrencyFromStorage() {
       throw Error('No Preferred Fiat selected');
     }
   } catch (_) {
-    const deviceCurrencies = RNLocalize.getCurrencies();
-    if (Object.keys(FiatUnit).some((unit) => unit === deviceCurrencies[0])) {
-      preferredFiatCurrency = FiatUnit[deviceCurrencies[0]];
-    } else {
-      preferredFiatCurrency = FiatUnit.USD;
-    }
+    // todo uncomment code with device local currency when ML currency api supports it
+    // const deviceCurrencies = RNLocalize.getCurrencies();
+    // if (Object.keys(FiatUnit).some((unit) => unit === deviceCurrencies[0])) {
+    //   preferredFiatCurrency = FiatUnit[deviceCurrencies[0]];
+    // } else {
+    preferredFiatCurrency = FiatUnit.USD;
+    // }
   }
 }
 
@@ -82,12 +85,16 @@ async function updateExchangeRate() {
   }
   console.log('updating exchange rate...');
 
-  let rate;
   try {
-    rate = await getFiatRate(preferredFiatCurrency.endPointKey);
+    const btcRate = await getFiatRate(preferredFiatCurrency.endPointKey);
     exchangeRates[LAST_UPDATED] = +new Date();
-    exchangeRates['BTC_' + preferredFiatCurrency.endPointKey] = rate;
+    exchangeRates['BTC_' + preferredFiatCurrency.endPointKey] = btcRate;
     exchangeRates.LAST_UPDATED_ERROR = false;
+    await AsyncStorage.setItem(EXCHANGE_RATES_STORAGE_KEY, JSON.stringify(exchangeRates));
+
+    const mlRate = await ExchangeRates.getRate('ml', preferredFiatCurrency.endPointKey);
+    exchangeRates[LAST_UPDATED] = +new Date();
+    exchangeRates['ML_' + preferredFiatCurrency.endPointKey] = mlRate[`ml-${preferredFiatCurrency.endPointKey}`];
     await AsyncStorage.setItem(EXCHANGE_RATES_STORAGE_KEY, JSON.stringify(exchangeRates));
   } catch (Err) {
     console.log('Error encountered when attempting to update exchange rate...');
@@ -129,6 +136,43 @@ async function init(clearLastUpdatedTime = false) {
   }
 
   return updateExchangeRate();
+}
+
+function mlCoinsToLocalCurrency(ml, format = true) {
+  if (!exchangeRates['ML_' + preferredFiatCurrency.endPointKey]) {
+    updateExchangeRate();
+    return '...';
+  }
+
+  let b = new BigNumber(ml).dividedBy(ML_ATOMS_PER_COIN).multipliedBy(exchangeRates['ML_' + preferredFiatCurrency.endPointKey]);
+
+  if (b.isGreaterThanOrEqualTo(0.005) || b.isLessThanOrEqualTo(-0.005)) {
+    b = b.toFixed(2);
+  } else {
+    b = b.toPrecision(2);
+  }
+
+  if (format === false) return b;
+
+  let formatter;
+  try {
+    formatter = new Intl.NumberFormat(preferredFiatCurrency.locale, {
+      style: 'currency',
+      currency: preferredFiatCurrency.endPointKey,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 8,
+    });
+  } catch (error) {
+    console.warn(error);
+    formatter = new Intl.NumberFormat(FiatUnit.USD.locale, {
+      style: 'currency',
+      currency: preferredFiatCurrency.endPointKey,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 8,
+    });
+  }
+
+  return formatter.format(b);
 }
 
 function satoshiToLocalCurrency(satoshi, format = true) {
@@ -186,6 +230,7 @@ async function mostRecentFetchedRate() {
   return {
     LastUpdated: currencyInformation[LAST_UPDATED],
     Rate: formatter.format(currencyInformation[`BTC_${preferredFiatCurrency.endPointKey}`]),
+    MlRate: formatter.format(currencyInformation[`ML_${preferredFiatCurrency.endPointKey}`]),
   };
 }
 
@@ -202,6 +247,22 @@ function btcToSatoshi(btc) {
 function fiatToBTC(fiatFloat) {
   let b = new BigNumber(fiatFloat);
   b = b.dividedBy(exchangeRates['BTC_' + preferredFiatCurrency.endPointKey]).toFixed(8);
+  return b;
+}
+
+function coinsToML(coins) {
+  let b = new BigNumber(coins);
+  b = b.dividedBy(ML_ATOMS_PER_COIN);
+  return b.toString(10);
+}
+
+function mlToCoins(ml) {
+  return new BigNumber(ml).multipliedBy(ML_ATOMS_PER_COIN).toNumber();
+}
+
+function fiatToML(fiatFloat) {
+  let b = new BigNumber(fiatFloat);
+  b = b.dividedBy(exchangeRates['ML_' + preferredFiatCurrency.endPointKey]).toFixed(8);
   return b;
 }
 
@@ -230,8 +291,12 @@ function _setExchangeRate(pair, rate) {
 
 module.exports.updateExchangeRate = updateExchangeRate;
 module.exports.init = init;
+module.exports.mlCoinsToLocalCurrency = mlCoinsToLocalCurrency;
 module.exports.satoshiToLocalCurrency = satoshiToLocalCurrency;
 module.exports.fiatToBTC = fiatToBTC;
+module.exports.coinsToML = coinsToML;
+module.exports.mlToCoins = mlToCoins;
+module.exports.fiatToML = fiatToML;
 module.exports.satoshiToBTC = satoshiToBTC;
 module.exports.BTCToLocalCurrency = BTCToLocalCurrency;
 module.exports.setPrefferedCurrency = setPrefferedCurrency;
