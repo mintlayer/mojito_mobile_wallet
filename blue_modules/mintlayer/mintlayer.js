@@ -79,11 +79,11 @@ export const getOutputs = async ({ amount, address, networkType, type = 'Transfe
   }
   if (type === 'LockThenTransfer') {
     let lockEncoded;
-    if (lock.UntilTime) {
-      lockEncoded = await webviewEventBus.exec(wasmMethods.encode_lock_until_time, [BigInt(lock.UntilTime.timestamp)]);
+    if (lock.type === 'UntilTime') {
+      lockEncoded = await webviewEventBus.exec(wasmMethods.encode_lock_until_time, [BigInt(lock.content.timestamp)]);
     }
-    if (lock.ForBlockCount) {
-      lockEncoded = await webviewEventBus.exec(wasmMethods.encode_lock_for_block_count, [BigInt(lock.ForBlockCount)]);
+    if (lock.type === 'ForBlockCount') {
+      lockEncoded = await webviewEventBus.exec(wasmMethods.encode_lock_for_block_count, [BigInt(lock.content)]);
     }
 
     return webviewEventBus.exec(wasmMethods.encode_output_lock_then_transfer, [amount, address, lockEncoded, networkIndex]);
