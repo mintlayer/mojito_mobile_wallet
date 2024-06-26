@@ -84,6 +84,16 @@ export function verify_signature_for_spending(public_key: Uint8Array, signature:
  */
 export function encode_output_transfer(amount: Amount, address: string, network: Network): Uint8Array;
 /**
+ * Given a destination address, an amount, token ID (in address form) and a network type (mainnet, testnet, etc), this function
+ * creates an output of type Transfer for tokens, and returns it as bytes.
+ * @param {Amount} amount
+ * @param {string} address
+ * @param {string} token_id
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_output_token_transfer(amount: Amount, address: string, token_id: string, network: Network): Uint8Array;
+/**
  * Given the current block height and a network type (mainnet, testnet, etc),
  * this function returns the number of blocks, after which a pool that decommissioned,
  * will have its funds unlocked and available for spending.
@@ -136,11 +146,32 @@ export function encode_lock_until_height(block_height: bigint): Uint8Array;
  */
 export function encode_output_lock_then_transfer(amount: Amount, address: string, lock: Uint8Array, network: Network): Uint8Array;
 /**
+ * Given a valid receiving address, token ID (in address form), a locking rule as bytes (available in this file),
+ * and a network type (mainnet, testnet, etc), this function creates an output of type
+ * LockThenTransfer with the parameters provided.
+ * @param {Amount} amount
+ * @param {string} address
+ * @param {string} token_id
+ * @param {Uint8Array} lock
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_output_token_lock_then_transfer(amount: Amount, address: string, token_id: string, lock: Uint8Array, network: Network): Uint8Array;
+/**
  * Given an amount, this function creates an output (as bytes) to burn a given amount of coins
  * @param {Amount} amount
  * @returns {Uint8Array}
  */
 export function encode_output_coin_burn(amount: Amount): Uint8Array;
+/**
+ * Given an amount, token ID (in address form) and network type (mainnet, testnet, etc),
+ * this function creates an output (as bytes) to burn a given amount of tokens
+ * @param {Amount} amount
+ * @param {string} token_id
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_output_token_burn(amount: Amount, token_id: string, network: Network): Uint8Array;
 /**
  * Given a pool id as string, an owner address and a network type (mainnet, testnet, etc),
  * this function returns an output (as bytes) to create a delegation to the given pool.
@@ -185,6 +216,50 @@ export function encode_stake_pool_data(value: Amount, staker: string, vrf_public
  */
 export function encode_output_create_stake_pool(pool_id: string, pool_data: Uint8Array, network: Network): Uint8Array;
 /**
+ * Returns the fee that needs to be paid by a transaction for issuing a new fungible token
+ * @param {bigint} _current_block_height
+ * @param {Network} network
+ * @returns {Amount}
+ */
+export function fungible_token_issuance_fee(_current_block_height: bigint, network: Network): Amount;
+/**
+ * Given the current block height and a network type (mainnet, testnet, etc),
+ * this will return the fee that needs to be paid by a transaction for issuing a new NFT
+ * The current block height information is used in case a network upgrade changed the value.
+ * @param {bigint} current_block_height
+ * @param {Network} network
+ * @returns {Amount}
+ */
+export function nft_issuance_fee(current_block_height: bigint, network: Network): Amount;
+/**
+ * Given the current block height and a network type (mainnet, testnet, etc),
+ * this will return the fee that needs to be paid by a transaction for changing the total supply of a token
+ * by either minting or unminting tokens
+ * The current block height information is used in case a network upgrade changed the value.
+ * @param {bigint} current_block_height
+ * @param {Network} network
+ * @returns {Amount}
+ */
+export function token_supply_change_fee(current_block_height: bigint, network: Network): Amount;
+/**
+ * Given the current block height and a network type (mainnet, testnet, etc),
+ * this will return the fee that needs to be paid by a transaction for freezing/unfreezing a token
+ * The current block height information is used in case a network upgrade changed the value.
+ * @param {bigint} current_block_height
+ * @param {Network} network
+ * @returns {Amount}
+ */
+export function token_freeze_fee(current_block_height: bigint, network: Network): Amount;
+/**
+ * Given the current block height and a network type (mainnet, testnet, etc),
+ * this will return the fee that needs to be paid by a transaction for changing the authority of a token
+ * The current block height information is used in case a network upgrade changed the value.
+ * @param {bigint} current_block_height
+ * @param {Network} network
+ * @returns {Amount}
+ */
+export function token_change_authority_fee(current_block_height: bigint, network: Network): Amount;
+/**
  * Given the parameters needed to issue a fungible token, and a network type (mainnet, testnet, etc),
  * this function creates an output that issues that token.
  * @param {string} authority
@@ -194,10 +269,29 @@ export function encode_output_create_stake_pool(pool_id: string, pool_data: Uint
  * @param {TotalSupply} total_supply
  * @param {Amount | undefined} supply_amount
  * @param {FreezableToken} is_token_freezable
+ * @param {bigint} _current_block_height
  * @param {Network} network
  * @returns {Uint8Array}
  */
-export function encode_output_issue_fungible_token(authority: string, token_ticker: Uint8Array, metadata_uri: Uint8Array, number_of_decimals: number, total_supply: TotalSupply, supply_amount: Amount | undefined, is_token_freezable: FreezableToken, network: Network): Uint8Array;
+export function encode_output_issue_fungible_token(authority: string, token_ticker: Uint8Array, metadata_uri: Uint8Array, number_of_decimals: number, total_supply: TotalSupply, supply_amount: Amount | undefined, is_token_freezable: FreezableToken, _current_block_height: bigint, network: Network): Uint8Array;
+/**
+ * Given the parameters needed to issue an NFT, and a network type (mainnet, testnet, etc),
+ * this function creates an output that issues that NFT.
+ * @param {string} token_id
+ * @param {string} authority
+ * @param {string} name
+ * @param {string} ticker
+ * @param {string} description
+ * @param {Uint8Array} media_hash
+ * @param {string | undefined} creator
+ * @param {Uint8Array | undefined} media_uri
+ * @param {Uint8Array | undefined} icon_uri
+ * @param {Uint8Array | undefined} additional_metadata_uri
+ * @param {bigint} _current_block_height
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_output_issue_nft(token_id: string, authority: string, name: string, ticker: string, description: string, media_hash: Uint8Array, creator: string | undefined, media_uri: Uint8Array | undefined, icon_uri: Uint8Array | undefined, additional_metadata_uri: Uint8Array | undefined, _current_block_height: bigint, network: Network): Uint8Array;
 /**
  * Given data to be deposited in the blockchain, this function provides the output that deposits this data
  * @param {Uint8Array} data
@@ -295,6 +389,29 @@ export function get_transaction_id(transaction_bytes: Uint8Array, strict_byte_si
  */
 export function effective_pool_balance(network: Network, pledge_amount: Amount, pool_balance: Amount): Amount;
 /**
+ * The network, for which an operation to be done. Mainnet, testnet, etc.
+ */
+export enum Network {
+  Mainnet = 0,
+  Testnet = 1,
+  Regtest = 2,
+  Signet = 3,
+}
+/**
+ * Indicates whether a token can be frozen
+ */
+export enum FreezableToken {
+  No = 0,
+  Yes = 1,
+}
+/**
+ * A utxo can either come from a transaction or a block reward. This enum signifies that.
+ */
+export enum SourceId {
+  Transaction = 0,
+  BlockReward = 1,
+}
+/**
  * The token supply of a specific token, set on issuance
  */
 export enum TotalSupply {
@@ -312,13 +429,6 @@ export enum TotalSupply {
   Fixed = 2,
 }
 /**
- * A utxo can either come from a transaction or a block reward. This enum signifies that.
- */
-export enum SourceId {
-  Transaction = 0,
-  BlockReward = 1,
-}
-/**
  * The part of the transaction that will be committed in the signature. Similar to bitcoin's sighash.
  */
 export enum SignatureHashType {
@@ -326,22 +436,6 @@ export enum SignatureHashType {
   NONE = 1,
   SINGLE = 2,
   ANYONECANPAY = 3,
-}
-/**
- * The network, for which an operation to be done. Mainnet, testnet, etc.
- */
-export enum Network {
-  Mainnet = 0,
-  Testnet = 1,
-  Regtest = 2,
-  Signet = 3,
-}
-/**
- * Indicates whether a token can be frozen
- */
-export enum FreezableToken {
-  No = 0,
-  Yes = 1,
 }
 /**
  * Amount type abstraction. The amount type is stored in a string
@@ -379,18 +473,27 @@ export interface InitOutput {
   readonly sign_message_for_spending: (a: number, b: number, c: number, d: number, e: number) => void;
   readonly verify_signature_for_spending: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => void;
   readonly encode_output_transfer: (a: number, b: number, c: number, d: number, e: number) => void;
+  readonly encode_output_token_transfer: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => void;
   readonly staking_pool_spend_maturity_block_count: (a: number, b: number) => number;
   readonly encode_lock_for_block_count: (a: number, b: number) => void;
   readonly encode_lock_for_seconds: (a: number, b: number) => void;
   readonly encode_lock_until_time: (a: number, b: number) => void;
   readonly encode_lock_until_height: (a: number, b: number) => void;
   readonly encode_output_lock_then_transfer: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => void;
+  readonly encode_output_token_lock_then_transfer: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => void;
   readonly encode_output_coin_burn: (a: number, b: number) => void;
+  readonly encode_output_token_burn: (a: number, b: number, c: number, d: number, e: number) => void;
   readonly encode_output_create_delegation: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
   readonly encode_output_delegate_staking: (a: number, b: number, c: number, d: number, e: number) => void;
   readonly encode_stake_pool_data: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number) => void;
   readonly encode_output_create_stake_pool: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
-  readonly encode_output_issue_fungible_token: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number) => void;
+  readonly fungible_token_issuance_fee: (a: number, b: number) => number;
+  readonly nft_issuance_fee: (a: number, b: number) => number;
+  readonly token_supply_change_fee: (a: number, b: number) => number;
+  readonly token_freeze_fee: (a: number, b: number) => number;
+  readonly token_change_authority_fee: (a: number, b: number) => number;
+  readonly encode_output_issue_fungible_token: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number) => void;
+  readonly encode_output_issue_nft: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number, n: number, o: number, p: number, q: number, r: number, s: number, t: number, u: number, v: number, w: number) => void;
   readonly encode_output_data_deposit: (a: number, b: number, c: number) => void;
   readonly encode_input_for_utxo: (a: number, b: number, c: number, d: number) => void;
   readonly encode_input_for_withdraw_from_delegation: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
@@ -401,10 +504,10 @@ export interface InitOutput {
   readonly encode_signed_transaction: (a: number, b: number, c: number, d: number, e: number) => void;
   readonly get_transaction_id: (a: number, b: number, c: number, d: number) => void;
   readonly effective_pool_balance: (a: number, b: number, c: number, d: number) => void;
-  readonly rustsecp256k1_v0_9_2_context_create: (a: number) => number;
-  readonly rustsecp256k1_v0_9_2_context_destroy: (a: number) => void;
-  readonly rustsecp256k1_v0_9_2_default_illegal_callback_fn: (a: number, b: number) => void;
-  readonly rustsecp256k1_v0_9_2_default_error_callback_fn: (a: number, b: number) => void;
+  readonly rustsecp256k1_v0_10_0_context_create: (a: number) => number;
+  readonly rustsecp256k1_v0_10_0_context_destroy: (a: number) => void;
+  readonly rustsecp256k1_v0_10_0_default_illegal_callback_fn: (a: number, b: number) => void;
+  readonly rustsecp256k1_v0_10_0_default_error_callback_fn: (a: number, b: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;

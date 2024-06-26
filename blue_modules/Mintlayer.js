@@ -9,6 +9,7 @@ const MINTLAYER_ENDPOINTS = {
   GET_ADDRESS_DELEGATIONS: '/address/:address/delegations',
   GET_DELEGATION: '/delegation/:delegation',
   GET_CHAIN_TIP: '/chain/tip',
+  GET_TOKEN_DATA: '/token/:token',
 };
 
 const ML_NETWORK_TYPES = {
@@ -22,6 +23,7 @@ const TransactionType = {
   CreateDelegationId: 'CreateDelegationId',
   DelegateStaking: 'DelegateStaking',
   CreateStakePool: 'CreateStakePool',
+  TokenTransfer: 'TokenTransfer',
 };
 
 const ML_ATOMS_PER_COIN = 100000000000;
@@ -110,4 +112,9 @@ const broadcastTransaction = (transaction, network) => {
   return tryServers({ endpoint: MINTLAYER_ENDPOINTS.POST_TRANSACTION, body: transaction, network });
 };
 
-export { TransactionType, getAddressData, getTransactionData, getAddressUtxo, getWalletUtxos, broadcastTransaction, getFeesEstimates, getChainTip, MINTLAYER_ENDPOINTS, ML_NETWORK_TYPES, ML_ATOMS_PER_COIN };
+const getTokenData = async (token, network) => {
+  const endpoint = MINTLAYER_ENDPOINTS.GET_TOKEN_DATA.replace(':token', token);
+  return tryServers({ endpoint, network });
+};
+
+export { TransactionType, getAddressData, getTransactionData, getAddressUtxo, getWalletUtxos, broadcastTransaction, getFeesEstimates, getChainTip, getTokenData, MINTLAYER_ENDPOINTS, ML_NETWORK_TYPES, ML_ATOMS_PER_COIN };

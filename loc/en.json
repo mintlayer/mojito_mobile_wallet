@@ -525,6 +525,7 @@
     "list_create_a_button": "Add now",
     "list_create_a_wallet": "Add a wallet",
     "list_create_a_wallet_text": "you can add as many wallets as you like, for free",
+    "list_empty_tokens": "Your tokens will appear here.",
     "list_empty_txs1": "Your transactions will appear here.",
     "list_empty_txs1_lightning": "Lightning wallet should be used for your daily transactions. Fees are unfairly cheap and the speed is blazing fast.",
     "list_empty_txs2": "Start with your wallet.",

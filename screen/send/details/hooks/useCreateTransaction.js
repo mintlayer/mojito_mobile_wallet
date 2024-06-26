@@ -10,10 +10,11 @@ import { AbstractHDElectrumWallet } from '../../../../class/wallets/abstract-hd-
 import { MintLayerWallet } from '../../../../class/wallets/mintlayer-wallet';
 import { ML_ATOMS_PER_COIN } from '../../../../blue_modules/Mintlayer';
 import { MintlayerUnit } from '../../../../models/mintlayerUnits';
+import BigInt from 'big-integer';
 
 const DUST_THRESHOLD = process.env.DUST_THRESHOLD;
 
-export const useCreateTransaction = ({ wallet, setIsLoading, feeRate, addresses, balance, scrollView, txMetadata, isTransactionReplaceable, transactionMemo, utxo, payjoinUrl, changeAddress, setChangeAddress, saveToDisk, sleep }) => {
+export const useCreateTransaction = ({ wallet, setIsLoading, feeRate, addresses, balance, scrollView, txMetadata, isTransactionReplaceable, transactionMemo, utxo, payjoinUrl, changeAddress, setChangeAddress, saveToDisk, sleep, tokenInfo }) => {
   const navigation = useNavigation();
   const { params: routeParams } = useRoute();
 
@@ -223,7 +224,11 @@ export const useCreateTransaction = ({ wallet, setIsLoading, feeRate, addresses,
           continue;
         }
         const value = parseInt(transaction.amountInCoins);
-        if (value > 0) {
+        if (tokenInfo) {
+          const atoms = tokenInfo.number_of_decimals;
+          const tokenValue = BigInt(Math.round(transaction.amount * Math.pow(10, atoms)));
+          targets.push({ address: transaction.address, value: tokenValue });
+        } else if (value > 0) {
           targets.push({ address: transaction.address, value });
         } else if (transaction.amount) {
           const amount = currency.mlToCoins(transaction.amount);
@@ -233,7 +238,7 @@ export const useCreateTransaction = ({ wallet, setIsLoading, feeRate, addresses,
         }
       }
 
-      const { tx, outputs, fee, requireUtxo } = await wallet.createTransaction(lutxo, targets, requestedMlCoinsPerByteNum, changeAddress);
+      const { tx, outputs, fee, requireUtxo } = await wallet.createTransaction(lutxo, targets, requestedMlCoinsPerByteNum, changeAddress, tokenInfo?.token_id);
 
       const recipients = outputs.filter(({ address }) => address !== changeAddress);
 
@@ -244,6 +249,7 @@ export const useCreateTransaction = ({ wallet, setIsLoading, feeRate, addresses,
         tx,
         recipients,
         requireUtxo,
+        tokenInfo,
       });
 
       setIsLoading(false);

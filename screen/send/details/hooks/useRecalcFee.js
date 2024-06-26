@@ -1,3 +1,5 @@
+import BigInt from 'big-integer';
+
 import { BitcoinUnit } from '../../../../models/bitcoinUnits';
 import currency from '../../../../blue_modules/currency';
 import React, { useEffect } from 'react';
@@ -5,7 +7,7 @@ import { WatchOnlyWallet } from '../../../../class';
 import { AbstractHDElectrumWallet } from '../../../../class/wallets/abstract-hd-electrum-wallet';
 import { MintLayerWallet } from '../../../../class/wallets/mintlayer-wallet';
 
-export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, addresses, changeAddress, dumb, feePrecalc, setFeePrecalc, balance }) => {
+export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, addresses, changeAddress, dumb, feePrecalc, setFeePrecalc, balance, tokenInfo }) => {
   // recalc fees in effect so we don't block render
   useEffect(() => {
     function recalcBtcFees() {
@@ -105,7 +107,11 @@ export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, ad
             continue;
           }
           const value = parseInt(transaction.amountInCoins);
-          if (value > 0) {
+          if (tokenInfo) {
+            const atoms = tokenInfo.number_of_decimals;
+            const tokenValue = BigInt(Math.round(transaction.amount * Math.pow(10, atoms)));
+            targets.push({ address: transaction.address, value: tokenValue });
+          } else if (value > 0) {
             targets.push({ address: transaction.address, value });
           } else if (transaction.amount) {
             const amount = currency.mlToCoins(transaction.amount);
@@ -118,7 +124,7 @@ export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, ad
         try {
           // only one target available now
           const { value: amountToUse, address } = targets[0];
-          const fee = await wallet.calculateFee(lutxo, address, changeAddress, amountToUse, opt.fee);
+          const fee = await wallet.calculateFee(lutxo, address, changeAddress, amountToUse, opt.fee, tokenInfo?.token_id);
           newFeePrecalc[opt.key] = fee;
         } catch (e) {
           newFeePrecalc[opt.key] = null;

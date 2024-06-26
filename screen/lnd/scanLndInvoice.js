@@ -202,6 +202,7 @@ const ScanLndInvoice = () => {
     navigate('Success', {
       amount: amountSats,
       amountUnit: BitcoinUnit.SATS,
+      feeUnit: BitcoinUnit.SATS,
       invoiceDescription: decoded.description,
     });
     fetchAndSaveWalletTransactions(wallet.getID());

@@ -65,6 +65,8 @@ export const TransactionListItem = React.memo(({ item, itemPriceUnit = BitcoinUn
           return loc.lnd.expired;
         }
       }
+    } else if (item.type === TransactionType.TokenTransfer) {
+      return item.value;
     } else {
       return formatBalanceWithoutSuffix(item.value && item.value, itemPriceUnit, true).toString();
     }

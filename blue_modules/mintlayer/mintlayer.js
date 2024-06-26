@@ -19,6 +19,7 @@ const wasmMethods = {
   encode_outpoint_source_id: 'encode_outpoint_source_id',
   encode_input_for_utxo: 'encode_input_for_utxo',
   encode_output_transfer: 'encode_output_transfer',
+  encode_output_token_transfer: 'encode_output_token_transfer',
   encode_transaction: 'encode_transaction',
   encode_witness: 'encode_witness',
   encode_signed_transaction: 'encode_signed_transaction',
@@ -68,14 +69,18 @@ export const getTxInput = async (outpointSourceId, index) => {
   return webviewEventBus.exec(wasmMethods.encode_input_for_utxo, [outpointSourceId, index]);
 };
 
-export const getOutputs = async ({ amount, address, networkType, type = 'Transfer', lock }) => {
+export const getOutputs = async ({ amount, address, networkType, type = 'Transfer', lock, chainTip, tokenId }) => {
   if (type === 'LockThenTransfer' && !lock) {
     throw new Error('LockThenTransfer requires a lock');
   }
 
   const networkIndex = NETWORKS[networkType];
   if (type === 'Transfer') {
-    return webviewEventBus.exec(wasmMethods.encode_output_transfer, [amount, address, networkIndex]);
+    if (tokenId) {
+      return webviewEventBus.exec(wasmMethods.encode_output_token_transfer, [amount, address, tokenId, networkIndex]);
+    } else {
+      return webviewEventBus.exec(wasmMethods.encode_output_transfer, [amount, address, networkIndex]);
+    }
   }
   if (type === 'LockThenTransfer') {
     let lockEncoded;

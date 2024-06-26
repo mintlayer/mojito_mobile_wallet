@@ -2,8 +2,8 @@ import BigInt from 'big-integer';
 
 import * as ML from '../../blue_modules/mintlayer/mintlayer';
 
-const getUtxoBalance = (utxo) => {
-  return utxo.reduce((sum, item) => sum + BigInt(item.utxo.value.amount.atoms), BigInt(0));
+const getUtxoBalance = (item) => {
+  return BigInt(item.utxo.value.amount.atoms);
 };
 
 const getUtxoAvailable = (utxo) => {
@@ -15,42 +15,32 @@ const getUtxoAvailable = (utxo) => {
       return acc;
     }, []);
 
-  return available.map((item) => [item]);
+  return available;
 };
 
-const getUtxoTransaction = (utxo) => {
-  return utxo.map((item) => ({
+const getUtxoTransaction = (item) => {
+  return {
     transaction: item.outpoint.source_id,
     index: item.outpoint.index,
-  }));
+  };
 };
 
-const getUtxoTransactionsBytes = (transactions) => {
-  return transactions.map((transaction) => {
-    return {
-      bytes: Buffer.from(transaction.transaction, 'hex'),
-      index: transaction.index,
-    };
-  });
+const getUtxoTransactionsBytes = (transaction) => {
+  return {
+    bytes: Buffer.from(transaction.transaction, 'hex'),
+    index: transaction.index,
+  };
 };
 
 const getOutpointedSourceId = async (transactionsBytes) => {
-  return await Promise.all(
-    transactionsBytes.map(async (transaction) => {
-      return {
-        sourcedID: await ML.getEncodedOutpointSourceId(transaction.bytes),
-        index: transaction.index,
-      };
-    }),
-  );
+  return {
+    sourcedID: await ML.getEncodedOutpointSourceId(transactionsBytes.bytes),
+    index: transactionsBytes.index,
+  };
 };
 
-const getTxInput = async (outpointSourceId) => {
-  return await Promise.all(
-    outpointSourceId.map((outpoint) => {
-      return ML.getTxInput(outpoint.sourcedID, outpoint.index);
-    }),
-  );
+const getTxInput = async (outpoint) => {
+  return ML.getTxInput(outpoint.sourcedID, outpoint.index);
 };
 
 /**
@@ -60,19 +50,19 @@ const getTxInput = async (outpointSourceId) => {
  * In that case backend will return error with proper fee amount wich is parsed and passed as override fee value.
  * Need to add some "backup" additional UTXO is AMOUNT is equal of UTXOs amount so that server error less likely to happen but I'm leaving it just to be sure
  * @param utxos
- * @param amountToUse
- * @param fee
+ * @param amount
+ * @param tokenId
  * @returns {*[]}
  */
-const getTransactionUtxos = (utxos, amountToUse, fee = BigInt(0)) => {
+const getTransactionUtxos = ({ utxos, amount, tokenId }) => {
   let balance = BigInt(0);
   const utxosToSpend = [];
   let lastIndex = 0;
 
   for (let i = 0; i < utxos.length; i++) {
     lastIndex = i;
-    const utxoBalance = getUtxoBalance(utxos[i]);
-    if (balance < BigInt(amountToUse) + fee) {
+    const utxoBalance = getUtxoBalance(utxos[i], tokenId);
+    if (utxoBalance && balance < BigInt(amount)) {
       balance += utxoBalance;
       utxosToSpend.push(utxos[i]);
     } else {
@@ -80,7 +70,7 @@ const getTransactionUtxos = (utxos, amountToUse, fee = BigInt(0)) => {
     }
   }
 
-  if (balance === BigInt(amountToUse)) {
+  if (balance === BigInt(amount)) {
     // pick up extra UTXO
     if (utxos[lastIndex + 1]) {
       utxosToSpend.push(utxos[lastIndex + 1]);
@@ -122,12 +112,18 @@ const getTxInputs = async (outpointSourceIds) => {
   return txInputs;
 };
 
-const getTxOutput = async (amount, address, networkType, poolId, delegationId) => {
-  return await ML.getOutputs({
-    amount,
-    address,
-    networkType,
-  });
+const getTxOutput = ({ amount, address, networkType, poolId, delegationId, chainTip, tokenId }) => {
+  let txOutput;
+  if (poolId) {
+    txOutput = ML.getDelegationOutput(poolId, address, networkType);
+  } else {
+    if (delegationId) {
+      txOutput = ML.getStakingOutput(amount, delegationId, networkType);
+    } else {
+      txOutput = ML.getOutputs({ amount, address, networkType, chainTip, tokenId });
+    }
+  }
+  return txOutput;
 };
 
 const getTransactionHex = (encodedSignedTransaction) => {
@@ -143,6 +139,7 @@ const getOptUtxos = async (utxos, network) => {
         networkType: network,
         type: item.utxo.type,
         lock: item.utxo.lock,
+        tokenId: item.utxo.value.token_id,
       });
     }),
   );
@@ -185,17 +182,16 @@ const getArraySpead = (inputs) => {
   return inputsArray;
 };
 
-const totalUtxosAmount = (utxosToSpend) => {
-  return utxosToSpend
-    .flatMap((utxo) => [...utxo])
-    .reduce((acc, utxo) => {
-      const amount = utxo?.utxo?.value?.amount ? BigInt(utxo.utxo.value.amount.atoms) : 0;
-      return acc + amount;
-    }, BigInt(0));
+const totalUtxosAmount = (utxosToSpend, token) => {
+  return utxosToSpend.reduce((acc, utxo) => {
+    const requiredToken = token ? utxo.utxo.value.token_id === token : utxo.utxo.value.type === 'Coin';
+    const amount = utxo?.utxo?.value?.amount && requiredToken ? BigInt(utxo.utxo.value.amount.atoms) : BigInt(0);
+    return acc + amount;
+  }, BigInt(0));
 };
 
 const getUtxoAddress = (utxosToSpend) => {
-  return utxosToSpend.flatMap((utxo) => [...utxo]).map((utxo) => utxo.utxo.destination);
+  return utxosToSpend.map((utxo) => utxo.utxo.destination);
 };
 
 export { getUtxoBalance, getUtxoTransaction, getUtxoTransactionsBytes, getOutpointedSourceId, getTransactionUtxos, getUtxoTransactions, getTransactionsBytes, getOutpointedSourceIds, getTxInputs, getTxOutput, getTransactionHex, getOptUtxos, getEncodedWitnesses, getArraySpead, getUtxoAvailable, totalUtxosAmount, getUtxoAddress };
