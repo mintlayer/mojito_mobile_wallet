@@ -23,6 +23,11 @@ import { ML_ATOMS_PER_COIN } from '../../blue_modules/Mintlayer';
 import currency from '../../blue_modules/currency';
 import AmountInputML from '../../components/amount_input/AmountInputML';
 import BigInt from 'big-integer';
+import { FButton, FContainer } from '../../components/FloatButtons';
+import { Chain } from '../../models/bitcoinUnits';
+import { Icon } from 'react-native-elements';
+import { COLORS } from '../../theme/Colors';
+import { WatchOnlyWallet } from '../../class';
 
 const StakingDelegationDetails = () => {
   const navigation = useNavigation();
@@ -364,23 +369,49 @@ const StakingDelegationDetails = () => {
     <View style={[styles.root]} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
       <StatusBar barStyle="light-content" />
       <View>
-        <View>
-          <Text>Delegation details</Text>
+        <View style={styles.infoDetails}>
+          <View>
+            <Text style={styles.listHeaderText}>Delegation details</Text>
+          </View>
+          <View>
+            <Text>Delegation ID:</Text>
+            <Text>{delegation.delegation_id}</Text>
+          </View>
+          <View>
+            <Text>Pool Id:</Text>
+            <Text>{delegation.pool_id}</Text>
+          </View>
+
+          <View style={styles.balance}>
+            <Text style={styles.balanceLabel}>Balance:</Text>
+            <Text style={styles.balanceValue}>{delegation.balance / 1e11} ML</Text>
+          </View>
         </View>
-        <View>
-          <Text>Balance: {balance / 1e11} ML</Text>
-        </View>
-        <View>
-          <Text>Pool Id: </Text>
-        </View>
-        <View>
-          <Button onPress={handleClickAddFunds} text="Add funds">
-            Add funds to delegation
-          </Button>
-          <Button onPress={handleClickWithdraw} text="Withdraw from delegation">
-            Withdraw from delegation
-          </Button>
-        </View>
+
+        <FContainer>
+          <FButton
+            testID="ReceiveButton"
+            text={loc.stake.add_funds}
+            onPress={handleClickAddFunds}
+            icon={
+              <View style={styles.receiveIcon}>
+                <Icon name="arrow-down" size={20} type="font-awesome" color={COLORS.white} />
+              </View>
+            }
+          />
+          <FButton
+            onLongPress={handleClickWithdraw}
+            onPress={handleClickWithdraw}
+            text={loc.stake.withdraw}
+            testID="SendButton"
+            icon={
+              <View style={styles.sendIcon}>
+                <Icon name="arrow-down" size={20} type="font-awesome" color={COLORS.white} />
+              </View>
+            }
+          />
+        </FContainer>
+
         {renderAddFundsModal()}
         {renderWithdrawModal()}
       </View>

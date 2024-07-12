@@ -271,7 +271,11 @@
     "problem_with_psbt": "Problem with PSBT"
   },
   "stake": {
-    "header": "Stake"
+    "header": "Stake",
+    "pool_id": "Pool ID",
+    "add_funds": "Add Funds",
+    "withdraw": "Withdraw",
+    "add_delegation": "Add new delegation"
   },
   "settings": {
     "about": "About",

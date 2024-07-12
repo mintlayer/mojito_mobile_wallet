@@ -587,7 +587,10 @@ export class MintLayerWallet extends AbstractHDWallet {
     let ret = [];
 
     if (this._utxo?.length !== 0) {
-      const usedUtxo = this._unconfirmedTxs.flatMap(({ usedUtxo }) => usedUtxo);
+      const usedUtxo = this._unconfirmedTxs.flatMap(({ usedUtxo }) => usedUtxo).filter((utxo) => utxo);
+
+      console.log('usedUtxo:', JSON.stringify(usedUtxo, null, 2));
+
       const unusedUtxo = this._utxo.map((utxo) => {
         return utxo.filter(({ outpoint: { source_id, index } }) => {
           return !usedUtxo.some(({ outpoint }) => outpoint.source_id === source_id && outpoint.index === index);

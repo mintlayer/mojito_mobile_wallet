@@ -13,6 +13,10 @@ import ToolTipMenu from './TooltipMenu';
 import { BluePrivateBalance } from '../BlueComponents';
 import { MintLayerWallet } from '../class/wallets/mintlayer-wallet';
 import { type } from '../theme/Fonts';
+import { COLORS } from '../theme/Colors';
+import { Icon } from 'react-native-elements';
+
+const SHOW_STAKING = false;
 
 export default class TransactionsNavigationHeader extends Component {
   static propTypes = {
@@ -154,6 +158,16 @@ export default class TransactionsNavigationHeader extends Component {
     this.props.onManageFundsPressed(id);
   };
 
+  navigateToStake = () => {
+    console.log('this.props', this.props);
+    this.props.navigation('StakingRoot', {
+      screen: 'Staking',
+      params: {
+        walletID: this.state.wallet.getID(),
+      },
+    });
+  };
+
   onPressMenuItem = (id) => {
     if (id === TransactionsNavigationHeader.actionKeys.WalletBalanceVisibility) {
       this.handleBalanceVisibility();
@@ -286,6 +300,14 @@ export default class TransactionsNavigationHeader extends Component {
             </View>
           </TouchableOpacity>
         )}
+        {SHOW_STAKING && this.state.wallet.allowStaking() && (
+          <TouchableOpacity accessibilityRole="button" onPress={this.navigateToStake}>
+            <View style={styles.stakeButton}>
+              <Icon name="pie-chart" size={18} type="font-awesome" color={COLORS.green_shade} />
+              <Text style={styles.stakeButtonText}>Stake ML</Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </LinearGradient>
     );
   }
@@ -340,5 +362,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#FFFFFF',
     padding: 12,
+  },
+  stakeButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 85,
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    borderRadius: 9,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    display: 'flex',
+    flexDirection: 'row',
+    zIndex: 999,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stakeButtonText: {
+    fontSize: 14,
+    color: COLORS.black,
+    fontWeight: '700',
+    marginLeft: 5,
   },
 });

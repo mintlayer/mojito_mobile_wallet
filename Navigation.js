@@ -104,6 +104,7 @@ import NativeAssets from './screen/NativeAssets';
 import Staking from './screen/staking/staking';
 import StakingDelegationDetails from './screen/staking/delegationDetails';
 import StakingConfirm from './screen/staking/confirm';
+import StakingSuccess from './screen/staking/success';
 
 import { sendBottom, settingBottom, walletBottom, create_wallet, ic_back_black } from './theme/Images';
 import { COLORS } from './theme/Colors';
@@ -577,6 +578,7 @@ function MlWalletRoot() {
       <TopTab.Navigator tabBarOptions={tabBarOptions}>
         <TopTab.Screen name="Transactions" component={MLWalletTransactions} initialParams={{ walletID }} />
         <TopTab.Screen name="Tokens" component={MLWalletTokens} initialParams={{ walletID }} />
+        <TopTab.Screen name="Stake ML" component={Staking} initialParams={{ walletID }} />
       </TopTab.Navigator>
     </View>
   );
@@ -623,6 +625,10 @@ const Navigation = () => {
 
       <RootStack.Screen name="RBFBumpFee" component={RBFBumpFee} options={RBFBumpFee.navigationOptions(theme)} />
       <RootStack.Screen name="RBFCancel" component={RBFCancel} options={RBFCancel.navigationOptions(theme)} />
+
+      <StakingStack.Screen name="Delegation" component={StakingDelegationDetails} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Confirm" component={StakingConfirm} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Success" component={StakingSuccess} options={{ headerShown: false, gestureEnabled: false }} />
 
       <RootStack.Screen
         name="ScanQRCodeRoot"

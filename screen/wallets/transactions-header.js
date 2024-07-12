@@ -13,7 +13,7 @@ const WalletTransactionsHeader = () => {
   const { wallets, saveToDisk, walletTransactionUpdateStatus } = useContext(BlueStorageContext);
   const { walletID } = useRoute().params;
   const wallet = wallets.find((w) => w.getID() === walletID);
-  const { setParams, setOptions } = useNavigation();
+  const { setParams, setOptions, navigate } = useNavigation();
 
   useEffect(() => {
     setOptions({ headerTitle: walletTransactionUpdateStatus === walletID ? loc.transactions.updating : '' });
@@ -51,6 +51,7 @@ const WalletTransactionsHeader = () => {
             saveToDisk();
           })
         }
+        navigation={navigate}
       />
     </View>
   );

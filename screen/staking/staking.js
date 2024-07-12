@@ -24,6 +24,9 @@ import MlNetworkTransactionFees, { MlNetworkTransactionFee } from '../../models/
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BigNumber from 'bignumber.js';
 import { ML_ATOMS_PER_COIN } from '../../blue_modules/Mintlayer';
+import { FButton, FContainer } from '../../components/FloatButtons';
+import { Icon } from 'react-native-elements';
+import { COLORS } from '../../theme/Colors';
 
 const Staking = () => {
   const navigation = useNavigation();
@@ -149,17 +152,19 @@ const Staking = () => {
         }}
       >
         <View style={styles.delegationItem}>
-          <View>
-            <Text>Balance: {item.balance / 1e11} ML</Text>
+          <View style={styles.info}>
+            <View style={styles.delegationId}>
+              <Text style={styles.delegationIdText}>{item.delegation_id.slice(0, 12) + '...' + item.delegation_id.slice(-12)}</Text>
+            </View>
+            <View style={styles.delegationPoolId}>
+              <Text style={styles.delegationPoolIdText}>Pool ID: {item.pool_id.slice(0, 8) + '...' + item.pool_id.slice(-8)}</Text>
+            </View>
+            <View style={styles.delegationDate}>
+              <Text style={styles.delegationDateText}>{dayjs(item.creation_time * 1000).format('YYYY-MM-DD HH:mm')}</Text>
+            </View>
           </View>
-          <View>
-            <Text>Delegation ID: {item.delegation_id}</Text>
-          </View>
-          <View>
-            <Text>Pool ID: {item.pool_id}</Text>
-          </View>
-          <View>
-            <Text>Created: {dayjs(item.creation_time * 1000).format('YYYY-MM-DD HH:mm:ss')}</Text>
+          <View style={styles.delegationBalance}>
+            <Text style={styles.delegationBalanceText}>{item.balance / 1e11} ML</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -222,6 +227,7 @@ const Staking = () => {
     const recipients = outputs.filter(({ address }) => address !== changeAddress);
 
     navigation.navigate('Confirm', {
+      action: 'CreateDelegation',
       fee: new BigNumber(fee).dividedBy(ML_ATOMS_PER_COIN).toNumber(),
       walletID: wallet.getID(),
       tx,
@@ -299,13 +305,13 @@ const Staking = () => {
       <StatusBar barStyle="light-content" />
       <View>
         <FlatList
-          ListHeaderComponent={
-            <View style={styles.listHeader}>
-              <View style={styles.listHeaderTextRow}>
-                <Text style={styles.listHeaderText}>Your delegation list</Text>
-              </View>
-            </View>
-          }
+          // ListHeaderComponent={
+          //   <View style={styles.listHeader}>
+          //     <View style={styles.listHeaderTextRow}>
+          //       <Text style={styles.listHeaderText}>Your delegation list</Text>
+          //     </View>
+          //   </View>
+          // }
           ListFooterComponent={<View style={styles.listFooter} />}
           onEndReachedThreshold={0.3}
           onEndReached={async () => {
@@ -325,11 +331,18 @@ const Staking = () => {
           refreshing={isLoading}
         />
 
-        <View style={styles.addButton}>
-          <Button onPress={handleClickAddDelegation} text="Add new delegation">
-            Add new delegation
-          </Button>
-        </View>
+        <FContainer>
+          <FButton
+            testID="ReceiveButton"
+            text={loc.stake.add_delegation}
+            onPress={handleClickAddDelegation}
+            icon={
+              <View>
+                <Icon name="plus" size={20} type="font-awesome" color={COLORS.white} />
+              </View>
+            }
+          />
+        </FContainer>
         {renderAddDelegationModal()}
       </View>
       <BlueDismissKeyboardInputAccessory />

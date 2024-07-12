@@ -16,7 +16,7 @@ const Success = () => {
   };
   const { colors } = useTheme();
   const { dangerouslyGetParent } = useNavigation();
-  const { amount, fee, amountUnit = BitcoinUnit.BTC, feeUnit = BitcoinUnit.BTC, invoiceDescription = '', onDonePressed = pop } = useRoute().params;
+  const { amount, fee, amountUnit = BitcoinUnit.BTC, feeUnit = BitcoinUnit.BTC, invoiceDescription = '', onDonePressed = pop, action } = useRoute().params;
   const stylesHook = StyleSheet.create({
     root: {
       backgroundColor: colors.elevated,

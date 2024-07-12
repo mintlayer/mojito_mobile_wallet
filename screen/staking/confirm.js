@@ -22,11 +22,9 @@ const Confirm = () => {
   const { wallets, fetchAndSaveWalletTransactions, isElectrumDisabled, isTorDisabled, isTestMode } = useContext(BlueStorageContext);
   const [isBiometricUseCapableAndEnabled, setIsBiometricUseCapableAndEnabled] = useState(false);
   const { params } = useRoute();
-  const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt, requireUtxo, tokenInfo } = params;
+  const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt, requireUtxo, tokenInfo, action } = params;
   const [isLoading, setIsLoading] = useState(false);
-  const [isPayjoinEnabled, setIsPayjoinEnabled] = useState(false);
   const wallet = wallets.find((wallet) => wallet.getID() === walletID);
-  const payjoinUrl = wallet.allowPayJoin() ? params.payjoinUrl : false;
   const isMintlayerWallet = wallet.type === MintLayerWallet.type;
   const formattedFee = new Bignumber(fee).multipliedBy(isMintlayerWallet ? ML_ATOMS_PER_COIN : 100000000).toNumber();
   const { navigate, setOptions } = useNavigation();
@@ -62,39 +60,6 @@ const Confirm = () => {
     Biometric.isBiometricUseCapableAndEnabled().then(setIsBiometricUseCapableAndEnabled);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    !isMintlayerWallet &&
-      setOptions({
-        headerRight: () => (
-          <TouchableOpacity
-            accessibilityRole="button"
-            testID="TransactionDetailsButton"
-            style={[styles.txDetails, stylesHook.txDetails]}
-            onPress={async () => {
-              if (isBiometricUseCapableAndEnabled) {
-                if (!(await Biometric.unlockWithBiometrics())) {
-                  return;
-                }
-              }
-
-              navigate('CreateTransaction', {
-                fee,
-                recipients,
-                memo,
-                tx,
-                satoshiPerByte,
-                wallet,
-                formattedFee,
-              });
-            }}
-          >
-            <Text style={[styles.txText, stylesHook.valueUnit]}>{loc.send.create_details}</Text>
-          </TouchableOpacity>
-        ),
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colors, fee, formattedFee, isBiometricUseCapableAndEnabled, memo, recipients, satoshiPerByte, tx, wallet, isMintlayerWallet]);
 
   const sendMl = async () => {
     setIsLoading(true);
@@ -132,6 +97,18 @@ const Confirm = () => {
         amount,
         amountUnit: tokenInfo ? tokenInfo.token_ticker.string : isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML,
         feeUnit: isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML,
+        action,
+        onDonePressed: () => {
+          if (action === 'CreateDelegation') {
+            navigate('Stake ML', { walletID });
+          }
+          if (action === 'addFunds') {
+            navigate('Stake ML', { walletID });
+          }
+          if (action === 'withdrawFunds') {
+            navigate('Stake ML', { walletID });
+          }
+        },
       });
 
       setIsLoading(false);
@@ -173,13 +150,17 @@ const Confirm = () => {
 
     return (
       <>
-        <View style={styles.valueWrap}>
-          <Text testID="TransactionValue" style={[styles.valueValue, stylesHook.valueValue]}>
-            {amount}
-          </Text>
-          <Text style={[styles.valueUnit, stylesHook.valueValue]}>{' ' + unit}</Text>
-        </View>
-        {!tokenInfo && <Text style={[styles.transactionAmountFiat, stylesHook.transactionAmountFiat]}>{toLocalCurrencyFn(item.value)}</Text>}
+        {action !== 'CreateDelegation' && (
+          <>
+            <View style={styles.valueWrap}>
+              <Text testID="TransactionValue" style={[styles.valueValue, stylesHook.valueValue]}>
+                {amount}
+              </Text>
+              <Text style={[styles.valueUnit, stylesHook.valueValue]}>{' ' + unit}</Text>
+            </View>
+            <Text style={[styles.transactionAmountFiat, stylesHook.transactionAmountFiat]}>{toLocalCurrencyFn(item.value)}</Text>
+          </>
+        )}
         <BlueCard>
           <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.send.create_to}</Text>
           <Text testID="TransactionAddress" style={[styles.transactionDetailsSubtitle, stylesHook.transactionDetailsSubtitle]}>
@@ -188,7 +169,7 @@ const Confirm = () => {
         </BlueCard>
         {item.poolId && (
           <BlueCard>
-            <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.send.create_to}</Text>
+            <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.stake.pool_id}</Text>
             <Text testID="TransactionAddress" style={[styles.transactionDetailsSubtitle, stylesHook.transactionDetailsSubtitle]}>
               {item.poolId}
             </Text>
