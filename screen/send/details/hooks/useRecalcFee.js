@@ -84,7 +84,6 @@ export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, ad
     async function recalcMlFees() {
       if (!wallet) return;
       const fees = networkTransactionFees;
-      console.log('fees', fees);
       const changeAddress = getChangeAddressFast();
       const requestedSatPerByte = Number(feeRate);
       const lutxo = utxo || wallet.getUtxo();
@@ -98,12 +97,8 @@ export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, ad
 
       const newFeePrecalc = { ...feePrecalc };
 
-      console.log('newFeePrecalc', newFeePrecalc);
-
       for (const opt of options) {
         const targets = [];
-
-        console.log('addresses', addresses);
 
         for (const transaction of addresses) {
           if (transaction.amount === BitcoinUnit.MAX) {
@@ -130,8 +125,6 @@ export const useRecalcFee = ({ wallet, networkTransactionFees, feeRate, utxo, ad
             }
           }
         }
-
-        console.log('targets', targets);
 
         try {
           // only one target available now

@@ -159,7 +159,6 @@ export default class TransactionsNavigationHeader extends Component {
   };
 
   navigateToStake = () => {
-    console.log('this.props', this.props);
     this.props.navigation('StakingRoot', {
       screen: 'Staking',
       params: {
