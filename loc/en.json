@@ -275,7 +275,8 @@
     "pool_id": "Pool ID",
     "add_funds": "Add Funds",
     "withdraw": "Withdraw",
-    "add_delegation": "Add new delegation"
+    "add_delegation": "Add new delegation",
+    "owner_address": "Owner address"
   },
   "settings": {
     "about": "About",

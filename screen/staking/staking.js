@@ -65,18 +65,22 @@ const Staking = () => {
   const { name } = useRoute();
   const wallet = wallets.find((w) => w.getID() === walletID);
 
+  const poolIdValid = poolId !== '' && poolId.length === 64 && poolId.startsWith(isTestMode ? 'tpool1' : 'mpool1');
+
   const handleClickAddDelegation = () => {
     setAddDelegationModalVisible(true);
   };
 
   const recalcFee = async () => {
-    if (!wallet) {
+    if (!wallet || !poolId) {
       return null;
     }
 
     const utxo = wallet.getUtxo();
     const address = await wallet.getAddressAsync();
     const changeAddress = await wallet.getChangeAddressAsync();
+
+    console.log('recalcFee', utxo, address, changeAddress, poolId);
 
     const fee = await wallet.calculateFee({
       utxosTotal: utxo,
@@ -178,6 +182,8 @@ const Staking = () => {
       </View>
     );
 
+    const coin = isTestMode ? 'TML' : 'ML';
+
     return (
       <View style={styles.tokenWrapper}>
         <TouchableOpacity onPress={onItemPress}>
@@ -197,7 +203,7 @@ const Staking = () => {
             }
             contentStyle={styles.contentStyle}
             subtitleNumberOfLines={2}
-            rightSubtitle="ML"
+            rightSubtitle={coin}
             // rightSubtitle={`${dayjs(item.creation_time * 1000).format('YYYY-MM-DD HH:mm')}`}
             Component={View}
             chevron={false}
@@ -250,30 +256,38 @@ const Staking = () => {
       return null;
     }
 
-    const utxo = wallet.getUtxo();
-    const address = await wallet.getAddressAsync();
-    const changeAddress = await wallet.getChangeAddressAsync();
+    setIsLoading(true);
 
-    const targets = [
-      {
-        poolId,
-        address,
-        value: 1,
-      },
-    ];
+    try {
+      const utxo = wallet.getUtxo();
+      const address = await wallet.getAddressAsync();
+      const changeAddress = await wallet.getChangeAddressAsync();
 
-    const { tx, outputs, fee, requireUtxo } = await wallet.createTransaction(utxo, targets, 100000000, changeAddress);
+      const targets = [
+        {
+          poolId,
+          address,
+          value: 1,
+        },
+      ];
 
-    const recipients = outputs.filter(({ address }) => address !== changeAddress);
+      const { tx, outputs, fee, requireUtxo } = await wallet.createTransaction(utxo, targets, 100000000, changeAddress);
 
-    navigation.navigate('Confirm', {
-      action: 'CreateDelegation',
-      fee: new BigNumber(fee).dividedBy(ML_ATOMS_PER_COIN).toNumber(),
-      walletID: wallet.getID(),
-      tx,
-      recipients,
-      requireUtxo,
-    });
+      const recipients = outputs.filter(({ address }) => address !== changeAddress);
+
+      navigation.navigate('Confirm', {
+        action: 'CreateDelegation',
+        fee: new BigNumber(fee).dividedBy(ML_ATOMS_PER_COIN).toNumber(),
+        walletID: wallet.getID(),
+        tx,
+        recipients,
+        requireUtxo,
+      });
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
   };
 
   useRecalcFee({ wallet, networkTransactionFees, feeRate, utxo, addresses, changeAddress, dumb, feePrecalc, setFeePrecalc, balance });
@@ -312,7 +326,7 @@ const Staking = () => {
                 )}
               </TouchableOpacity>
 
-              <View style={styles.createButton}>{isLoading ? <ActivityIndicator /> : <BlueButton onPress={createTransaction} title={loc.send.details_next} testID="CreateTransactionButton" />}</View>
+              <View style={styles.createButton}>{isLoading ? <ActivityIndicator /> : <BlueButton disabled={!poolIdValid} onPress={createTransaction} title={loc.send.details_next} testID="CreateTransactionButton" />}</View>
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -332,6 +346,10 @@ const Staking = () => {
     try {
       await wallet.fetchDelegations();
       const newDelegations = wallet.getDelegations();
+
+      // reverse the order of delegations
+      newDelegations.reverse();
+
       setDataSource(newDelegations);
       setIsLoading(false);
     } catch (error) {

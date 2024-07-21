@@ -803,6 +803,8 @@ export class MintLayerWallet extends AbstractHDWallet {
       tokenId,
     });
 
+    console.log('txOutput', txOutput);
+
     const changeAmountCoin = (totalUtxosAmount(requireUtxoCoin) - Number(amountToUseFinaleCoin)).toString();
     const txChangeOutputCoin = await getTxOutput({
       amount: changeAmountCoin,

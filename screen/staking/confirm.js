@@ -150,6 +150,14 @@ const Confirm = () => {
 
     return (
       <>
+        {action === 'CreateDelegation' && (
+          <>
+            <View style={styles.valueWrap}>
+              <Text style={[styles.valueValue, stylesHook.valueValue]}>Create delegation</Text>
+            </View>
+          </>
+        )}
+
         {action !== 'CreateDelegation' && (
           <>
             <View style={styles.valueWrap}>
@@ -162,7 +170,7 @@ const Confirm = () => {
           </>
         )}
         <BlueCard>
-          <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.send.create_to}</Text>
+          <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.stake.owner_address}</Text>
           <Text testID="TransactionAddress" style={[styles.transactionDetailsSubtitle, stylesHook.transactionDetailsSubtitle]}>
             {item.address}
           </Text>
