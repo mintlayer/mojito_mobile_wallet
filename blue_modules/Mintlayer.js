@@ -12,6 +12,7 @@ const MINTLAYER_ENDPOINTS = {
   GET_TOKEN_DATA: '/token/:token',
   GET_BLOCK_HASH: '/chain/:height',
   GET_BLOCK_DATA: '/block/:hash',
+  GET_POOL_DATA: '/pool/:pool_id',
 };
 
 const ML_NETWORK_TYPES = {
@@ -152,4 +153,14 @@ const getTokenData = async (token, network) => {
   return tryServers({ endpoint, network });
 };
 
-export { TransactionType, getAddressData, getTransactionData, getAddressUtxo, getWalletUtxos, broadcastTransaction, getFeesEstimates, getChainTip, getTokenData, getWalletDelegations, getBlocksData, getDelegationDetails, MINTLAYER_ENDPOINTS, ML_NETWORK_TYPES, ML_ATOMS_PER_COIN };
+const getPool = async (pool_id, network) => {
+  const endpoint = MINTLAYER_ENDPOINTS.GET_POOL_DATA.replace(':pool_id', pool_id);
+  return tryServers({ endpoint, network });
+};
+
+const getPoolsData = async (pool_ids, network) => {
+  const poolsPromises = pool_ids.map((pool_id) => getPool(pool_id, network));
+  return Promise.all(poolsPromises).then((results) => results.flatMap(JSON.parse));
+};
+
+export { TransactionType, getAddressData, getTransactionData, getAddressUtxo, getWalletUtxos, broadcastTransaction, getFeesEstimates, getChainTip, getTokenData, getWalletDelegations, getBlocksData, getDelegationDetails, getPoolsData, MINTLAYER_ENDPOINTS, ML_NETWORK_TYPES, ML_ATOMS_PER_COIN };

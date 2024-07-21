@@ -365,6 +365,8 @@ const StakingDelegationDetails = () => {
     );
   };
 
+  console.log('delegation', delegation);
+
   return (
     <View style={[styles.root]} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
       <StatusBar barStyle="light-content" />
@@ -373,13 +375,17 @@ const StakingDelegationDetails = () => {
           <View>
             <Text style={styles.listHeaderText}>Delegation details</Text>
           </View>
-          <View>
+          <View style={styles.delegationDetailsData}>
             <Text>Delegation ID:</Text>
             <Text>{delegation.delegation_id}</Text>
           </View>
-          <View>
+          <View style={styles.delegationPoolDetailsData}>
             <Text>Pool Id:</Text>
             <Text>{delegation.pool_id}</Text>
+          </View>
+          <View style={styles.delegationPoolDetailsData}>
+            <Text>Pool Summary:</Text>
+            <Text>{JSON.stringify(delegation.pool_data)}</Text>
           </View>
 
           <View style={styles.balance}>

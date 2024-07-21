@@ -2,7 +2,7 @@ import * as bip39 from 'bip39';
 import * as ML from '../../blue_modules/mintlayer/mintlayer';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 import { MintlayerUnit } from '../../models/mintlayerUnits';
-import { broadcastTransaction, getAddressData, getAddressUtxo, getBlocksData, getDelegationDetails, getTransactionData, getWalletDelegations, ML_NETWORK_TYPES, TransactionType, getTokenData } from '../../blue_modules/Mintlayer';
+import { broadcastTransaction, getAddressData, getAddressUtxo, getBlocksData, getDelegationDetails, getTransactionData, getWalletDelegations, ML_NETWORK_TYPES, TransactionType, getTokenData, getPoolsData } from '../../blue_modules/Mintlayer';
 import { range } from '../../utils/Array';
 import { getArraySpead, getEncodedWitnesses, getOptUtxos, getOutpointedSourceIds, getTransactionHex, getTransactionsBytes, getTransactionUtxos, getTxInputs, getTxOutput, getUtxoAddress, getUtxoAvailable, getUtxoTransactions, totalUtxosAmount } from '../../utils/ML/transaction';
 import * as ExchangeRates from '../../models/exchangeRates';
@@ -559,9 +559,23 @@ export class MintLayerWallet extends AbstractHDWallet {
       this.network,
     );
 
+    const pool_ids = delegations.map((delegation) => delegation.pool_id);
+    const uniquePoolIds = [...new Set(pool_ids)];
+
+    const pool_data = await getPoolsData(uniquePoolIds, this.network);
+
+    // create object from pool data where pool_id is a key
+    const poolsData = uniquePoolIds.reduce((acc, pool, index) => {
+      acc[pool] = pool_data[index];
+      return acc;
+    }, {});
+
+    console.log('poolsData', poolsData);
+
     const mergedDelegations = delegations.map((delegation, index) => {
       return {
         ...delegation,
+        pool_data: poolsData[delegation.pool_id] || {},
         balance: delegation.balance.atoms,
         creation_block_height: delegation_details[index].creation_block_height,
         creation_time: blocks_data.find(({ height }) => height === delegation_details[index].creation_block_height).header.timestamp.timestamp,

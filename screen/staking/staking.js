@@ -1,8 +1,8 @@
 import { navigationStyleTx } from '../../components/navigationStyle';
 import loc, { formatBalance, formatBalanceWithoutSuffix } from '../../loc';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Dimensions, FlatList, Keyboard, KeyboardAvoidingView, LayoutAnimation, Platform, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { BlueButton, BlueDismissKeyboardInputAccessory } from '../../BlueComponents';
+import { ActivityIndicator, Alert, Dimensions, FlatList, I18nManager, Keyboard, KeyboardAvoidingView, LayoutAnimation, Platform, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { BlueButton, BlueDismissKeyboardInputAccessory, BlueListItem, MlCoinLogo, TokenLogo } from '../../BlueComponents';
 import InputAccessoryAllFunds from '../../components/InputAccessoryAllFunds';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { stakingStyles as styles } from './styles';
@@ -144,30 +144,70 @@ const Staking = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallets, wallet, walletID]);
 
+  const containerStyle = useMemo(
+    () => ({
+      borderBottomColor: colors.lightBorder,
+      paddingTop: 12,
+      paddingBottom: 12,
+      paddingRight: 0,
+    }),
+    [colors.lightBorder],
+  );
+
   const renderDelegationItem = ({ item }) => {
+    const onItemPress = () => {
+      navigation.navigate('Delegation', { delegation: item, walletID: wallet.getID() });
+    };
+
+    const isDecommissioned = item.pool_data.staker_balance.decimal < 1;
+
+    // make style for icon
+    const iconStyle = {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingLeft: isDecommissioned ? 0 : 3,
+      backgroundColor: isDecommissioned ? '#FFB800' : COLORS.green,
+    };
+
+    const logo = (
+      <View style={iconStyle}>
+        <Icon name={isDecommissioned ? 'warning' : 'pie-chart'} size={23} type="font-awesome" color={isDecommissioned ? '#ffffff' : '#ffffff'} />
+      </View>
+    );
+
     return (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Delegation', { delegation: item, walletID: wallet.getID() });
-        }}
-      >
-        <View style={styles.delegationItem}>
-          <View style={styles.info}>
-            <View style={styles.delegationId}>
-              <Text style={styles.delegationIdText}>{item.delegation_id.slice(0, 12) + '...' + item.delegation_id.slice(-12)}</Text>
-            </View>
-            <View style={styles.delegationPoolId}>
-              <Text style={styles.delegationPoolIdText}>Pool ID: {item.pool_id.slice(0, 8) + '...' + item.pool_id.slice(-8)}</Text>
-            </View>
-            <View style={styles.delegationDate}>
-              <Text style={styles.delegationDateText}>{dayjs(item.creation_time * 1000).format('YYYY-MM-DD HH:mm')}</Text>
-            </View>
-          </View>
-          <View style={styles.delegationBalance}>
-            <Text style={styles.delegationBalanceText}>{item.balance / 1e11} ML</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+      <View style={styles.tokenWrapper}>
+        <TouchableOpacity onPress={onItemPress}>
+          <BlueListItem
+            leftAvatar={logo}
+            leftAvatarProps={{ size: 42 }}
+            title={item.delegation_id.slice(0, 10) + '...' + item.delegation_id.slice(-10)}
+            subtitle={
+              <>
+                <View>
+                  <Text>Pool: {item.pool_id.slice(0, 8) + '...' + item.pool_id.slice(-8)}</Text>
+                </View>
+                <View>
+                  <Text style={styles.delegationDateText}>Created: {dayjs(item.creation_time * 1000).format('YYYY-MM-DD HH:mm')}</Text>
+                </View>
+              </>
+            }
+            contentStyle={styles.contentStyle}
+            subtitleNumberOfLines={2}
+            rightSubtitle="ML"
+            // rightSubtitle={`${dayjs(item.creation_time * 1000).format('YYYY-MM-DD HH:mm')}`}
+            Component={View}
+            chevron={false}
+            rightTitle={`${item.balance / 1e11} ML`}
+            rightContentStyle={styles.rightContentStyle}
+            rightTitleStyle={[styles.rowTitleStyle, stylesHook.rowTitle]}
+            containerStyle={containerStyle}
+          />
+        </TouchableOpacity>
+      </View>
     );
   };
 

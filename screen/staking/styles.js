@@ -13,13 +13,23 @@ export const stakingStyles = {
     marginHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#EFEFEF',
-    paddingVertical: 5,
+    paddingTop: 5,
+    paddingBottom: 10,
     flex: 1,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  delegationItemInfo: {},
+  iconPlaceholder: {
+    width: 20,
+    backgroundColor: '#f00',
+    flex: 1,
+  },
+  delegationItemInfo: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   delegationBalance: {},
   delegationBalanceText: {
     fontSize: 14,
@@ -34,7 +44,9 @@ export const stakingStyles = {
   delegationIdText: {
     fontSize: 18,
   },
-  delegationDate: {},
+  delegationDate: {
+    marginTop: 3,
+  },
   delegationDateText: {
     fontWeight: 'bold',
   },
@@ -127,5 +139,13 @@ export const stakingStyles = {
   },
   sendIcon: {
     transform: [{ rotate: I18nManager.isRTL ? '45deg' : '-45deg' }],
+  },
+
+  delegationDetailsData: {
+    paddingBottom: 10,
+  },
+
+  delegationPoolDetailsData: {
+    paddingTop: 10,
   },
 };
