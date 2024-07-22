@@ -82,6 +82,19 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+
+def setNodeEnvOptions = { execSpec ->
+    execSpec.environment("NODE_OPTIONS", "--openssl-legacy-provider")
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'bundleReleaseJsAndAssets') {
+        task.doFirst {
+            setNodeEnvOptions(delegate)
+        }
+    }
+}
+
 // apply plugin: "com.bugsnag.android.gradle"
 
 /**
