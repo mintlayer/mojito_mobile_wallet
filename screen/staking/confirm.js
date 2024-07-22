@@ -14,6 +14,7 @@ import alert from '../../components/Alert';
 import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
 import { MintlayerUnit } from '../../models/mintlayerUnits';
 import { ML_ATOMS_PER_COIN, TransactionType } from '../../blue_modules/Mintlayer';
+import { COLORS } from '../../theme/Colors';
 const currency = require('../../blue_modules/currency');
 const BlueElectrum = require('../../blue_modules/BlueElectrum');
 const Bignumber = require('bignumber.js');
@@ -22,7 +23,8 @@ const Confirm = () => {
   const { wallets, fetchAndSaveWalletTransactions, isElectrumDisabled, isTorDisabled, isTestMode } = useContext(BlueStorageContext);
   const [isBiometricUseCapableAndEnabled, setIsBiometricUseCapableAndEnabled] = useState(false);
   const { params } = useRoute();
-  const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt, requireUtxo, tokenInfo, action } = params;
+  const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt, requireUtxo, tokenInfo, action, delegation } = params;
+  console.log(tx);
   const [isLoading, setIsLoading] = useState(false);
   const wallet = wallets.find((wallet) => wallet.getID() === walletID);
   const isMintlayerWallet = wallet.type === MintLayerWallet.type;
@@ -152,8 +154,22 @@ const Confirm = () => {
       <>
         {action === 'CreateDelegation' && (
           <>
-            <View style={styles.valueWrap}>
-              <Text style={[styles.valueValue, stylesHook.valueValue]}>Create delegation</Text>
+            <View style={styles.actionView}>
+              <Text style={[styles.actionText]}>Create delegation</Text>
+            </View>
+          </>
+        )}
+        {action === 'addFunds' && (
+          <>
+            <View style={styles.actionView}>
+              <Text style={styles.actionText}>Add funds to delegation</Text>
+            </View>
+          </>
+        )}
+        {action === 'withdrawFunds' && (
+          <>
+            <View style={styles.actionView}>
+              <Text style={[styles.actionText]}>Withdraw from delegation</Text>
             </View>
           </>
         )}
@@ -169,12 +185,22 @@ const Confirm = () => {
             <Text style={[styles.transactionAmountFiat, stylesHook.transactionAmountFiat]}>{toLocalCurrencyFn(item.value)}</Text>
           </>
         )}
-        <BlueCard>
-          <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.stake.owner_address}</Text>
-          <Text testID="TransactionAddress" style={[styles.transactionDetailsSubtitle, stylesHook.transactionDetailsSubtitle]}>
-            {item.address}
-          </Text>
-        </BlueCard>
+        {delegation && delegation.delegation_id && (
+          <BlueCard>
+            <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.stake.delegation_id}</Text>
+            <Text testID="TransactionAddress" style={[styles.transactionDetailsSubtitle, stylesHook.transactionDetailsSubtitle]}>
+              {delegation.delegation_id}
+            </Text>
+          </BlueCard>
+        )}
+        {item.address && (
+          <BlueCard>
+            <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.stake.owner_address}</Text>
+            <Text testID="TransactionAddress" style={[styles.transactionDetailsSubtitle, stylesHook.transactionDetailsSubtitle]}>
+              {item.address}
+            </Text>
+          </BlueCard>
+        )}
         {item.poolId && (
           <BlueCard>
             <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.stake.pool_id}</Text>
@@ -183,6 +209,16 @@ const Confirm = () => {
             </Text>
           </BlueCard>
         )}
+
+        {action === 'addFunds' && (
+          <BlueCard>
+            <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.stake.new_balance}</Text>
+            <Text testID="TransactionAddress" style={[styles.transactionDetailsSubtitle, stylesHook.transactionDetailsSubtitle]}>
+              {amount + delegation.balance / 1e11} ML
+            </Text>
+          </BlueCard>
+        )}
+
         {recipients.length > 1 && <BlueText style={styles.valueOf}>{loc.formatString(loc._.of, { number: index + 1, total: recipients.length })}</BlueText>}
       </>
     );
@@ -308,6 +344,17 @@ const styles = StyleSheet.create({
     color: '#81868e',
     fontSize: 15,
     fontWeight: 'bold',
+  },
+  actionView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 16,
+  },
+  actionText: {
+    color: COLORS.green,
+    fontSize: 22,
+    fontWeight: '500',
+    alignSelf: 'center',
   },
 });
 

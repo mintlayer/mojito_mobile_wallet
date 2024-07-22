@@ -273,10 +273,12 @@
   "stake": {
     "header": "Stake",
     "pool_id": "Pool ID",
+    "delegation_id": "Delegation ID",
     "add_funds": "Add Funds",
     "withdraw": "Withdraw",
     "add_delegation": "Add new delegation",
-    "owner_address": "Owner address"
+    "owner_address": "Owner address",
+    "new_balance": "New balance after transaction"
   },
   "settings": {
     "about": "About",

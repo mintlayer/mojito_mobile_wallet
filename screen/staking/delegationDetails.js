@@ -46,7 +46,6 @@ const StakingDelegationDetails = () => {
   const [units, setUnits] = useState([MintlayerUnit.ML]);
 
   const [customFee, setCustomFee] = useState(null);
-  const [amountUnit, setAmountUnit] = useState(MintlayerUnit.ML);
   const [amount, setAmount] = useState('');
   const [feeUnit, setFeeUnit] = useState();
   const [addresses, setAddresses] = useState([]);
@@ -57,6 +56,8 @@ const StakingDelegationDetails = () => {
   const [networkTransactionFeesIsLoading, setNetworkTransactionFeesIsLoading] = useState(false);
 
   const [dumb, setDumb] = useState(false);
+
+  const amountUnit = MintlayerUnit.ML;
 
   const balance = utxo ? utxo.reduce((prev, curr) => prev + curr.value, 0) : wallet?.getBalance();
 
@@ -121,7 +122,6 @@ const StakingDelegationDetails = () => {
     // check if we have a suitable wallet
     setUnits([MintlayerUnit.ML]);
     setFeeUnit(wallet.getPreferredBalanceUnit());
-    setAmountUnit(wallet.preferredBalanceUnit); // default for whole screen
 
     // we are ready!
     setIsLoading(false);
@@ -225,28 +225,38 @@ const StakingDelegationDetails = () => {
       return null;
     }
 
-    const utxo = wallet.getUtxo();
-    const address = await wallet.getAddressAsync();
-    const changeAddress = await wallet.getChangeAddressAsync();
+    setIsLoading(true);
 
-    const targets = [
-      {
-        delegationId: delegation.delegation_id,
-        value: BigInt(amount * 100000000000),
-      },
-    ];
+    try {
+      const utxo = wallet.getUtxo();
+      const address = await wallet.getAddressAsync();
+      const changeAddress = await wallet.getChangeAddressAsync();
 
-    const { tx, outputs, fee, requireUtxo } = await wallet.createTransaction(utxo, targets, 100000000, changeAddress);
+      const targets = [
+        {
+          delegationId: delegation.delegation_id,
+          value: BigInt(amount * 100000000000),
+        },
+      ];
 
-    const recipients = outputs.filter(({ address }) => address !== changeAddress);
+      const { tx, outputs, fee, requireUtxo } = await wallet.createTransaction(utxo, targets, 100000000, changeAddress);
 
-    navigation.navigate('Confirm', {
-      fee: new BigNumber(fee).dividedBy(ML_ATOMS_PER_COIN).toNumber(),
-      walletID: wallet.getID(),
-      tx,
-      recipients,
-      requireUtxo,
-    });
+      const recipients = outputs.filter(({ address }) => address !== changeAddress);
+
+      navigation.navigate('Confirm', {
+        action: 'addFunds',
+        fee: new BigNumber(fee).dividedBy(ML_ATOMS_PER_COIN).toNumber(),
+        walletID: wallet.getID(),
+        tx,
+        recipients,
+        requireUtxo,
+        delegation,
+      });
+      setIsLoading(false);
+    } catch (e) {
+      console.log(e);
+      setIsLoading(false);
+    }
   };
 
   const createWithdrawTransaction = async () => {
@@ -254,24 +264,46 @@ const StakingDelegationDetails = () => {
       return null;
     }
 
-    const utxo = wallet.getUtxo();
-    const address = await wallet.getAddressAsync();
-    const changeAddress = await wallet.getChangeAddressAsync();
+    setIsLoading(true);
 
-    const targets = [
-      {
-        delegationId: delegation.delegation_id,
-        value: BigInt(amount * 100000000000),
-      },
-    ];
+    try {
+      const utxo = wallet.getUtxo();
+      const address = await wallet.getAddressAsync();
+      const changeAddress = await wallet.getChangeAddressAsync();
 
-    const { tx, fee } = await wallet.withdrawDelegation({ delegation, amount: BigInt(amount * 100000000000), feeRate: 100000000 });
+      const targets = [
+        {
+          delegationId: delegation.delegation_id,
+          value: BigInt(amount * 100000000000),
+        },
+      ];
 
-    navigation.navigate('Confirm', {
-      fee: new BigNumber(fee).dividedBy(ML_ATOMS_PER_COIN).toNumber(),
-      walletID: wallet.getID(),
-      tx,
-    });
+      const { tx, fee } = await wallet.withdrawDelegation({
+        delegation,
+        amount: BigInt(amount * 100000000000),
+        feeRate: 100000000,
+      });
+
+      const recipients = [
+        {
+          address: delegation.spend_destination,
+          value: BigInt(amount * 100000000000),
+        },
+      ];
+
+      navigation.navigate('Confirm', {
+        delegation,
+        action: 'withdrawFunds',
+        fee: new BigNumber(fee).dividedBy(ML_ATOMS_PER_COIN).toNumber(),
+        walletID: wallet.getID(),
+        recipients,
+        tx,
+      });
+      setIsLoading(false);
+    } catch (e) {
+      console.log(e);
+      setIsLoading(false);
+    }
   };
 
   useRecalcFee({ wallet, networkTransactionFees, feeRate, utxo, addresses, changeAddress, dumb, feePrecalc, setFeePrecalc, balance });
@@ -282,7 +314,7 @@ const StakingDelegationDetails = () => {
         <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
           <View style={styles.addDelegationModal}>
             <View style={styles.addDelegationModalContent}>
-              <Text>Enter amount</Text>
+              <Text>Enter amount you want to delegate</Text>
             </View>
 
             <AmountInputML
@@ -292,6 +324,7 @@ const StakingDelegationDetails = () => {
                 // TODO: implement unit change
               }}
               onChangeText={(text) => {
+                console.log(text);
                 setAmount(text);
               }}
               unit={amountUnit}
@@ -313,7 +346,7 @@ const StakingDelegationDetails = () => {
                 )}
               </TouchableOpacity>
 
-              <View style={styles.createButton}>{isLoading ? <ActivityIndicator /> : <BlueButton onPress={createAddFundsTransaction} title={loc.send.details_next} testID="CreateTransactionButton" />}</View>
+              <View style={styles.createButton}>{isLoading ? <ActivityIndicator /> : <BlueButton disabled={amount < 1} onPress={createAddFundsTransaction} title={loc.send.details_next} testID="CreateTransactionButton" />}</View>
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -327,7 +360,7 @@ const StakingDelegationDetails = () => {
         <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
           <View style={styles.addDelegationModal}>
             <View style={styles.addDelegationModalContent}>
-              <Text>Enter amount</Text>
+              <Text>Enter amount you want to withdraw</Text>
             </View>
             <AmountInputML
               isLoading={isLoading}
@@ -357,15 +390,13 @@ const StakingDelegationDetails = () => {
                 )}
               </TouchableOpacity>
 
-              <View style={styles.createButton}>{isLoading ? <ActivityIndicator /> : <BlueButton onPress={createWithdrawTransaction} title={loc.send.details_next} testID="CreateTransactionButton" />}</View>
+              <View style={styles.createButton}>{isLoading ? <ActivityIndicator /> : <BlueButton disabled={amount > delegation.balance / 1e11 - feePrecalc.current / 1e11} onPress={createWithdrawTransaction} title={loc.send.details_next} testID="CreateTransactionButton" />}</View>
             </View>
           </View>
         </KeyboardAvoidingView>
       </BottomModal>
     );
   };
-
-  console.log('delegation', delegation);
 
   return (
     <View style={[styles.root]} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
@@ -383,13 +414,22 @@ const StakingDelegationDetails = () => {
             <Text>Pool Id:</Text>
             <Text>{delegation.pool_id}</Text>
           </View>
-          <View style={styles.delegationPoolDetailsData}>
+          <View style={styles.delegationPoolSummaryData}>
             <Text>Pool Summary:</Text>
-            <Text>{JSON.stringify(delegation.pool_data)}</Text>
+
+            <View>
+              <Text>Cost per block: {delegation.pool_data.cost_per_block.decimal} ML</Text>
+            </View>
+            <View>
+              <Text>Margin ratio: {delegation.pool_data.margin_ratio_per_thousand}</Text>
+            </View>
+            <View>
+              <Text>Pool pledge: {delegation.pool_data.staker_balance.decimal} ML</Text>
+            </View>
           </View>
 
           <View style={styles.balance}>
-            <Text style={styles.balanceLabel}>Balance:</Text>
+            <Text style={styles.balanceLabel}>Your balance:</Text>
             <Text style={styles.balanceValue}>{delegation.balance / 1e11} ML</Text>
           </View>
         </View>

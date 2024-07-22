@@ -148,4 +148,8 @@ export const stakingStyles = {
   delegationPoolDetailsData: {
     paddingTop: 10,
   },
+
+  delegationPoolSummaryData: {
+    paddingTop: 10,
+  },
 };
