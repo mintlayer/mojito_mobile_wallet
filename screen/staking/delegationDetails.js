@@ -253,6 +253,7 @@ const StakingDelegationDetails = () => {
         delegation,
       });
       setIsLoading(false);
+      setAddFundsModalVisible(false);
     } catch (e) {
       console.log(e);
       setIsLoading(false);
@@ -300,6 +301,7 @@ const StakingDelegationDetails = () => {
         tx,
       });
       setIsLoading(false);
+      setWithdrawModalVisible(false);
     } catch (e) {
       console.log(e);
       setIsLoading(false);
@@ -416,6 +418,18 @@ const StakingDelegationDetails = () => {
           </View>
           <View style={styles.delegationPoolSummaryData}>
             <Text>Pool Summary:</Text>
+
+            {delegation?.pool_data?.staker_balance?.decimal > 1 ? (
+              <View>
+                <Text>Pool status: Active</Text>
+              </View>
+            ) : (
+              <View>
+                <View>
+                  <Text>Pool status: Decommissioned</Text>
+                </View>
+              </View>
+            )}
 
             <View>
               <Text>Cost per block: {delegation.pool_data.cost_per_block.decimal} ML</Text>

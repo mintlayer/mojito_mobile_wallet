@@ -51,7 +51,6 @@ const WalletTransactionsHeader = () => {
             saveToDisk();
           })
         }
-        navigation={navigate}
       />
     </View>
   );

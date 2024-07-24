@@ -163,7 +163,7 @@ const Staking = () => {
       navigation.navigate('Delegation', { delegation: item, walletID: wallet.getID() });
     };
 
-    const isDecommissioned = item.pool_data.staker_balance.decimal < 1;
+    const isDecommissioned = item?.pool_data?.staker_balance?.decimal < 1;
 
     // make style for icon
     const iconStyle = {
@@ -203,11 +203,11 @@ const Staking = () => {
             }
             contentStyle={styles.contentStyle}
             subtitleNumberOfLines={2}
-            rightSubtitle={coin}
+            // rightSubtitle={coin}
             // rightSubtitle={`${dayjs(item.creation_time * 1000).format('YYYY-MM-DD HH:mm')}`}
             Component={View}
             chevron={false}
-            rightTitle={`${item.balance / 1e11} ML`}
+            rightTitle={`${item.balance / 1e11} ${coin}`}
             rightContentStyle={styles.rightContentStyle}
             rightTitleStyle={[styles.rowTitleStyle, stylesHook.rowTitle]}
             containerStyle={containerStyle}

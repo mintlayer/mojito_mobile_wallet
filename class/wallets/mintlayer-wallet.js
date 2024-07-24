@@ -570,8 +570,6 @@ export class MintLayerWallet extends AbstractHDWallet {
       return acc;
     }, {});
 
-    console.log('poolsData', poolsData);
-
     const mergedDelegations = delegations.map((delegation, index) => {
       return {
         ...delegation,
