@@ -10,6 +10,9 @@ const MINTLAYER_ENDPOINTS = {
   GET_DELEGATION: '/delegation/:delegation',
   GET_CHAIN_TIP: '/chain/tip',
   GET_TOKEN_DATA: '/token/:token',
+  GET_BLOCK_HASH: '/chain/:height',
+  GET_BLOCK_DATA: '/block/:hash',
+  GET_POOL_DATA: '/pool/:pool_id',
 };
 
 const ML_NETWORK_TYPES = {
@@ -100,8 +103,41 @@ const getWalletUtxos = (addresses) => {
   return Promise.all(utxosPromises);
 };
 
-const getChainTip = async () => {
-  return tryServers(MINTLAYER_ENDPOINTS.GET_CHAIN_TIP);
+const getAddressDelegations = (address, network) => {
+  const endpoint = MINTLAYER_ENDPOINTS.GET_ADDRESS_DELEGATIONS.replace(':address', address);
+  return tryServers({ endpoint, network });
+};
+
+const getDelegation = (delegation, network) => {
+  const endpoint = MINTLAYER_ENDPOINTS.GET_DELEGATION.replace(':delegation', delegation);
+  return tryServers({ endpoint, network });
+};
+
+const getBlockDataByHeight = (height, network) => {
+  const endpoint = MINTLAYER_ENDPOINTS.GET_BLOCK_HASH.replace(':height', height);
+  return tryServers({ endpoint, network })
+    .then(JSON.parse)
+    .then((response) => {
+      const endpoint = MINTLAYER_ENDPOINTS.GET_BLOCK_DATA.replace(':hash', response);
+      return tryServers({ endpoint, network });
+    });
+};
+
+const getWalletDelegations = (addresses, network) => {
+  const delegationsPromises = addresses.map((address) => getAddressDelegations(address, network));
+  return Promise.all(delegationsPromises).then((results) => results.flatMap(JSON.parse));
+};
+const getDelegationDetails = (delegations, network) => {
+  const delegationsPromises = delegations.map((delegation) => getDelegation(delegation, network));
+  return Promise.all(delegationsPromises).then((results) => results.flatMap(JSON.parse));
+};
+const getBlocksData = (heights, network) => {
+  const heightsPromises = heights.map((height) => getBlockDataByHeight(height, network));
+  return Promise.all(heightsPromises).then((results) => results.flatMap(JSON.parse));
+};
+
+const getChainTip = async (network) => {
+  return tryServers({ endpoint: MINTLAYER_ENDPOINTS.GET_CHAIN_TIP, network });
 };
 
 const getFeesEstimates = async (network) => {
@@ -117,4 +153,14 @@ const getTokenData = async (token, network) => {
   return tryServers({ endpoint, network });
 };
 
-export { TransactionType, getAddressData, getTransactionData, getAddressUtxo, getWalletUtxos, broadcastTransaction, getFeesEstimates, getChainTip, getTokenData, MINTLAYER_ENDPOINTS, ML_NETWORK_TYPES, ML_ATOMS_PER_COIN };
+const getPool = async (pool_id, network) => {
+  const endpoint = MINTLAYER_ENDPOINTS.GET_POOL_DATA.replace(':pool_id', pool_id);
+  return tryServers({ endpoint, network });
+};
+
+const getPoolsData = async (pool_ids, network) => {
+  const poolsPromises = pool_ids.map((pool_id) => getPool(pool_id, network));
+  return Promise.all(poolsPromises).then((results) => results.flatMap(JSON.parse));
+};
+
+export { TransactionType, getAddressData, getTransactionData, getAddressUtxo, getWalletUtxos, broadcastTransaction, getFeesEstimates, getChainTip, getTokenData, getWalletDelegations, getBlocksData, getDelegationDetails, getPoolsData, MINTLAYER_ENDPOINTS, ML_NETWORK_TYPES, ML_ATOMS_PER_COIN };

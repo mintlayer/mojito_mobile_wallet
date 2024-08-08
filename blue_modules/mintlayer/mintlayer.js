@@ -29,6 +29,9 @@ const wasmMethods = {
   encode_output_lock_then_transfer: 'encode_output_lock_then_transfer',
   staking_pool_spend_maturity_block_count: 'staking_pool_spend_maturity_block_count',
   encode_lock_for_block_count: 'encode_lock_for_block_count',
+  encode_output_create_delegation: 'encode_output_create_delegation',
+  encode_output_delegate_staking: 'encode_output_delegate_staking',
+  encode_input_for_withdraw_from_delegation: 'encode_input_for_withdraw_from_delegation',
 };
 
 export const getPrivateKeyFromMnemonic = async (mnemonic, networkType) => {
@@ -69,7 +72,7 @@ export const getTxInput = async (outpointSourceId, index) => {
   return webviewEventBus.exec(wasmMethods.encode_input_for_utxo, [outpointSourceId, index]);
 };
 
-export const getOutputs = async ({ amount, address, networkType, type = 'Transfer', lock, chainTip, tokenId }) => {
+export const getOutputs = async ({ amount, address, networkType, type = 'Transfer', lock, chainTip, tokenId, poolId, delegationId }) => {
   if (type === 'LockThenTransfer' && !lock) {
     throw new Error('LockThenTransfer requires a lock');
   }
@@ -94,11 +97,34 @@ export const getOutputs = async ({ amount, address, networkType, type = 'Transfe
     return webviewEventBus.exec(wasmMethods.encode_output_lock_then_transfer, [amount, address, lockEncoded, networkIndex]);
   }
   if (type === 'spendFromDelegation') {
-    const chainTip = await Mintlayer.getChainTip();
-    const stakingMaturity = await getStakingMaturity(JSON.parse(chainTip).block_height, networkType);
-    const encodedLockForBlock = await webviewEventBus.exec(wasmMethods.encode_lock_for_block_count, [stakingMaturity]);
+    const chainTip = await Mintlayer.getChainTip(networkType);
+    const blockHeight = JSON.parse(chainTip).block_height;
+    const stakingMaturity = await webviewEventBus.exec(wasmMethods.staking_pool_spend_maturity_block_count, [BigInt(blockHeight), networkIndex]);
+    const encodedLockForBlock = await webviewEventBus.exec(wasmMethods.encode_lock_for_block_count, [BigInt(stakingMaturity)]);
     return webviewEventBus.exec(wasmMethods.encode_output_lock_then_transfer, [amount, address, encodedLockForBlock, networkIndex]);
   }
+  if (type === 'CreateDelegationId') {
+    if (!poolId) {
+      throw new Error('Pool ID is required for CreateDelegationId');
+    }
+    return webviewEventBus.exec(wasmMethods.encode_output_create_delegation, [poolId, address, networkIndex]);
+  }
+  if (type === 'DelegateStaking') {
+    if (!delegationId) {
+      throw new Error('Delegation ID is required for CreateDelegationId');
+    }
+    return webviewEventBus.exec(wasmMethods.encode_output_delegate_staking, [amount, delegationId, networkIndex]);
+  }
+};
+
+export const getDelegationOutput = async ({ poolId, address, networkType }) => {
+  const networkIndex = NETWORKS[networkType];
+  return webviewEventBus.exec(wasmMethods.encode_output_create_delegation, [poolId, address, networkIndex]);
+};
+
+export const getStakingOutput = async ({ amount, delegationId, networkType }) => {
+  const networkIndex = NETWORKS[networkType];
+  return webviewEventBus.exec(wasmMethods.encode_output_delegate_staking, [amount, delegationId, networkIndex]);
 };
 
 export const getStakingMaturity = async (blockHeight, networkType) => {
@@ -131,4 +157,9 @@ export const getEncodedSignedTransaction = async (transaction, witness) => {
 export const getEstimatetransactionSize = async (inputs, inputAddresses, outputs, networkType) => {
   const networkIndex = NETWORKS[networkType];
   return webviewEventBus.exec(wasmMethods.estimate_transaction_size, [inputs, inputAddresses, outputs, networkIndex]);
+};
+
+export const getAccountOutpointInput = async (delegationId, amount, nonce, networkType) => {
+  const networkIndex = NETWORKS[networkType];
+  return webviewEventBus.exec(wasmMethods.encode_input_for_withdraw_from_delegation, [delegationId, amount, BigInt(Number(nonce)), networkIndex]);
 };

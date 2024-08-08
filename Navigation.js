@@ -101,6 +101,11 @@ import LdkViewLogs from './screen/wallets/ldkViewLogs';
 import Introduction from './screen/introduction';
 import NativeAssets from './screen/NativeAssets';
 
+import Staking from './screen/staking/staking';
+import StakingDelegationDetails from './screen/staking/delegationDetails';
+import StakingConfirm from './screen/staking/confirm';
+import StakingSuccess from './screen/staking/success';
+
 import { sendBottom, settingBottom, walletBottom, create_wallet, ic_back_black } from './theme/Images';
 import { COLORS } from './theme/Colors';
 import { getFlage } from './store/asyncStorage';
@@ -211,6 +216,20 @@ const AddWalletRoot = () => {
       <AddWalletStack.Screen name="WalletsAddMultisigStep2" component={WalletsAddMultisigStep2} options={WalletsAddMultisigStep2.navigationOptions(theme)} />
       <AddWalletStack.Screen name="WalletsAddMultisigHelp" component={WalletsAddMultisigHelp} options={WalletsAddMultisigHelp.navigationOptions(theme)} />
     </AddWalletStack.Navigator>
+  );
+};
+
+const StakingStack = createNativeStackNavigator();
+
+const StakingRoot = () => {
+  const theme = useTheme();
+
+  return (
+    <StakingStack.Navigator screenOptions={{ headerHideShadow: true }}>
+      <StakingStack.Screen name="Staking" component={Staking} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Delegation" component={StakingDelegationDetails} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Confirm" component={StakingConfirm} options={Staking.navigationOptions(theme)} />
+    </StakingStack.Navigator>
   );
 };
 
@@ -559,6 +578,7 @@ function MlWalletRoot() {
       <TopTab.Navigator tabBarOptions={tabBarOptions}>
         <TopTab.Screen name="Transactions" component={MLWalletTransactions} initialParams={{ walletID }} />
         <TopTab.Screen name="Tokens" component={MLWalletTokens} initialParams={{ walletID }} />
+        <TopTab.Screen name="Stake ML" component={Staking} initialParams={{ walletID }} />
       </TopTab.Navigator>
     </View>
   );
@@ -606,6 +626,10 @@ const Navigation = () => {
       <RootStack.Screen name="RBFBumpFee" component={RBFBumpFee} options={RBFBumpFee.navigationOptions(theme)} />
       <RootStack.Screen name="RBFCancel" component={RBFCancel} options={RBFCancel.navigationOptions(theme)} />
 
+      <StakingStack.Screen name="Delegation" component={StakingDelegationDetails} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Confirm" component={StakingConfirm} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Success" component={StakingSuccess} options={{ headerShown: false, gestureEnabled: false }} />
+
       <RootStack.Screen
         name="ScanQRCodeRoot"
         component={ScanQRCodeRoot}
@@ -614,6 +638,8 @@ const Navigation = () => {
           stackPresentation: isDesktop ? 'containedModal' : 'fullScreenModal',
         }}
       />
+
+      <RootStack.Screen name="StakingRoot" component={StakingRoot} options={NavigationDefaultOptions} />
     </RootStack.Navigator>
   );
 };

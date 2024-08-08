@@ -129,6 +129,7 @@ const WalletsList = () => {
       }
       return null;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const verifyBalance = () => {

@@ -498,6 +498,10 @@ const WalletTransactions = () => {
     }
   };
 
+  const stakeButtonLongPress = () => {
+    //
+  };
+
   const navigateToViewEditCosigners = () => {
     navigate('ViewEditMultisigCosignersRoot', {
       screen: 'ViewEditMultisigCosigners',
