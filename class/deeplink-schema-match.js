@@ -12,7 +12,7 @@ class DeeplinkSchemaMatch {
   static hasSchema(schemaString) {
     if (typeof schemaString !== 'string' || schemaString.length <= 0) return false;
     const lowercaseString = schemaString.trim().toLowerCase();
-    return lowercaseString.startsWith('bitcoin:') || lowercaseString.startsWith('lightning:') || lowercaseString.startsWith('blue:') || lowercaseString.startsWith('bluewallet:') || lowercaseString.startsWith('lapp:') || lowercaseString.startsWith('aopp:');
+    return lowercaseString.startsWith('bitcoin:') || lowercaseString.startsWith('lightning:') || lowercaseString.startsWith('blue:') || lowercaseString.startsWith('bluewallet:') || lowercaseString.startsWith('mojitowallet:') || lowercaseString.startsWith('lapp:') || lowercaseString.startsWith('aopp:');
   }
 
   /**
@@ -31,11 +31,13 @@ class DeeplinkSchemaMatch {
       return;
     }
 
-    if (event.url.toLowerCase().startsWith('bluewallet:bitcoin:') || event.url.toLowerCase().startsWith('bluewallet:lightning:')) {
-      event.url = event.url.substring(11);
-    } else if (event.url.toLocaleLowerCase().startsWith('bluewallet://widget?action=')) {
-      event.url = event.url.substring('bluewallet://'.length);
+    if (event.url.toLowerCase().startsWith('mojitowallet:bitcoin:') || event.url.toLowerCase().startsWith('mojitowallet:lightning:')) {
+      event.url = event.url.substring(13);
+    } else if (event.url.toLocaleLowerCase().startsWith('mojitowallet://widget?action=')) {
+      event.url = event.url.substring('mojitowallet://'.length);
     }
+
+    console.log('DeeplinkSchemaMatch.navigationRouteFor', event.url);
 
     if (DeeplinkSchemaMatch.isWidgetAction(event.url)) {
       if (context.wallets.length >= 0) {
@@ -79,6 +81,20 @@ class DeeplinkSchemaMatch {
           }
         }
       }
+    } else if (DeeplinkSchemaMatch.isChallengeAction(event.url)) {
+      console.log('SignChallengeRoot');
+      const urlObject = url.parse(event.url, true); // eslint-disable-line node/no-deprecated-api
+      console.log('urlObject', urlObject);
+      completionHandler([
+        'SignChallengeRoot',
+        {
+          screen: 'SignChallenge',
+          params: {
+            challengeBase64: urlObject.query.challengeBase64,
+            callback: urlObject.query.callback,
+          },
+        },
+      ]);
     } else if (DeeplinkSchemaMatch.isPossiblySignedPSBTFile(event.url)) {
       RNFS.readFile(decodeURI(event.url))
         .then((file) => {
@@ -381,6 +397,11 @@ class DeeplinkSchemaMatch {
 
   static isWidgetAction(text) {
     return text.startsWith('widget?action=');
+  }
+
+  static isChallengeAction(text) {
+    console.log('text', text);
+    return text.startsWith('mojitowallet://signchallenge?');
   }
 
   static isSafelloRedirect(event) {

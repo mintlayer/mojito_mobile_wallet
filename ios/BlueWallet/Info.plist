@@ -108,6 +108,7 @@
 			<array>
 				<string>bitcoin</string>
 				<string>lightning</string>
+				<string>mojitowallet</string>
 				<string>bluewallet</string>
 				<string>lapp</string>
 				<string>blue</string>

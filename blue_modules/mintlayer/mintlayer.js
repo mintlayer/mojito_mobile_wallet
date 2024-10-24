@@ -32,6 +32,8 @@ const wasmMethods = {
   encode_output_create_delegation: 'encode_output_create_delegation',
   encode_output_delegate_staking: 'encode_output_delegate_staking',
   encode_input_for_withdraw_from_delegation: 'encode_input_for_withdraw_from_delegation',
+  sign_challenge: 'sign_challenge',
+  verify_challenge: 'verify_challenge',
 };
 
 export const getPrivateKeyFromMnemonic = async (mnemonic, networkType) => {
@@ -162,4 +164,8 @@ export const getEstimatetransactionSize = async (inputs, inputAddresses, outputs
 export const getAccountOutpointInput = async (delegationId, amount, nonce, networkType) => {
   const networkIndex = NETWORKS[networkType];
   return webviewEventBus.exec(wasmMethods.encode_input_for_withdraw_from_delegation, [delegationId, amount, BigInt(Number(nonce)), networkIndex]);
+};
+
+export const signChallenge = async (privateKey, challenge) => {
+  return webviewEventBus.exec(wasmMethods.sign_challenge, [privateKey, challenge]);
 };

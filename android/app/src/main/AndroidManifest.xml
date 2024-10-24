@@ -87,6 +87,7 @@
           <category android:name="android.intent.category.DEFAULT" />
           <data android:scheme="bitcoin" />
           <data android:scheme="lightning" />
+          <data android:scheme="mojitowallet" />
           <data android:scheme="bluewallet" />
           <data android:scheme="lapp" />
           <data android:scheme="blue" />

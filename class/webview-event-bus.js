@@ -12,6 +12,7 @@ class WebViewEventBus {
     return new Promise((resolve, reject) => {
       this._callbackId = String(Number(this._callbackId) + 1);
       this._pending[this._callbackId] = { resolve, reject };
+      console.log('exec', method);
       this._webViewRef.current.postMessage(
         JSON.stringify({
           callbackId: this._callbackId,
@@ -32,6 +33,7 @@ class WebViewEventBus {
 
   onMessage(e) {
     const data = JSON.parse(e.nativeEvent.data);
+    console.log('onMessage', data);
     const { type, error, result, callbackId, method } = data;
 
     const defer = this._pending[callbackId];
