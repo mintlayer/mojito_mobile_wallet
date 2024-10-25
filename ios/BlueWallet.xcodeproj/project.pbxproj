@@ -20,7 +20,7 @@
 		782F075B5DD048449E2DECE9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D9B3A7B2CB4255876B67AF /* libz.tbd */; };
 		84E05A842721191B001A0D3A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84E05A832721191B001A0D3A /* Settings.bundle */; };
 		F7214470B4769F079E848616 /* libPods-BlueWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AC45F56E191B4558282FE72 /* libPods-BlueWallet.a */; };
-		BA84154E5D224AE297DCF4A3 /* wasm_wrappers_bg.wasm in Resources */ = {isa = PBXBuildFile; fileRef = AF9E9A5ABDEE4146B0BEEBBE /* wasm_wrappers_bg.wasm */; };
+		4AF8184AE84B4C549990AA9B /* wasm_wrappers_bg.wasm in Resources */ = {isa = PBXBuildFile; fileRef = C697EC417529416EABA33E15 /* wasm_wrappers_bg.wasm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -231,7 +231,7 @@
 		FC63C7054F1C4FDFB7A830E5 /* libRCTPrivacySnapshot.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTPrivacySnapshot.a; sourceTree = "<group>"; };
 		FC98DC24A81A463AB8B2E6B1 /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
 		FD7977067E1A496F94D8B1B7 /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
-		AF9E9A5ABDEE4146B0BEEBBE /* wasm_wrappers_bg.wasm */ = {isa = PBXFileReference; name = "wasm_wrappers_bg.wasm"; path = "../assets/mintlayer/wasm_wrappers_bg.wasm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C697EC417529416EABA33E15 /* wasm_wrappers_bg.wasm */ = {isa = PBXFileReference; name = "wasm_wrappers_bg.wasm"; path = "../assets/mintlayer/wasm_wrappers_bg.wasm"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -341,7 +341,7 @@
 				4D746BBE67E84684848246E2 /* SimpleLineIcons.ttf */,
 				47C436B1EF23484B8181DBEA /* Zocial.ttf */,
 				DBB3EE9542AA4406B5711FB9 /* Fontisto.ttf */,
-				AF9E9A5ABDEE4146B0BEEBBE /* wasm_wrappers_bg.wasm */,
+				C697EC417529416EABA33E15 /* wasm_wrappers_bg.wasm */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -660,7 +660,7 @@
 				6DF25A9F249DB97E001D06F5 /* LaunchScreen.storyboard in Resources */,
 				84E05A842721191B001A0D3A /* Settings.bundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				BA84154E5D224AE297DCF4A3 /* wasm_wrappers_bg.wasm in Resources */,
+				4AF8184AE84B4C549990AA9B /* wasm_wrappers_bg.wasm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
