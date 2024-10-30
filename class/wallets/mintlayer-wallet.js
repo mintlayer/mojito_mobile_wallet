@@ -895,6 +895,13 @@ export class MintLayerWallet extends AbstractHDWallet {
     return { tx: transactionHex, fee };
   }
 
+  async signChallenge(challenge, address) {
+    const walletPrivKeys = await this._getWalletPrivKeysList();
+    const privKey = walletPrivKeys.mlReceivingPrivKeys[address];
+    const signature = await ML.signChallenge(privKey, challenge);
+    return { signature };
+  }
+
   isAddressValid(address) {
     return true;
   }
