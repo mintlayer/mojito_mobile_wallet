@@ -59,7 +59,7 @@ const SignChallenge = ({ route, navigation }) => {
   useEffect(() => {
     handleSign();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [challengeBase64, address]);
 
   const wallet = mlWallets[selectedWallet];
 
@@ -77,7 +77,18 @@ const SignChallenge = ({ route, navigation }) => {
     // send signed message to callback
     console.log('signature', signature);
     // open url in external browser
-    Linking.openURL(callback + '?signature=' + signature + '&address=' + selectedAddress + '&challengeBase64=' + challengeBase64);
+    console.log('callback', callback);
+
+    if (callback.includes('t.me') && callback.endsWith('startapp=')) {
+      const link = decodeURIComponent(callback) + Buffer.from(JSON.stringify({ signature, address: selectedAddress, challengeBase64 })).toString('base64');
+      console.log('link', link);
+      Linking.openURL(link);
+    } else {
+      const concat = callback.includes('?') ? '&' : '?';
+      const link = decodeURIComponent(callback) + concat + 'signature=' + signature + '&address=' + selectedAddress + '&challengeBase64=' + challengeBase64;
+      console.log('link', link);
+      Linking.openURL(link);
+    }
   };
 
   useEffect(() => {

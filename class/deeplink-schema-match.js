@@ -12,7 +12,7 @@ class DeeplinkSchemaMatch {
   static hasSchema(schemaString) {
     if (typeof schemaString !== 'string' || schemaString.length <= 0) return false;
     const lowercaseString = schemaString.trim().toLowerCase();
-    return lowercaseString.startsWith('bitcoin:') || lowercaseString.startsWith('lightning:') || lowercaseString.startsWith('blue:') || lowercaseString.startsWith('bluewallet:') || lowercaseString.startsWith('mojitowallet:') || lowercaseString.startsWith('lapp:') || lowercaseString.startsWith('aopp:');
+    return lowercaseString.startsWith('https:') || lowercaseString.startsWith('bitcoin:') || lowercaseString.startsWith('lightning:') || lowercaseString.startsWith('blue:') || lowercaseString.startsWith('bluewallet:') || lowercaseString.startsWith('mojitowallet:') || lowercaseString.startsWith('lapp:') || lowercaseString.startsWith('aopp:');
   }
 
   /**
@@ -30,6 +30,8 @@ class DeeplinkSchemaMatch {
     if (typeof event.url !== 'string') {
       return;
     }
+
+    console.log('event.url', event.url);
 
     if (event.url.toLowerCase().startsWith('mojitowallet:bitcoin:') || event.url.toLowerCase().startsWith('mojitowallet:lightning:')) {
       event.url = event.url.substring(13);
@@ -401,7 +403,7 @@ class DeeplinkSchemaMatch {
 
   static isChallengeAction(text) {
     console.log('text', text);
-    return text.startsWith('mojitowallet://signchallenge?');
+    return text.includes('signchallenge?');
   }
 
   static isSafelloRedirect(event) {
