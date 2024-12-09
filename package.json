@@ -141,7 +141,7 @@
     "@react-navigation/material-top-tabs": "^5.3.19",
     "@react-navigation/native": "5.9.4",
     "@react-navigation/stack": "^5.14.9",
-    "@remobile/react-native-qrcode-local-image": "https://github.com/BlueWallet/react-native-qrcode-local-image",
+    "@remobile/react-native-qrcode-local-image": "https://github.com/remobile/react-native-qrcode-local-image#31b0113110fbafcf5a5f3ca4183a563550f5c352",
     "@shopify/react-native-skia": "0.1.136",
     "aez": "1.0.1",
     "assert": "2.0.0",
