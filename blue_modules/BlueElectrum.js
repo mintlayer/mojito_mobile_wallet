@@ -50,12 +50,12 @@ const storageKey = 'ELECTRUM_PEERS';
 const defaultPeer = { host: 'vmd84592.contaboserver.net', ssl: '50002' };
 const defaultTestnetPeer = { host: 'testnet.qtornado.com', ssl: '51002' };
 const hardcodedPeers = [
-  { host: 'electrum.blockstream.info', ssl: '50002' },
+  // { host: 'electrum.blockstream.info', ssl: '50002' },
   // { host: 'electrum5.hodlister.co', ssl: '50002' },
   // { host: 'node.degga.net', ssl: '50002' },
   // { host: 'horsey.cryptocowboys.net', ssl: '50002' },
   // { host: 'ca.poiuty.com', ssl: '50002' },
-  // { host: 'electrum.bitaroo.net', ssl: '50002' },
+  { host: 'electrum.bitaroo.net', ssl: '50002' },
   // { host: 'btc.ocf.sh', ssl: '50002' }, // connection lost
   // { host: 'electrumx.erbium.eu', ssl: '50002' },
   // { host: 'electrum.kendigisland.xyz', ssl: '50002' },
