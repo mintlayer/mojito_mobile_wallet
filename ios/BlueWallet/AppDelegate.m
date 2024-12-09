@@ -117,7 +117,8 @@ static void InitializeFlipper(UIApplication *application) {
 {
   NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.io.bluewallet.bluewallet"];
   [defaults setValue:@{@"activityType": userActivity.activityType, @"userInfo": userActivity.userInfo} forKey:@"onUserActivityOpen"];
-  if (userActivity.activityType == NSUserActivityTypeBrowsingWeb) {
+  if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+    NSLog(@"Passing URL to React Native: %@", userActivity.webpageURL.absoluteString);
     return [RCTLinkingManager application:application
                      continueUserActivity:userActivity
                        restorationHandler:restorationHandler];
