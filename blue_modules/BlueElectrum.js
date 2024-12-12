@@ -3,7 +3,6 @@ import { Alert } from 'react-native';
 import { LegacyWallet, SegwitBech32Wallet, SegwitP2SHWallet } from '../class';
 import DefaultPreference from 'react-native-default-preference';
 import loc from '../loc';
-import WidgetCommunication from './WidgetCommunication';
 import { isTorDaemonDisabled } from './environment';
 import alert from '../components/Alert';
 const bitcoin = require('bitcoinjs-lib');
@@ -125,8 +124,6 @@ async function connectMain(isTest) {
       await DefaultPreference.set(ELECTRUM_TCP_PORT, usingPeer.tcp);
       await DefaultPreference.set(ELECTRUM_SSL_PORT, usingPeer.ssl);
     }
-
-    WidgetCommunication.reloadAllTimelines();
   } catch (e) {
     // Must be running on Android
     console.log(e);

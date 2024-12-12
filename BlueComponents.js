@@ -23,7 +23,7 @@ if (aspectRatio > 1.6) {
   isIpad = true;
 }
 // eslint-disable-next-line no-unused-expressions
-Platform.OS === 'android' ? (ActivityIndicator.defaultProps.color = PlatformColor('?attr/colorControlActivated')) : null;
+const ActivityIndicatorColor = Platform.OS === 'android' ? PlatformColor('?attr/colorControlActivated') : null;
 
 export const BlueButton = (props) => {
   const { colors } = useTheme();
@@ -456,7 +456,7 @@ export const BlueListItem = React.memo((props) => {
         </ListItem.Content>
       )}
       {props.isLoading ? (
-        <ActivityIndicator />
+        <ActivityIndicator color={ActivityIndicatorColor} />
       ) : (
         <>
           {props.chevron && <ListItem.Chevron iconStyle={{ transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }] }} />}
@@ -751,7 +751,7 @@ export const BlueDoneAndDismissKeyboardInputAccessory = (props) => {
 export const BlueLoading = (props) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center' }} {...props}>
-      <ActivityIndicator />
+      <ActivityIndicator color={ActivityIndicatorColor} />
     </View>
   );
 };

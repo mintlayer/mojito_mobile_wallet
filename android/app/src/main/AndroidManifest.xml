@@ -1,7 +1,6 @@
-
-  <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  android:installLocation="auto"
-  package="com.mojitowallet">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
@@ -16,6 +15,7 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:extractNativeLibs="true"
+      android:largeHeap="true"
       android:requestLegacyExternalStorage="true"
       android:usesCleartextTraffic="true"
       android:supportsRtl="true"
@@ -55,42 +55,27 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".SplashActivity"
-            android:label="@string/app_name"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
-            </intent-filter>
-        </activity>
-
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
-          android:exported="true"
-        android:launchMode="singleInstance"
+        android:exported="true"
+        android:launchMode="singleTop"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:windowSoftInputMode="adjustResize">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-        <!-- Intent-filter for App Links -->
-        <intent-filter android:autoVerify="true">
-          <action android:name="android.intent.action.VIEW" />
-          <category android:name="android.intent.category.DEFAULT" />
-          <category android:name="android.intent.category.BROWSABLE" />
-          <data android:scheme="https" android:host="wallet-meta.mintlayer.org" android:pathPrefix="/app" />
-        </intent-filter>
-        <!-- Intent-filter for non-standard links -->
-        <intent-filter>
+          <!-- Main launcher intent filter -->
+          <intent-filter>
+              <action android:name="android.intent.action.MAIN" />
+              <category android:name="android.intent.category.LAUNCHER" />
+          </intent-filter>
+          <!-- Intent-filter for App Links -->
+          <intent-filter android:autoVerify="true">
+              <action android:name="android.intent.action.VIEW" />
+              <category android:name="android.intent.category.DEFAULT" />
+              <category android:name="android.intent.category.BROWSABLE" />
+              <data android:scheme="https" android:host="wallet-meta.mintlayer.org" android:pathPrefix="/app" />
+          </intent-filter>
+          <!-- Intent-filter for non-standard links -->
+          <intent-filter>
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.DEFAULT" />
           <category android:name="android.intent.category.BROWSABLE" />

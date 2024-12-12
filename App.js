@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler'; // should be on top
 import React, { useContext, useEffect, useRef } from 'react';
-import { AppState, DeviceEventEmitter, NativeModules, NativeEventEmitter, Linking, Platform, StyleSheet, UIManager, useColorScheme, View, StatusBar } from 'react-native';
+import { AppState, Text, DeviceEventEmitter, NativeModules, NativeEventEmitter, Linking, Platform, StyleSheet, UIManager, useColorScheme, View, StatusBar } from 'react-native';
 import { NavigationContainer, CommonActions } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { navigationRef } from './NavigationService';
@@ -19,7 +19,6 @@ import WatchConnectivity from './WatchConnectivity';
 import DeviceQuickActions from './class/quick-actions';
 import Notifications from './blue_modules/notifications';
 import Biometric from './class/biometrics';
-import WidgetCommunication from './blue_modules/WidgetCommunication';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import ActionSheet from './screen/ActionSheet';
 import HandoffComponent from './components/handoff';
@@ -93,12 +92,16 @@ const App = () => {
     if (walletsInitialized) {
       addListeners();
     }
+    const subscription = Linking.addListener('url', handleOpenURL);
+
+    return () => {
+      subscription.remove();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletsInitialized]);
 
   useEffect(() => {
     return () => {
-      Linking.removeEventListener('url', handleOpenURL);
       AppState.removeEventListener('change', handleAppStateChange);
       eventEmitter.removeAllListeners('onNotificationReceived');
       eventEmitter.removeAllListeners('openSettings');
@@ -120,7 +123,6 @@ const App = () => {
   }, [colorScheme]);
 
   const addListeners = () => {
-    Linking.addEventListener('url', handleOpenURL);
     AppState.addEventListener('change', handleAppStateChange);
     DeviceEventEmitter.addListener('quickActionShortcut', walletQuickActions);
     DeviceQuickActions.popInitialAction().then(popInitialAction);
@@ -362,13 +364,12 @@ const App = () => {
         {/* <NavigationContainer ref={navigationRef} theme={colorScheme === 'dark' ? BlueDarkTheme : BlueDefaultTheme}> */}
         <NavigationContainer ref={navigationRef} theme={BlueDefaultTheme}>
           <InitRoot />
-          <Notifications onProcessNotifications={processPushNotifications} />
+      {/*    <Notifications onProcessNotifications={processPushNotifications} />*/}
         </NavigationContainer>
         {walletsInitialized && !isDesktop && <WatchConnectivity />}
       </View>
       <DeviceQuickActions />
       <Biometric />
-      <WidgetCommunication />
       <Privacy />
     </SafeAreaProvider>
   );

@@ -4,7 +4,6 @@ import * as RNLocalize from 'react-native-localize';
 import BigNumber from 'bignumber.js';
 import { FiatUnit, getFiatRate } from '../models/fiatUnit';
 import * as ExchangeRates from '../models/exchangeRates';
-import WidgetCommunication from './WidgetCommunication';
 import { ML_ATOMS_PER_COIN } from './Mintlayer';
 
 const PREFERRED_CURRENCY_STORAGE_KEY = 'preferredCurrency';
@@ -28,7 +27,6 @@ async function setPrefferedCurrency(item) {
   await DefaultPreference.setName('group.com.mojitowallet');
   await DefaultPreference.set('preferredCurrency', item.endPointKey);
   await DefaultPreference.set('preferredCurrencyLocale', item.locale.replace('-', '_'));
-  WidgetCommunication.reloadAllTimelines();
 }
 
 async function getPreferredCurrency() {

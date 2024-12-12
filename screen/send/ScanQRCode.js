@@ -1,6 +1,7 @@
+// TODO: Refactor this file
 import React, { useState } from 'react';
 import { Image, View, TouchableOpacity, StatusBar, Platform, StyleSheet, TextInput, Alert } from 'react-native';
-import { RNCamera } from 'react-native-camera';
+import { Camera as RNCamera } from 'react-native-camera-kit';
 import { Icon } from 'react-native-elements';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { decodeUR, extractSingleWorkload, BlueURDecoder } from '../../blue_modules/ur';
@@ -11,7 +12,7 @@ import { BlueCurrentTheme } from '../../components/themes';
 import { openPrivacyDesktopSettings } from '../../class/camera';
 import alert from '../../components/Alert';
 
-const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
+// const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
 const createHash = require('create-hash');
 const fs = require('../../blue_modules/fs');
 const Base43 = require('../../blue_modules/base43');
@@ -268,14 +269,14 @@ const ScanQRCode = () => {
             const asset = response.assets[0];
             if (asset.uri) {
               const uri = asset.uri.toString().replace('file://', '');
-              LocalQRCode.decode(uri, (error, result) => {
-                if (!error) {
-                  onBarCodeRead({ data: result });
-                } else {
-                  alert(loc.send.qr_error_no_qrcode);
-                  setIsLoading(false);
-                }
-              });
+              // LocalQRCode.decode(uri, (error, result) => {
+              //   if (!error) {
+              //     onBarCodeRead({ data: result });
+              //   } else {
+              //     alert(loc.send.qr_error_no_qrcode);
+              //     setIsLoading(false);
+              //   }
+              // });
             } else {
               setIsLoading(false);
             }

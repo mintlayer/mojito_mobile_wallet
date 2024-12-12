@@ -8,7 +8,6 @@ export * from './wallets/hd-legacy-breadwallet-wallet';
 export * from './wallets/hd-legacy-p2pkh-wallet';
 export * from './wallets/watch-only-wallet';
 export * from './wallets/lightning-custodian-wallet';
-export * from './wallets/lightning-ldk-wallet';
 export * from './wallets/abstract-hd-wallet';
 export * from './wallets/hd-segwit-bech32-wallet';
 export * from './wallets/hd-legacy-electrum-seed-p2pkh-wallet';
@@ -18,3 +17,5 @@ export * from './wallets/multisig-hd-wallet';
 export * from './wallets/slip39-wallets';
 export * from './hd-segwit-bech32-transaction';
 export * from './multisig-cosigner';
+
+export const LightningLdkWallet = {}
