@@ -1,5 +1,4 @@
-// TODO: Refactor this file
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Image, View, TouchableOpacity, StatusBar, Platform, StyleSheet, TextInput, Alert } from 'react-native';
 import { Camera as RNCamera } from 'react-native-camera-kit';
 import { Icon } from 'react-native-elements';
@@ -91,6 +90,14 @@ const styles = StyleSheet.create({
 const ScanQRCode = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
+
+  // switch to another screen until lib start working
+  useEffect(() => {
+    navigation.goBack();
+  }, []);
+
+  return;
+
   const route = useRoute();
   const showFileImportButton = route.params.showFileImportButton || false;
   const { launchedBy, onBarScanned, onDismiss, onBarScannerDismissWithoutData = () => {} } = route.params;
