@@ -31,15 +31,11 @@ class DeeplinkSchemaMatch {
       return;
     }
 
-    console.log('event.url', event.url);
-
     if (event.url.toLowerCase().startsWith('mojitowallet:bitcoin:') || event.url.toLowerCase().startsWith('mojitowallet:lightning:')) {
       event.url = event.url.substring(13);
     } else if (event.url.toLocaleLowerCase().startsWith('mojitowallet://widget?action=')) {
       event.url = event.url.substring('mojitowallet://'.length);
     }
-
-    console.log('DeeplinkSchemaMatch.navigationRouteFor', event.url);
 
     if (DeeplinkSchemaMatch.isWidgetAction(event.url)) {
       if (context.wallets.length >= 0) {
@@ -84,9 +80,7 @@ class DeeplinkSchemaMatch {
         }
       }
     } else if (DeeplinkSchemaMatch.isChallengeAction(event.url)) {
-      console.log('SignChallengeRoot');
       const urlObject = url.parse(event.url, true); // eslint-disable-line node/no-deprecated-api
-      console.log('urlObject', urlObject);
       completionHandler([
         'SignChallengeRoot',
         {
@@ -402,7 +396,6 @@ class DeeplinkSchemaMatch {
   }
 
   static isChallengeAction(text) {
-    console.log('text', text);
     return text.includes('signchallenge?');
   }
 

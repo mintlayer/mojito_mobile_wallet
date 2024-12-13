@@ -65,28 +65,18 @@ const SignChallenge = ({ route, navigation }) => {
 
   const handleSign = async () => {
     const challengeText = Buffer.from(challengeBase64, 'base64').toString();
-    console.log('---challengeText', challengeText);
-    console.log('selectedAddress', selectedAddress);
     const signChallenge = await wallet.signChallenge(stringToBytes(challengeText), selectedAddress);
     const str = uint8ArrayToString(signChallenge.signature);
-    console.log('sigdnedMessage', str);
     setSignature(str);
   };
 
   const handleSubmit = () => {
-    // send signed message to callback
-    console.log('signature', signature);
-    // open url in external browser
-    console.log('callback', callback);
-
     if (callback.includes('t.me') && callback.endsWith('startapp=')) {
       const link = decodeURIComponent(callback) + Buffer.from(JSON.stringify({ signature, address: selectedAddress, challengeBase64 })).toString('base64');
-      console.log('link', link);
       Linking.openURL(link);
     } else {
       const concat = callback.includes('?') ? '&' : '?';
       const link = decodeURIComponent(callback) + concat + 'signature=' + signature + '&address=' + selectedAddress + '&challengeBase64=' + challengeBase64;
-      console.log('link', link);
       Linking.openURL(link);
     }
   };

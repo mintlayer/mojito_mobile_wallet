@@ -31,7 +31,6 @@ export const WasmWebView = ({ setWasmInitializationFinished }) => {
       const wasmBinary = await RNFetchBlob.fs.readFile(path, 'base64').then();
       webViewEventBus.setWebViewRef(webviewRef);
       await webViewEventBus.exec('initWasm', [wasmBinary]);
-      console.log('was initialized');
     } catch (e) {
       Alert.alert('Wasm Init Error', e.message);
       console.error(e);
