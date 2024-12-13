@@ -92,17 +92,27 @@ const App = () => {
     if (walletsInitialized) {
       addListeners();
     }
-    const subscription = Linking.addListener('url', handleOpenURL);
+    const subscriptionLinking = Linking.addListener('url', handleOpenURL);
+    const subscriptionAppState = AppState.addEventListener('change', handleAppStateChange);
+
+    const notificationSubscription = eventEmitter.addListener('onNotificationReceived', onNotificationReceived);
+    const settingsSubscription = eventEmitter.addListener('openSettings', openSettings);
+    const userActivitySubscription = eventEmitter.addListener('onUserActivityOpen', onUserActivityOpen);
+
 
     return () => {
-      subscription.remove();
+      subscriptionLinking.remove();
+      subscriptionAppState.remove();
+
+      notificationSubscription.remove();
+      settingsSubscription.remove();
+      userActivitySubscription.remove();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletsInitialized]);
 
   useEffect(() => {
     return () => {
-      AppState.removeEventListener('change', handleAppStateChange);
       eventEmitter.removeAllListeners('onNotificationReceived');
       eventEmitter.removeAllListeners('openSettings');
       eventEmitter.removeAllListeners('onUserActivityOpen');
@@ -123,20 +133,12 @@ const App = () => {
   }, [colorScheme]);
 
   const addListeners = () => {
-    AppState.addEventListener('change', handleAppStateChange);
     DeviceEventEmitter.addListener('quickActionShortcut', walletQuickActions);
     DeviceQuickActions.popInitialAction().then(popInitialAction);
     EventEmitter?.getMostRecentUserActivity()
       .then(onUserActivityOpen)
       .catch(() => console.log('No userActivity object sent'));
     handleAppStateChange(undefined);
-    /*
-      When a notification on iOS is shown while the app is on foreground;
-      On willPresent on AppDelegate.m
-     */
-    eventEmitter.addListener('onNotificationReceived', onNotificationReceived);
-    eventEmitter.addListener('openSettings', openSettings);
-    eventEmitter.addListener('onUserActivityOpen', onUserActivityOpen);
   };
 
   const popInitialAction = async (data) => {
