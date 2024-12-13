@@ -106,6 +106,8 @@ import StakingDelegationDetails from './screen/staking/delegationDetails';
 import StakingConfirm from './screen/staking/confirm';
 import StakingSuccess from './screen/staking/success';
 
+import SignChallenge from './screen/signChallenge/sign';
+
 import { sendBottom, settingBottom, walletBottom, create_wallet, ic_back_black } from './theme/Images';
 import { COLORS } from './theme/Colors';
 import { getFlage } from './store/asyncStorage';
@@ -526,6 +528,17 @@ const SettingsRoot = () => {
   );
 };
 
+const SignChallengeStack = createNativeStackNavigator();
+const SignChallengeRoot = () => {
+  const theme = useTheme();
+
+  return (
+    <SignChallengeStack.Navigator name="SignChallengeRoot" screenOptions={{ headerHideShadow: true }} initialRouteName="SignChallenge">
+      <SignChallengeStack.Screen name="SignChallenge" component={SignChallenge} options={SignChallenge.navigationOptions(theme)} />
+    </SignChallengeStack.Navigator>
+  );
+};
+
 const Tab = createBottomTabNavigator();
 const BottomTab = () => {
   const { theme, colors } = useTheme();
@@ -640,6 +653,7 @@ const Navigation = () => {
       />
 
       <RootStack.Screen name="StakingRoot" component={StakingRoot} options={NavigationDefaultOptions} />
+      <RootStack.Screen name="SignChallengeRoot" component={SignChallengeRoot} options={NavigationDefaultOptions} />
     </RootStack.Navigator>
   );
 };

@@ -82,11 +82,21 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.DEFAULT" />
         </intent-filter>
+        <!-- Intent-filter for App Links -->
+        <intent-filter android:autoVerify="true">
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <data android:scheme="https" android:host="wallet-meta.mintlayer.org" android:pathPrefix="/app" />
+        </intent-filter>
+        <!-- Intent-filter for non-standard links -->
         <intent-filter>
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
           <data android:scheme="bitcoin" />
           <data android:scheme="lightning" />
+          <data android:scheme="mojitowallet" />
           <data android:scheme="bluewallet" />
           <data android:scheme="lapp" />
           <data android:scheme="blue" />
@@ -94,7 +104,6 @@
           <data android:scheme="bankid" />
           <data android:scheme="swish" />
           <data android:scheme="http" />
-          <data android:scheme="https" />
         </intent-filter>
         <intent-filter>
   <action android:name="android.intent.action.VIEW" />

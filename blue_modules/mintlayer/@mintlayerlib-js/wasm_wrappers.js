@@ -13,18 +13,18 @@ if (typeof TextDecoder !== 'undefined') {
   cachedTextDecoder.decode();
 }
 
-let cachedUint8Memory0 = null;
+let cachedUint8ArrayMemory0 = null;
 
-function getUint8Memory0() {
-  if (cachedUint8Memory0 === null || cachedUint8Memory0.byteLength === 0) {
-    cachedUint8Memory0 = new Uint8Array(wasm.memory.buffer);
+function getUint8ArrayMemory0() {
+  if (cachedUint8ArrayMemory0 === null || cachedUint8ArrayMemory0.byteLength === 0) {
+    cachedUint8ArrayMemory0 = new Uint8Array(wasm.memory.buffer);
   }
-  return cachedUint8Memory0;
+  return cachedUint8ArrayMemory0;
 }
 
 function getStringFromWasm0(ptr, len) {
   ptr = ptr >>> 0;
-  return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
+  return cachedTextDecoder.decode(getUint8ArrayMemory0().subarray(ptr, ptr + len));
 }
 
 const heap = new Array(128).fill(undefined);
@@ -87,7 +87,7 @@ function passStringToWasm0(arg, malloc, realloc) {
   if (realloc === undefined) {
     const buf = cachedTextEncoder.encode(arg);
     const ptr = malloc(buf.length, 1) >>> 0;
-    getUint8Memory0()
+    getUint8ArrayMemory0()
       .subarray(ptr, ptr + buf.length)
       .set(buf);
     WASM_VECTOR_LEN = buf.length;
@@ -97,7 +97,7 @@ function passStringToWasm0(arg, malloc, realloc) {
   let len = arg.length;
   let ptr = malloc(len, 1) >>> 0;
 
-  const mem = getUint8Memory0();
+  const mem = getUint8ArrayMemory0();
 
   let offset = 0;
 
@@ -112,7 +112,7 @@ function passStringToWasm0(arg, malloc, realloc) {
       arg = arg.slice(offset);
     }
     ptr = realloc(ptr, len, (len = offset + arg.length * 3), 1) >>> 0;
-    const view = getUint8Memory0().subarray(ptr + offset, ptr + len);
+    const view = getUint8ArrayMemory0().subarray(ptr + offset, ptr + len);
     const ret = encodeString(arg, view);
 
     offset += ret.written;
@@ -127,25 +127,25 @@ function isLikeNone(x) {
   return x === undefined || x === null;
 }
 
-let cachedInt32Memory0 = null;
+let cachedDataViewMemory0 = null;
 
-function getInt32Memory0() {
-  if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
-    cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
+function getDataViewMemory0() {
+  if (cachedDataViewMemory0 === null || cachedDataViewMemory0.buffer.detached === true || (cachedDataViewMemory0.buffer.detached === undefined && cachedDataViewMemory0.buffer !== wasm.memory.buffer)) {
+    cachedDataViewMemory0 = new DataView(wasm.memory.buffer);
   }
-  return cachedInt32Memory0;
+  return cachedDataViewMemory0;
 }
 
 function passArray8ToWasm0(arg, malloc) {
   const ptr = malloc(arg.length * 1, 1) >>> 0;
-  getUint8Memory0().set(arg, ptr / 1);
+  getUint8ArrayMemory0().set(arg, ptr / 1);
   WASM_VECTOR_LEN = arg.length;
   return ptr;
 }
 
 function getArrayU8FromWasm0(ptr, len) {
   ptr = ptr >>> 0;
-  return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
+  return getUint8ArrayMemory0().subarray(ptr / 1, ptr / 1 + len);
 }
 /**
  * A utxo can either come from a transaction or a block reward.
@@ -162,8 +162,8 @@ export function encode_outpoint_source_id(id, source) {
     const ptr0 = passArray8ToWasm0(id, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
     wasm.encode_outpoint_source_id(retptr, ptr0, len0, source);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
     var v2 = getArrayU8FromWasm0(r0, r1).slice();
     wasm.__wbindgen_free(r0, r1 * 1, 1);
     return v2;
@@ -180,8 +180,8 @@ export function make_private_key() {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     wasm.make_private_key(retptr);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
     wasm.__wbindgen_free(r0, r1 * 1, 1);
     return v1;
@@ -203,10 +203,10 @@ export function make_default_account_privkey(mnemonic, network) {
     const ptr0 = passStringToWasm0(mnemonic, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len0 = WASM_VECTOR_LEN;
     wasm.make_default_account_privkey(retptr, ptr0, len0, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -231,10 +231,10 @@ export function make_receiving_address(private_key_bytes, key_index) {
     const ptr0 = passArray8ToWasm0(private_key_bytes, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
     wasm.make_receiving_address(retptr, ptr0, len0, key_index);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -259,10 +259,10 @@ export function make_change_address(private_key_bytes, key_index) {
     const ptr0 = passArray8ToWasm0(private_key_bytes, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
     wasm.make_change_address(retptr, ptr0, len0, key_index);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -289,10 +289,10 @@ export function pubkey_to_pubkeyhash_address(public_key_bytes, network) {
     const ptr0 = passArray8ToWasm0(public_key_bytes, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
     wasm.pubkey_to_pubkeyhash_address(retptr, ptr0, len0, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     var ptr2 = r0;
     var len2 = r1;
     if (r3) {
@@ -320,10 +320,10 @@ export function public_key_from_private_key(private_key) {
     const ptr0 = passArray8ToWasm0(private_key, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
     wasm.public_key_from_private_key(retptr, ptr0, len0);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -351,10 +351,10 @@ export function sign_message_for_spending(private_key, message) {
     const ptr1 = passArray8ToWasm0(message, wasm.__wbindgen_malloc);
     const len1 = WASM_VECTOR_LEN;
     wasm.sign_message_for_spending(retptr, ptr0, len0, ptr1, len1);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -387,9 +387,72 @@ export function verify_signature_for_spending(public_key, signature, message) {
     const ptr2 = passArray8ToWasm0(message, wasm.__wbindgen_malloc);
     const len2 = WASM_VECTOR_LEN;
     wasm.verify_signature_for_spending(retptr, ptr0, len0, ptr1, len1, ptr2, len2);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    if (r2) {
+      throw takeObject(r1);
+    }
+    return r0 !== 0;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
+ * Given a message and a private key, create and sign a challenge with the given private key
+ * This kind of signature is to be used when signing challenges.
+ * @param {Uint8Array} private_key
+ * @param {Uint8Array} message
+ * @returns {Uint8Array}
+ */
+export function sign_challenge(private_key, message) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    const ptr0 = passArray8ToWasm0(private_key, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passArray8ToWasm0(message, wasm.__wbindgen_malloc);
+    const len1 = WASM_VECTOR_LEN;
+    wasm.sign_challenge(retptr, ptr0, len0, ptr1, len1);
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
+    if (r3) {
+      throw takeObject(r2);
+    }
+    var v3 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v3;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
+ * Given a signed challenge, an address and a message. Verify that
+ * the signature is produced by signing the message with the private key
+ * that derived the given public key.
+ * Note that this function is used for verifying messages related challenges.
+ * @param {string} address
+ * @param {Network} network
+ * @param {Uint8Array} signed_challenge
+ * @param {Uint8Array} message
+ * @returns {boolean}
+ */
+export function verify_challenge(address, network, signed_challenge, message) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    const ptr0 = passStringToWasm0(address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passArray8ToWasm0(signed_challenge, wasm.__wbindgen_malloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ptr2 = passArray8ToWasm0(message, wasm.__wbindgen_malloc);
+    const len2 = WASM_VECTOR_LEN;
+    wasm.verify_challenge(retptr, ptr0, len0, network, ptr1, len1, ptr2, len2);
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
     if (r2) {
       throw takeObject(r1);
     }
@@ -421,10 +484,10 @@ export function encode_output_transfer(amount, address, network) {
     const ptr1 = passStringToWasm0(address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
     wasm.encode_output_transfer(retptr, ptr0, ptr1, len1, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -455,10 +518,10 @@ export function encode_output_token_transfer(amount, address, token_id, network)
     const ptr2 = passStringToWasm0(token_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len2 = WASM_VECTOR_LEN;
     wasm.encode_output_token_transfer(retptr, ptr0, ptr1, len1, ptr2, len2, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -495,8 +558,8 @@ export function encode_lock_for_block_count(block_count) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     wasm.encode_lock_for_block_count(retptr, block_count);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
     wasm.__wbindgen_free(r0, r1 * 1, 1);
     return v1;
@@ -516,8 +579,8 @@ export function encode_lock_for_seconds(total_seconds) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     wasm.encode_lock_for_seconds(retptr, total_seconds);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
     wasm.__wbindgen_free(r0, r1 * 1, 1);
     return v1;
@@ -537,8 +600,8 @@ export function encode_lock_until_time(timestamp_since_epoch_in_seconds) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     wasm.encode_lock_until_time(retptr, timestamp_since_epoch_in_seconds);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
     wasm.__wbindgen_free(r0, r1 * 1, 1);
     return v1;
@@ -557,8 +620,8 @@ export function encode_lock_until_height(block_height) {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     wasm.encode_lock_until_height(retptr, block_height);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
     wasm.__wbindgen_free(r0, r1 * 1, 1);
     return v1;
@@ -587,10 +650,10 @@ export function encode_output_lock_then_transfer(amount, address, lock, network)
     const ptr2 = passArray8ToWasm0(lock, wasm.__wbindgen_malloc);
     const len2 = WASM_VECTOR_LEN;
     wasm.encode_output_lock_then_transfer(retptr, ptr0, ptr1, len1, ptr2, len2, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -625,10 +688,10 @@ export function encode_output_token_lock_then_transfer(amount, address, token_id
     const ptr3 = passArray8ToWasm0(lock, wasm.__wbindgen_malloc);
     const len3 = WASM_VECTOR_LEN;
     wasm.encode_output_token_lock_then_transfer(retptr, ptr0, ptr1, len1, ptr2, len2, ptr3, len3, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -651,10 +714,10 @@ export function encode_output_coin_burn(amount) {
     _assertClass(amount, Amount);
     var ptr0 = amount.__destroy_into_raw();
     wasm.encode_output_coin_burn(retptr, ptr0);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -682,10 +745,10 @@ export function encode_output_token_burn(amount, token_id, network) {
     const ptr1 = passStringToWasm0(token_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
     wasm.encode_output_token_burn(retptr, ptr0, ptr1, len1, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -714,10 +777,10 @@ export function encode_output_create_delegation(pool_id, owner_address, network)
     const ptr1 = passStringToWasm0(owner_address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
     wasm.encode_output_create_delegation(retptr, ptr0, len0, ptr1, len1, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -745,10 +808,10 @@ export function encode_output_delegate_staking(amount, delegation_id, network) {
     const ptr1 = passStringToWasm0(delegation_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
     wasm.encode_output_delegate_staking(retptr, ptr0, ptr1, len1, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -786,10 +849,10 @@ export function encode_stake_pool_data(value, staker, vrf_public_key, decommissi
     _assertClass(cost_per_block, Amount);
     var ptr4 = cost_per_block.__destroy_into_raw();
     wasm.encode_stake_pool_data(retptr, ptr0, ptr1, len1, ptr2, len2, ptr3, len3, margin_ratio_per_thousand, ptr4, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -819,10 +882,10 @@ export function encode_output_create_stake_pool(pool_id, pool_data, network) {
     const ptr1 = passArray8ToWasm0(pool_data, wasm.__wbindgen_malloc);
     const len1 = WASM_VECTOR_LEN;
     wasm.encode_output_create_stake_pool(retptr, ptr0, len0, ptr1, len1, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -902,8 +965,8 @@ export function token_change_authority_fee(current_block_height, network) {
  * Given the parameters needed to issue a fungible token, and a network type (mainnet, testnet, etc),
  * this function creates an output that issues that token.
  * @param {string} authority
- * @param {Uint8Array} token_ticker
- * @param {Uint8Array} metadata_uri
+ * @param {string} token_ticker
+ * @param {string} metadata_uri
  * @param {number} number_of_decimals
  * @param {TotalSupply} total_supply
  * @param {Amount | undefined} supply_amount
@@ -917,9 +980,9 @@ export function encode_output_issue_fungible_token(authority, token_ticker, meta
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     const ptr0 = passStringToWasm0(authority, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len0 = WASM_VECTOR_LEN;
-    const ptr1 = passArray8ToWasm0(token_ticker, wasm.__wbindgen_malloc);
+    const ptr1 = passStringToWasm0(token_ticker, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len1 = WASM_VECTOR_LEN;
-    const ptr2 = passArray8ToWasm0(metadata_uri, wasm.__wbindgen_malloc);
+    const ptr2 = passStringToWasm0(metadata_uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len2 = WASM_VECTOR_LEN;
     let ptr3 = 0;
     if (!isLikeNone(supply_amount)) {
@@ -927,10 +990,10 @@ export function encode_output_issue_fungible_token(authority, token_ticker, meta
       ptr3 = supply_amount.__destroy_into_raw();
     }
     wasm.encode_output_issue_fungible_token(retptr, ptr0, len0, ptr1, len1, ptr2, len2, number_of_decimals, total_supply, ptr3, is_token_freezable, _current_block_height, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -943,6 +1006,40 @@ export function encode_output_issue_fungible_token(authority, token_ticker, meta
 }
 
 /**
+ * Returns the Fungible/NFT Token ID for the given inputs of a transaction
+ * @param {Uint8Array} inputs
+ * @param {Network} network
+ * @returns {string}
+ */
+export function get_token_id(inputs, network) {
+  let deferred3_0;
+  let deferred3_1;
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    const ptr0 = passArray8ToWasm0(inputs, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    wasm.get_token_id(retptr, ptr0, len0, network);
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
+    var ptr2 = r0;
+    var len2 = r1;
+    if (r3) {
+      ptr2 = 0;
+      len2 = 0;
+      throw takeObject(r2);
+    }
+    deferred3_0 = ptr2;
+    deferred3_1 = len2;
+    return getStringFromWasm0(ptr2, len2);
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+    wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
+  }
+}
+
+/**
  * Given the parameters needed to issue an NFT, and a network type (mainnet, testnet, etc),
  * this function creates an output that issues that NFT.
  * @param {string} token_id
@@ -951,10 +1048,10 @@ export function encode_output_issue_fungible_token(authority, token_ticker, meta
  * @param {string} ticker
  * @param {string} description
  * @param {Uint8Array} media_hash
- * @param {string | undefined} creator
- * @param {Uint8Array | undefined} media_uri
- * @param {Uint8Array | undefined} icon_uri
- * @param {Uint8Array | undefined} additional_metadata_uri
+ * @param {Uint8Array | undefined} creator
+ * @param {string | undefined} media_uri
+ * @param {string | undefined} icon_uri
+ * @param {string | undefined} additional_metadata_uri
  * @param {bigint} _current_block_height
  * @param {Network} network
  * @returns {Uint8Array}
@@ -974,19 +1071,19 @@ export function encode_output_issue_nft(token_id, authority, name, ticker, descr
     const len4 = WASM_VECTOR_LEN;
     const ptr5 = passArray8ToWasm0(media_hash, wasm.__wbindgen_malloc);
     const len5 = WASM_VECTOR_LEN;
-    var ptr6 = isLikeNone(creator) ? 0 : passStringToWasm0(creator, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var ptr6 = isLikeNone(creator) ? 0 : passArray8ToWasm0(creator, wasm.__wbindgen_malloc);
     var len6 = WASM_VECTOR_LEN;
-    var ptr7 = isLikeNone(media_uri) ? 0 : passArray8ToWasm0(media_uri, wasm.__wbindgen_malloc);
+    var ptr7 = isLikeNone(media_uri) ? 0 : passStringToWasm0(media_uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     var len7 = WASM_VECTOR_LEN;
-    var ptr8 = isLikeNone(icon_uri) ? 0 : passArray8ToWasm0(icon_uri, wasm.__wbindgen_malloc);
+    var ptr8 = isLikeNone(icon_uri) ? 0 : passStringToWasm0(icon_uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     var len8 = WASM_VECTOR_LEN;
-    var ptr9 = isLikeNone(additional_metadata_uri) ? 0 : passArray8ToWasm0(additional_metadata_uri, wasm.__wbindgen_malloc);
+    var ptr9 = isLikeNone(additional_metadata_uri) ? 0 : passStringToWasm0(additional_metadata_uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     var len9 = WASM_VECTOR_LEN;
     wasm.encode_output_issue_nft(retptr, ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3, ptr4, len4, ptr5, len5, ptr6, len6, ptr7, len7, ptr8, len8, ptr9, len9, _current_block_height, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -1009,16 +1106,102 @@ export function encode_output_data_deposit(data) {
     const ptr0 = passArray8ToWasm0(data, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
     wasm.encode_output_data_deposit(retptr, ptr0, len0);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
     var v2 = getArrayU8FromWasm0(r0, r1).slice();
     wasm.__wbindgen_free(r0, r1 * 1, 1);
     return v2;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
+ * Returns the fee that needs to be paid by a transaction for issuing a data deposit
+ * @param {bigint} current_block_height
+ * @param {Network} network
+ * @returns {Amount}
+ */
+export function data_deposit_fee(current_block_height, network) {
+  const ret = wasm.data_deposit_fee(current_block_height, network);
+  return Amount.__wrap(ret);
+}
+
+/**
+ * Given the parameters needed to create hash timelock contract, and a network type (mainnet, testnet, etc),
+ * this function creates an output.
+ * @param {Amount} amount
+ * @param {string | undefined} token_id
+ * @param {string} secret_hash
+ * @param {string} spend_address
+ * @param {string} refund_address
+ * @param {Uint8Array} refund_timelock
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_output_htlc(amount, token_id, secret_hash, spend_address, refund_address, refund_timelock, network) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    _assertClass(amount, Amount);
+    var ptr0 = amount.__destroy_into_raw();
+    var ptr1 = isLikeNone(token_id) ? 0 : passStringToWasm0(token_id, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len1 = WASM_VECTOR_LEN;
+    const ptr2 = passStringToWasm0(secret_hash, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len2 = WASM_VECTOR_LEN;
+    const ptr3 = passStringToWasm0(spend_address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len3 = WASM_VECTOR_LEN;
+    const ptr4 = passStringToWasm0(refund_address, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len4 = WASM_VECTOR_LEN;
+    const ptr5 = passArray8ToWasm0(refund_timelock, wasm.__wbindgen_malloc);
+    const len5 = WASM_VECTOR_LEN;
+    wasm.encode_output_htlc(retptr, ptr0, ptr1, len1, ptr2, len2, ptr3, len3, ptr4, len4, ptr5, len5, network);
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
+    if (r3) {
+      throw takeObject(r2);
+    }
+    var v7 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v7;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
+ * Given a signed transaction and input outpoint that spends an htlc utxo, extract a secret that is
+ * encoded in the corresponding input signature
+ * @param {Uint8Array} signed_tx_bytes
+ * @param {boolean} strict_byte_size
+ * @param {Uint8Array} htlc_outpoint_source_id
+ * @param {number} htlc_output_index
+ * @returns {Uint8Array}
+ */
+export function extract_htlc_secret(signed_tx_bytes, strict_byte_size, htlc_outpoint_source_id, htlc_output_index) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    const ptr0 = passArray8ToWasm0(signed_tx_bytes, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passArray8ToWasm0(htlc_outpoint_source_id, wasm.__wbindgen_malloc);
+    const len1 = WASM_VECTOR_LEN;
+    wasm.extract_htlc_secret(retptr, ptr0, len0, strict_byte_size, ptr1, len1, htlc_output_index);
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
+    if (r3) {
+      throw takeObject(r2);
+    }
+    var v3 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v3;
   } finally {
     wasm.__wbindgen_add_to_stack_pointer(16);
   }
@@ -1037,10 +1220,10 @@ export function encode_input_for_utxo(outpoint_source_id, output_index) {
     const ptr0 = passArray8ToWasm0(outpoint_source_id, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
     wasm.encode_input_for_utxo(retptr, ptr0, len0, output_index);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -1070,10 +1253,10 @@ export function encode_input_for_withdraw_from_delegation(delegation_id, amount,
     _assertClass(amount, Amount);
     var ptr1 = amount.__destroy_into_raw();
     wasm.encode_input_for_withdraw_from_delegation(retptr, ptr0, len0, ptr1, nonce, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -1085,20 +1268,11 @@ export function encode_input_for_withdraw_from_delegation(delegation_id, amount,
   }
 }
 
-let cachedUint32Memory0 = null;
-
-function getUint32Memory0() {
-  if (cachedUint32Memory0 === null || cachedUint32Memory0.byteLength === 0) {
-    cachedUint32Memory0 = new Uint32Array(wasm.memory.buffer);
-  }
-  return cachedUint32Memory0;
-}
-
 function passArrayJsValueToWasm0(array, malloc) {
   const ptr = malloc(array.length * 4, 4) >>> 0;
-  const mem = getUint32Memory0();
+  const mem = getDataViewMemory0();
   for (let i = 0; i < array.length; i++) {
-    mem[ptr / 4 + i] = addHeapObject(array[i]);
+    mem.setUint32(ptr + 4 * i, addHeapObject(array[i]), true);
   }
   WASM_VECTOR_LEN = array.length;
   return ptr;
@@ -1109,6 +1283,7 @@ function passArrayJsValueToWasm0(array, malloc) {
  * for Account inputs that spend from a delegation it is the owning address of that delegation,
  * and in the case of AccountCommand inputs which change a token it is the token's authority destination)
  * and the outputs, estimate the transaction size.
+ * ScriptHash and ClassicMultisig destinations are not supported.
  * @param {Uint8Array} inputs
  * @param {(string)[]} input_utxos_destinations
  * @param {Uint8Array} outputs
@@ -1125,9 +1300,9 @@ export function estimate_transaction_size(inputs, input_utxos_destinations, outp
     const ptr2 = passArray8ToWasm0(outputs, wasm.__wbindgen_malloc);
     const len2 = WASM_VECTOR_LEN;
     wasm.estimate_transaction_size(retptr, ptr0, len0, ptr1, len1, ptr2, len2, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
     if (r2) {
       throw takeObject(r1);
     }
@@ -1153,10 +1328,10 @@ export function encode_transaction(inputs, outputs, flags) {
     const ptr1 = passArray8ToWasm0(outputs, wasm.__wbindgen_malloc);
     const len1 = WASM_VECTOR_LEN;
     wasm.encode_transaction(retptr, ptr0, len0, ptr1, len1, flags);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -1176,8 +1351,8 @@ export function encode_witness_no_signature() {
   try {
     const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
     wasm.encode_witness_no_signature(retptr);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
     var v1 = getArrayU8FromWasm0(r0, r1).slice();
     wasm.__wbindgen_free(r0, r1 * 1, 1);
     return v1;
@@ -1210,10 +1385,10 @@ export function encode_witness(sighashtype, private_key_bytes, input_owner_desti
     const ptr3 = passArray8ToWasm0(inputs, wasm.__wbindgen_malloc);
     const len3 = WASM_VECTOR_LEN;
     wasm.encode_witness(retptr, sighashtype, ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3, input_num, network);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -1226,7 +1401,124 @@ export function encode_witness(sighashtype, private_key_bytes, input_owner_desti
 }
 
 /**
- * Given an unsigned transaction, and signatures, this function returns a SignedTransaction object as bytes.
+ * Given a private key, inputs and an input number to sign, and the destination that owns that output (through the utxo),
+ * and a network type (mainnet, testnet, etc), and an htlc secret this function returns a witness to be used in a signed transaction, as bytes.
+ * @param {SignatureHashType} sighashtype
+ * @param {Uint8Array} private_key_bytes
+ * @param {string} input_owner_destination
+ * @param {Uint8Array} transaction_bytes
+ * @param {Uint8Array} inputs
+ * @param {number} input_num
+ * @param {Uint8Array} secret
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_witness_htlc_secret(sighashtype, private_key_bytes, input_owner_destination, transaction_bytes, inputs, input_num, secret, network) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    const ptr0 = passArray8ToWasm0(private_key_bytes, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passStringToWasm0(input_owner_destination, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ptr2 = passArray8ToWasm0(transaction_bytes, wasm.__wbindgen_malloc);
+    const len2 = WASM_VECTOR_LEN;
+    const ptr3 = passArray8ToWasm0(inputs, wasm.__wbindgen_malloc);
+    const len3 = WASM_VECTOR_LEN;
+    const ptr4 = passArray8ToWasm0(secret, wasm.__wbindgen_malloc);
+    const len4 = WASM_VECTOR_LEN;
+    wasm.encode_witness_htlc_secret(retptr, sighashtype, ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3, input_num, ptr4, len4, network);
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
+    if (r3) {
+      throw takeObject(r2);
+    }
+    var v6 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v6;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
+ * Given an arbitrary number of public keys as bytes, number of minimum required signatures, and a network type, this function returns
+ * the multisig challenge, as bytes.
+ * @param {Uint8Array} public_keys_bytes
+ * @param {number} min_required_signatures
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_multisig_challenge(public_keys_bytes, min_required_signatures, network) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    const ptr0 = passArray8ToWasm0(public_keys_bytes, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    wasm.encode_multisig_challenge(retptr, ptr0, len0, min_required_signatures, network);
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
+    if (r3) {
+      throw takeObject(r2);
+    }
+    var v2 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v2;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
+ * Given a private key, inputs and an input number to sign, and multisig challenge,
+ * and a network type (mainnet, testnet, etc), this function returns a witness to be used in a signed transaction, as bytes.
+ *
+ * `key_index` parameter is an index of a public key in the challenge, against which is the signature produces from private key is to be verified.
+ * `input_witness` parameter can be either empty or a result of previous calls to this function.
+ * @param {SignatureHashType} sighashtype
+ * @param {Uint8Array} private_key_bytes
+ * @param {number} key_index
+ * @param {Uint8Array} input_witness
+ * @param {Uint8Array} multisig_challenge
+ * @param {Uint8Array} transaction_bytes
+ * @param {Uint8Array} utxos
+ * @param {number} input_num
+ * @param {Network} network
+ * @returns {Uint8Array}
+ */
+export function encode_witness_htlc_multisig(sighashtype, private_key_bytes, key_index, input_witness, multisig_challenge, transaction_bytes, utxos, input_num, network) {
+  try {
+    const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+    const ptr0 = passArray8ToWasm0(private_key_bytes, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passArray8ToWasm0(input_witness, wasm.__wbindgen_malloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ptr2 = passArray8ToWasm0(multisig_challenge, wasm.__wbindgen_malloc);
+    const len2 = WASM_VECTOR_LEN;
+    const ptr3 = passArray8ToWasm0(transaction_bytes, wasm.__wbindgen_malloc);
+    const len3 = WASM_VECTOR_LEN;
+    const ptr4 = passArray8ToWasm0(utxos, wasm.__wbindgen_malloc);
+    const len4 = WASM_VECTOR_LEN;
+    wasm.encode_witness_htlc_multisig(retptr, sighashtype, ptr0, len0, key_index, ptr1, len1, ptr2, len2, ptr3, len3, ptr4, len4, input_num, network);
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
+    if (r3) {
+      throw takeObject(r2);
+    }
+    var v6 = getArrayU8FromWasm0(r0, r1).slice();
+    wasm.__wbindgen_free(r0, r1 * 1, 1);
+    return v6;
+  } finally {
+    wasm.__wbindgen_add_to_stack_pointer(16);
+  }
+}
+
+/**
+ * Given an unsigned transaction and signatures, this function returns a SignedTransaction object as bytes.
  * @param {Uint8Array} transaction_bytes
  * @param {Uint8Array} signatures
  * @returns {Uint8Array}
@@ -1239,10 +1531,10 @@ export function encode_signed_transaction(transaction_bytes, signatures) {
     const ptr1 = passArray8ToWasm0(signatures, wasm.__wbindgen_malloc);
     const len1 = WASM_VECTOR_LEN;
     wasm.encode_signed_transaction(retptr, ptr0, len0, ptr1, len1);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     if (r3) {
       throw takeObject(r2);
     }
@@ -1276,10 +1568,10 @@ export function get_transaction_id(transaction_bytes, strict_byte_size) {
     const ptr0 = passArray8ToWasm0(transaction_bytes, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
     wasm.get_transaction_id(retptr, ptr0, len0, strict_byte_size);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
-    var r3 = getInt32Memory0()[retptr / 4 + 3];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+    var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
     var ptr2 = r0;
     var len2 = r1;
     if (r3) {
@@ -1312,9 +1604,9 @@ export function effective_pool_balance(network, pledge_amount, pool_balance) {
     _assertClass(pool_balance, Amount);
     var ptr1 = pool_balance.__destroy_into_raw();
     wasm.effective_pool_balance(retptr, network, ptr0, ptr1);
-    var r0 = getInt32Memory0()[retptr / 4 + 0];
-    var r1 = getInt32Memory0()[retptr / 4 + 1];
-    var r2 = getInt32Memory0()[retptr / 4 + 2];
+    var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+    var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+    var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
     if (r2) {
       throw takeObject(r1);
     }
@@ -1332,13 +1624,13 @@ function handleError(f, args) {
   }
 }
 /**
- * The network, for which an operation to be done. Mainnet, testnet, etc.
- */
-export const Network = Object.freeze({ Mainnet: 0, 0: 'Mainnet', Testnet: 1, 1: 'Testnet', Regtest: 2, 2: 'Regtest', Signet: 3, 3: 'Signet' });
-/**
  * The part of the transaction that will be committed in the signature. Similar to bitcoin's sighash.
  */
 export const SignatureHashType = Object.freeze({ ALL: 0, 0: 'ALL', NONE: 1, 1: 'NONE', SINGLE: 2, 2: 'SINGLE', ANYONECANPAY: 3, 3: 'ANYONECANPAY' });
+/**
+ * The network, for which an operation to be done. Mainnet, testnet, etc.
+ */
+export const Network = Object.freeze({ Mainnet: 0, 0: 'Mainnet', Testnet: 1, 1: 'Testnet', Regtest: 2, 2: 'Regtest', Signet: 3, 3: 'Signet' });
 /**
  * The token supply of a specific token, set on issuance
  */
@@ -1368,7 +1660,7 @@ export const FreezableToken = Object.freeze({ No: 0, 0: 'No', Yes: 1, 1: 'Yes' }
  */
 export const SourceId = Object.freeze({ Transaction: 0, 0: 'Transaction', BlockReward: 1, 1: 'BlockReward' });
 
-const AmountFinalization = typeof FinalizationRegistry === 'undefined' ? { register: () => {}, unregister: () => {} } : new FinalizationRegistry((ptr) => wasm.__wbg_amount_free(ptr >>> 0));
+const AmountFinalization = typeof FinalizationRegistry === 'undefined' ? { register: () => {}, unregister: () => {} } : new FinalizationRegistry((ptr) => wasm.__wbg_amount_free(ptr >>> 0, 1));
 /**
  * Amount type abstraction. The amount type is stored in a string
  * since JavaScript number type cannot fit 128-bit integers.
@@ -1393,7 +1685,7 @@ export class Amount {
 
   free() {
     const ptr = this.__destroy_into_raw();
-    wasm.__wbg_amount_free(ptr);
+    wasm.__wbg_amount_free(ptr, 0);
   }
 
   /**
@@ -1417,8 +1709,8 @@ export class Amount {
       const ptr = this.__destroy_into_raw();
       const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
       wasm.amount_atoms(retptr, ptr);
-      var r0 = getInt32Memory0()[retptr / 4 + 0];
-      var r1 = getInt32Memory0()[retptr / 4 + 1];
+      var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+      var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
       deferred1_0 = r0;
       deferred1_1 = r1;
       return getStringFromWasm0(r0, r1);
@@ -1491,10 +1783,6 @@ function __wbg_get_imports() {
     const ret = typeof getObject(arg0) === 'string';
     return ret;
   };
-  imports.wbg.__wbg_msCrypto_eb05e62b530a1508 = function (arg0) {
-    const ret = getObject(arg0).msCrypto;
-    return addHeapObject(ret);
-  };
   imports.wbg.__wbg_require_cca90b1a94a0255b = function () {
     return handleError(function () {
       const ret = module.require;
@@ -1504,6 +1792,10 @@ function __wbg_get_imports() {
   imports.wbg.__wbindgen_is_function = function (arg0) {
     const ret = typeof getObject(arg0) === 'function';
     return ret;
+  };
+  imports.wbg.__wbg_msCrypto_eb05e62b530a1508 = function (arg0) {
+    const ret = getObject(arg0).msCrypto;
+    return addHeapObject(ret);
   };
   imports.wbg.__wbg_randomFillSync_5c9c955aa56b6049 = function () {
     return handleError(function (arg0, arg1) {
@@ -1515,12 +1807,12 @@ function __wbg_get_imports() {
       getObject(arg0).getRandomValues(getObject(arg1));
     }, arguments);
   };
-  imports.wbg.__wbg_newnoargs_e258087cd0daa0ea = function (arg0, arg1) {
+  imports.wbg.__wbg_newnoargs_76313bd6ff35d0f2 = function (arg0, arg1) {
     // eslint-disable-next-line no-new-func
     const ret = new Function(getStringFromWasm0(arg0, arg1));
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_call_27c0f87801dedf93 = function () {
+  imports.wbg.__wbg_call_1084a111329e68ce = function () {
     return handleError(function (arg0, arg1) {
       const ret = getObject(arg0).call(getObject(arg1));
       return addHeapObject(ret);
@@ -1531,33 +1823,33 @@ function __wbg_get_imports() {
     const ret = typeof obj === 'string' ? obj : undefined;
     var ptr1 = isLikeNone(ret) ? 0 : passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     var len1 = WASM_VECTOR_LEN;
-    getInt32Memory0()[arg0 / 4 + 1] = len1;
-    getInt32Memory0()[arg0 / 4 + 0] = ptr1;
+    getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+    getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
   };
   imports.wbg.__wbindgen_object_clone_ref = function (arg0) {
     const ret = getObject(arg0);
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_self_ce0dbfc45cf2f5be = function () {
+  imports.wbg.__wbg_self_3093d5d1f7bcb682 = function () {
     return handleError(function () {
       // eslint-disable-next-line no-undef
       const ret = self.self;
       return addHeapObject(ret);
     }, arguments);
   };
-  imports.wbg.__wbg_window_c6fb939a7f436783 = function () {
+  imports.wbg.__wbg_window_3bcfc4d31bc012f8 = function () {
     return handleError(function () {
       const ret = window.window;
       return addHeapObject(ret);
     }, arguments);
   };
-  imports.wbg.__wbg_globalThis_d1e6af4856ba331b = function () {
+  imports.wbg.__wbg_globalThis_86b222e13bdf32ed = function () {
     return handleError(function () {
       const ret = globalThis.globalThis;
       return addHeapObject(ret);
     }, arguments);
   };
-  imports.wbg.__wbg_global_207b558942527489 = function () {
+  imports.wbg.__wbg_global_e5a3fe56f8be9485 = function () {
     return handleError(function () {
       const ret = global.global;
       return addHeapObject(ret);
@@ -1567,32 +1859,32 @@ function __wbg_get_imports() {
     const ret = getObject(arg0) === undefined;
     return ret;
   };
-  imports.wbg.__wbg_call_b3ca7c6051f9bec1 = function () {
+  imports.wbg.__wbg_call_89af060b4e1523f2 = function () {
     return handleError(function (arg0, arg1, arg2) {
       const ret = getObject(arg0).call(getObject(arg1), getObject(arg2));
       return addHeapObject(ret);
     }, arguments);
   };
-  imports.wbg.__wbg_buffer_12d079cc21e14bdb = function (arg0) {
+  imports.wbg.__wbg_buffer_b7b08af79b0b0974 = function (arg0) {
     const ret = getObject(arg0).buffer;
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_newwithbyteoffsetandlength_aa4a17c33a06e5cb = function (arg0, arg1, arg2) {
+  imports.wbg.__wbg_newwithbyteoffsetandlength_8a2cb9ca96b27ec9 = function (arg0, arg1, arg2) {
     const ret = new Uint8Array(getObject(arg0), arg1 >>> 0, arg2 >>> 0);
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_new_63b92bc8671ed464 = function (arg0) {
+  imports.wbg.__wbg_new_ea1883e1e5e86686 = function (arg0) {
     const ret = new Uint8Array(getObject(arg0));
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_set_a47bac70306a19a7 = function (arg0, arg1, arg2) {
+  imports.wbg.__wbg_set_d1e79e2388520f18 = function (arg0, arg1, arg2) {
     getObject(arg0).set(getObject(arg1), arg2 >>> 0);
   };
-  imports.wbg.__wbg_newwithlength_e9b4878cebadb3d3 = function (arg0) {
+  imports.wbg.__wbg_newwithlength_ec548f448387c968 = function (arg0) {
     const ret = new Uint8Array(arg0 >>> 0);
     return addHeapObject(ret);
   };
-  imports.wbg.__wbg_subarray_a1f73cd4b5b42fe1 = function (arg0, arg1, arg2) {
+  imports.wbg.__wbg_subarray_7c2e3576afe181d1 = function (arg0, arg1, arg2) {
     const ret = getObject(arg0).subarray(arg1 >>> 0, arg2 >>> 0);
     return addHeapObject(ret);
   };
@@ -1607,20 +1899,22 @@ function __wbg_get_imports() {
   return imports;
 }
 
-function __wbg_init_memory(imports, maybe_memory) {}
+function __wbg_init_memory(imports, memory) {}
 
 function __wbg_finalize_init(instance, module) {
   wasm = instance.exports;
   __wbg_init.__wbindgen_wasm_module = module;
-  cachedInt32Memory0 = null;
-  cachedUint32Memory0 = null;
-  cachedUint8Memory0 = null;
+  cachedDataViewMemory0 = null;
+  cachedUint8ArrayMemory0 = null;
 
   return wasm;
 }
 
 function initSync(module) {
   if (wasm !== undefined) return wasm;
+
+  if (typeof module !== 'undefined' && Object.getPrototypeOf(module) === Object.prototype) ({ module } = module);
+  else console.warn('using deprecated parameters for `initSync()`; pass a single object instead');
 
   const imports = __wbg_get_imports();
 
@@ -1635,21 +1929,24 @@ function initSync(module) {
   return __wbg_finalize_init(instance, module);
 }
 
-async function __wbg_init(input) {
+async function __wbg_init(module_or_path) {
   if (wasm !== undefined) return wasm;
 
-  if (typeof input === 'undefined') {
-    // input = new URL('wasm_wrappers_bg.wasm', import.meta.url);
+  if (typeof module_or_path !== 'undefined' && Object.getPrototypeOf(module_or_path) === Object.prototype) ({ module_or_path } = module_or_path);
+  else console.warn('using deprecated parameters for the initialization function; pass a single object instead');
+
+  if (typeof module_or_path === 'undefined') {
+    // module_or_path = new URL('wasm_wrappers_bg.wasm', import.meta.url);
   }
   const imports = __wbg_get_imports();
 
-  if (typeof input === 'string' || (typeof Request === 'function' && input instanceof Request) || (typeof URL === 'function' && input instanceof URL)) {
-    input = fetch(input);
+  if (typeof module_or_path === 'string' || (typeof Request === 'function' && module_or_path instanceof Request) || (typeof URL === 'function' && module_or_path instanceof URL)) {
+    module_or_path = fetch(module_or_path);
   }
 
   __wbg_init_memory(imports);
 
-  const { instance, module } = await __wbg_load(await input, imports);
+  const { instance, module } = await __wbg_load(await module_or_path, imports);
 
   return __wbg_finalize_init(instance, module);
 }

@@ -280,6 +280,9 @@
     "owner_address": "Owner address",
     "new_balance": "New balance after transaction"
   },
+  "challenge": {
+    "header": "Challenge"
+  },
   "settings": {
     "about": "About",
     "about_awesome": "Built with the awesome",
