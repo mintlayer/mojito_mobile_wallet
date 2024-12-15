@@ -101,7 +101,7 @@ export const getOutputs = async ({ amount, address, networkType, type = 'Transfe
   if (type === 'spendFromDelegation') {
     const chainTip = await Mintlayer.getChainTip(networkType);
     const blockHeight = JSON.parse(chainTip).block_height;
-    const stakingMaturity = await webviewEventBus.exec(wasmMethods.staking_pool_spend_maturity_block_count, [BigInt(blockHeight), networkIndex]);
+    const stakingMaturity = await webviewEventBus.exec(wasmMethods.staking_pool_spend_maturity_block_count, [String(blockHeight), 1]);
     const encodedLockForBlock = await webviewEventBus.exec(wasmMethods.encode_lock_for_block_count, [BigInt(stakingMaturity)]);
     return webviewEventBus.exec(wasmMethods.encode_output_lock_then_transfer, [amount, address, encodedLockForBlock, networkIndex]);
   }
