@@ -17,7 +17,7 @@ const nStyles = StyleSheet.create({
   root: {},
   container: {
     borderRadius: 10,
-    minHeight: Platform.OS === 'ios' ? 164 : 181,
+    minHeight: 164,
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
