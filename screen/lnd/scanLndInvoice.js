@@ -5,7 +5,6 @@ import {
   KeyboardAvoidingView,
   View,
   TouchableOpacity,
-  StatusBar,
   Keyboard,
   ScrollView,
   StyleSheet,

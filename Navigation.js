@@ -1,5 +1,5 @@
 import React from 'react';
-import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Platform, useWindowDimensions, Dimensions, I18nManager, Image, StyleSheet, View, Text, Touchable, TouchableOpacity } from 'react-native';
 import { useRoute, useTheme } from '@react-navigation/native';

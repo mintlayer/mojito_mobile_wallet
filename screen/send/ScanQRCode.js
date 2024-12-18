@@ -313,7 +313,7 @@ const ScanQRCode = () => {
     </View>
   ) : (
     <View style={styles.root}>
-      {/* <StatusBar hidden /> */}
+       <StatusBar hidden />
       {isFocused && cameraStatus !== RNCamera.Constants.CameraStatus.NOT_AUTHORIZED && (
         <RNCamera
           autoFocus
