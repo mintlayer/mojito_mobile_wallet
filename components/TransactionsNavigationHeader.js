@@ -9,7 +9,7 @@ import WalletGradient from '../class/wallet-gradient';
 import Biometric from '../class/biometrics';
 import loc, { formatBalance } from '../loc';
 import { BlueStorageContext } from '../blue_modules/storage-context';
-import ToolTipMenu from './TooltipMenu';
+import ToolTipMenu from './TooltipMenu.js';
 import { BluePrivateBalance } from '../BlueComponents';
 import { MintLayerWallet } from '../class/wallets/mintlayer-wallet';
 import { type } from '../theme/Fonts';
@@ -208,105 +208,107 @@ export default class TransactionsNavigationHeader extends Component {
 
     return (
       <LinearGradient colors={WalletGradient.gradientsFor(this.state.wallet.type)} style={styles.lineaderGradient} {...WalletGradient.linearGradientProps(this.state.wallet.type)}>
-        <Image
-          source={(() => {
-            switch (this.state.wallet.type) {
-              case LightningLdkWallet.type:
-              case LightningCustodianWallet.type:
-                return I18nManager.isRTL ? require('../img/lnd-shape-rtl.png') : require('../img/lnd-shape.png');
-              case MultisigHDWallet.type:
-                return I18nManager.isRTL ? require('../img/vault-shape-rtl.png') : require('../img/vault-shape.png');
-              case MintLayerWallet.type:
-                return I18nManager.isRTL ? require('../img/ml-shape-rtl.png') : require('../img/ml-shape.png');
-              default:
-                return I18nManager.isRTL ? require('../img/btc-shape-rtl.png') : require('../img/btc-shape.png');
+        <View style={styles.lineaderGradientInner}>
+          <Image
+            source={(() => {
+              switch (this.state.wallet.type) {
+                case LightningLdkWallet.type:
+                case LightningCustodianWallet.type:
+                  return I18nManager.isRTL ? require('../img/lnd-shape-rtl.png') : require('../img/lnd-shape.png');
+                case MultisigHDWallet.type:
+                  return I18nManager.isRTL ? require('../img/vault-shape-rtl.png') : require('../img/vault-shape.png');
+                case MintLayerWallet.type:
+                  return I18nManager.isRTL ? require('../img/ml-shape-rtl.png') : require('../img/ml-shape.png');
+                default:
+                  return I18nManager.isRTL ? require('../img/btc-shape-rtl.png') : require('../img/btc-shape.png');
+              }
+            })()}
+            style={styles.chainIcon}
+          />
+          <Text testID="WalletLabel" numberOfLines={1} style={styles.walletLabel}>
+            {this.state.wallet.getLabel()}
+          </Text>
+          <ToolTipMenu
+            onPress={this.changeWalletBalanceUnit}
+            ref={this.menuRef}
+            title={loc.wallets.balance}
+            onPressMenuItem={this.onPressMenuItem}
+            actions={
+              this.state.wallet.hideBalance
+                ? [
+                    {
+                      id: TransactionsNavigationHeader.actionKeys.WalletBalanceVisibility,
+                      text: loc.transactions.details_balance_show,
+                      icon: TransactionsNavigationHeader.actionIcons.Eye,
+                    },
+                  ]
+                : [
+                    {
+                      id: TransactionsNavigationHeader.actionKeys.WalletBalanceVisibility,
+                      text: loc.transactions.details_balance_hide,
+                      icon: TransactionsNavigationHeader.actionIcons.EyeSlash,
+                    },
+                    {
+                      id: TransactionsNavigationHeader.actionKeys.CopyToClipboard,
+                      text: loc.transactions.details_copy,
+                      icon: TransactionsNavigationHeader.actionIcons.Clipboard,
+                    },
+                  ]
             }
-          })()}
-          style={styles.chainIcon}
-        />
-        <Text testID="WalletLabel" numberOfLines={1} style={styles.walletLabel}>
-          {this.state.wallet.getLabel()}
-        </Text>
-        <ToolTipMenu
-          onPress={this.changeWalletBalanceUnit}
-          ref={this.menuRef}
-          title={loc.wallets.balance}
-          onPressMenuItem={this.onPressMenuItem}
-          actions={
-            this.state.wallet.hideBalance
-              ? [
-                  {
-                    id: TransactionsNavigationHeader.actionKeys.WalletBalanceVisibility,
-                    text: loc.transactions.details_balance_show,
-                    icon: TransactionsNavigationHeader.actionIcons.Eye,
-                  },
-                ]
-              : [
-                  {
-                    id: TransactionsNavigationHeader.actionKeys.WalletBalanceVisibility,
-                    text: loc.transactions.details_balance_hide,
-                    icon: TransactionsNavigationHeader.actionIcons.EyeSlash,
-                  },
-                  {
-                    id: TransactionsNavigationHeader.actionKeys.CopyToClipboard,
-                    text: loc.transactions.details_copy,
-                    icon: TransactionsNavigationHeader.actionIcons.Clipboard,
-                  },
-                ]
-          }
-        >
-          <View style={styles.balance}>
-            {this.state.wallet.hideBalance ? (
-              <BluePrivateBalance />
-            ) : (
-              <View>
-                <Text
-                  testID="WalletBalance"
-                  key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
-                  numberOfLines={1}
-                  adjustsFontSizeToFit
-                  style={styles.walletBalance}
-                >
-                  {balance}
-                </Text>
-                {!!lockedBalance && (
-                  <Text testID="WalletLockedBalance" key={lockedBalance} numberOfLines={1} adjustsFontSizeToFit style={styles.lockedWalletBalance}>
-                    {loc.formatString(loc.wallets.locked_balance, {
-                      locked: formattedLockedBalance,
-                    })}
+          >
+            <View style={styles.balance}>
+              {this.state.wallet.hideBalance ? (
+                <BluePrivateBalance />
+              ) : (
+                <View>
+                  <Text
+                    testID="WalletBalance"
+                    key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
+                    numberOfLines={1}
+                    adjustsFontSizeToFit
+                    style={styles.walletBalance}
+                  >
+                    {balance}
                   </Text>
-                )}
-              </View>
-            )}
-          </View>
-        </ToolTipMenu>
-        {this.state.wallet.type === LightningCustodianWallet.type && this.state.allowOnchainAddress && (
-          <ToolTipMenu isMenuPrimaryAction isButton onPressMenuItem={this.manageFundsPressed} actions={this.toolTipMenuActions} buttonStyle={styles.manageFundsButton}>
-            <Text style={styles.manageFundsButtonText}>{loc.lnd.title}</Text>
+                  {!!lockedBalance && (
+                    <Text testID="WalletLockedBalance" key={lockedBalance} numberOfLines={1} adjustsFontSizeToFit style={styles.lockedWalletBalance}>
+                      {loc.formatString(loc.wallets.locked_balance, {
+                        locked: formattedLockedBalance,
+                      })}
+                    </Text>
+                  )}
+                </View>
+              )}
+            </View>
           </ToolTipMenu>
-        )}
-        {this.state.wallet.type === LightningLdkWallet.type && (
-          <TouchableOpacity accessibilityRole="button" onPress={this.manageFundsPressed}>
-            <View style={styles.manageFundsButton}>
+          {this.state.wallet.type === LightningCustodianWallet.type && this.state.allowOnchainAddress && (
+            <ToolTipMenu isMenuPrimaryAction isButton onPressMenuItem={this.manageFundsPressed} actions={this.toolTipMenuActions} buttonStyle={styles.manageFundsButton}>
               <Text style={styles.manageFundsButtonText}>{loc.lnd.title}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-        {this.state.wallet.type === MultisigHDWallet.type && (
-          <TouchableOpacity accessibilityRole="button" onPress={this.manageFundsPressed}>
-            <View style={styles.manageFundsButton}>
-              <Text style={styles.manageFundsButtonText}>{loc.multisig.manage_keys}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-        {SHOW_STAKING && this.state.wallet.allowStaking() && (
-          <TouchableOpacity accessibilityRole="button" onPress={this.navigateToStake}>
-            <View style={styles.stakeButton}>
-              <Icon name="pie-chart" size={18} type="font-awesome" color={COLORS.green_shade} />
-              <Text style={styles.stakeButtonText}>Stake ML</Text>
-            </View>
-          </TouchableOpacity>
-        )}
+            </ToolTipMenu>
+          )}
+          {this.state.wallet.type === LightningLdkWallet.type && (
+            <TouchableOpacity accessibilityRole="button" onPress={this.manageFundsPressed}>
+              <View style={styles.manageFundsButton}>
+                <Text style={styles.manageFundsButtonText}>{loc.lnd.title}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          {this.state.wallet.type === MultisigHDWallet.type && (
+            <TouchableOpacity accessibilityRole="button" onPress={this.manageFundsPressed}>
+              <View style={styles.manageFundsButton}>
+                <Text style={styles.manageFundsButtonText}>{loc.multisig.manage_keys}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          {SHOW_STAKING && this.state.wallet.allowStaking() && (
+            <TouchableOpacity accessibilityRole="button" onPress={this.navigateToStake}>
+              <View style={styles.stakeButton}>
+                <Icon name="pie-chart" size={18} type="font-awesome" color={COLORS.green_shade} />
+                <Text style={styles.stakeButtonText}>Stake ML</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        </View>
       </LinearGradient>
     );
   }
@@ -314,9 +316,13 @@ export default class TransactionsNavigationHeader extends Component {
 
 const styles = StyleSheet.create({
   lineaderGradient: {
-    padding: 15,
+    padding: 0,
+    marginTop: 0,
     minHeight: 140,
     justifyContent: 'center',
+  },
+  lineaderGradientInner: {
+    padding: 15,
   },
   chainIcon: {
     width: 99,

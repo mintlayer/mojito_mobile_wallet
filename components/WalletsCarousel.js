@@ -76,10 +76,14 @@ const iStyles = StyleSheet.create({
   root: { paddingRight: 20 },
   rootLargeDevice: { marginVertical: 20 },
   grad: {
-    padding: 15,
+    padding: 0,
     borderRadius: 12,
     minHeight: 164,
     elevation: 5,
+  },
+  gradInner: {
+    padding: 15,
+    elevation: 6,
   },
   image: {
     width: 99,
@@ -211,40 +215,37 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
       >
         <LinearGradient shadowColor={colors.shadowColor} colors={WalletGradient.gradientsFor(item.type)} style={iStyles.grad}>
           {/* <Image source={image} style={iStyles.image} /> */}
-          {/* <View style={[iStyles.grad, { backgroundColor: colors.walletBalanceBgColor }]}> */}
+          <View style={iStyles.gradInner}>
+            <Text numberOfLines={1} style={[iStyles.label, { color: colors.inverseForegroundColor }]}>
+              {item.getLabel()}
+            </Text>
 
-          <Text style={iStyles.br} />
-          <Text numberOfLines={1} style={[iStyles.label, { color: colors.inverseForegroundColor }]}>
-            {item.getLabel()}
-          </Text>
-
-          <View style={iStyles.row}>
-            <View style={iStyles.balanceLeftCont}>
-              {item.hideBalance ? (
-                <BluePrivateBalance />
-              ) : (
-                <Text
-                  numberOfLines={1}
-                  key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
-                  adjustsFontSizeToFit
-                  style={[iStyles.balanceInDollar, { color: colors.inverseForegroundColor }]}
-                >
-                  {balance}
+            <View style={iStyles.row}>
+              <View style={iStyles.balanceLeftCont}>
+                {item.hideBalance ? (
+                  <BluePrivateBalance />
+                ) : (
+                  <Text
+                    numberOfLines={1}
+                    key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
+                    adjustsFontSizeToFit
+                    style={[iStyles.balanceInDollar, { color: colors.inverseForegroundColor }]}
+                  >
+                    {balance}
+                  </Text>
+                )}
+                <Text style={iStyles.br} />
+                <Text numberOfLines={1} style={[iStyles.BalanceInBtc, { color: colors.inverseForegroundColor }]}>
+                  {loc.wallets.list_latest_transaction}
                 </Text>
-              )}
-              <Text style={iStyles.br} />
-              <Text numberOfLines={1} style={[iStyles.BalanceInBtc, { color: colors.inverseForegroundColor }]}>
-                {loc.wallets.list_latest_transaction}
-              </Text>
+              </View>
+              <Image source={bitcoin} style={iStyles.btcImg} />
             </View>
-            <Image source={bitcoin} style={iStyles.btcImg} />
-          </View>
 
-          <Text numberOfLines={1} style={[iStyles.btcInfoMain, { color: colors.inverseForegroundColor }]}>
-            {latestTransactionText}
-          </Text>
-
-          {/* </View> */}
+            <Text numberOfLines={1} style={[iStyles.btcInfoMain, { color: colors.inverseForegroundColor }]}>
+              {latestTransactionText}
+            </Text>
+           </View>
         </LinearGradient>
       </TouchableWithoutFeedback>
     </Animated.View>

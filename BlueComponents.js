@@ -1,8 +1,8 @@
 /* eslint react/prop-types: "off", react-native/no-inline-styles: "off" */
 import React, { Component, forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Input, Text, Header, ListItem, Avatar } from 'react-native-elements';
-import { ActivityIndicator, Alert, Animated, Dimensions, Image, InputAccessoryView, Keyboard, KeyboardAvoidingView, PixelRatio, Platform, PlatformColor, SafeAreaView, StyleSheet, Switch, TextInput, TouchableOpacity, View, I18nManager, ImageBackground } from 'react-native';
+import { Icon, Input, Header, ListItem, Avatar } from 'react-native-elements';
+import { ActivityIndicator, Text, Alert, Animated, Dimensions, Image, InputAccessoryView, Keyboard, KeyboardAvoidingView, PixelRatio, Platform, PlatformColor, SafeAreaView, StyleSheet, Switch, TextInput, TouchableOpacity, View, I18nManager, ImageBackground } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import NetworkTransactionFees, { NetworkTransactionFee, NetworkTransactionFeeType } from './models/networkTransactionFees';
 import AsyncStorage from '@react-native-async-storage/async-storage';
