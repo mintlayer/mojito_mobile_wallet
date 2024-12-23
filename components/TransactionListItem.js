@@ -329,7 +329,7 @@ export const TransactionListItem = React.memo(({ item, itemPriceUnit = BitcoinUn
 
   return (
     <View style={styles.container}>
-      <ToolTipMenu ref={menuRef} actions={toolTipActions} onPressMenuItem={onToolTipPress} onPress={onPress}>
+      <ToolTipMenu actions={toolTipActions} onPressMenuItem={onToolTipPress} onPress={onPress}>
         <BlueListItem leftAvatar={avatar} title={title} subtitleNumberOfLines={subtitleNumberOfLines} subtitle={subtitle} Component={View} subtitleProps={subtitleProps} chevron={false} rightTitle={rowTitle} rightTitleStyle={rowTitleStyle} containerStyle={containerStyle} />
       </ToolTipMenu>
     </View>

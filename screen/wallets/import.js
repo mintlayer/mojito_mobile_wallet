@@ -173,12 +173,13 @@ const WalletsImport = () => {
         </TouchableWithoutFeedback>
         <BlueSpacing20 />
         <BlueFormMultiInput value={importText} onBlur={onBlur} onChangeText={setImportText} testID="MnemonicInput" inputAccessoryViewID={BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID} />
-        <View style={styles.scanContainer}>
-          <BlueFormLabel style={styles.paragraph}>{loc.multisig.scan_or_import_file}</BlueFormLabel>
-        </View>
-        <View style={styles.scanView}>
-          <BlueButton title={loc.send.details_scan} testID="Scan" onPress={importScan} textStyle={{ color: colors.buttonTextColor }} />
-        </View>
+
+        {/*<View style={styles.scanContainer}>*/}
+        {/*  <BlueFormLabel style={styles.paragraph}>{loc.multisig.scan_or_import_file}</BlueFormLabel>*/}
+        {/*</View>*/}
+        {/*<View style={styles.scanView}>*/}
+        {/*  <BlueButton title={loc.send.details_scan} testID="Scan" onPress={importScan} textStyle={{ color: colors.buttonTextColor }} />*/}
+        {/*</View>*/}
 
         {Platform.select({ android: !isToolbarVisibleForAndroid && renderOptionsAndImportButton, default: renderOptionsAndImportButton })}
         {Platform.select({

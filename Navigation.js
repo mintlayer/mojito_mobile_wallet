@@ -543,8 +543,13 @@ const Tab = createBottomTabNavigator();
 const BottomTab = () => {
   const { theme, colors } = useTheme();
 
+  const screenOptions = {
+    headerShown: false,
+    headerHideShadow: true,
+  };
+
   return (
-    <Tab.Navigator initialRouteName="WalletsList" showLabel={false}>
+    <Tab.Navigator initialRouteName="WalletsList" screenOptions={screenOptions} showLabel={false}>
       <WalletsStack.Screen
         name="WalletsList"
         component={WalletsList}

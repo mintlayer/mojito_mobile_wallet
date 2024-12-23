@@ -140,36 +140,6 @@ const WalletsList = () => {
     }
   };
 
-  useEffect(() => {
-    setOptions({
-      headerShown: !isDesktop,
-      headerStyle: {
-        backgroundColor: colors.customHeader,
-        borderBottomWidth: 0,
-        elevation: 0,
-        shadowOpacity: 0,
-        shadowOffset: { height: 0, width: 0 },
-      },
-      headerRight: () =>
-        I18nManager.isRTL ? null : (
-          <TouchableOpacity accessibilityRole="button" testID="SettingsButton" style={styles.headerTouch} onPress={navigateToSettings}>
-            <Icon size={22} name="kebab-horizontal" type="octicon" color={colors.foregroundColor} />
-          </TouchableOpacity>
-        ),
-      headerLeft: () =>
-        I18nManager.isRTL ? (
-          <TouchableOpacity accessibilityRole="button" testID="SettingsButton" style={styles.headerTouch} onPress={navigateToSettings}>
-            <Icon size={22} name="kebab-horizontal" type="octicon" color={colors.foregroundColor} />
-          </TouchableOpacity>
-        ) : null,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colors]);
-
-  const navigateToSettings = () => {
-    navigate('Settings');
-  };
-
   /**
    * Forcefully fetches TXs and balance for ALL wallets.
    * Triggered manually by user on pull-to-refresh.
@@ -220,8 +190,7 @@ const WalletsList = () => {
   };
 
   const renderListHeaderComponent = () => {
-    const style = { opacity: isLoading ? 1.0 : 0.5 };
-    return <View style={[styles.listHeaderBack, stylesHook.listHeaderBack]} />;
+    return <></>;
   };
 
   const handleLongPress = () => {
