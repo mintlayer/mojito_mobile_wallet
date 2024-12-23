@@ -1,5 +1,16 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Text, ActivityIndicator, KeyboardAvoidingView, View, TouchableOpacity, StatusBar, Keyboard, ScrollView, StyleSheet, I18nManager } from 'react-native';
+import {
+  Text,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  View,
+  TouchableOpacity,
+  Keyboard,
+  ScrollView,
+  StyleSheet,
+  I18nManager,
+  Platform
+} from 'react-native';
 import { Icon } from 'react-native-elements';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useFocusEffect, useNavigation, useRoute, useTheme } from '@react-navigation/native';
@@ -14,6 +25,7 @@ import Biometric from '../../class/biometrics';
 import loc, { formatBalanceWithoutSuffix } from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import alert from '../../components/Alert';
+import Privacy from "../../blue_modules/Privacy.ios";
 const currency = require('../../blue_modules/currency');
 
 const ScanLndInvoice = () => {
@@ -48,14 +60,12 @@ const ScanLndInvoice = () => {
   });
 
   useEffect(() => {
-    console.log('scanLndInvoice useEffect');
-    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
-    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+    const keyboardDidShowSubscription = Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    const keyboardDidHideSubscription = Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
     return () => {
-      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
-      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+      keyboardDidShowSubscription.remove();
+      keyboardDidHideSubscription.remove();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

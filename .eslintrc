@@ -2,7 +2,7 @@
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint",
-    "react-native" // for no-inline-styles rule
+    "react-native", // for no-inline-styles rule
   ],
   "extends": [
     "standard",
@@ -11,22 +11,16 @@
     "plugin:react-hooks/recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
+    "@react-native",
     "plugin:prettier/recommended" // removes all eslint rules that can mess up with prettier
   ],
   "rules": {
-    "react/jsx-key": "off",
-    "@typescript-eslint/no-unused-vars": "off",
-    "react/prop-types": "off",
     "react/jsx-handler-names": "off", // activated by standard-react config
     "react/display-name": "off",
     "react-native/no-inline-styles": "error",
-    "@typescript-eslint/camelcase": "off",
-    "camelcase": "off",
-    "no-var": "off",
-    "one-var": "off",
-    "no-void": "off",
-    "eqeqeq": "off",
-    "no-redeclare": "off",
+    "react-native/no-unused-styles": "error",
+    "react/no-is-mounted": "off",
+    "react-native/no-single-element-style-arrays": "error",
     "prettier/prettier": [
       "warn",
       {
@@ -76,12 +70,10 @@
     "es6": true,
     "jest": true
   },
-  // "parserOptions": {
-  //   "ecmaVersion": 2018,
-  //   "sourceType": "module",
-  //   "ecmaFeatures": {
-  //     "jsx": true
-  //   }
-  // },
-  "globals": { "fetch": false }
+  "globals": { "fetch": false },
+  "settings": {
+    "react": { // this is for eslint-plugin-react
+      "version": "detect" // React version. "detect" automatically picks the version you have installed.
+    }
+  }
 }

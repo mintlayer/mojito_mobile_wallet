@@ -1,6 +1,6 @@
 /* eslint react/prop-types: "off" */
 import React, { useState, useMemo, useCallback, useContext, useEffect, useRef } from 'react';
-import { Linking, StyleSheet, View } from 'react-native';
+import { Linking, StyleSheet, View, Text } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { BitcoinUnit } from '../models/bitcoinUnits';
 import * as NavigationService from '../NavigationService';
@@ -9,7 +9,7 @@ import { useNavigation, useTheme } from '@react-navigation/native';
 import loc, { formatBalanceWithoutSuffix, transactionTimeToReadable } from '../loc';
 import Lnurl from '../class/lnurl';
 import { BlueStorageContext } from '../blue_modules/storage-context';
-import ToolTipMenu from './TooltipMenu';
+import ToolTipMenu from './TooltipMenu.js';
 import { BlueListItem, BlueTransactionDelegateStakingIcon, BlueTransactionDelegateWithdrawalIcon, BlueTransactionExpiredIcon, BlueTransactionIncomingIcon, BlueTransactionOffchainIcon, BlueTransactionOffchainIncomingIcon, BlueTransactionOnchainIcon, BlueTransactionOutgoingIcon, BlueTransactionPendingIcon, BlueTransactionStakingIcon } from '../BlueComponents';
 import { TransactionType } from '../blue_modules/Mintlayer';
 

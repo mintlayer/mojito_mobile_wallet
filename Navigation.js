@@ -1,5 +1,5 @@
 import React from 'react';
-import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Platform, useWindowDimensions, Dimensions, I18nManager, Image, StyleSheet, View, Text, Touchable, TouchableOpacity } from 'react-native';
 import { useRoute, useTheme } from '@react-navigation/native';
@@ -580,18 +580,39 @@ function MlWalletRoot() {
     labelStyle: { fontSize: 18, fontWeight: 'bold', textTransform: 'none' },
     indicatorStyle: { backgroundColor: colors.mainColor },
     activeTintColor: colors.foregroundColor,
-    tabStyle: { padding: 2 },
+    tabStyle: { padding: 1 },
     style: { marginTop: 8, marginHorizontal: 16, elevation: 0 },
     pressColor: colors.background,
+  };
+
+  const screenOptions = {
+    tabBarActiveTintColor: colors.foregroundColor,
+    tabBarPressColor: '#FFFFFF',
+    tabBarLabelStyle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      textTransform: 'none',
+    },
+    tabBarItemStyle: {
+      padding: 1,
+    },
+    tabBarIndicatorStyle: {
+      backgroundColor: '#11967F',
+    },
+    tabBarStyle: {
+      marginTop: 8,
+      marginHorizontal: 16,
+      elevation: 0,
+    },
   };
 
   return (
     <View style={styles.flex}>
       <WalletTransactionsHeader />
-      <TopTab.Navigator tabBarOptions={tabBarOptions}>
-        <TopTab.Screen name="Transactions" component={MLWalletTransactions} initialParams={{ walletID }} />
-        <TopTab.Screen name="Tokens" component={MLWalletTokens} initialParams={{ walletID }} />
-        <TopTab.Screen name="Stake ML" component={Staking} initialParams={{ walletID }} />
+      <TopTab.Navigator screenOptions={({route})=>({...screenOptions, key: route.name})}>
+        <TopTab.Screen key="wallet_detail_transactions" name="Transactions" component={MLWalletTransactions} initialParams={{ walletID }} />
+        <TopTab.Screen key="wallet_detail_tokens" name="Tokens" component={MLWalletTokens} initialParams={{ walletID }} />
+        <TopTab.Screen key="wallet_detail_staking" name="Stake ML" component={Staking} initialParams={{ walletID }} />
       </TopTab.Navigator>
     </View>
   );

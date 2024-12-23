@@ -136,7 +136,7 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<true/>
+		<false/>
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>localhost</key>
@@ -153,7 +153,7 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>This alert should not show up as we do not require this data</string>
 	<key>NSCameraUsageDescription</key>
-	<string>In order to quickly scan the recipient's address, we need your permission to use the camera to scan their QR Code.</string>
+	<string>In order to quickly scan the recipient&apos;s address, we need your permission to use the camera to scan their QR Code.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>In order to use FaceID please confirm your permission.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -207,7 +207,7 @@
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
-		<string>armv7</string>
+		<string>arm64</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
@@ -360,7 +360,7 @@
 	<key>bugsnag</key>
 	<dict>
 		<key>apiKey</key>
-		<string>17ba9059f676f1cc4f45d98182388b01</string>
+		<string></string>
 	</dict>
 </dict>
 </plist>

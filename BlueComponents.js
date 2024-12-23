@@ -1,8 +1,8 @@
 /* eslint react/prop-types: "off", react-native/no-inline-styles: "off" */
 import React, { Component, forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Input, Text, Header, ListItem, Avatar } from 'react-native-elements';
-import { ActivityIndicator, Alert, Animated, Dimensions, Image, InputAccessoryView, Keyboard, KeyboardAvoidingView, PixelRatio, Platform, PlatformColor, SafeAreaView, StyleSheet, Switch, TextInput, TouchableOpacity, View, I18nManager, ImageBackground } from 'react-native';
+import { Icon, Input, Header, ListItem, Avatar } from 'react-native-elements';
+import { ActivityIndicator, Text, Alert, Animated, Dimensions, Image, InputAccessoryView, Keyboard, KeyboardAvoidingView, PixelRatio, Platform, PlatformColor, SafeAreaView, StyleSheet, Switch, TextInput, TouchableOpacity, View, I18nManager, ImageBackground } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import NetworkTransactionFees, { NetworkTransactionFee, NetworkTransactionFeeType } from './models/networkTransactionFees';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,7 +23,7 @@ if (aspectRatio > 1.6) {
   isIpad = true;
 }
 // eslint-disable-next-line no-unused-expressions
-Platform.OS === 'android' ? (ActivityIndicator.defaultProps.color = PlatformColor('?attr/colorControlActivated')) : null;
+const ActivityIndicatorColor = Platform.OS === 'android' ? PlatformColor('?attr/colorControlActivated') : null;
 
 export const BlueButton = (props) => {
   const { colors } = useTheme();
@@ -456,7 +456,7 @@ export const BlueListItem = React.memo((props) => {
         </ListItem.Content>
       )}
       {props.isLoading ? (
-        <ActivityIndicator />
+        <ActivityIndicator color={ActivityIndicatorColor} />
       ) : (
         <>
           {props.chevron && <ListItem.Chevron iconStyle={{ transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }] }} />}
@@ -751,7 +751,7 @@ export const BlueDoneAndDismissKeyboardInputAccessory = (props) => {
 export const BlueLoading = (props) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center' }} {...props}>
-      <ActivityIndicator />
+      <ActivityIndicator color={ActivityIndicatorColor} />
     </View>
   );
 };

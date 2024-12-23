@@ -188,7 +188,7 @@ const StakingDelegationDetails = () => {
 
   const processAddressData = (data) => {
     //
-    console.log(data);
+    console.log('processAddressData data', data);
   };
 
   const formatFee = (fee) => formatBalance(fee, feeUnit, true);
@@ -268,17 +268,6 @@ const StakingDelegationDetails = () => {
     setIsLoading(true);
 
     try {
-      const utxo = wallet.getUtxo();
-      const address = await wallet.getAddressAsync();
-      const changeAddress = await wallet.getChangeAddressAsync();
-
-      const targets = [
-        {
-          delegationId: delegation.delegation_id,
-          value: BigInt(amount * 100000000000),
-        },
-      ];
-
       const { tx, fee } = await wallet.withdrawDelegation({
         delegation,
         amount: BigInt(amount * 100000000000),
@@ -303,7 +292,7 @@ const StakingDelegationDetails = () => {
       setIsLoading(false);
       setWithdrawModalVisible(false);
     } catch (e) {
-      console.log(e);
+      console.log('createWithdrawTransaction', e);
       setIsLoading(false);
     }
   };
@@ -326,7 +315,6 @@ const StakingDelegationDetails = () => {
                 // TODO: implement unit change
               }}
               onChangeText={(text) => {
-                console.log(text);
                 setAmount(text);
               }}
               unit={amountUnit}

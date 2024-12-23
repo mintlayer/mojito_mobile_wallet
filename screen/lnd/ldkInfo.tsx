@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { View, StatusBar, StyleSheet, Text, Keyboard, TouchableOpacity, SectionList } from 'react-native';
+import { View, StyleSheet, Text, Keyboard, TouchableOpacity, SectionList } from 'react-native';
 import { RouteProp, useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { SafeBlueArea, BlueButton, BlueSpacing20, BlueSpacing10, BlueLoading, BlueTextCentered } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';

@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler'; // should be on top
 import React, { useContext, useEffect, useRef } from 'react';
-import { AppState, DeviceEventEmitter, NativeModules, NativeEventEmitter, Linking, Platform, StyleSheet, UIManager, useColorScheme, View, StatusBar } from 'react-native';
+import { AppState, Text, DeviceEventEmitter, NativeModules, NativeEventEmitter, Linking, Platform, StyleSheet, UIManager, useColorScheme, View, StatusBar } from 'react-native';
 import { NavigationContainer, CommonActions } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { navigationRef } from './NavigationService';
@@ -19,7 +19,6 @@ import WatchConnectivity from './WatchConnectivity';
 import DeviceQuickActions from './class/quick-actions';
 import Notifications from './blue_modules/notifications';
 import Biometric from './class/biometrics';
-import WidgetCommunication from './blue_modules/WidgetCommunication';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import ActionSheet from './screen/ActionSheet';
 import HandoffComponent from './components/handoff';
@@ -93,13 +92,27 @@ const App = () => {
     if (walletsInitialized) {
       addListeners();
     }
+    const subscriptionLinking = Linking.addListener('url', handleOpenURL);
+    const subscriptionAppState = AppState.addEventListener('change', handleAppStateChange);
+
+    const notificationSubscription = eventEmitter.addListener('onNotificationReceived', onNotificationReceived);
+    const settingsSubscription = eventEmitter.addListener('openSettings', openSettings);
+    const userActivitySubscription = eventEmitter.addListener('onUserActivityOpen', onUserActivityOpen);
+
+
+    return () => {
+      subscriptionLinking.remove();
+      subscriptionAppState.remove();
+
+      notificationSubscription.remove();
+      settingsSubscription.remove();
+      userActivitySubscription.remove();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletsInitialized]);
 
   useEffect(() => {
     return () => {
-      Linking.removeEventListener('url', handleOpenURL);
-      AppState.removeEventListener('change', handleAppStateChange);
       eventEmitter.removeAllListeners('onNotificationReceived');
       eventEmitter.removeAllListeners('openSettings');
       eventEmitter.removeAllListeners('onUserActivityOpen');
@@ -120,21 +133,12 @@ const App = () => {
   }, [colorScheme]);
 
   const addListeners = () => {
-    Linking.addEventListener('url', handleOpenURL);
-    AppState.addEventListener('change', handleAppStateChange);
     DeviceEventEmitter.addListener('quickActionShortcut', walletQuickActions);
     DeviceQuickActions.popInitialAction().then(popInitialAction);
     EventEmitter?.getMostRecentUserActivity()
       .then(onUserActivityOpen)
       .catch(() => console.log('No userActivity object sent'));
     handleAppStateChange(undefined);
-    /*
-      When a notification on iOS is shown while the app is on foreground;
-      On willPresent on AppDelegate.m
-     */
-    eventEmitter.addListener('onNotificationReceived', onNotificationReceived);
-    eventEmitter.addListener('openSettings', openSettings);
-    eventEmitter.addListener('onUserActivityOpen', onUserActivityOpen);
   };
 
   const popInitialAction = async (data) => {
@@ -362,13 +366,12 @@ const App = () => {
         {/* <NavigationContainer ref={navigationRef} theme={colorScheme === 'dark' ? BlueDarkTheme : BlueDefaultTheme}> */}
         <NavigationContainer ref={navigationRef} theme={BlueDefaultTheme}>
           <InitRoot />
-          <Notifications onProcessNotifications={processPushNotifications} />
+      {/*    <Notifications onProcessNotifications={processPushNotifications} />*/}
         </NavigationContainer>
         {walletsInitialized && !isDesktop && <WatchConnectivity />}
       </View>
       <DeviceQuickActions />
       <Biometric />
-      <WidgetCommunication />
       <Privacy />
     </SafeAreaProvider>
   );

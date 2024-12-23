@@ -16,7 +16,7 @@ import navigationStyle from '../../components/navigationStyle';
 import { TransactionListItem } from '../../components/TransactionListItem';
 import { SendReceiveCard } from '../../components/SendReceiveCard';
 import BottomModal from '../../components/BottomModal';
-import { LightningCustodianWallet, LightningLdkWallet } from '../class';
+import { LightningCustodianWallet } from '../../class';
 import { type } from '../../theme/Fonts';
 import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
 
@@ -124,7 +124,7 @@ const WalletsList = () => {
 
   useEffect(() => {
     wallets.map((item) => {
-      if (item.type == LightningLdkWallet.type || item.type == LightningCustodianWallet.type) {
+      if (item.type == LightningCustodianWallet.type) {
         setShowModal(true);
       }
       return null;

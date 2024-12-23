@@ -52,14 +52,24 @@ const ImportWalletDiscovery = () => {
     if (importing.current) return;
     importing.current = true;
     addAndSaveWallet(wallet);
-    navigation.dangerouslyGetParent().pop();
+    const parentNavigator = navigation.getParent();
+    if (parentNavigator) {
+      parentNavigator.pop();
+    } else {
+      console.warn('No parent navigator found');
+    }
   };
 
   const saveWallets = () => {
     if (importing.current) return;
     importing.current = true;
     selected.forEach((selectedIndex) => addAndSaveWallet(wallets[selectedIndex].wallet));
-    navigation.dangerouslyGetParent().pop();
+    const parentNavigator = navigation.getParent();
+    if (parentNavigator) {
+      parentNavigator.pop();
+    } else {
+      console.warn('No parent navigator found');
+    }
   };
 
   useEffect(() => {

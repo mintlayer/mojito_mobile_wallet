@@ -6,8 +6,8 @@ import { BlueStorageProvider } from './blue_modules/storage-context';
 import SplashScreen from 'react-native-splash-screen';
 import { getIntroSliderFlage, setFlage } from './store/asyncStorage.js';
 import { WasmWebView } from './components/wasm_webview/WasmWebView';
-
-const A = require('./blue_modules/analytics');
+//
+// const A = require('./blue_modules/analytics');
 if (!Error.captureStackTrace) {
   // captureStackTrace is only available when debugging
   Error.captureStackTrace = () => {};
@@ -17,7 +17,7 @@ const BlueAppComponent = () => {
   const [wasmInitializationFinished, setWasmInitializationFinished] = useState(false);
 
   useEffect(() => {
-    A(A.ENUM.INIT);
+    // A(A.ENUM.INIT);
     setTimeout(() => {
       SplashScreen.hide();
     }, 5000);
@@ -37,4 +37,4 @@ const BlueAppComponent = () => {
   );
 };
 
-AppRegistry.registerComponent('BlueWallet', () => BlueAppComponent);
+AppRegistry.registerComponent('MojitoWallet', () => BlueAppComponent);
