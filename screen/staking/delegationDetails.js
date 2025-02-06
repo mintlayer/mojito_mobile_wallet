@@ -389,7 +389,7 @@ const StakingDelegationDetails = () => {
   };
 
   return (
-    <View style={[styles.root]} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
+    <View style={styles.root} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
       <StatusBar barStyle="light-content" />
       <View>
         <View style={styles.infoDetails}>

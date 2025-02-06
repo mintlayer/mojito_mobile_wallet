@@ -77,7 +77,7 @@ const TorSettings = () => {
 
   if (isLoading) {
     return (
-      <View style={[styles.root]}>
+      <View style={styles.root}>
         <BlueLoading />
       </View>
     );

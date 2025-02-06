@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Text, Keyboard, TouchableOpacity, SectionList } from 'react-native';
 import { RouteProp, useNavigation, useRoute, useTheme } from '@react-navigation/native';

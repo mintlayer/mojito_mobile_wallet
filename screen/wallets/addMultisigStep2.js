@@ -579,7 +579,7 @@ const WalletsAddMultisigStep2 = () => {
   return (
     <View style={[styles.root, stylesHook.root]}>
       {renderHelp()}
-      <View style={[styles.wrapBox]}>
+      <View style={styles.wrapBox}>
         <FlatList data={data.current} renderItem={_renderKeyItem} keyExtractor={(_item, index) => `${index}`} />
       </View>
       {renderMnemonicsModal()}

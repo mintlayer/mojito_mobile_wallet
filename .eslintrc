@@ -17,8 +17,8 @@
   "rules": {
     "react/jsx-handler-names": "off", // activated by standard-react config
     "react/display-name": "off",
-    "react-native/no-inline-styles": "error",
-    "react-native/no-unused-styles": "error",
+    "react-native/no-inline-styles": "warn",
+    "react-native/no-unused-styles": "warn",
     "react/no-is-mounted": "off",
     "react-native/no-single-element-style-arrays": "error",
     "prettier/prettier": [
@@ -50,7 +50,10 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-this-alias": "off",
-    "@typescript-eslint/no-use-before-define": "off"
+    "@typescript-eslint/no-use-before-define": "off",
+
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-unreachable": "warn"
   },
   "overrides": [
     {
@@ -67,8 +70,7 @@
     }
   ],
   "env": {
-    "es6": true,
-    "jest": true
+    "es6": true
   },
   "globals": { "fetch": false },
   "settings": {

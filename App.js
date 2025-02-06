@@ -387,7 +387,7 @@ const App = () => {
         {/* <NavigationContainer ref={navigationRef} theme={colorScheme === 'dark' ? BlueDarkTheme : BlueDefaultTheme}> */}
         <NavigationContainer ref={navigationRef} theme={BlueDefaultTheme}>
           <InitRoot />
-      {/*    <Notifications onProcessNotifications={processPushNotifications} />*/}
+        {/* <Notifications onProcessNotifications={processPushNotifications} /> */}
         </NavigationContainer>
         {walletsInitialized && !isDesktop && <WatchConnectivity />}
       </View>

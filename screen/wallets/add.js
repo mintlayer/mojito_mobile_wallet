@@ -302,8 +302,8 @@ const WalletsAdd = () => {
           </View>
           {!isLoading && (
             <View style={styles.importContainer}>
-              <Text style={[styles.importText]}>{loc.wallets.add_import_wallet}</Text>
-              <Text style={[styles.importText]}>
+              <Text style={styles.importText}>{loc.wallets.add_import_wallet}</Text>
+              <Text style={styles.importText}>
                 <BlueButtonLink testID="ImportWallet" style={styles.clickImportContainer} textStyle={styles.clickImport} title={loc.wallets.click_here} onPress={navigateToImportWallet} />
               </Text>
             </View>

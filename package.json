@@ -1,6 +1,6 @@
 {
-  "name": "bluewallet",
-  "version": "0.0.1",
+  "name": "mojito-mobile-wallet",
+  "version": "0.4.2",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -58,7 +58,8 @@
     "react-native-dotenv": "^3.4.7",
     "react-native-typescript-transformer": "^1.2.13",
     "react-test-renderer": "18.3.1",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "ts-jest": "^29.1.1"
   },
   "husky": {
     "hooks": {
@@ -100,37 +101,11 @@
     "lint": "eslint --ext .js,.ts,.tsx '*.@(js|ts|tsx)' screen 'blue_modules/*.@(js|ts|tsx)' class models loc tests components",
     "lint:fix": "npm run lint -- --fix",
     "lint:quickfix": "git status --porcelain | grep -v '\\.json' | grep -E '\\.js|\\.ts' --color=never |  awk '{print $2}' | xargs eslint --fix; exit 0",
-    "unit": "jest -b tests/unit/*",
+    "unit": "jest -b -w tests/unit/*",
     "windows": "react-native run-windows",
     "ci:test": "jest --ci",
     "resolve": "npx npm-force-resolutions",
     "assets": "npx react-native-asset"
-  },
-  "jest": {
-    "preset": "react-native",
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts",
-      "tsx"
-    ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native(-.*)?|@react-native(-community)?)|@mintlayer/entropy-generator|@shopify/react-native-skia|react-navigation|react-navigation-redux-helpers|@react-navigation/|@react-navigation/native|@react-navigation/stack|react-native-reanimated|react-native-gesture-handler/)"
-    ],
-    "setupFiles": [
-      "./tests/setup.js",
-      "<rootDir>/node_modules/@shopify/react-native-skia/jestSetup.js",
-      "./node_modules/react-native-gesture-handler/jestSetup.js"
-    ],
-    "watchPathIgnorePatterns": [
-      "<rootDir>/node_modules"
-    ],
-    "setupFilesAfterEnv": [
-      "./tests/setupAfterEnv.js"
-    ]
   },
   "dependencies": {
     "@babel/runtime-corejs2": "^7.17.2",

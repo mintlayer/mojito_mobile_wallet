@@ -177,7 +177,7 @@ const EntropyGenerator = ({ props }) => {
   return (
     <GestureHandlerRootView style={styles.flex1}>
       <View>
-        <Text style={[styles.headingText]}>{loc.wallets.entrophy_generator}</Text>
+        <Text style={styles.headingText}>{loc.wallets.entrophy_generator}</Text>
         <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy}</Text>
         <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy2}</Text>
         <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.add_desc_entrophy3}</Text>
@@ -185,7 +185,7 @@ const EntropyGenerator = ({ props }) => {
       </View>
       <DrawingBoard callbackPath={(data) => setPaths(data)} />
       <View style={styles.createButton}>{!isLoading ? <BlueButton testID="entropyCreate" title={loc.wallets.add_create} disabled={paths[0].segments.length == 0} onPress={createWallet} /> : <ActivityIndicator />}</View>
-      <View style={styles.importContainer}>{!isLoading && <Text style={[styles.importText]}>{loc.wallets.add_import_wallet}</Text>}</View>
+      <View style={styles.importContainer}>{!isLoading && <Text style={styles.importText}>{loc.wallets.add_import_wallet}</Text>}</View>
       {!isLoading && <BlueButtonLink testID="ImportWallet" style={styles.clickImportContainer} textStyle={styles.clickImport} title={loc.wallets.click_here} onPress={navigateToImportWallet} />}
     </GestureHandlerRootView>
   );

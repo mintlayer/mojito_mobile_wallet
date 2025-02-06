@@ -430,7 +430,7 @@ const TransactionsStatus = () => {
             </Text>
           </View>
           {eta ? (
-            <View style={[styles.eta]}>
+            <View style={styles.eta}>
               <BlueSpacing10 />
               <Text style={styles.confirmationsText}>{eta}</Text>
             </View>
