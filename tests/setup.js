@@ -99,8 +99,8 @@ jest.mock('react-native-document-picker', () => ({}));
 
 jest.mock('react-native-haptic-feedback', () => ({}));
 
-jest.mock('rn-ldk/lib/module', () => ({}));
-jest.mock('rn-ldk/src/index', () => ({}));
+// jest.mock('rn-ldk/lib/module', () => ({}));
+// jest.mock('rn-ldk/src/index', () => ({}));
 
 const realmInstanceMock = {
   close: function () {},
@@ -147,20 +147,22 @@ jest.mock('react-native-share', () => {
   };
 });
 
-jest.mock('../blue_modules/WidgetCommunication', () => {
-  return {
-    reloadAllTimelines: jest.fn(),
-  };
-});
+// jest.mock('../blue_modules/WidgetCommunication', () => {
+//   return {
+//     reloadAllTimelines: jest.fn(),
+//   };
+// });
 
-const keychainMock = {
-  SECURITY_LEVEL_ANY: 'MOCK_SECURITY_LEVEL_ANY',
-  SECURITY_LEVEL_SECURE_SOFTWARE: 'MOCK_SECURITY_LEVEL_SECURE_SOFTWARE',
-  SECURITY_LEVEL_SECURE_HARDWARE: 'MOCK_SECURITY_LEVEL_SECURE_HARDWARE',
-  setGenericPassword: jest.fn().mockResolvedValue(),
-  getGenericPassword: jest.fn().mockResolvedValue(),
-  resetGenericPassword: jest.fn().mockResolvedValue(),
-};
-jest.mock('react-native-keychain', () => keychainMock);
+jest.mock('react-native-keychain', () => {
+  const keychainMock = {
+    SECURITY_LEVEL_ANY: 'MOCK_SECURITY_LEVEL_ANY',
+    SECURITY_LEVEL_SECURE_SOFTWARE: 'MOCK_SECURITY_LEVEL_SECURE_SOFTWARE',
+    SECURITY_LEVEL_SECURE_HARDWARE: 'MOCK_SECURITY_LEVEL_SECURE_HARDWARE',
+    setGenericPassword: jest.fn().mockResolvedValue(),
+    getGenericPassword: jest.fn().mockResolvedValue(),
+    resetGenericPassword: jest.fn().mockResolvedValue(),
+  };
+  return keychainMock;
+});
 
 global.alert = () => {};

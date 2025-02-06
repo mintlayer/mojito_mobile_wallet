@@ -155,7 +155,7 @@ const Confirm = () => {
         {action === 'CreateDelegation' && (
           <>
             <View style={styles.actionView}>
-              <Text style={[styles.actionText]}>Create delegation</Text>
+              <Text style={styles.actionText}>Create delegation</Text>
             </View>
           </>
         )}
@@ -169,7 +169,7 @@ const Confirm = () => {
         {action === 'withdrawFunds' && (
           <>
             <View style={styles.actionView}>
-              <Text style={[styles.actionText]}>Withdraw from delegation</Text>
+              <Text style={styles.actionText}>Withdraw from delegation</Text>
             </View>
           </>
         )}

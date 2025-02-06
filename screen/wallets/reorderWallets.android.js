@@ -190,7 +190,7 @@ const ReorderWallets = () => {
     <View style={[styles.root, stylesHook.root]}>
       <StatusBar barStyle="light-content" />
       <ScrollView scrollEnabled={scrollEnabled}>
-        {/*<SortableList ref={sortableList} data={data} renderRow={renderItem} scrollEnabled={false} onChangeOrder={onChangeOrder} onActivateRow={onActivateRow} onReleaseRow={onReleaseRow} />*/}
+        {/* <SortableList ref={sortableList} data={data} renderRow={renderItem} scrollEnabled={false} onChangeOrder={onChangeOrder} onActivateRow={onActivateRow} onReleaseRow={onReleaseRow} /> */}
       </ScrollView>
     </View>
   );

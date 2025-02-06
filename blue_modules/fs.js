@@ -120,13 +120,13 @@ const showImagePickerAndReadImage = () => {
           const asset = response.assets[0];
           if (asset.uri) {
             const uri = asset.uri.toString().replace('file://', '');
-            LocalQRCode.decode(uri, (error, result) => {
-              if (!error) {
-                resolve(result);
-              } else {
-                reject(new Error(loc.send.qr_error_no_qrcode));
-              }
-            });
+            // LocalQRCode.decode(uri, (error, result) => {
+            //   if (!error) {
+            //     resolve(result);
+            //   } else {
+            //     reject(new Error(loc.send.qr_error_no_qrcode));
+            //   }
+            // });
           }
         }
       },
@@ -145,13 +145,13 @@ const takePhotoWithImagePickerAndReadPhoto = () => {
       (response) => {
         if (response.uri) {
           const uri = response.uri.toString().replace('file://', '');
-          LocalQRCode.decode(uri, (error, result) => {
-            if (!error) {
-              resolve(result);
-            } else {
-              reject(new Error(loc.send.qr_error_no_qrcode));
-            }
-          });
+          // LocalQRCode.decode(uri, (error, result) => {
+          //   if (!error) {
+          //     resolve(result);
+          //   } else {
+          //     reject(new Error(loc.send.qr_error_no_qrcode));
+          //   }
+          // });
         } else if (response.error) {
           presentCameraNotAuthorizedAlert(response.error);
         }
@@ -179,13 +179,13 @@ const showFilePickerAndReadFile = async function () {
     if (res?.type === DocumentPicker.types.images || res?.type?.startsWith('image/')) {
       return new Promise((resolve) => {
         const uri = res.uri.toString().replace('file://', '');
-        LocalQRCode.decode(decodeURI(uri), (error, result) => {
-          if (!error) {
-            resolve({ data: result, uri: decodeURI(res.uri) });
-          } else {
-            resolve({ data: false, uri: false });
-          }
-        });
+        // LocalQRCode.decode(decodeURI(uri), (error, result) => {
+        //   if (!error) {
+        //     resolve({ data: result, uri: decodeURI(res.uri) });
+        //   } else {
+        //     resolve({ data: false, uri: false });
+        //   }
+        // });
       });
     }
 

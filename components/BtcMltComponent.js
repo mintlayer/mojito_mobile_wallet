@@ -10,8 +10,8 @@ export const BtcMlcComponent = forwardRef((props, ref) => {
   return (
     <TouchableOpacity style={[{ backgroundColor: colors.aquaHaze }, styles.TouchableTags]}>
       <View style={styles.container}>
-        <View style={[styles.doubleEle]}>
-          <View style={[styles.arrowContainer]}>
+        <View style={styles.doubleEle}>
+          <View style={styles.arrowContainer}>
             <Image source={props.source} />
           </View>
           <View>
@@ -19,16 +19,16 @@ export const BtcMlcComponent = forwardRef((props, ref) => {
             {props.title && <Text style={[styles.detailText, { color: colors.walletBalanceBgColor }]}>{props.detail}</Text>}
           </View>
         </View>
-        <View style={[styles.secondDoubleEle]}>
+        <View style={styles.secondDoubleEle}>
           {props.amount > 383.0 ? (
             <ComingSoon text={loc.addresses.comming_soon} />
           ) : (
-            <View style={[styles.secondDoubleEle]}>
+            <View style={styles.secondDoubleEle}>
               <Text style={[styles.amountText, { color: colors.walletBalanceBgColor }]}>{props.amount}</Text>
 
-              <View style={[styles.doubleEle]}>
+              <View style={styles.doubleEle}>
                 <Text style={[styles.dateText, { color: colors.walletBalanceBgColor }]}>{props.date}</Text>
-                <Text style={[styles.dateText]}>{props.title}</Text>
+                <Text style={styles.dateText}>{props.title}</Text>
               </View>
             </View>
           )}

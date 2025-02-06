@@ -10,7 +10,7 @@ const Privacy = () => {
   }, [isPrivacyBlurEnabled]);
 
   Privacy.enableBlur = () => {
-    if (!isPrivacyBlurEnabled) return;
+    // if (!isPrivacyBlurEnabled) return;
     // Obscure.activateObscure();
   };
 

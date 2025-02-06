@@ -14,7 +14,7 @@ beforeAll(async () => {
   await BlueElectrum.connectMain();
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 500 * 1000;
+jest.setTimeout(500 * 1000);
 
 describe('Watch only wallet', () => {
   it('can fetch balance', async () => {

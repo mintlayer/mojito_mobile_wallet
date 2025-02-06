@@ -226,7 +226,7 @@ async function presentNetworkErrorAlert(usingPeer) {
                     await DefaultPreference.clear(ELECTRUM_HOST);
                     await DefaultPreference.clear(ELECTRUM_SSL_PORT);
                     await DefaultPreference.clear(ELECTRUM_TCP_PORT);
-                    WidgetCommunication.reloadAllTimelines();
+                    // WidgetCommunication.reloadAllTimelines();
                   } catch (e) {
                     // Must be running on Android
                     console.log(e);

@@ -184,7 +184,7 @@ const ReorderWallets = () => {
   ) : (
     <View style={[styles.root, stylesHook.root]}>
       <StatusBar barStyle="default" />
-      {/*<SortableList ref={sortableList} data={data} renderRow={renderItem} onChangeOrder={onChangeOrder} onActivateRow={onActivateRow} onReleaseRow={onReleaseRow} style={styles.root} />*/}
+      {/* <SortableList ref={sortableList} data={data} renderRow={renderItem} onChangeOrder={onChangeOrder} onActivateRow={onActivateRow} onReleaseRow={onReleaseRow} style={styles.root} /> */}
     </View>
   );
 };

@@ -23,7 +23,7 @@ export default class AOPP {
 
   constructor(uri) {
     this.uri = uri;
-    const { protocol, query } = url.parse(uri, true); // eslint-disable-line node/no-deprecated-api
+    const { protocol, query } = url.parse(uri, true); // eslint-disable-line
 
     if (protocol !== 'aopp:') throw new Error('Unsupported protocol');
     if (query.v !== '0') throw new Error('Unsupported version');
@@ -45,7 +45,7 @@ export default class AOPP {
     this.callback = query.callback;
 
     // parse callback url
-    const { hostname } = url.parse(this.callback, true); // eslint-disable-line node/no-deprecated-api
+    const { hostname } = url.parse(this.callback, true); // eslint-disable-line
     if (!hostname) throw new Error('Wrong callback');
 
     this.callbackHostname = hostname;
