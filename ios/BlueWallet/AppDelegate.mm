@@ -7,10 +7,10 @@
 #import <UserNotifications/UserNotifications.h>
 #import <RNCPushNotificationIOS.h>
 #import "EventEmitter.h"
-#import "MenuElementsEmitter.h"
+// #import "MenuElementsEmitter.h"
 #import <React/RCTRootView.h>
 // #import <Bugsnag/Bugsnag.h>
-#import "CustomSegmentedControlManager.h"
+// #import "CustomSegmentedControlManager.h"
 
 @interface AppDelegate() <UNUserNotificationCenterDelegate>
 
@@ -22,9 +22,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [MenuElementsEmitter sharedInstance];
-  [CustomSegmentedControlManager registerIfNecessary];
-  [self clearFilesIfNeeded];
+  // [MenuElementsEmitter sharedInstance];
+  // [CustomSegmentedControlManager registerIfNecessary];
+  // [self clearFilesIfNeeded];
   self.userDefaultsGroup = [[NSUserDefaults alloc] initWithSuiteName:@"group.io.mojitowallet.mojitowallet"];
 
   NSString *isDoNotTrackEnabled = [self.userDefaultsGroup stringForKey:@"donottrack"];
@@ -46,7 +46,7 @@
 //     [NSUserDefaults.standardUserDefaults setValue:@"" forKey:@"deviceUIDCopy"];
 //   }
 
-  self.moduleName = @"BlueWallet";
+  self.moduleName = @"MojitoWallet";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
@@ -59,7 +59,12 @@
   [self setupUserDefaultsListener];
   [self registerNotificationCategories];
 
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+  BOOL result = [super application:application didFinishLaunchingWithOptions:launchOptions];
+  UIWindow *window = self.window;
+  if (window) {
+    window.backgroundColor = [UIColor whiteColor];
+  }
+  return result;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
@@ -112,9 +117,9 @@
         @"electrum_ssl_port"
     ];
 
-    if ([keys containsObject:keyPath]) {
-        [WidgetHelper reloadAllWidgets];
-    }
+//    if ([keys containsObject:keyPath]) {
+//        [WidgetHelper reloadAllWidgets];
+//    }
 }
 
 - (void)copyDeviceUID {
@@ -242,17 +247,6 @@
     // Insert the new Settings menu after the About menu
     [builder insertSiblingMenu:settings afterMenuForIdentifier:UIMenuAbout];
 }
-
-- (void)openSettings:(UIKeyCommand *)keyCommand {
-  [MenuElementsEmitter.sharedInstance openSettings];
-}
-
-- (void)addWalletAction:(UIKeyCommand *)keyCommand {
-    // Implement the functionality for adding a wallet
-    [MenuElementsEmitter.sharedInstance addWalletMenuAction];
-    NSLog(@"Add Wallet action performed");
-}
-
 
 - (void)showHelp:(id)sender {
   [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://docs.mintlayer.org/"] options:@{} completionHandler:nil];

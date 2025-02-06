@@ -7,7 +7,7 @@ import HandoffComponent from '../../components/handoff';
 import loc, { formatBalance } from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import Clipboard from '@react-native-clipboard/clipboard';
-import ToolTipMenu from '../../components/TooltipMenu';
+import ToolTipMenu from '../../components/TooltipMenu.js';
 import alert from '../../components/Alert';
 import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
 import { TransactionType } from '../../blue_modules/Mintlayer';

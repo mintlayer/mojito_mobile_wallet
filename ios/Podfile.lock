@@ -1364,8 +1364,72 @@ PODS:
     - Yoga
   - react-native-randombytes (3.6.1):
     - React-Core
-  - react-native-safe-area-context (3.3.2):
+  - react-native-safe-area-context (5.0.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - react-native-safe-area-context/common (= 5.0.0)
+    - react-native-safe-area-context/fabric (= 5.0.0)
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - react-native-safe-area-context/common (5.0.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - react-native-safe-area-context/fabric (5.0.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - react-native-safe-area-context/common
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-secure-key-store (2.0.10):
     - React-Core
   - react-native-skia (1.7.2):
@@ -1391,8 +1455,6 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-splash-screen (3.3.0):
-    - React-Core
   - react-native-tcp-socket (5.5.0):
     - CocoaAsyncSocket
     - React-Core
@@ -2074,7 +2136,6 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-secure-key-store (from `../node_modules/react-native-secure-key-store`)
   - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
-  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -2239,8 +2300,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-secure-key-store"
   react-native-skia:
     :path: "../node_modules/@shopify/react-native-skia"
-  react-native-splash-screen:
-    :path: "../node_modules/react-native-splash-screen"
   react-native-tcp-socket:
     :path: "../node_modules/react-native-tcp-socket"
   react-native-webview:
@@ -2398,10 +2457,9 @@ SPEC CHECKSUMS:
   react-native-ios-context-menu: e34f5c6a607a3a392b3d763c558ad3d3e7bb26ec
   react-native-pager-view: f744922595bb0a6a7804617b7505869c8add2e06
   react-native-randombytes: 3c8f3e89d12487fd03a2f966c288d495415fc116
-  react-native-safe-area-context: 1c298d1cee1e333d3f44ea6dc8dfca086bd06242
+  react-native-safe-area-context: f145b8906585d648f9f9c7dfa3885bac54f38fcc
   react-native-secure-key-store: eb45b44bdec3f48e9be5cdfca0f49ddf64892ea6
   react-native-skia: 53e9b4abdba56bbc4fcbca2e507fc355133ddb71
-  react-native-splash-screen: 95994222cc95c236bd3cdc59fe45ed5f27969594
   react-native-tcp-socket: b00b1932d98e97e2916af3c80501b4206da97c18
   react-native-webview: 2ae666ce72cfd3c38d8750c2009f5caa621d709f
   React-nativeconfig: f7ab6c152e780b99a8c17448f2d99cf5f69a2311

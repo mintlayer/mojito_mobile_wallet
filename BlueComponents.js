@@ -325,10 +325,10 @@ export class BlueCopyTextToClipboard extends Component {
     truncated: PropTypes.bool,
   };
 
-  static defaultProps = {
-    text: '',
-    truncated: false,
-  };
+  // static defaultProps = {
+  //   text: '',
+  //   truncated: false,
+  // };
 
   constructor(props) {
     super(props);
@@ -1164,9 +1164,9 @@ export class BlueReplaceFeeSuggestions extends Component {
     transactionMinimum: PropTypes.number.isRequired,
   };
 
-  static defaultProps = {
-    transactionMinimum: 1,
-  };
+  // static defaultProps = {
+  //   transactionMinimum: 1,
+  // };
 
   state = {
     customFeeValue: '1',

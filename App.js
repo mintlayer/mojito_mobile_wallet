@@ -1,6 +1,20 @@
 import 'react-native-gesture-handler'; // should be on top
 import React, { useContext, useEffect, useRef } from 'react';
-import { AppState, Text, DeviceEventEmitter, NativeModules, NativeEventEmitter, Linking, Platform, StyleSheet, UIManager, useColorScheme, View, StatusBar } from 'react-native';
+import {
+  AppState,
+  Text,
+  DeviceEventEmitter,
+  NativeModules,
+  NativeEventEmitter,
+  Linking,
+  Platform,
+  StyleSheet,
+  UIManager,
+  useColorScheme,
+  View,
+  StatusBar,
+  Alert
+} from 'react-native';
 import { NavigationContainer, CommonActions } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { navigationRef } from './NavigationService';
@@ -89,16 +103,32 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (walletsInitialized) {
-      addListeners();
+    if (!walletsInitialized) {
+      return;
     }
+
+    const initializeListeners = async () => {
+      try {
+        const initialAction = await DeviceQuickActions.popInitialAction();
+        popInitialAction(initialAction);
+
+        const userActivity = await EventEmitter?.getMostRecentUserActivity();
+        onUserActivityOpen(userActivity);
+      } catch (error) {
+        console.log('No userActivity object sent', error);
+      }
+
+      handleAppStateChange(undefined);
+    };
+
+    initializeListeners();
+
     const subscriptionLinking = Linking.addListener('url', handleOpenURL);
     const subscriptionAppState = AppState.addEventListener('change', handleAppStateChange);
 
     const notificationSubscription = eventEmitter.addListener('onNotificationReceived', onNotificationReceived);
     const settingsSubscription = eventEmitter.addListener('openSettings', openSettings);
     const userActivitySubscription = eventEmitter.addListener('onUserActivityOpen', onUserActivityOpen);
-
 
     return () => {
       subscriptionLinking.remove();
@@ -131,15 +161,6 @@ const App = () => {
       }
     }
   }, [colorScheme]);
-
-  const addListeners = () => {
-    DeviceEventEmitter.addListener('quickActionShortcut', walletQuickActions);
-    DeviceQuickActions.popInitialAction().then(popInitialAction);
-    EventEmitter?.getMostRecentUserActivity()
-      .then(onUserActivityOpen)
-      .catch(() => console.log('No userActivity object sent'));
-    handleAppStateChange(undefined);
-  };
 
   const popInitialAction = async (data) => {
     if (data) {
