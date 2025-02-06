@@ -1,5 +1,6 @@
+// TODO: add obscure
 import { useContext, useEffect } from 'react';
-import Obscure from 'react-native-obscure';
+// import Obscure from 'react-native-obscure';
 import { BlueStorageContext } from './storage-context';
 const Privacy = () => {
   const { isPrivacyBlurEnabled } = useContext(BlueStorageContext);
@@ -10,11 +11,11 @@ const Privacy = () => {
 
   Privacy.enableBlur = () => {
     if (!isPrivacyBlurEnabled) return;
-    Obscure.activateObscure();
+    // Obscure.activateObscure();
   };
 
   Privacy.disableBlur = () => {
-    Obscure.deactivateObscure();
+    // Obscure.deactivateObscure();
   };
   return null;
 };

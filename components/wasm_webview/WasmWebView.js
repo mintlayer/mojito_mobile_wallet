@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, Platform, StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import injectedJavaScript from './webview';
 import webViewEventBus from '../../class/webview-event-bus';
 import PropTypes from 'prop-types';

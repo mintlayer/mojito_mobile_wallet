@@ -50,7 +50,7 @@ const SendDetails = () => {
   const [payjoinUrl, setPayjoinUrl] = useState(null);
   const [changeAddress, setChangeAddress] = useState();
   const [dumb, setDumb] = useState(false);
-  const { isEditable = true } = routeParams;
+  const { isEditable = true, tokenInfo } = routeParams;
   const isMintlayerWallet = wallet?.type === MintLayerWallet.type;
   const unit = isMintlayerWallet ? (isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML) : BitcoinUnit.BTC;
 
@@ -76,7 +76,7 @@ const SendDetails = () => {
     return initialFee;
   }, [customFee, feePrecalc, networkTransactionFees]);
 
-  useRecalcFee({ wallet, networkTransactionFees, feeRate, utxo, addresses, changeAddress, dumb, feePrecalc, setFeePrecalc, balance });
+  useRecalcFee({ wallet, networkTransactionFees, feeRate, utxo, addresses, changeAddress, dumb, feePrecalc, setFeePrecalc, balance, tokenInfo });
 
   const { optionsVisible, hideOptions, handlePsbtSign, onUseAllPressed, importQrTransaction, importTransactionMultisig, importTransactionMultisigScanQr, handleCoinControl, handleRemoveRecipient, handleAddRecipient, importTransaction, onReplaceableFeeSwitchValueChanged } = useHeaderRightOptions({
     name,
@@ -103,7 +103,7 @@ const SendDetails = () => {
 
   const stylesHook = StyleSheet.create(getStyles(colors));
   const { isAmountToolbarVisibleForAndroid, walletSelectionOrCoinsSelectedHidden } = useKeyboard();
-  const { createTransaction } = useCreateTransaction({ wallet, setIsLoading, feeRate, addresses, balance, scrollView, txMetadata, isTransactionReplaceable, transactionMemo, utxo, payjoinUrl, changeAddress, setChangeAddress, saveToDisk, sleep });
+  const { createTransaction } = useCreateTransaction({ wallet, setIsLoading, feeRate, addresses, balance, scrollView, txMetadata, isTransactionReplaceable, transactionMemo, utxo, payjoinUrl, changeAddress, setChangeAddress, saveToDisk, sleep, tokenInfo });
 
   useEffect(() => {
     // decode route params
@@ -255,7 +255,7 @@ const SendDetails = () => {
 
   const formatFee = (fee) => formatBalance(fee, feeUnit, true);
 
-  const { renderTransactionInfoFields } = useTransactionInfoFields({ wallet, scrollView, isMintlayerWallet, scrollIndex, isLoading, setIsLoading, addresses, setAddresses, units, setUnits, amountUnit, setAmountUnit, isEditable, transactionMemo, setTransactionMemo, setPayjoinUrl, width, name, isTestMode, stylesHook, styles });
+  const { renderTransactionInfoFields } = useTransactionInfoFields({ wallet, scrollView, isMintlayerWallet, scrollIndex, isLoading, setIsLoading, addresses, setAddresses, units, setUnits, amountUnit, setAmountUnit, isEditable, transactionMemo, setTransactionMemo, setPayjoinUrl, width, name, isTestMode, stylesHook, styles, tokenInfo });
 
   const getFeeRateVByte = (rate) => {
     if (isMintlayerWallet) {

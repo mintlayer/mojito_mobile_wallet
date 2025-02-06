@@ -1,8 +1,8 @@
 /* eslint react/prop-types: "off", react-native/no-inline-styles: "off" */
 import React, { Component, forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Input, Text, Header, ListItem, Avatar } from 'react-native-elements';
-import { ActivityIndicator, Alert, Animated, Dimensions, Image, InputAccessoryView, Keyboard, KeyboardAvoidingView, PixelRatio, Platform, PlatformColor, SafeAreaView, StyleSheet, Switch, TextInput, TouchableOpacity, View, I18nManager, ImageBackground } from 'react-native';
+import { Icon, Input, Header, ListItem, Avatar } from 'react-native-elements';
+import { ActivityIndicator, Text, Alert, Animated, Dimensions, Image, InputAccessoryView, Keyboard, KeyboardAvoidingView, PixelRatio, Platform, PlatformColor, SafeAreaView, StyleSheet, Switch, TextInput, TouchableOpacity, View, I18nManager, ImageBackground } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import NetworkTransactionFees, { NetworkTransactionFee, NetworkTransactionFeeType } from './models/networkTransactionFees';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,7 +23,7 @@ if (aspectRatio > 1.6) {
   isIpad = true;
 }
 // eslint-disable-next-line no-unused-expressions
-Platform.OS === 'android' ? (ActivityIndicator.defaultProps.color = PlatformColor('?attr/colorControlActivated')) : null;
+const ActivityIndicatorColor = Platform.OS === 'android' ? PlatformColor('?attr/colorControlActivated') : null;
 
 export const BlueButton = (props) => {
   const { colors } = useTheme();
@@ -325,10 +325,10 @@ export class BlueCopyTextToClipboard extends Component {
     truncated: PropTypes.bool,
   };
 
-  static defaultProps = {
-    text: '',
-    truncated: false,
-  };
+  // static defaultProps = {
+  //   text: '',
+  //   truncated: false,
+  // };
 
   constructor(props) {
     super(props);
@@ -402,9 +402,9 @@ export const BlueListItem = React.memo((props) => {
 
   return (
     <ListItem containerStyle={props.containerStyle ?? { backgroundColor: 'transparent' }} Component={props.Component ?? TouchableOpacity} bottomDivider={props.bottomDivider !== undefined ? props.bottomDivider : true} topDivider={props.topDivider !== undefined ? props.topDivider : false} testID={props.testID} onPress={props.onPress} onLongPress={props.onLongPress} disabled={props.disabled} accessible={props.switch === undefined}>
-      {props.leftAvatar && <Avatar>{props.leftAvatar}</Avatar>}
+      {props.leftAvatar && <Avatar {...props.leftAvatarProps}>{props.leftAvatar}</Avatar>}
       {props.leftIcon && <Avatar icon={props.leftIcon} />}
-      <ListItem.Content>
+      <ListItem.Content style={props.contentStyle}>
         <ListItem.Title
           style={{
             color: props.disabled ? colors.buttonDisabledTextColor : colors.foregroundColor,
@@ -434,14 +434,29 @@ export const BlueListItem = React.memo((props) => {
         )}
       </ListItem.Content>
       {props.rightTitle && (
-        <ListItem.Content right>
+        <ListItem.Content right style={props.rightContentStyle}>
           <ListItem.Title style={props.rightTitleStyle} numberOfLines={0} right>
             {props.rightTitle}
           </ListItem.Title>
+          {props.rightSubtitle && (
+            <ListItem.Subtitle
+              numberOfLines={props.subtitleNumberOfLines ?? 1}
+              accessible={props.switch === undefined}
+              style={{
+                flexWrap: 'wrap',
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+                color: colors.alternativeTextColor,
+                fontWeight: '400',
+                fontSize: 14,
+              }}
+            >
+              {props.rightSubtitle}
+            </ListItem.Subtitle>
+          )}
         </ListItem.Content>
       )}
       {props.isLoading ? (
-        <ActivityIndicator />
+        <ActivityIndicator color={ActivityIndicatorColor} />
       ) : (
         <>
           {props.chevron && <ListItem.Chevron iconStyle={{ transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }] }} />}
@@ -736,7 +751,7 @@ export const BlueDoneAndDismissKeyboardInputAccessory = (props) => {
 export const BlueLoading = (props) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center' }} {...props}>
-      <ActivityIndicator />
+      <ActivityIndicator color={ActivityIndicatorColor} />
     </View>
   );
 };
@@ -952,6 +967,102 @@ export const BlueTransactionOnchainIcon = (props) => {
   );
 };
 
+export const MlCoinLogo = () => {
+  const { colors } = useTheme();
+  const stylesMlLogoHooks = StyleSheet.create({
+    img: {
+      tintColor: colors.inverseForegroundColor,
+    },
+    imgContainer: {
+      backgroundColor: colors.buttonBackgroundColor,
+    },
+  });
+  return (
+    <View>
+      <View style={[stylesMlLogo.imgContainer, stylesMlLogoHooks.imgContainer]}>
+        <Image source={create_wallet} style={[stylesMlLogo.img, stylesMlLogoHooks.img]} />
+      </View>
+    </View>
+  );
+};
+
+const stylesMlLogo = StyleSheet.create({
+  imgContainer: {
+    height: 42,
+    width: 42,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  img: {
+    height: 20,
+    width: 20,
+  },
+});
+
+export const TokenLogo = ({ text }) => {
+  const { colors } = useTheme();
+  const stylesTokenLogoHooks = StyleSheet.create({
+    container: {
+      backgroundColor: colors.buttonBackgroundColor,
+    },
+    text: {
+      color: colors.inverseForegroundColor,
+    },
+    img: {
+      backgroundColor: colors.buttonBackgroundColor,
+      tintColor: colors.inverseForegroundColor,
+    },
+    imgContainer: {
+      backgroundColor: colors.buttonBackgroundColor,
+      borderColor: colors.inverseForegroundColor,
+      tintColor: colors.inverseForegroundColor,
+    },
+  });
+  return (
+    <View>
+      <View style={[stylesTokenLogo.container, stylesTokenLogoHooks.container]}>
+        <Text style={[stylesTokenLogo.text, stylesTokenLogoHooks.text]}>{text}</Text>
+        <View style={[stylesTokenLogo.imgContainer, stylesTokenLogoHooks.imgContainer]}>
+          <Image source={create_wallet} style={[stylesTokenLogo.img, stylesTokenLogoHooks.img]} />
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const stylesTokenLogo = StyleSheet.create({
+  container: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 42,
+    width: 42,
+    borderRadius: 50,
+  },
+  text: {
+    textTransform: 'uppercase',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  imgContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: -5,
+    bottom: -5,
+    height: 20,
+    width: 20,
+    borderRadius: 50,
+    borderWidth: 2,
+  },
+  img: {
+    height: 8,
+    width: 8,
+  },
+});
+
 export const BlueTransactionOffchainIcon = (props) => {
   const { colors } = useTheme();
   const stylesBlueIconHooks = StyleSheet.create({
@@ -1053,9 +1164,9 @@ export class BlueReplaceFeeSuggestions extends Component {
     transactionMinimum: PropTypes.number.isRequired,
   };
 
-  static defaultProps = {
-    transactionMinimum: 1,
-  };
+  // static defaultProps = {
+  //   transactionMinimum: 1,
+  // };
 
   state = {
     customFeeValue: '1',

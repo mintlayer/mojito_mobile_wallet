@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { View, ActivityIndicator, Text, TouchableOpacity, StyleSheet, StatusBar, BackHandler } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
@@ -333,6 +333,10 @@ const TransactionsStatus = () => {
   const fee = wallet.current.type === MintLayerWallet.type ? tx?.fee.atoms : tx?.fee;
   const unit = wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit !== MintlayerUnit.LOCAL_CURRENCY && wallet.current.preferredBalanceUnit;
 
+  const tokenString = useMemo(() => {
+    return wallet.current.getTokenData(tx?.token_id)?.token_ticker.string;
+  }, [tx]);
+
   if (isLoading || !tx) {
     return (
       <SafeBlueArea>
@@ -349,7 +353,15 @@ const TransactionsStatus = () => {
         <BlueCard>
           <View style={styles.center}>
             <Text style={[styles.value, stylesHook.value]}>
-              {formatBalanceWithoutSuffix(tx.value, wallet.current.preferredBalanceUnit, true)} {unit && <Text style={[styles.valueUnit, stylesHook.valueUnit]}>{loc.units[unit]}</Text>}
+              {tx.type === TransactionType.TokenTransfer ? (
+                <>
+                  {tx.value} <Text style={[styles.valueUnit, stylesHook.valueUnit]}>{tokenString}</Text>
+                </>
+              ) : (
+                <>
+                  {formatBalanceWithoutSuffix(tx.value, wallet.current.preferredBalanceUnit, true)} {unit && <Text style={[styles.valueUnit, stylesHook.valueUnit]}>{loc.units[unit]}</Text>}
+                </>
+              )}
             </Text>
           </View>
 

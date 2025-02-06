@@ -1,3 +1,4 @@
+// TOOD: switch to RNQRGenerator
 import { Alert, Linking, PermissionsAndroid, Platform } from 'react-native';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
@@ -9,7 +10,7 @@ import { isDesktop } from '../blue_modules/environment';
 import ActionSheet from '../screen/ActionSheet';
 import BlueClipboard from './clipboard';
 import alert from '../components/Alert';
-const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
+import RNQRGenerator from 'rn-qr-generator';
 
 const writeFileAndExportToAndroidDestionation = async ({ filename, contents, destinationLocalizedString, destination }) => {
   const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {

@@ -14,7 +14,7 @@ import { MintlayerUnit } from '../../../../models/mintlayerUnits';
 
 const btcAddressRx = /^[a-zA-Z0-9]{26,35}$/;
 
-export const useTransactionInfoFields = ({ wallet, scrollView, isMintlayerWallet, scrollIndex, isLoading, setIsLoading, addresses, setAddresses, units, setUnits, amountUnit, setAmountUnit, isEditable, transactionMemo, setTransactionMemo, setPayjoinUrl, width, name, isTestMode, stylesHook, styles }) => {
+export const useTransactionInfoFields = ({ wallet, scrollView, isMintlayerWallet, scrollIndex, isLoading, setIsLoading, addresses, setAddresses, units, setUnits, amountUnit, setAmountUnit, isEditable, transactionMemo, setTransactionMemo, setPayjoinUrl, width, name, isTestMode, stylesHook, styles, tokenInfo }) => {
   const renderBitcoinTransactionInfoFields = (params) => {
     const { item, index } = params;
     const itemAmount = item.amount ? item.amount.toString() : 0;
@@ -164,6 +164,7 @@ export const useTransactionInfoFields = ({ wallet, scrollView, isMintlayerWallet
     return (
       <View style={{ width }} testID={'Transaction' + index}>
         <AmountInputML
+          tokenInfo={tokenInfo}
           isLoading={isLoading}
           amount={itemAmount}
           onAmountUnitChange={(unit) => {

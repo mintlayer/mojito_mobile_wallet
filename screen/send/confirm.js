@@ -29,7 +29,7 @@ const Confirm = () => {
   const { wallets, fetchAndSaveWalletTransactions, isElectrumDisabled, isTorDisabled, isTestMode } = useContext(BlueStorageContext);
   const [isBiometricUseCapableAndEnabled, setIsBiometricUseCapableAndEnabled] = useState(false);
   const { params } = useRoute();
-  const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt, requireUtxo } = params;
+  const { recipients = [], walletID, fee, memo, tx, satoshiPerByte, psbt, requireUtxo, tokenInfo } = params;
   const [isLoading, setIsLoading] = useState(false);
   const [isPayjoinEnabled, setIsPayjoinEnabled] = useState(false);
   const wallet = wallets.find((wallet) => wallet.getID() === walletID);
@@ -202,26 +202,31 @@ const Confirm = () => {
         amount += recipient.value;
       }
 
+      const atomsPerCoin = Math.pow(10, tokenInfo?.number_of_decimals) || undefined;
+      const value = atomsPerCoin ? currency.getAmountInCoins(amount, atomsPerCoin) : amount;
+
       const unconfirmedTx = {
         sortKey: Date.now(),
         confirmations: 0,
         id: txId,
+        token_id: tokenInfo?.token_id,
         hash: txId,
-        value: amount,
+        value,
         fee: { atoms: currency.mlToCoins(Number(fee)), decimal: Number(fee) },
         isUnconfirmedTx: true,
-        type: TransactionType.Transfer,
+        type: tokenInfo?.token_id ? TransactionType.TokenTransfer : TransactionType.Transfer,
         usedUtxo: requireUtxo,
       };
 
       wallet.addUnconfirmedTx(unconfirmedTx);
 
-      amount = formatBalanceWithoutSuffix(amount, MintlayerUnit.ML, false);
+      amount = tokenInfo ? currency.getAmountInCoins(amount, atomsPerCoin) : formatBalanceWithoutSuffix(amount, MintlayerUnit.ML, false);
       ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
       navigate('Success', {
         fee: Number(fee),
         amount,
-        amountUnit: isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML,
+        amountUnit: tokenInfo ? tokenInfo.token_ticker.string : isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML,
+        feeUnit: isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML,
       });
 
       setIsLoading(false);
@@ -258,11 +263,13 @@ const Confirm = () => {
   };
 
   const send = isMintlayerWallet ? sendMl : sendBtc;
-  const unit = isMintlayerWallet ? (isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML) : BitcoinUnit.BTC;
+  const feeUnit = isMintlayerWallet ? (isTestMode ? MintlayerUnit.TML : MintlayerUnit.ML) : BitcoinUnit.BTC;
   const toLocalCurrencyFn = isMintlayerWallet ? currency.mlCoinsToLocalCurrency : currency.satoshiToLocalCurrency;
 
   const _renderItem = ({ index, item }) => {
-    const amount = isMintlayerWallet ? currency.coinsToML(item.value) : currency.satoshiToBTC(item.value);
+    const atomsPerCoin = Math.pow(10, tokenInfo?.number_of_decimals) || undefined;
+    const amount = isMintlayerWallet ? currency.getAmountInCoins(item.value, atomsPerCoin) : currency.satoshiToBTC(item.value);
+    const unit = tokenInfo ? tokenInfo.token_ticker.string : loc.units[feeUnit];
 
     return (
       <>
@@ -270,9 +277,9 @@ const Confirm = () => {
           <Text testID="TransactionValue" style={[styles.valueValue, stylesHook.valueValue]}>
             {amount}
           </Text>
-          <Text style={[styles.valueUnit, stylesHook.valueValue]}>{' ' + loc.units[unit]}</Text>
+          <Text style={[styles.valueUnit, stylesHook.valueValue]}>{' ' + unit}</Text>
         </View>
-        <Text style={[styles.transactionAmountFiat, stylesHook.transactionAmountFiat]}>{toLocalCurrencyFn(item.value)}</Text>
+        {!tokenInfo && <Text style={[styles.transactionAmountFiat, stylesHook.transactionAmountFiat]}>{toLocalCurrencyFn(item.value)}</Text>}
         <BlueCard>
           <Text style={[styles.transactionDetailsTitle, stylesHook.transactionDetailsTitle]}>{loc.send.create_to}</Text>
           <Text testID="TransactionAddress" style={[styles.transactionDetailsSubtitle, stylesHook.transactionDetailsSubtitle]}>
@@ -310,7 +317,7 @@ const Confirm = () => {
       <View style={styles.cardBottom}>
         <BlueCard>
           <Text style={styles.cardText} testID="TransactionFee">
-            {loc.send.create_fee}: {formatBalance(formattedFee, unit)} ({toLocalCurrencyFn(formattedFee)})
+            {loc.send.create_fee}: {formatBalance(formattedFee, feeUnit)} ({toLocalCurrencyFn(formattedFee)})
           </Text>
           {isLoading ? <ActivityIndicator /> : <BlueButton disabled={isElectrumDisabled} onPress={send} title={loc.send.confirm_sendNow} />}
         </BlueCard>
