@@ -1,5 +1,9 @@
 # Mojito - A Bitcoin & Mintlayer Wallet
 
+> [!IMPORTANT]
+> **This codebase will be retired soon.**
+> The Mojito mobile wallet is approaching end-of-life and will no longer be actively maintained once retired. Don't worry — **Mojito 2.0 is on the way** and will replace this codebase. Until then, please note that this repository is **no longer eligible for the Mintlayer bug bounty program**, so issues reported here will not be reviewed or rewarded.
+
 Built with React Native and Electrum, based on [BlueWallet](https://github.com/BlueWallet/BlueWallet)
 
 Website: [mintlayer.org](https://www.mintlayer.org/)
