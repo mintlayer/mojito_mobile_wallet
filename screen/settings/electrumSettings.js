@@ -11,7 +11,6 @@ import { BlueButton, BlueButtonLink, BlueCard, BlueLoading, BlueSpacing20, BlueT
 import { BlueCurrentTheme } from '../../components/themes';
 import { isTorCapable } from '../../blue_modules/environment';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import WidgetCommunication from '../../blue_modules/WidgetCommunication';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import alert from '../../components/Alert';
 
@@ -149,7 +148,6 @@ export default class ElectrumSettings extends Component {
             await DefaultPreference.clear(BlueElectrum.ELECTRUM_HOST);
             await DefaultPreference.clear(BlueElectrum.ELECTRUM_SSL_PORT);
             await DefaultPreference.clear(BlueElectrum.ELECTRUM_TCP_PORT);
-            WidgetCommunication.reloadAllTimelines();
           } catch (e) {
             // Must be running on Android
             console.log(e);
@@ -178,7 +176,6 @@ export default class ElectrumSettings extends Component {
             await DefaultPreference.set(BlueElectrum.ELECTRUM_HOST, host);
             await DefaultPreference.set(BlueElectrum.ELECTRUM_TCP_PORT, port);
             await DefaultPreference.set(BlueElectrum.ELECTRUM_SSL_PORT, sslPort);
-            WidgetCommunication.reloadAllTimelines();
           } catch (e) {
             // Must be running on Android
             console.log(e);

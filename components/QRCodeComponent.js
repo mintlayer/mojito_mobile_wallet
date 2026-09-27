@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { useTheme } from './themes';
-import ToolTipMenu from './TooltipMenu';
+import ToolTipMenu from './TooltipMenu.js';
 import Share from 'react-native-share';
 import loc from '../loc';
 import PropTypes from 'prop-types';

@@ -1,6 +1,6 @@
 import { AppStorage } from './class';
 import Biometric from './class/biometrics';
-import { Platform } from 'react-native';
+import {Alert, Platform} from 'react-native';
 import loc from './loc';
 const prompt = require('./blue_modules/prompt');
 const currency = require('./blue_modules/currency');

@@ -4,7 +4,6 @@ import * as RNLocalize from 'react-native-localize';
 import BigNumber from 'bignumber.js';
 import { FiatUnit, getFiatRate } from '../models/fiatUnit';
 import * as ExchangeRates from '../models/exchangeRates';
-import WidgetCommunication from './WidgetCommunication';
 import { ML_ATOMS_PER_COIN } from './Mintlayer';
 
 const PREFERRED_CURRENCY_STORAGE_KEY = 'preferredCurrency';
@@ -28,7 +27,6 @@ async function setPrefferedCurrency(item) {
   await DefaultPreference.setName('group.com.mojitowallet');
   await DefaultPreference.set('preferredCurrency', item.endPointKey);
   await DefaultPreference.set('preferredCurrencyLocale', item.locale.replace('-', '_'));
-  WidgetCommunication.reloadAllTimelines();
 }
 
 async function getPreferredCurrency() {
@@ -250,6 +248,14 @@ function fiatToBTC(fiatFloat) {
   return b;
 }
 
+function getAmountInCoins(amointInAtoms, atomsPerCoin = ML_ATOMS_PER_COIN) {
+  return amointInAtoms / atomsPerCoin;
+}
+
+function getAmountInAtoms(amountInCoins, atomsPerCoin = ML_ATOMS_PER_COIN) {
+  return BigInt(Math.round(amountInCoins * atomsPerCoin));
+}
+
 function coinsToML(coins) {
   let b = new BigNumber(coins);
   b = b.dividedBy(ML_ATOMS_PER_COIN);
@@ -294,6 +300,8 @@ module.exports.init = init;
 module.exports.mlCoinsToLocalCurrency = mlCoinsToLocalCurrency;
 module.exports.satoshiToLocalCurrency = satoshiToLocalCurrency;
 module.exports.fiatToBTC = fiatToBTC;
+module.exports.getAmountInCoins = getAmountInCoins;
+module.exports.getAmountInAtoms = getAmountInAtoms;
 module.exports.coinsToML = coinsToML;
 module.exports.mlToCoins = mlToCoins;
 module.exports.fiatToML = fiatToML;

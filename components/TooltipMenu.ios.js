@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { ContextMenuView, ContextMenuButton } from 'react-native-ios-context-menu';
 import PropTypes from 'prop-types';
-import QRCodeComponent from './QRCodeComponent';
+// import QRCodeComponent from './QRCodeComponent';
 import { TouchableOpacity } from 'react-native';
 
 const ToolTipMenu = (props, ref) => {
@@ -77,7 +77,7 @@ const ToolTipMenu = (props, ref) => {
               previewType: 'CUSTOM',
               backgroundColor: 'white',
             },
-            renderPreview: () => <QRCodeComponent value={previewValue} isMenuAvailable={false} />,
+            // renderPreview: () => <QRCodeComponent value={previewValue} isMenuAvailable={false} />,
           }
         : {})}
     >

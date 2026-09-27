@@ -1,9 +1,10 @@
 import React from 'react';
-import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Platform, useWindowDimensions, Dimensions, I18nManager, Image, StyleSheet, View, Text, Touchable, TouchableOpacity } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+import { useRoute, useTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import Settings from './screen/settings/settings';
 import About from './screen/settings/about';
@@ -26,6 +27,9 @@ import TestMode from './screen/settings/testmode';
 
 import WalletsList from './screen/wallets/list';
 import WalletTransactions from './screen/wallets/transactions';
+import WalletTransactionsHeader from './screen/wallets/transactions-header';
+import MLWalletTransactions from './screen/wallets/ml-transactions';
+import MLWalletTokens from './screen/wallets/ml-tokens';
 import AddWallet from './screen/wallets/add';
 import WalletsAddMultisig from './screen/wallets/addMultisig';
 import WalletsAddMultisigStep2 from './screen/wallets/addMultisigStep2';
@@ -96,6 +100,13 @@ import LdkViewLogs from './screen/wallets/ldkViewLogs';
 
 import Introduction from './screen/introduction';
 import NativeAssets from './screen/NativeAssets';
+
+import Staking from './screen/staking/staking';
+import StakingDelegationDetails from './screen/staking/delegationDetails';
+import StakingConfirm from './screen/staking/confirm';
+import StakingSuccess from './screen/staking/success';
+
+import SignChallenge from './screen/signChallenge/sign';
 
 import { sendBottom, settingBottom, walletBottom, create_wallet, ic_back_black } from './theme/Images';
 import { COLORS } from './theme/Colors';
@@ -207,6 +218,20 @@ const AddWalletRoot = () => {
       <AddWalletStack.Screen name="WalletsAddMultisigStep2" component={WalletsAddMultisigStep2} options={WalletsAddMultisigStep2.navigationOptions(theme)} />
       <AddWalletStack.Screen name="WalletsAddMultisigHelp" component={WalletsAddMultisigHelp} options={WalletsAddMultisigHelp.navigationOptions(theme)} />
     </AddWalletStack.Navigator>
+  );
+};
+
+const StakingStack = createNativeStackNavigator();
+
+const StakingRoot = () => {
+  const theme = useTheme();
+
+  return (
+    <StakingStack.Navigator screenOptions={{ headerHideShadow: true }}>
+      <StakingStack.Screen name="Staking" component={Staking} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Delegation" component={StakingDelegationDetails} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Confirm" component={StakingConfirm} options={Staking.navigationOptions(theme)} />
+    </StakingStack.Navigator>
   );
 };
 
@@ -503,12 +528,28 @@ const SettingsRoot = () => {
   );
 };
 
+const SignChallengeStack = createNativeStackNavigator();
+const SignChallengeRoot = () => {
+  const theme = useTheme();
+
+  return (
+    <SignChallengeStack.Navigator name="SignChallengeRoot" screenOptions={{ headerHideShadow: true }} initialRouteName="SignChallenge">
+      <SignChallengeStack.Screen name="SignChallenge" component={SignChallenge} options={SignChallenge.navigationOptions(theme)} />
+    </SignChallengeStack.Navigator>
+  );
+};
+
 const Tab = createBottomTabNavigator();
 const BottomTab = () => {
   const { theme, colors } = useTheme();
 
+  const screenOptions = {
+    headerShown: false,
+    headerHideShadow: true,
+  };
+
   return (
-    <Tab.Navigator initialRouteName="WalletsList" showLabel={false}>
+    <Tab.Navigator initialRouteName="WalletsList" screenOptions={screenOptions} showLabel={false}>
       <WalletsStack.Screen
         name="WalletsList"
         component={WalletsList}
@@ -535,6 +576,53 @@ const BottomTab = () => {
   );
 };
 
+const TopTab = createMaterialTopTabNavigator();
+
+function MlWalletRoot() {
+  const { walletID } = useRoute().params;
+  const { colors } = useTheme();
+  const tabBarOptions = {
+    labelStyle: { fontSize: 18, fontWeight: 'bold', textTransform: 'none' },
+    indicatorStyle: { backgroundColor: colors.mainColor },
+    activeTintColor: colors.foregroundColor,
+    tabStyle: { padding: 1 },
+    style: { marginTop: 8, marginHorizontal: 16, elevation: 0 },
+    pressColor: colors.background,
+  };
+
+  const screenOptions = {
+    tabBarActiveTintColor: colors.foregroundColor,
+    tabBarPressColor: '#FFFFFF',
+    tabBarLabelStyle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      textTransform: 'none',
+    },
+    tabBarItemStyle: {
+      padding: 1,
+    },
+    tabBarIndicatorStyle: {
+      backgroundColor: '#11967F',
+    },
+    tabBarStyle: {
+      marginTop: 8,
+      marginHorizontal: 16,
+      elevation: 0,
+    },
+  };
+
+  return (
+    <View style={styles.flex}>
+      <WalletTransactionsHeader />
+      <TopTab.Navigator screenOptions={({route})=>({...screenOptions, key: route.name})}>
+        <TopTab.Screen key="wallet_detail_transactions" name="Transactions" component={MLWalletTransactions} initialParams={{ walletID }} />
+        <TopTab.Screen key="wallet_detail_tokens" name="Tokens" component={MLWalletTokens} initialParams={{ walletID }} />
+        <TopTab.Screen key="wallet_detail_staking" name="Stake ML" component={Staking} initialParams={{ walletID }} />
+      </TopTab.Navigator>
+    </View>
+  );
+}
+
 const Navigation = () => {
   const theme = useTheme();
 
@@ -554,6 +642,7 @@ const Navigation = () => {
       <RootStack.Screen name="HodlHodlWebview" component={HodlHodlWebview} options={HodlHodlWebview.navigationOptions(theme)} />
 
       <RootStack.Screen name="WalletTransactions" component={WalletTransactions} options={WalletTransactions.navigationOptions(theme)} />
+      <RootStack.Screen name="MLWalletTransactions" component={MlWalletRoot} options={WalletTransactions.navigationOptions(theme)} />
       <WalletsStack.Screen name="WalletDetails" component={WalletDetails} options={WalletDetails.navigationOptions(theme)} />
       <WalletsStack.Screen name="WalletAddresses" component={WalletAddresses} options={WalletAddresses.navigationOptions(theme)} />
 
@@ -576,6 +665,10 @@ const Navigation = () => {
       <RootStack.Screen name="RBFBumpFee" component={RBFBumpFee} options={RBFBumpFee.navigationOptions(theme)} />
       <RootStack.Screen name="RBFCancel" component={RBFCancel} options={RBFCancel.navigationOptions(theme)} />
 
+      <StakingStack.Screen name="Delegation" component={StakingDelegationDetails} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Confirm" component={StakingConfirm} options={Staking.navigationOptions(theme)} />
+      <StakingStack.Screen name="Success" component={StakingSuccess} options={{ headerShown: false, gestureEnabled: false }} />
+
       <RootStack.Screen
         name="ScanQRCodeRoot"
         component={ScanQRCodeRoot}
@@ -584,11 +677,17 @@ const Navigation = () => {
           stackPresentation: isDesktop ? 'containedModal' : 'fullScreenModal',
         }}
       />
+
+      <RootStack.Screen name="StakingRoot" component={StakingRoot} options={NavigationDefaultOptions} />
+      <RootStack.Screen name="SignChallengeRoot" component={SignChallengeRoot} options={NavigationDefaultOptions} />
     </RootStack.Navigator>
   );
 };
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   marginTopTab: {
     marginTop: 20,
   },

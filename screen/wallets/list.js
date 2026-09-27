@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { StatusBar, View, TouchableOpacity, Text, StyleSheet, SectionList, Platform, Image, Dimensions, useWindowDimensions, findNodeHandle, I18nManager, Keyboard } from 'react-native';
+import { StatusBar, View, TouchableOpacity, Text, StyleSheet, SectionList, Platform, Image, Dimensions, useWindowDimensions, findNodeHandle, I18nManager, Keyboard, Button } from 'react-native';
 import { BlueFormInput, BlueHeaderDefaultMain, BlueSendReceiveButton, BlueButton } from '../../BlueComponents';
 import WalletsCarousel from '../../components/WalletsCarousel';
 import { Icon } from 'react-native-elements';
@@ -16,8 +16,9 @@ import navigationStyle from '../../components/navigationStyle';
 import { TransactionListItem } from '../../components/TransactionListItem';
 import { SendReceiveCard } from '../../components/SendReceiveCard';
 import BottomModal from '../../components/BottomModal';
-import { LightningCustodianWallet, LightningLdkWallet } from '../class';
+import { LightningCustodianWallet } from '../../class';
 import { type } from '../../theme/Fonts';
+import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
 
 const scanqrHelper = require('../../helpers/scan-qr');
 const A = require('../../blue_modules/analytics');
@@ -123,11 +124,12 @@ const WalletsList = () => {
 
   useEffect(() => {
     wallets.map((item) => {
-      if (item.type == LightningLdkWallet.type || item.type == LightningCustodianWallet.type) {
+      if (item.type == LightningCustodianWallet.type) {
         setShowModal(true);
       }
       return null;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const verifyBalance = () => {
@@ -136,36 +138,6 @@ const WalletsList = () => {
     } else {
       A(A.ENUM.GOT_ZERO_BALANCE);
     }
-  };
-
-  useEffect(() => {
-    setOptions({
-      headerShown: !isDesktop,
-      headerStyle: {
-        backgroundColor: colors.customHeader,
-        borderBottomWidth: 0,
-        elevation: 0,
-        shadowOpacity: 0,
-        shadowOffset: { height: 0, width: 0 },
-      },
-      headerRight: () =>
-        I18nManager.isRTL ? null : (
-          <TouchableOpacity accessibilityRole="button" testID="SettingsButton" style={styles.headerTouch} onPress={navigateToSettings}>
-            <Icon size={22} name="kebab-horizontal" type="octicon" color={colors.foregroundColor} />
-          </TouchableOpacity>
-        ),
-      headerLeft: () =>
-        I18nManager.isRTL ? (
-          <TouchableOpacity accessibilityRole="button" testID="SettingsButton" style={styles.headerTouch} onPress={navigateToSettings}>
-            <Icon size={22} name="kebab-horizontal" type="octicon" color={colors.foregroundColor} />
-          </TouchableOpacity>
-        ) : null,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colors]);
-
-  const navigateToSettings = () => {
-    navigate('Settings');
   };
 
   /**
@@ -188,7 +160,8 @@ const WalletsList = () => {
     if (index <= wallets.length - 1) {
       const wallet = wallets[index];
       const walletID = wallet.getID();
-      navigate('WalletTransactions', {
+      const screenName = wallet.type === MintLayerWallet.type ? 'MLWalletTransactions' : 'WalletTransactions';
+      navigate(screenName, {
         walletID,
         walletType: wallet.type,
         key: `WalletTransactions-${walletID}`,
@@ -217,8 +190,7 @@ const WalletsList = () => {
   };
 
   const renderListHeaderComponent = () => {
-    const style = { opacity: isLoading ? 1.0 : 0.5 };
-    return <View style={[styles.listHeaderBack, stylesHook.listHeaderBack]} />;
+    return <></>;
   };
 
   const handleLongPress = () => {

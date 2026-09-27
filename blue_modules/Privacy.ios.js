@@ -1,5 +1,6 @@
+// TODO: react-native-privacy-snapshot
 import { useContext, useEffect } from 'react';
-import { enabled } from 'react-native-privacy-snapshot';
+// import { enabled } from 'react-native-privacy-snapshot';
 import { BlueStorageContext } from './storage-context';
 const Privacy = () => {
   const { isPrivacyBlurEnabled } = useContext(BlueStorageContext);
@@ -10,11 +11,11 @@ const Privacy = () => {
 
   Privacy.enableBlur = () => {
     if (!isPrivacyBlurEnabled) return;
-    enabled(true);
+    // enabled(true);
   };
 
   Privacy.disableBlur = () => {
-    enabled(false);
+    // enabled(false);
   };
   return null;
 };

@@ -119,7 +119,7 @@ const SelectWallet = () => {
                   case MultisigHDWallet.type:
                     return I18nManager.isRTL ? require('../../img/vault-shape-rtl.png') : require('../../img/vault-shape.png');
                   case MintLayerWallet.type:
-                    return I18nManager.isRTL ? require('../img/ml-shape-rtl.png') : require('../img/ml-shape.png');
+                    return I18nManager.isRTL ? require('../../img/ml-shape-rtl.png') : require('../../img/ml-shape.png');
                   default:
                     return I18nManager.isRTL ? require('../../img/btc-shape-rtl.png') : require('../../img/btc-shape.png');
                 }

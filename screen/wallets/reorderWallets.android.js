@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { View, ActivityIndicator, Image, Text, StyleSheet, TouchableOpacity, StatusBar, ScrollView, I18nManager } from 'react-native';
 import { BluePrivateBalance } from '../../BlueComponents';
-import SortableList from 'react-native-sortable-list';
+// import SortableList from 'react-native-sortable-list';
 import LinearGradient from 'react-native-linear-gradient';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useNavigation, useTheme } from '@react-navigation/native';
@@ -190,7 +190,7 @@ const ReorderWallets = () => {
     <View style={[styles.root, stylesHook.root]}>
       <StatusBar barStyle="light-content" />
       <ScrollView scrollEnabled={scrollEnabled}>
-        <SortableList ref={sortableList} data={data} renderRow={renderItem} scrollEnabled={false} onChangeOrder={onChangeOrder} onActivateRow={onActivateRow} onReleaseRow={onReleaseRow} />
+        {/*<SortableList ref={sortableList} data={data} renderRow={renderItem} scrollEnabled={false} onChangeOrder={onChangeOrder} onActivateRow={onActivateRow} onReleaseRow={onReleaseRow} />*/}
       </ScrollView>
     </View>
   );

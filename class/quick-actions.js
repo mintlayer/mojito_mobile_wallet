@@ -63,7 +63,7 @@ function DeviceQuickActions() {
               title: wallet.getLabel(), // Optional, if empty, `type` will be used instead
               subtitle: wallet.hideBalance || wallet.getBalance() <= 0 ? '' : formatBalance(Number(wallet.getBalance()), wallet.getPreferredBalanceUnit(), true),
               userInfo: {
-                url: `bluewallet://wallet/${wallet.getID()}`, // Provide any custom data like deep linking URL
+                url: `mojitowallet://wallet/${wallet.getID()}`, // Provide any custom data like deep linking URL
               },
               icon: Platform.select({ android: 'quickactions', ios: 'bookmark' }),
             });

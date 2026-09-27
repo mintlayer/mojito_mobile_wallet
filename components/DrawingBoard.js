@@ -6,6 +6,7 @@ import { Canvas, Path } from '@shopify/react-native-skia';
 
 import loc from '../loc';
 import { type } from '../theme/Fonts';
+import {runOnJS} from "react-native-reanimated";
 
 const DrawingBoard = (props) => {
   const color = '#06D6A0';
@@ -18,22 +19,29 @@ const DrawingBoard = (props) => {
     },
   };
   const onDrawing = (mode, g) => {
-    const newPaths = [...paths];
+    const newPaths = paths.map((path) => ({
+      ...path,
+      segments: [...(path.segments || [])], // Копируем сегменты
+    }));
+
     // Modes follow syntax of path on SVG: read more here https://css-tricks.com/svg-path-syntax-illustrated-guide/
-    newPaths[paths.length - 1].segments.push(`${mode} ${g.x} ${g.y}`);
+    newPaths[paths.length - 1].segments.push(`${g.x} ${g.y}`);
     setPaths(newPaths);
     props.callbackPath(newPaths);
   };
 
   const pan = Gesture.Pan()
     .onStart((g) => {
-      onDrawing('M', g);
+      'worklet';
+      // runOnJS(onDrawing)('M', g);
     })
     .onUpdate((g) => {
-      onDrawing('L', g);
+      'worklet';
+      runOnJS(onDrawing)('L', g);
     })
     .onEnd(() => {
-      setPaths([...paths, { segments: [], color }]);
+      'worklet';
+      runOnJS(setPaths)([...paths, { segments: [], color }]);
     })
     .minDistance(1);
 
@@ -46,9 +54,9 @@ const DrawingBoard = (props) => {
     <GestureDetector gesture={pan}>
       <View style={styles.entrophyContainer}>
         <Canvas style={styles.flex8} mode="default">
-          {paths.map((p, index) => (
-            <Path key={index} path={p.segments.join(' ')} strokeWidth={3} style="stroke" color={p.color} />
-          ))}
+          {paths.map((p, index) => {
+            return <Path key={index} path={p.segments.map((s, segmentIndex)=>segmentIndex === 0 ? 'M ' + s : 'L '+ s).join(' ')} strokeWidth={3} style="stroke" color={p.color}/>
+          })}
         </Canvas>
         <TouchableOpacity onPress={onClearDrawingButtonClick} style={styles.undoButton}>
           <Text style={[styles.descText, stylesHook.advancedText]}>{loc.wallets.clear}</Text>

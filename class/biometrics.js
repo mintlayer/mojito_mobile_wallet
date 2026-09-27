@@ -1,4 +1,4 @@
-import FingerprintScanner from 'react-native-fingerprint-scanner';
+// TODO: refactor FingerprintScanner to use react-native-biometrics
 import { Platform, Alert } from 'react-native';
 import PasscodeAuth from 'react-native-passcode-auth';
 import * as NavigationService from '../NavigationService';
@@ -8,6 +8,13 @@ import loc from '../loc';
 import { useContext } from 'react';
 import { BlueStorageContext } from '../blue_modules/storage-context';
 import alert from '../components/Alert';
+
+const FingerprintScanner = {
+  isSensorAvailable: () => {},
+  isDeviceBiometricCapable: () => {},
+  authenticate: () => {},
+  release: () => {},
+}
 
 function Biometric() {
   const { getItem, setItem } = useContext(BlueStorageContext);

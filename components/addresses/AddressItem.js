@@ -5,7 +5,7 @@ import { ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { AddressTypeBadge } from './AddressTypeBadge';
 import loc, { formatBalance } from '../../loc';
-import TooltipMenu from '../TooltipMenu';
+import TooltipMenu from '../TooltipMenu.js';
 import Clipboard from '@react-native-clipboard/clipboard';
 import Share from 'react-native-share';
 

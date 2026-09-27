@@ -1,8 +1,4 @@
-import Tor from 'react-native-tor';
-const tor = Tor({
-  bootstrapTimeoutMs: 35000,
-  numberConcurrentRequests: 1,
-});
+const tor = {};
 
 /**
  * TOR wrapper mimicking Frisbee interface

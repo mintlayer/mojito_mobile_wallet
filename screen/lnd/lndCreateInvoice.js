@@ -60,12 +60,11 @@ const LNDCreateInvoice = () => {
   });
 
   useEffect(() => {
-    // console.log(params)
-    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
-    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+    const keyboardDidShowSubscription = Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    const keyboardDidHideSubscription = Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
     return () => {
-      Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
-      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+      keyboardDidShowSubscription.remove();
+      keyboardDidHideSubscription.remove();
     };
   }, []);
 

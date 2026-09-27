@@ -27,6 +27,7 @@ class AmountInputML extends Component {
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
     isTestMode: PropTypes.bool,
+    tokenInfo: PropTypes.object,
   };
 
   /**
@@ -185,7 +186,7 @@ class AmountInputML extends Component {
   };
 
   render() {
-    const { colors, disabled, unit, isTestMode } = this.props;
+    const { colors, disabled, unit, isTestMode, tokenInfo } = this.props;
     const displayUnit = (unit) => getFormattedMlUnitByTestMode(unit, isTestMode);
     const originalAmount = this.props.amount || 0;
     const amount = originalAmount.toString().includes('e') ? BigNumber(originalAmount).toFormat() : originalAmount;
@@ -246,16 +247,19 @@ class AmountInputML extends Component {
                     <Text style={[styles.input, stylesHook.input]}>{MintlayerUnit.MAX}</Text>
                   </Pressable>
                 )}
-                {unit !== MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX && <Text style={[styles.cryptoCurrency, stylesHook.cryptoCurrency]}>{' ' + loc.units[displayUnit(unit)]}</Text>}
+                {unit !== MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX && !tokenInfo && <Text style={[styles.cryptoCurrency, stylesHook.cryptoCurrency]}>{' ' + loc.units[displayUnit(unit)]}</Text>}
+                {unit !== MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX && tokenInfo && <Text style={[styles.cryptoCurrency, stylesHook.cryptoCurrency]}>{` ${tokenInfo.token_ticker.string}`}</Text>}
               </View>
               <View style={styles.secondaryRoot}>
-                <Text style={styles.secondaryText}>
-                  {unit === MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX ? removeTrailingZeros(secondaryDisplayCurrency) : secondaryDisplayCurrency}
-                  {unit === MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX ? ` ${loc.units[displayUnit(MintlayerUnit.ML)]}` : null}
-                </Text>
+                {!tokenInfo && (
+                  <Text style={styles.secondaryText}>
+                    {unit === MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX ? removeTrailingZeros(secondaryDisplayCurrency) : secondaryDisplayCurrency}
+                    {unit === MintlayerUnit.LOCAL_CURRENCY && amount !== MintlayerUnit.MAX ? ` ${loc.units[displayUnit(MintlayerUnit.ML)]}` : null}
+                  </Text>
+                )}
               </View>
             </View>
-            {!disabled && amount !== MintlayerUnit.MAX && (
+            {!disabled && amount !== MintlayerUnit.MAX && !tokenInfo && (
               <TouchableOpacity accessibilityRole="button" testID="changeAmountUnitMintlayer" style={styles.changeAmountUnit} onPress={this.changeAmountUnit}>
                 <Image source={require('../../img/round-compare-arrows-24-px.png')} />
               </TouchableOpacity>

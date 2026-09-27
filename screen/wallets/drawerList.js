@@ -9,6 +9,7 @@ import { BlueHeaderDefaultMain } from '../../BlueComponents';
 import WalletsCarousel from '../../components/WalletsCarousel';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
+import { MintLayerWallet } from '../../class/wallets/mintlayer-wallet';
 
 const DrawerList = (props) => {
   const walletsCarousel = useRef();
@@ -34,7 +35,8 @@ const DrawerList = (props) => {
     if (index <= wallets.length - 1) {
       const wallet = wallets[index];
       const walletID = wallet.getID();
-      props.navigation.navigate('WalletTransactions', {
+      const screenName = wallet.type === MintLayerWallet.type ? 'MLWalletTransactions' : 'WalletTransactions';
+      props.navigation.navigate(screenName, {
         walletID: wallet.getID(),
         walletType: wallet.type,
         key: `WalletTransactions-${walletID}`,
